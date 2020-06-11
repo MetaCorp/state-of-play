@@ -12,6 +12,9 @@ import 'dart:typed_data';
 
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
+import 'package:flutter/services.dart';
+
+
 void main() {
   runApp(MyApp());
 }
@@ -61,6 +64,48 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+
+// STATE_OF_PLAY TEXTS
+
+class StateOfPlayTexts {
+  const StateOfPlayTexts(
+    this.ownerAux,
+    this.representativeAux,
+    this.tenantsAux
+  );
+
+  final String ownerAux;
+  final String representativeAux;
+  final String tenantsAux;
+}
+
+const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
+  'Ci-après le Propriétaire',
+  'Ci-après le Mandataire',
+  'Ci-après le(s) Locataire(s)'
+);
+
+// STATE_OF_PLAY OPTIONS
+
+class StateOfPlayOptions {
+  const StateOfPlayOptions(
+    this.title,
+    this.description,
+    this.logo
+  );
+
+  final String title;
+  final String description;
+  final String logo;
+}
+
+const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
+  "État des lieux d'entrée",
+  'Dressé en commun et contradicatoire entre les soussignés',
+  'assets/images/logo.png'
+);
+
+// STATE_OF_PLAY MODEL
 
 class Owner {
   const Owner(
@@ -217,13 +262,225 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _generatePdf() async {
     final pw.Document pdf = pw.Document();
 
+    PdfImage logo = PdfImage.file(
+      pdf.document,
+      bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+    );
+
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Text("Hello World 3"),
-          ); // Center
+          return pw.Column(
+            children: [
+              pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 20),
+                child: pw.Row(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Expanded(
+                      child: pw.Column(
+                        children: [
+                          pw.Container(
+                            height: 30,
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Text(
+                              stateOfPlayOptions.title.toUpperCase(),
+                              style: pw.TextStyle(
+                                color: PdfColors.black,
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 22,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            height: 30,
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Text(
+                              stateOfPlayOptions.description,
+                              style: pw.TextStyle(
+                                color: PdfColors.black,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ])
+                    ),
+                    pw.Column(
+                      children: [
+                        pw.Container(
+                          height: 90,
+                          child: pw.Image(logo)
+                        ),
+                    ])
+                ]),
+              ),
+              
+              pw.Row(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Expanded(
+                    child: pw.Column(
+                      children: [
+                        pw.Container(
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.grey100,
+                            ),
+                            height: 120,
+                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                            margin: const pw.EdgeInsets.only(right: 10),
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  stateOfPlay.owner.company,
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.owner.address.split(', ')[0],
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.owner.address.split(', ')[1],
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Expanded(
+                                  child: pw.Row(
+                                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                                    mainAxisAlignment: pw.MainAxisAlignment.end,
+                                    children: [pw.Text(
+                                      stateOfPlayTexts.ownerAux,
+                                      style: pw.TextStyle(
+                                        color: PdfColors.black,
+                                        fontStyle: pw.FontStyle.italic,
+                                        fontSize: 7,
+                                      ),
+                                    )
+                                  ])
+                                )
+                              ]),
+                          )
+                        ),
+                      ])
+                  ),
+                  pw.Expanded(
+                    child: pw.Column(
+                      children: [
+                        pw.Container(
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.grey100,
+                            ),
+                            height: 120,
+                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                            margin: const pw.EdgeInsets.only(right: 10),
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  stateOfPlay.representative.company,
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.representative.address.split(', ')[0],
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Text(
+                                  stateOfPlay.representative.address.split(', ')[1],
+                                  style: pw.TextStyle(
+                                    color: PdfColors.black,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                pw.Expanded(
+                                  child: pw.Row(
+                                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                                    mainAxisAlignment: pw.MainAxisAlignment.end,
+                                    children: [pw.Text(
+                                      stateOfPlayTexts.representativeAux,
+                                      style: pw.TextStyle(
+                                        color: PdfColors.black,
+                                        fontStyle: pw.FontStyle.italic,
+                                        fontSize: 7,
+                                      ),
+                                    )
+                                  ])
+                                )
+                              ]),
+                          )
+                        ),
+                      ])
+                  ),
+                  pw.Expanded(
+                    child: pw.Column(
+                      children: [
+                        pw.Container(
+                          decoration: pw.BoxDecoration(
+                            color: PdfColors.grey100,
+                          ),
+                          // height: 120,
+                          padding: const pw.EdgeInsets.only(left: 20, top: 15),
+                          margin: const pw.EdgeInsets.only(right: 10),
+                          alignment: pw.Alignment.centerLeft,
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                'Box 1',
+                                style: pw.TextStyle(
+                                  color: PdfColors.black,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              pw.Text(
+                                'Box 1',
+                                style: pw.TextStyle(
+                                  color: PdfColors.black,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ]),
+                        ),
+                      ])
+                  ),
+              ]),
+        ]);
       })
     ); // Page
 
@@ -257,8 +514,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-
-
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -285,6 +540,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image(image: AssetImage('assets/images/logo.png')),
             RaisedButton(
               onPressed: _generatePdf,
               child: Text(
