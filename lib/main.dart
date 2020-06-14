@@ -71,18 +71,21 @@ class StateOfPlayTexts {
   const StateOfPlayTexts(
     this.ownerAux,
     this.representativeAux,
-    this.tenantsAux
+    this.tenantsAux,
+    this.entryDate
   );
 
   final String ownerAux;
   final String representativeAux;
   final String tenantsAux;
+  final String entryDate;
 }
 
 const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
   'Ci-après le Propriétaire',
   'Ci-après le Mandataire',
-  'Ci-après le(s) Locataire(s)'
+  'Ci-après le(s) Locataire(s)',
+  "Date d'entrée"
 );
 
 // STATE_OF_PLAY OPTIONS
@@ -259,12 +262,118 @@ class _MyHomePageState extends State<MyHomePage> {
     OpenFile.open(file.path);
   }
 
+  // pw.Widget _buildTable() {
+  //   const tableHeaders = [
+  //     'SKU#',
+  //     'Item Description',
+  //     'Price',
+  //     'Quantity',
+  //     'Total'
+  //   ];
+
+  //   return pw.Table.fromTextArray(
+  //     border: null,
+  //     cellAlignment: pw.Alignment.centerLeft,
+  //     headerDecoration: pw.BoxDecoration(
+  //       borderRadius: 2,
+  //       color: baseColor,
+  //     ),
+  //     headerHeight: 25,
+  //     cellHeight: 40,
+  //     cellAlignments: {
+  //       0: pw.Alignment.centerLeft,
+  //       1: pw.Alignment.centerLeft,
+  //       2: pw.Alignment.centerRight,
+  //       3: pw.Alignment.center,
+  //       4: pw.Alignment.centerRight,
+  //     },
+  //     headerStyle: pw.TextStyle(
+  //       color: _baseTextColor,
+  //       fontSize: 10,
+  //       fontWeight: pw.FontWeight.bold,
+  //     ),
+  //     cellStyle: const pw.TextStyle(
+  //       color: _darkColor,
+  //       fontSize: 10,
+  //     ),
+  //     rowDecoration: pw.BoxDecoration(
+  //       border: pw.BoxBorder(
+  //         bottom: true,
+  //         color: accentColor,
+  //         width: .5,
+  //       ),
+  //     ),
+  //     headers: List<String>.generate(
+  //       tableHeaders.length,
+  //       (col) => tableHeaders[col],
+  //     ),
+  //     data: List<List<String>>.generate(
+  //       products.length,
+  //       (row) => List<String>.generate(
+  //         tableHeaders.length,
+  //         (col) => products[row].getIndex(col),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Future<void> _generatePdf() async {
     final pw.Document pdf = pw.Document();
 
     PdfImage logo = PdfImage.file(
       pdf.document,
       bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+    );
+
+    List tenants = stateOfPlay.tenants.map((tenant) => pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          stateOfPlay.representative.lastname.toUpperCase() + ' ' + tenant.firstname,
+          style: pw.TextStyle(
+            color: PdfColors.black,
+            fontWeight: pw.FontWeight.bold,
+            fontSize: 9,
+          ),
+        ),
+        pw.Text(
+          tenant.address.split(', ')[0],
+          style: pw.TextStyle(
+            color: PdfColors.black,
+            fontSize: 9,
+          ),
+        ),
+        pw.Text(
+          tenant.address.split(', ')[1],
+          style: pw.TextStyle(
+            color: PdfColors.black,
+            fontSize: 9,
+          ),
+        )
+        // pw.Container(
+        //   padding: const pw.EdgeInsets.only(bottom: 15),
+        // )
+      ]
+    )).toList();
+
+    tenants.add(pw.Column(
+      children: [
+        // pw.Expanded(
+        //   child:
+          pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.end,
+            mainAxisAlignment: pw.MainAxisAlignment.end,
+            children: [pw.Text(
+              stateOfPlayTexts.tenantsAux,
+              style: pw.TextStyle(
+                color: PdfColors.black,
+                fontStyle: pw.FontStyle.italic,
+                fontSize: 7,
+              ),
+            )
+          ])
+        // )
+      ])
     );
 
     pdf.addPage(
@@ -316,7 +425,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ]),
               ),
               
-              pw.Row(
+              pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 30),
+                child: pw.Row(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   pw.Expanded(
@@ -449,38 +560,42 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: pw.Column(
                       children: [
                         pw.Container(
-                          decoration: pw.BoxDecoration(
-                            color: PdfColors.grey100,
-                          ),
-                          // height: 120,
-                          padding: const pw.EdgeInsets.only(left: 20, top: 15),
-                          margin: const pw.EdgeInsets.only(right: 10),
-                          alignment: pw.Alignment.centerLeft,
-                          child: pw.Column(
-                            crossAxisAlignment: pw.CrossAxisAlignment.start,
-                            children: [
-                              pw.Text(
-                                'Box 1',
-                                style: pw.TextStyle(
-                                  color: PdfColors.black,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              pw.Text(
-                                'Box 1',
-                                style: pw.TextStyle(
-                                  color: PdfColors.black,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ]),
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.grey100,
+                            ),
+                            height: 120,
+                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                            margin: const pw.EdgeInsets.only(right: 10),
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: tenants
+                            )
+                          )
                         ),
+                        pw.Container(
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.grey500,
+                            ),
+                            height: 25,
+                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                            margin: const pw.EdgeInsets.only(right: 10),
+                            alignment: pw.Alignment.centerLeft,
+                            child: pw.Text(
+                              stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate,
+                              style: pw.TextStyle(
+                                color: PdfColors.white
+                              )
+                            )
+                          )
                       ])
                   ),
-              ]),
-        ]);
+                ]),
+              ),
+
+
+            ]);
       })
     ); // Page
 
