@@ -14,6 +14,9 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 import 'package:flutter/services.dart';
 
+import 'package:flutter_tests/models/StateOfPlayOptions.dart';
+import 'package:flutter_tests/models/StateOfPlayTexts.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart';
 
 void main() {
   runApp(MyApp());
@@ -67,20 +70,6 @@ class MyHomePage extends StatefulWidget {
 
 // STATE_OF_PLAY TEXTS
 
-class StateOfPlayTexts {
-  const StateOfPlayTexts(
-    this.ownerAux,
-    this.representativeAux,
-    this.tenantsAux,
-    this.entryDate
-  );
-
-  final String ownerAux;
-  final String representativeAux;
-  final String tenantsAux;
-  final String entryDate;
-}
-
 const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
   'Ci-après le Propriétaire',
   'Ci-après le Mandataire',
@@ -90,18 +79,6 @@ const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
 
 // STATE_OF_PLAY OPTIONS
 
-class StateOfPlayOptions {
-  const StateOfPlayOptions(
-    this.title,
-    this.description,
-    this.logo
-  );
-
-  final String title;
-  final String description;
-  final String logo;
-}
-
 const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
   "État des lieux d'entrée",
   'Dressé en commun et contradicatoire entre les soussignés',
@@ -109,92 +86,6 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
 );
 
 // STATE_OF_PLAY MODEL
-
-class Owner {
-  const Owner(
-    this.firstname,
-    this.lastname,
-    this.company,
-    this.address
-  );
-
-  final String firstname;
-  final String lastname;
-  final String company;
-  final String address;
-}
-
-class Representative {
-  const Representative(
-    this.firstname,
-    this.lastname,
-    this.company,
-    this.address
-  );
-
-  final String firstname;
-  final String lastname;
-  final String company;
-  final String address;
-}
-
-class Tenant {
-  const Tenant(
-    this.firstname,
-    this.lastname,
-    this.address
-  );
-
-  final String firstname;
-  final String lastname;
-  final String address;
-}
-
-class Void {}// To be replaced
-
-class Property {
-  const Property(
-    this.address,
-    this.type,
-    this.reference,
-    this.lot,
-    this.floor,
-    this.roomCount,
-    this.area,
-    this.annexe,
-    this.heatingType,
-    this.hotWater
-  );
-
-  final String address;
-  final Void type;
-  final String reference;
-  final String lot;
-  final int floor;
-  final int roomCount;
-  final int area;
-  final Void annexe;
-  final Void heatingType;
-  final Void hotWater;
-}
-
-class StateOfPlay {
-  const StateOfPlay(
-    this.owner,
-    this.representative,
-    this.tenants,
-    this.entryDate,
-    this.property
-  );
-
-  final Owner owner;
-  final Representative representative;
-  final List<Tenant> tenants;
-
-  final String entryDate;// To be changed
-
-  final Property property;
-}
 
 const StateOfPlay stateOfPlay = StateOfPlay(
   Owner(
@@ -594,6 +485,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ]),
               ),
 
+              
 
             ]);
       })
