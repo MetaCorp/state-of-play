@@ -196,9 +196,9 @@ packages:
   pdf:
     dependency: "direct main"
     description:
-      name: pdf
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "dart_pdf/pdf"
+      relative: true
+    source: path
     version: "1.8.1"
   petitparser:
     dependency: transitive

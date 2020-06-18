@@ -71,7 +71,8 @@ class StateOfPlay {
     this.representative,
     this.tenants,
     this.entryDate,
-    this.property
+    this.property,
+    this.kitchen
   );
 
   final Owner owner;
@@ -81,4 +82,67 @@ class StateOfPlay {
   final String entryDate;// To be changed
 
   final Property property;
+
+  final Kitchen kitchen;
+}
+
+enum Decorations {
+  door,
+  floor,
+  baseboard,
+  wall,
+  ceiling,
+  window
+}
+
+enum States {
+  neww,
+  good,
+  used
+}
+
+enum DoorNature {
+  noDoor,
+  woodDoor,
+  woodDoors
+}
+
+class Decoration {
+  const Decoration(
+    this.decoration,
+    this.nature,
+    this.state,
+    this.comment,
+    this.photo// TODO
+  );
+
+  final Decorations decoration;
+  final dynamic nature;
+  final States state;
+  final String comment;
+  final String photo;
+
+  String getIndex(int index) {
+    switch (index) {
+      case 0:
+        return decoration.toString().split('.').last;
+      case 1:
+        return nature.toString().split('.').last;
+      case 2:
+        return state.toString().split('.').last;
+      case 3:
+        return comment;
+      case 4:
+        return photo;
+    }
+    return '';
+  }
+}
+
+class Kitchen {
+  Kitchen(
+    this.decorations
+  );
+
+  final List<Decoration> decorations;
 }

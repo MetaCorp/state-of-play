@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_tests/models/StateOfPlayOptions.dart';
 import 'package:flutter_tests/models/StateOfPlayTexts.dart';
-import 'package:flutter_tests/models/StateOfPlay.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 void main() {
   runApp(MyApp());
@@ -97,31 +97,33 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
 
 // STATE_OF_PLAY MODEL
 
-const StateOfPlay stateOfPlay = StateOfPlay(
-  Owner(
+sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
+  sop.Owner(
     'Robert',
     'Dupont',
     "SCI d'Investisseurs",
     '3 rue des Mésanges, 75001 Paris'
   ),
-  Representative(
+  sop.Representative(
     'Elise',
     'Lenotre',
     'Marketin Immobilier',
     '36 rue Paul Cézanne, 68200 Mulhouse'
   ),
-  [Tenant(
-    'Emilie',
-    'Dupond',
-    '36 rue des Vosges, 68000 Colmar',
-  ),
-  Tenant(
-    'Schmitt',
-    'Albert',
-    '84 boulevard Kenedy, 68100 Mulhouse'
-  )],
+  [
+    sop.Tenant(
+      'Emilie',
+      'Dupond',
+      '36 rue des Vosges, 68000 Colmar',
+    ),
+    sop.Tenant(
+      'Schmitt',
+      'Albert',
+      '84 boulevard Kenedy, 68100 Mulhouse'
+    )
+  ],
   'new DateTime(2020, 5, 2)',// To be changed
-  Property(
+  sop.Property(
     '2 avenue de la Liberté, 68200 Mulhouse',
     'appartement',
     '3465',
@@ -131,7 +133,24 @@ const StateOfPlay stateOfPlay = StateOfPlay(
     108,
     'balcon / cave / terasse',
     'chauffage collectif',
-    'eau chaude collective')
+    'eau chaude collective'
+  ),
+  sop.Kitchen([
+    sop.Decoration(
+      sop.Decorations.door,
+      sop.DoorNature.noDoor,
+      sop.States.good,
+      'Il manque la porte',
+      ''
+    ),
+    sop.Decoration(
+      sop.Decorations.door,
+      sop.DoorNature.noDoor,
+      sop.States.good,
+      'Il manque la porte',
+      ''
+    )
+  ])
 );
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -163,60 +182,53 @@ class _MyHomePageState extends State<MyHomePage> {
     OpenFile.open(file.path);
   }
 
-  // pw.Widget _buildTable() {
-  //   const tableHeaders = [
-  //     'SKU#',
-  //     'Item Description',
-  //     'Price',
-  //     'Quantity',
-  //     'Total'
-  //   ];
+  pw.Widget _buildTable() {
+    const tableHeaders = [
+      'Decoration',
+      'Nature',
+      'État',
+      'Commentaires',
+      'Photo'
+    ];
 
-  //   return pw.Table.fromTextArray(
-  //     border: null,
-  //     cellAlignment: pw.Alignment.centerLeft,
-  //     headerDecoration: pw.BoxDecoration(
-  //       borderRadius: 2,
-  //       color: baseColor,
-  //     ),
-  //     headerHeight: 25,
-  //     cellHeight: 40,
-  //     cellAlignments: {
-  //       0: pw.Alignment.centerLeft,
-  //       1: pw.Alignment.centerLeft,
-  //       2: pw.Alignment.centerRight,
-  //       3: pw.Alignment.center,
-  //       4: pw.Alignment.centerRight,
-  //     },
-  //     headerStyle: pw.TextStyle(
-  //       color: _baseTextColor,
-  //       fontSize: 10,
-  //       fontWeight: pw.FontWeight.bold,
-  //     ),
-  //     cellStyle: const pw.TextStyle(
-  //       color: _darkColor,
-  //       fontSize: 10,
-  //     ),
-  //     rowDecoration: pw.BoxDecoration(
-  //       border: pw.BoxBorder(
-  //         bottom: true,
-  //         color: accentColor,
-  //         width: .5,
-  //       ),
-  //     ),
-  //     headers: List<String>.generate(
-  //       tableHeaders.length,
-  //       (col) => tableHeaders[col],
-  //     ),
-  //     data: List<List<String>>.generate(
-  //       products.length,
-  //       (row) => List<String>.generate(
-  //         tableHeaders.length,
-  //         (col) => products[row].getIndex(col),
-  //       ),
-  //     ),
-  //   );
-  // }
+    return pw.Table.fromTextArray(
+      border: null,
+      cellAlignment: pw.Alignment.centerLeft,
+      headerDecoration: pw.BoxDecoration(
+        borderRadius: 2,
+        // color: baseColor,
+      ),
+      headerHeight: 25,
+      cellHeight: 40,
+      headerStyle: pw.TextStyle(
+        // color: _baseTextColor,
+        fontSize: 10,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      cellStyle: const pw.TextStyle(
+        // color: _darkColor,
+        fontSize: 10,
+      ),
+      // rowDecoration: pw.BoxDecoration(
+      //   border: pw.BoxBorder(
+      //     bottom: true,
+      //     // color: accentColor,
+      //     width: .5,
+      //   ),
+      // ),
+      headers: List<String>.generate(
+        tableHeaders.length,
+        (col) => tableHeaders[col],
+      ),
+      data: List<List<String>>.generate(
+        stateOfPlay.kitchen.decorations.length,
+        (row) => List<String>.generate(
+          tableHeaders.length,
+          (col) => stateOfPlay.kitchen.decorations[row].getIndex(col),
+        ),
+      ),
+    );
+  }
 
   Future<void> _generatePdf() async {
     final pw.Document pdf = pw.Document();
@@ -473,7 +485,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             height: 120,
                             padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            margin: const pw.EdgeInsets.only(right: 10),
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -487,12 +498,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             height: 25,
                             padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            margin: const pw.EdgeInsets.only(right: 10),
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate,
+                              stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate.toString(),
                               style: pw.TextStyle(
-                                color: PdfColors.white
+                                color: PdfColors.white,
+                                fontSize: 9
                               )
                             )
                           )
@@ -508,15 +519,133 @@ class _MyHomePageState extends State<MyHomePage> {
                 cellAlignments: {
                   0: pw.Alignment.centerLeft,
                 },
-                data: <List<String>>[
-                  <String>[stateOfPlayTexts.address + ':   ' + stateOfPlay.property.address],
-                  <String>[stateOfPlayTexts.type + ':   ' + stateOfPlay.property.type + '           ' + stateOfPlayTexts.reference + ':   ' + stateOfPlay.property.reference + '           ' + stateOfPlayTexts.lot + ':   ' + stateOfPlay.property.lot],
-                  <String>[stateOfPlayTexts.floor + ':   ' + stateOfPlay.property.floor.toString() + '           ' + stateOfPlayTexts.roomCount + ':   ' + stateOfPlay.property.roomCount.toString() + '           ' + stateOfPlayTexts.area + ':   ' + stateOfPlay.property.area.toString() + 'm²'],
-                  <String>[stateOfPlayTexts.annexe + ':   ' + stateOfPlay.property.annexe],
-                  <String>[stateOfPlayTexts.heatingType + ':   ' + stateOfPlay.property.heatingType + '           ' + stateOfPlayTexts.heatingType + ':   ' + stateOfPlay.property.heatingType],
+                data: <List<pw.Widget>>[
+
+                  <pw.Widget>[
+                    pw.Row(
+                      children: [
+                        pw.Text(
+                          stateOfPlayTexts.address + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.address
+                        )
+                    ])
+                  ],
+
+                  <pw.Widget>[
+                    pw.Row(
+                      children: [
+                        pw.Text(
+                          stateOfPlayTexts.type + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.type + '           '
+                        ),
+                        pw.Text(
+                          stateOfPlayTexts.reference + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.reference + '           '
+                        ),
+                        pw.Text(
+                          stateOfPlayTexts.lot + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.lot
+                        )
+                    ])
+                  ],
+                  
+                  <pw.Widget>[
+                    pw.Row(
+                      children: [
+                        pw.Text(
+                          stateOfPlayTexts.floor + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.floor.toString() + '           '
+                        ),
+                        pw.Text(
+                          stateOfPlayTexts.roomCount + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.roomCount.toString() + '           '
+                        ),
+                        pw.Text(
+                          stateOfPlayTexts.area + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.area.toString() + 'm²'
+                        )
+                    ])
+                  ],
+                  
+                  <pw.Widget>[
+                    pw.Row(
+                      children: [
+                        pw.Text(
+                          stateOfPlayTexts.annexe + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.annexe
+                        )
+                    ])
+                  ],
+
+                  
+                  <pw.Widget>[
+                    pw.Row(
+                      children: [
+                        pw.Text(
+                          stateOfPlayTexts.heatingType + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.heatingType + '           '
+                        ),
+                        pw.Text(
+                          stateOfPlayTexts.hotWater + ':   ',
+                          style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                          )
+                        ),
+                        pw.Text(
+                          stateOfPlay.property.hotWater
+                        )
+                    ])
+                  ],
                 ]
               ),
               
+
+              _buildTable()
 
             ]);
       })
