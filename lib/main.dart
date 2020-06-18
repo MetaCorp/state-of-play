@@ -74,7 +74,17 @@ const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
   'Ci-après le Propriétaire',
   'Ci-après le Mandataire',
   'Ci-après le(s) Locataire(s)',
-  "Date d'entrée"
+  "Date d'entrée",
+  'Adresse des lieux loués',
+  'Type de bien',
+  'Référence',
+  'Lot',
+  'Étage',
+  'Nombre de pièces',
+  'Surface',
+  'Annexes louées avec',
+  'Type de chauffage',
+  'Eau chaude'
 );
 
 // STATE_OF_PLAY OPTIONS
@@ -113,15 +123,15 @@ const StateOfPlay stateOfPlay = StateOfPlay(
   'new DateTime(2020, 5, 2)',// To be changed
   Property(
     '2 avenue de la Liberté, 68200 Mulhouse',
-    null,
+    'appartement',
     '3465',
     '34',
     5,
     5,
     108,
-    null,
-    null,
-    null)
+    'balcon / cave / terasse',
+    'chauffage collectif',
+    'eau chaude collective')
 );
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -240,10 +250,8 @@ class _MyHomePageState extends State<MyHomePage> {
             color: PdfColors.black,
             fontSize: 9,
           ),
-        )
-        // pw.Container(
-        //   padding: const pw.EdgeInsets.only(bottom: 15),
-        // )
+        ),
+        pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
       ]
     )).toList();
 
@@ -273,6 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
         build: (pw.Context context) {
           return pw.Column(
             children: [
+
+              // HEADER
               pw.Container(
                 margin: const pw.EdgeInsets.only(bottom: 20),
                 child: pw.Row(
@@ -321,6 +331,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: pw.Row(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
+
+                  // Box Owner
                   pw.Expanded(
                     child: pw.Column(
                       children: [
@@ -384,6 +396,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ])
                   ),
+
+                  // Box Representative
                   pw.Expanded(
                     child: pw.Column(
                       children: [
@@ -447,6 +461,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ])
                   ),
+
+                  // Box Tenants
                   pw.Expanded(
                     child: pw.Column(
                       children: [
@@ -485,6 +501,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 ]),
               ),
 
+              // Property Array
+              pw.Table.fromTextArray(
+                context: context,
+                cellAlignment: pw.Alignment.centerLeft,
+                cellAlignments: {
+                  0: pw.Alignment.centerLeft,
+                },
+                data: <List<String>>[
+                  <String>[stateOfPlayTexts.address + ':   ' + stateOfPlay.property.address],
+                  <String>[stateOfPlayTexts.type + ':   ' + stateOfPlay.property.type + '           ' + stateOfPlayTexts.reference + ':   ' + stateOfPlay.property.reference + '           ' + stateOfPlayTexts.lot + ':   ' + stateOfPlay.property.lot],
+                  <String>[stateOfPlayTexts.floor + ':   ' + stateOfPlay.property.floor.toString() + '           ' + stateOfPlayTexts.roomCount + ':   ' + stateOfPlay.property.roomCount.toString() + '           ' + stateOfPlayTexts.area + ':   ' + stateOfPlay.property.area.toString() + 'm²'],
+                  <String>[stateOfPlayTexts.annexe + ':   ' + stateOfPlay.property.annexe],
+                  <String>[stateOfPlayTexts.heatingType + ':   ' + stateOfPlay.property.heatingType + '           ' + stateOfPlayTexts.heatingType + ':   ' + stateOfPlay.property.heatingType],
+                ]
+              ),
               
 
             ]);

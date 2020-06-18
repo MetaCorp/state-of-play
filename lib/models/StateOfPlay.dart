@@ -39,8 +39,6 @@ class Tenant {
   final String address;
 }
 
-class Void {}// To be replaced
-
 class Property {
   const Property(
     this.address,
@@ -56,15 +54,15 @@ class Property {
   );
 
   final String address;
-  final Void type;
+  final String type;// To be replaced
   final String reference;
   final String lot;
   final int floor;
   final int roomCount;
   final int area;
-  final Void annexe;
-  final Void heatingType;
-  final Void hotWater;
+  final String annexe;// To be replaced
+  final String heatingType;// To be replaced
+  final String hotWater;// To be replaced
 }
 
 class StateOfPlay {
