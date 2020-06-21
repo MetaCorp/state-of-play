@@ -98,60 +98,113 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
 // STATE_OF_PLAY MODEL
 
 sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
-  sop.Owner(
-    'Robert',
-    'Dupont',
-    "SCI d'Investisseurs",
-    '3 rue des Mésanges, 75001 Paris'
+  owner: sop.Owner(
+    firstname: 'Robert',
+    lastname: 'Dupont',
+    company: "SCI d'Investisseurs",
+    address: '3 rue des Mésanges, 75001 Paris'
   ),
-  sop.Representative(
-    'Elise',
-    'Lenotre',
-    'Marketin Immobilier',
-    '36 rue Paul Cézanne, 68200 Mulhouse'
+  representative: sop.Representative(
+    firstname: 'Elise',
+    lastname: 'Lenotre',
+    company: 'Marketin Immobilier',
+    address: '36 rue Paul Cézanne, 68200 Mulhouse'
   ),
-  [
+  tenants: [
     sop.Tenant(
-      'Emilie',
-      'Dupond',
-      '36 rue des Vosges, 68000 Colmar',
+      firstname: 'Emilie',
+      lastname: 'Dupond',
+      address: '36 rue des Vosges, 68000 Colmar',
     ),
     sop.Tenant(
-      'Schmitt',
-      'Albert',
-      '84 boulevard Kenedy, 68100 Mulhouse'
+      firstname: 'Schmitt',
+      lastname: 'Albert',
+      address: '84 boulevard Kenedy, 68100 Mulhouse'
     )
   ],
-  'new DateTime(2020, 5, 2)',// To be changed
-  sop.Property(
-    '2 avenue de la Liberté, 68200 Mulhouse',
-    'appartement',
-    '3465',
-    '34',
-    5,
-    5,
-    108,
-    'balcon / cave / terasse',
-    'chauffage collectif',
-    'eau chaude collective'
+  entryDate: DateTime(2020, 5, 2),// To be changed
+  property: sop.Property(
+    address: '2 avenue de la Liberté, 68200 Mulhouse',
+    type: 'appartement',
+    reference: '3465',
+    lot: '34',
+    floor: 5,
+    roomCount: 5,
+    area: 108,
+    annexes: 'balcon / cave / terasse',
+    heatingType: 'chauffage collectif',
+    hotWater: 'eau chaude collective'
   ),
-  sop.Kitchen([
-    sop.Decoration(
-      sop.Decorations.door,
-      sop.DoorNature.noDoor,
-      sop.States.good,
-      'Il manque la porte',
-      ''
-    ),
-    sop.Decoration(
-      sop.Decorations.door,
-      sop.DoorNature.noDoor,
-      sop.States.good,
-      'Il manque la porte',
-      ''
-    )
-  ])
+  kitchen: sop.Kitchen(
+    decorations: [
+      sop.Decoration(
+        type: 'Porte',
+        nature: 'Pas de porte',
+        state: sop.States.good,
+        comment: 'Il manque la porte',
+        photo: ''
+      ),
+      sop.Decoration(
+        type: 'Porte',
+        nature: 'Pas de porte',
+        state: sop.States.good,
+        comment: 'Il manque la porte',
+        photo: ''
+      )
+    ],
+    electricsAndHeatings: [
+      sop.ElectricAndHeating(
+        type: 'Interrupteur',
+        quantity: 1,
+        state: sop.States.neww,
+        comment: '',
+        photo: ''
+      ),
+      sop.ElectricAndHeating(
+        type: 'Prise électrique',
+        quantity: 3,
+        state: sop.States.neww,
+        comment: '',
+        photo: ''
+      ),
+    ],
+    equipments: [
+      sop.Equipment(
+        type: 'Interrupteur',
+        brandOrObject: 'Brandt',
+        stateOrQuantity: sop.States.good,
+        comment: '',
+        photo: ''
+      ),
+      sop.Equipment(
+        type: 'Interrupteur',
+        brandOrObject: 'Brandt',
+        stateOrQuantity: sop.States.good,
+        comment: '',
+        photo: ''
+      ),
+    ],
+    generalAspects: [
+      sop.GeneralAspect(
+        type: 'Cuisine',
+        comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+        photo: ''
+      )
+    ]
+  )
 );
+
+// Comment convertir en data une enum ?
+// la stocker sous forme d'entier ou de string ?
+// pb si stocker sous forme de string, comment recréer l'enum cote client ?
+
+// solution 1. stocker en int :
+// sop.Decorations deco = sop.Decorations.values[0];
+// int enumInt = sop.Decorations.values.indexOf(sop.Decorations.ceiling)
+
+// MAIS pb si on ajoute un champs à l'enum, cela demandera de maj la bdd
+
+// solution 2 : https://medium.com/@amir.n3t/advanced-enums-in-flutter-a8f2e2702ffd
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
@@ -182,27 +235,31 @@ class _MyHomePageState extends State<MyHomePage> {
     OpenFile.open(file.path);
   }
 
-  pw.Widget _buildTable() {
-    const tableHeaders = [
-      'Decoration',
-      'Nature',
-      'État',
-      'Commentaires',
-      'Photo'
-    ];
+  pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, columnWidths }) {
+    print(array.length);
 
     return pw.Table.fromTextArray(
-      border: null,
+      columnWidths: columnWidths,
+      border: pw.TableBorder(
+        noGlobalBorder: true,
+        borderColor: PdfColors.grey400
+      ),
       cellAlignment: pw.Alignment.centerLeft,
+      headerAlignment: pw.Alignment.centerLeft,
       headerDecoration: pw.BoxDecoration(
-        borderRadius: 2,
-        // color: baseColor,
+        // borderRadius: 2,
+        color: PdfColors.grey100
       ),
       headerHeight: 25,
-      cellHeight: 40,
+      // cellHeight: 40,
       headerStyle: pw.TextStyle(
         // color: _baseTextColor,
-        fontSize: 10,
+        fontSize: 8,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      firstHeaderStyle: pw.TextStyle(
+        color: PdfColors.blue600,
+        fontSize: 8,
         fontWeight: pw.FontWeight.bold,
       ),
       cellStyle: const pw.TextStyle(
@@ -218,15 +275,117 @@ class _MyHomePageState extends State<MyHomePage> {
       // ),
       headers: List<String>.generate(
         tableHeaders.length,
-        (col) => tableHeaders[col],
+        (col) => tableHeaders[col].toUpperCase(),
       ),
       data: List<List<String>>.generate(
-        stateOfPlay.kitchen.decorations.length,
+        array.length,
         (row) => List<String>.generate(
           tableHeaders.length,
-          (col) => stateOfPlay.kitchen.decorations[row].getIndex(col),
+          (col) => array[row].getIndex(col),
         ),
       ),
+    );
+  }
+
+  pw.Widget _buildSectionHeader({ String title }) {
+    return pw.Container(
+      child: pw.Row(
+        children: [
+          // TODO Image Header
+          pw.Row(
+            children: [
+              pw.Text(
+                title
+              )
+            ]
+          )
+        ]
+      )
+    );
+  }
+
+  pw.Widget _buildKitchenTables() {
+    
+    const tableDecorationHeaders = [
+      'Decoration',
+      'Nature',
+      'État',
+      'Commentaires',
+      'Photo'
+    ];
+    
+    const tableElectricAndHeatingHeaders = [
+      'Électrique/Chauffage',
+      'Quantité',
+      'État',
+      'Commentaires',
+      'Photo'
+    ];
+
+    const tableEquipmentsHeaders = [
+      'Équipement',
+      'Marque/Objet',
+      'État/Qte',
+      'Commentaires',
+      'Photo'
+    ];
+    
+    const tableGeneralAspectsHeaders = [
+      'Aspect Général',
+      'Commentaires',
+      'Photo'
+    ];
+
+    return pw.Column(
+      children: [
+        _buildSectionHeader(
+          title: 'Cuisine'
+        ),
+        _buildTable(
+          tableHeaders: tableDecorationHeaders,
+          array: stateOfPlay.kitchen.decorations,
+          columnWidths: <int, pw.TableColumnWidth>{
+            0: const pw.FixedColumnWidth(120),
+            1: const pw.FixedColumnWidth(100),
+            2: const pw.FixedColumnWidth(80),
+            3: const pw.FixedColumnWidth(120),
+            4: const pw.FixedColumnWidth(60),
+            // 1: const pw.FlexColumnWidth(2),
+            // 2: const pw.FractionColumnWidth(.2),
+          }
+        ),
+        _buildTable(
+          tableHeaders: tableElectricAndHeatingHeaders,
+          array: stateOfPlay.kitchen.electricsAndHeatings,
+          columnWidths: <int, pw.TableColumnWidth>{
+            0: const pw.FixedColumnWidth(120),
+            1: const pw.FixedColumnWidth(100),
+            2: const pw.FixedColumnWidth(80),
+            3: const pw.FixedColumnWidth(120),
+            4: const pw.FixedColumnWidth(60),
+          }
+        ),
+        _buildTable(
+          tableHeaders: tableEquipmentsHeaders,
+          array: stateOfPlay.kitchen.equipments,
+          columnWidths: <int, pw.TableColumnWidth>{
+            0: const pw.FixedColumnWidth(120),
+            1: const pw.FixedColumnWidth(100),
+            2: const pw.FixedColumnWidth(80),
+            3: const pw.FixedColumnWidth(120),
+            4: const pw.FixedColumnWidth(60),
+          }
+        ),
+        _buildTable(
+          tableHeaders: tableGeneralAspectsHeaders,
+          array: stateOfPlay.kitchen.generalAspects,
+          columnWidths: <int, pw.TableColumnWidth>{
+            0: const pw.FixedColumnWidth(120),
+            1: const pw.FixedColumnWidth(300),
+            2: const pw.FixedColumnWidth(60),
+          }
+        ),
+      ]
     );
   }
 
@@ -288,366 +447,379 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Column(
-            children: [
+          return [
+            pw.Column(
+              children: [
 
-              // HEADER
-              pw.Container(
-                margin: const pw.EdgeInsets.only(bottom: 20),
-                child: pw.Row(
+                // HEADER
+                pw.Container(
+                  margin: const pw.EdgeInsets.only(bottom: 20),
+                  child: pw.Row(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Expanded(
+                        child: pw.Column(
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Text(
+                                stateOfPlayOptions.title.toUpperCase(),
+                                style: pw.TextStyle(
+                                  color: PdfColors.black,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 22,
+                                ),
+                              ),
+                            ),
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Text(
+                                stateOfPlayOptions.description,
+                                style: pw.TextStyle(
+                                  color: PdfColors.black,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ])
+                      ),
+                      pw.Column(
+                        children: [
+                          pw.Container(
+                            height: 90,
+                            child: pw.Image(logo)
+                          ),
+                      ])
+                  ]),
+                ),
+                
+                pw.Container(
+                  margin: const pw.EdgeInsets.only(bottom: 30),
+                  child: pw.Row(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
+
+                    // Box Owner
                     pw.Expanded(
                       child: pw.Column(
                         children: [
                           pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Text(
-                              stateOfPlayOptions.title.toUpperCase(),
-                              style: pw.TextStyle(
-                                color: PdfColors.black,
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 22,
+                            child: pw.Container(
+                              decoration: pw.BoxDecoration(
+                                color: PdfColors.grey100,
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Text(
-                              stateOfPlayOptions.description,
-                              style: pw.TextStyle(
-                                color: PdfColors.black,
-                                fontSize: 13,
-                              ),
-                            ),
+                              height: 120,
+                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                              margin: const pw.EdgeInsets.only(right: 10),
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text(
+                                    stateOfPlay.owner.company,
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    stateOfPlay.owner.address.split(', ')[0],
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    stateOfPlay.owner.address.split(', ')[1],
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  pw.Expanded(
+                                    child: pw.Row(
+                                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                                      mainAxisAlignment: pw.MainAxisAlignment.end,
+                                      children: [pw.Text(
+                                        stateOfPlayTexts.ownerAux,
+                                        style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontStyle: pw.FontStyle.italic,
+                                          fontSize: 7,
+                                        ),
+                                      )
+                                    ])
+                                  )
+                                ]),
+                            )
                           ),
                         ])
                     ),
-                    pw.Column(
-                      children: [
-                        pw.Container(
-                          height: 90,
-                          child: pw.Image(logo)
-                        ),
-                    ])
-                ]),
-              ),
-              
-              pw.Container(
-                margin: const pw.EdgeInsets.only(bottom: 30),
-                child: pw.Row(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
 
-                  // Box Owner
-                  pw.Expanded(
-                    child: pw.Column(
-                      children: [
-                        pw.Container(
-                          child: pw.Container(
-                            decoration: pw.BoxDecoration(
-                              color: PdfColors.grey100,
-                            ),
-                            height: 120,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            margin: const pw.EdgeInsets.only(right: 10),
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
-                                pw.Text(
-                                  stateOfPlay.owner.company,
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 9,
+                    // Box Representative
+                    pw.Expanded(
+                      child: pw.Column(
+                        children: [
+                          pw.Container(
+                            child: pw.Container(
+                              decoration: pw.BoxDecoration(
+                                color: PdfColors.grey100,
+                              ),
+                              height: 120,
+                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                              margin: const pw.EdgeInsets.only(right: 10),
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text(
+                                    stateOfPlay.representative.company,
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontWeight: pw.FontWeight.bold,
+                                      fontSize: 9,
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
+                                  pw.Text(
+                                    stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.owner.address.split(', ')[0],
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
+                                  pw.Text(
+                                    stateOfPlay.representative.address.split(', ')[0],
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.owner.address.split(', ')[1],
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
+                                  pw.Text(
+                                    stateOfPlay.representative.address.split(', ')[1],
+                                    style: pw.TextStyle(
+                                      color: PdfColors.black,
+                                      fontSize: 9,
+                                    ),
                                   ),
-                                ),
-                                pw.Expanded(
-                                  child: pw.Row(
-                                    crossAxisAlignment: pw.CrossAxisAlignment.end,
-                                    mainAxisAlignment: pw.MainAxisAlignment.end,
-                                    children: [pw.Text(
-                                      stateOfPlayTexts.ownerAux,
-                                      style: pw.TextStyle(
-                                        color: PdfColors.black,
-                                        fontStyle: pw.FontStyle.italic,
-                                        fontSize: 7,
-                                      ),
-                                    )
-                                  ])
-                                )
-                              ]),
-                          )
-                        ),
-                      ])
-                  ),
-
-                  // Box Representative
-                  pw.Expanded(
-                    child: pw.Column(
-                      children: [
-                        pw.Container(
-                          child: pw.Container(
-                            decoration: pw.BoxDecoration(
-                              color: PdfColors.grey100,
-                            ),
-                            height: 120,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            margin: const pw.EdgeInsets.only(right: 10),
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
-                                pw.Text(
-                                  stateOfPlay.representative.company,
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 9,
-                                  ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
-                                  ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.representative.address.split(', ')[0],
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
-                                  ),
-                                ),
-                                pw.Text(
-                                  stateOfPlay.representative.address.split(', ')[1],
-                                  style: pw.TextStyle(
-                                    color: PdfColors.black,
-                                    fontSize: 9,
-                                  ),
-                                ),
-                                pw.Expanded(
-                                  child: pw.Row(
-                                    crossAxisAlignment: pw.CrossAxisAlignment.end,
-                                    mainAxisAlignment: pw.MainAxisAlignment.end,
-                                    children: [pw.Text(
-                                      stateOfPlayTexts.representativeAux,
-                                      style: pw.TextStyle(
-                                        color: PdfColors.black,
-                                        fontStyle: pw.FontStyle.italic,
-                                        fontSize: 7,
-                                      ),
-                                    )
-                                  ])
-                                )
-                              ]),
-                          )
-                        ),
-                      ])
-                  ),
-
-                  // Box Tenants
-                  pw.Expanded(
-                    child: pw.Column(
-                      children: [
-                        pw.Container(
-                          child: pw.Container(
-                            decoration: pw.BoxDecoration(
-                              color: PdfColors.grey100,
-                            ),
-                            height: 120,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: tenants
+                                  pw.Expanded(
+                                    child: pw.Row(
+                                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                                      mainAxisAlignment: pw.MainAxisAlignment.end,
+                                      children: [pw.Text(
+                                        stateOfPlayTexts.representativeAux,
+                                        style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontStyle: pw.FontStyle.italic,
+                                          fontSize: 7,
+                                        ),
+                                      )
+                                    ])
+                                  )
+                                ]),
                             )
-                          )
-                        ),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                              color: PdfColors.grey500,
-                            ),
-                            height: 25,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Text(
-                              stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate.toString(),
-                              style: pw.TextStyle(
-                                color: PdfColors.white,
-                                fontSize: 9
+                          ),
+                        ])
+                    ),
+
+                    // Box Tenants
+                    pw.Expanded(
+                      child: pw.Column(
+                        children: [
+                          pw.Container(
+                            child: pw.Container(
+                              decoration: pw.BoxDecoration(
+                                color: PdfColors.grey100,
+                              ),
+                              height: 120,
+                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: tenants
                               )
                             )
+                          ),
+                          pw.Container(
+                              decoration: pw.BoxDecoration(
+                                color: PdfColors.grey500,
+                              ),
+                              height: 25,
+                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+                              alignment: pw.Alignment.centerLeft,
+                              child: pw.Text(
+                                stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate.toString(),
+                                style: pw.TextStyle(
+                                  color: PdfColors.white,
+                                  fontSize: 9
+                                )
+                              )
+                            )
+                        ])
+                    ),
+                  ]),
+                ),
+
+                // Property Array
+                pw.Table.fromTextArray(
+                  context: context,
+                  border: pw.TableBorder(
+                    color: PdfColors.grey400,
+                    borderColor: PdfColors.grey400
+                  ),
+                  cellAlignment: pw.Alignment.centerLeft,
+                  cellAlignments: {
+                    0: pw.Alignment.centerLeft,
+                  },
+                  data: <List<pw.Widget>>[
+
+                    <pw.Widget>[
+                      pw.Row(
+                        children: [
+                          pw.Text(
+                            stateOfPlayTexts.address + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.address
                           )
                       ])
-                  ),
-                ]),
-              ),
+                    ],
 
-              // Property Array
-              pw.Table.fromTextArray(
-                context: context,
-                cellAlignment: pw.Alignment.centerLeft,
-                cellAlignments: {
-                  0: pw.Alignment.centerLeft,
-                },
-                data: <List<pw.Widget>>[
+                    <pw.Widget>[
+                      pw.Row(
+                        children: [
+                          pw.Text(
+                            stateOfPlayTexts.type + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.type + '           '
+                          ),
+                          pw.Text(
+                            stateOfPlayTexts.reference + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.reference + '           '
+                          ),
+                          pw.Text(
+                            stateOfPlayTexts.lot + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.lot
+                          )
+                      ])
+                    ],
+                    
+                    <pw.Widget>[
+                      pw.Row(
+                        children: [
+                          pw.Text(
+                            stateOfPlayTexts.floor + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.floor.toString() + '           '
+                          ),
+                          pw.Text(
+                            stateOfPlayTexts.roomCount + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.roomCount.toString() + '           '
+                          ),
+                          pw.Text(
+                            stateOfPlayTexts.area + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.area.toString() + 'm²'
+                          )
+                      ])
+                    ],
+                    
+                    <pw.Widget>[
+                      pw.Row(
+                        children: [
+                          pw.Text(
+                            stateOfPlayTexts.annexe + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.annexes
+                          )
+                      ])
+                    ],
 
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.address + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
+                    
+                    <pw.Widget>[
+                      pw.Row(
+                        children: [
+                          pw.Text(
+                            stateOfPlayTexts.heatingType + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.heatingType + '           '
+                          ),
+                          pw.Text(
+                            stateOfPlayTexts.hotWater + ':   ',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            )
+                          ),
+                          pw.Text(
+                            stateOfPlay.property.hotWater
                           )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.address
-                        )
-                    ])
-                  ],
+                      ])
+                    ],
+                  ]
+                ),
+                pw.Padding(
+                  padding: pw.EdgeInsets.only(bottom: 25)
+                ),
 
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.type + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.type + '           '
-                        ),
-                        pw.Text(
-                          stateOfPlayTexts.reference + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.reference + '           '
-                        ),
-                        pw.Text(
-                          stateOfPlayTexts.lot + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.lot
-                        )
-                    ])
-                  ],
-                  
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.floor + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.floor.toString() + '           '
-                        ),
-                        pw.Text(
-                          stateOfPlayTexts.roomCount + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.roomCount.toString() + '           '
-                        ),
-                        pw.Text(
-                          stateOfPlayTexts.area + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.area.toString() + 'm²'
-                        )
-                    ])
-                  ],
-                  
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.annexe + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.annexe
-                        )
-                    ])
-                  ],
+                _buildKitchenTables(),
+                pw.Padding(
+                  padding: pw.EdgeInsets.only(bottom: 25)
+                ),
+                
+                _buildKitchenTables(),
 
-                  
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.heatingType + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.heatingType + '           '
-                        ),
-                        pw.Text(
-                          stateOfPlayTexts.hotWater + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.hotWater
-                        )
-                    ])
-                  ],
-                ]
-              ),
-              
-
-              _buildTable()
-
-            ]);
+              ])
+          ];
       })
     ); // Page
 
