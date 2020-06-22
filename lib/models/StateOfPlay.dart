@@ -74,7 +74,7 @@ class StateOfPlay {
     this.tenants,
     this.entryDate,
     this.property,
-    this.kitchen
+    this.rooms
   });
 
   final Owner owner;
@@ -85,7 +85,7 @@ class StateOfPlay {
 
   final Property property;
 
-  final Kitchen kitchen;
+  final List<Room> rooms;
 }
 
 // enum Decorations {
@@ -211,38 +211,26 @@ class Equipment {
 
 class GeneralAspect {
   const GeneralAspect({
-    this.type,
     this.comment,
     this.photo// TODO
   });
 
-  final String type;
   final String comment;
   final String photo;
-
-  String getIndex(int index) {
-    switch (index) {
-      case 0:
-        return type;
-      case 1:
-        return comment;
-      case 2:
-        return photo;
-    }
-    return '';
-  }
 }
 
-class Kitchen {
-  Kitchen({
+class Room {
+  Room({
+    this.name,
     this.decorations,
     this.electricsAndHeatings,
     this.equipments,
-    this.generalAspects
+    this.generalAspect
   });
 
+  final String name;
   final List<Decoration> decorations;
   final List<ElectricAndHeating> electricsAndHeatings;
   final List<Equipment> equipments;
-  final List<GeneralAspect> generalAspects;
+  final GeneralAspect generalAspect;
 }

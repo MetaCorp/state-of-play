@@ -135,63 +135,118 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
     heatingType: 'chauffage collectif',
     hotWater: 'eau chaude collective'
   ),
-  kitchen: sop.Kitchen(
-    decorations: [
-      sop.Decoration(
-        type: 'Porte',
-        nature: 'Pas de porte',
-        state: sop.States.good,
-        comment: 'Il manque la porte',
-        photo: ''
-      ),
-      sop.Decoration(
-        type: 'Porte',
-        nature: 'Pas de porte',
-        state: sop.States.good,
-        comment: 'Il manque la porte',
-        photo: ''
-      )
-    ],
-    electricsAndHeatings: [
-      sop.ElectricAndHeating(
-        type: 'Interrupteur',
-        quantity: 1,
-        state: sop.States.neww,
-        comment: '',
-        photo: ''
-      ),
-      sop.ElectricAndHeating(
-        type: 'Prise électrique',
-        quantity: 3,
-        state: sop.States.neww,
-        comment: '',
-        photo: ''
-      ),
-    ],
-    equipments: [
-      sop.Equipment(
-        type: 'Interrupteur',
-        brandOrObject: 'Brandt',
-        stateOrQuantity: sop.States.good,
-        comment: '',
-        photo: ''
-      ),
-      sop.Equipment(
-        type: 'Interrupteur',
-        brandOrObject: 'Brandt',
-        stateOrQuantity: sop.States.good,
-        comment: '',
-        photo: ''
-      ),
-    ],
-    generalAspects: [
-      sop.GeneralAspect(
-        type: 'Cuisine',
+  rooms: [
+    sop.Room(
+      name: 'Cuisine',
+      decorations: [
+        sop.Decoration(
+          type: 'Porte',
+          nature: 'Pas de porte',
+          state: sop.States.good,
+          comment: 'Il manque la porte',
+          photo: ''
+        ),
+        sop.Decoration(
+          type: 'Porte',
+          nature: 'Pas de porte',
+          state: sop.States.good,
+          comment: 'Il manque la porte',
+          photo: ''
+        )
+      ],
+      electricsAndHeatings: [
+        sop.ElectricAndHeating(
+          type: 'Interrupteur',
+          quantity: 1,
+          state: sop.States.neww,
+          comment: '',
+          photo: ''
+        ),
+        sop.ElectricAndHeating(
+          type: 'Prise électrique',
+          quantity: 3,
+          state: sop.States.neww,
+          comment: '',
+          photo: ''
+        ),
+      ],
+      equipments: [
+        sop.Equipment(
+          type: 'Interrupteur',
+          brandOrObject: 'Brandt',
+          stateOrQuantity: sop.States.good,
+          comment: '',
+          photo: ''
+        ),
+        sop.Equipment(
+          type: 'Interrupteur',
+          brandOrObject: 'Brandt',
+          stateOrQuantity: sop.States.good,
+          comment: '',
+          photo: ''
+        ),
+      ],
+      generalAspect: sop.GeneralAspect(
         comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
         photo: ''
       )
-    ]
-  )
+    ),
+    sop.Room(
+      name: 'Séjour / Salon',
+      decorations: [
+        sop.Decoration(
+          type: 'Porte',
+          nature: 'Pas de porte',
+          state: sop.States.good,
+          comment: 'Il manque la porte',
+          photo: ''
+        ),
+        sop.Decoration(
+          type: 'Porte',
+          nature: 'Pas de porte',
+          state: sop.States.good,
+          comment: 'Il manque la porte',
+          photo: ''
+        )
+      ],
+      electricsAndHeatings: [
+        sop.ElectricAndHeating(
+          type: 'Interrupteur',
+          quantity: 1,
+          state: sop.States.neww,
+          comment: '',
+          photo: ''
+        ),
+        sop.ElectricAndHeating(
+          type: 'Prise électrique',
+          quantity: 3,
+          state: sop.States.neww,
+          comment: '',
+          photo: ''
+        ),
+      ],
+      equipments: [
+        sop.Equipment(
+          type: 'Interrupteur',
+          brandOrObject: 'Brandt',
+          stateOrQuantity: sop.States.good,
+          comment: '',
+          photo: ''
+        ),
+        sop.Equipment(
+          type: 'Interrupteur',
+          brandOrObject: 'Brandt',
+          stateOrQuantity: sop.States.good,
+          comment: '',
+          photo: ''
+        ),
+      ],
+      generalAspect: sop.GeneralAspect(
+        comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+        photo: ''
+      ),
+    )
+  ]
 );
 
 // Comment convertir en data une enum ?
@@ -235,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
     OpenFile.open(file.path);
   }
 
-  pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, columnWidths }) {
+  pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
     print(array.length);
 
     return pw.Table.fromTextArray(
@@ -258,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
         fontWeight: pw.FontWeight.bold,
       ),
       firstHeaderStyle: pw.TextStyle(
-        color: PdfColors.blue600,
+        color: primaryColor,
         fontSize: 8,
         fontWeight: pw.FontWeight.bold,
       ),
@@ -287,6 +342,45 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  pw.Widget _buildTableGeneralAspect({ List<String> tableHeaders, String roomName, sop.GeneralAspect generalAspect, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
+    return pw.Table.fromTextArray(
+      columnWidths: columnWidths,
+      border: pw.TableBorder(
+        noGlobalBorder: true,
+        borderColor: PdfColors.grey400
+      ),
+      cellAlignment: pw.Alignment.centerLeft,
+      headerAlignment: pw.Alignment.centerLeft,
+      headerDecoration: pw.BoxDecoration(
+        color: PdfColors.grey100
+      ),
+      headerHeight: 25,
+      headerStyle: pw.TextStyle(
+        fontSize: 8,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      firstHeaderStyle: pw.TextStyle(
+        color: primaryColor,
+        fontSize: 8,
+        fontWeight: pw.FontWeight.bold,
+      ),
+      cellStyle: const pw.TextStyle(
+        fontSize: 10,
+      ),
+      headers: List<String>.generate(
+        tableHeaders.length,
+        (col) => tableHeaders[col].toUpperCase(),
+      ),
+      data: List<List<String>>.generate(
+        1,
+        (row) => List<String>.generate(
+          tableHeaders.length,
+          (col) => col == 0 ? roomName : col == 1 ? generalAspect.comment : generalAspect.photo,
+        ),
+      ),
+    );
+  }
+
   pw.Widget _buildSectionHeader({ String title }) {
     return pw.Container(
       child: pw.Row(
@@ -295,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
           pw.Row(
             children: [
               pw.Text(
-                title
+                title.toUpperCase()
               )
             ]
           )
@@ -303,8 +397,8 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
   }
-
-  pw.Widget _buildKitchenTables() {
+  
+  pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor}) {
     
     const tableDecorationHeaders = [
       'Decoration',
@@ -339,11 +433,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return pw.Column(
       children: [
         _buildSectionHeader(
-          title: 'Cuisine'
+          title: room.name
         ),
         _buildTable(
           tableHeaders: tableDecorationHeaders,
-          array: stateOfPlay.kitchen.decorations,
+          array: room.decorations,
           columnWidths: <int, pw.TableColumnWidth>{
             0: const pw.FixedColumnWidth(120),
             1: const pw.FixedColumnWidth(100),
@@ -352,38 +446,43 @@ class _MyHomePageState extends State<MyHomePage> {
             4: const pw.FixedColumnWidth(60),
             // 1: const pw.FlexColumnWidth(2),
             // 2: const pw.FractionColumnWidth(.2),
-          }
+          },
+          primaryColor: primaryColor//PdfColors.pink400
         ),
         _buildTable(
           tableHeaders: tableElectricAndHeatingHeaders,
-          array: stateOfPlay.kitchen.electricsAndHeatings,
+          array: room.electricsAndHeatings,
           columnWidths: <int, pw.TableColumnWidth>{
             0: const pw.FixedColumnWidth(120),
             1: const pw.FixedColumnWidth(100),
             2: const pw.FixedColumnWidth(80),
             3: const pw.FixedColumnWidth(120),
             4: const pw.FixedColumnWidth(60),
-          }
+          },
+          primaryColor: primaryColor
         ),
         _buildTable(
           tableHeaders: tableEquipmentsHeaders,
-          array: stateOfPlay.kitchen.equipments,
+          array: room.equipments,
           columnWidths: <int, pw.TableColumnWidth>{
             0: const pw.FixedColumnWidth(120),
             1: const pw.FixedColumnWidth(100),
             2: const pw.FixedColumnWidth(80),
             3: const pw.FixedColumnWidth(120),
             4: const pw.FixedColumnWidth(60),
-          }
+          },
+          primaryColor: primaryColor
         ),
-        _buildTable(
+        _buildTableGeneralAspect(
           tableHeaders: tableGeneralAspectsHeaders,
-          array: stateOfPlay.kitchen.generalAspects,
+          roomName: room.name,
+          generalAspect: room.generalAspect,
           columnWidths: <int, pw.TableColumnWidth>{
             0: const pw.FixedColumnWidth(120),
             1: const pw.FixedColumnWidth(300),
             2: const pw.FixedColumnWidth(60),
-          }
+          },
+          primaryColor: primaryColor
         ),
       ]
     );
@@ -811,12 +910,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: pw.EdgeInsets.only(bottom: 25)
                 ),
 
-                _buildKitchenTables(),
+                _buildRoom(
+                  room: stateOfPlay.rooms[0],
+                  primaryColor: PdfColors.blue
+                ),
                 pw.Padding(
                   padding: pw.EdgeInsets.only(bottom: 25)
                 ),
-                
-                _buildKitchenTables(),
+
+                _buildRoom(
+                  room: stateOfPlay.rooms[1],
+                  primaryColor: PdfColors.pink
+                )
 
               ])
           ];
