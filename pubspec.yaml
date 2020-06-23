@@ -26,6 +26,7 @@ dependencies:
   open_file: ^3.0.1
   path_provider: ^1.6.10
   flutter_email_sender: ^3.0.1
+  http: ^0.12.1
   pdf:
     path: ./dart_pdf/pdf
 

@@ -18,6 +18,8 @@ import 'package:flutter_tests/models/StateOfPlayOptions.dart';
 import 'package:flutter_tests/models/StateOfPlayTexts.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
+// import 'package:http/http.dart' as http;
+
 void main() {
   runApp(MyApp());
 }
@@ -276,6 +278,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final pw.Document pdf = pw.Document();
+
   Future<void> _saveAsFile(pdf) async {
     final Uint8List bytes = pdf.save();
 
@@ -381,24 +385,39 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  pw.Widget _buildSectionHeader({ String title }) {
+  pw.Widget _buildRoomHeader({ String title, PdfColor primaryColor, PdfImage logo }) {
     return pw.Container(
-      child: pw.Row(
-        children: [
-          // TODO Image Header
-          pw.Row(
+      child: pw.Expanded(// TODO: ne s'étend pas en largeur
+        child: pw.Expanded(
+          child: pw.Row(
+          // mainAxisAlignment: pw.MainAxisAlignment.end,
+            crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
-              pw.Text(
-                title.toUpperCase()
+              pw.Container(
+                height: 40,
+                child: pw.Image(logo)
+              ),
+              pw.Container(
+                height: 30,
+                decoration: pw.BoxDecoration(
+                  color: primaryColor
+                ),
+                child: pw.Row(
+                  children: [
+                    pw.Text(
+                      title.toUpperCase(),
+                    )
+                  ]
+                )
               )
             ]
           )
-        ]
+        )
       )
     );
   }
   
-  pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor}) {
+  pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
     
     const tableDecorationHeaders = [
       'Decoration',
@@ -432,10 +451,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return pw.Column(
       children: [
-        _buildSectionHeader(
-          title: room.name
+        _buildRoomHeader(
+          title: room.name,
+          primaryColor: primaryColor,
+          logo: logo
         ),
-        _buildTable(
+        room.decorations != null ? _buildTable(
           tableHeaders: tableDecorationHeaders,
           array: room.decorations,
           columnWidths: <int, pw.TableColumnWidth>{
@@ -448,8 +469,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // 2: const pw.FractionColumnWidth(.2),
           },
           primaryColor: primaryColor//PdfColors.pink400
-        ),
-        _buildTable(
+        ) : Container(),
+        room.electricsAndHeatings != null ? _buildTable(
           tableHeaders: tableElectricAndHeatingHeaders,
           array: room.electricsAndHeatings,
           columnWidths: <int, pw.TableColumnWidth>{
@@ -460,8 +481,8 @@ class _MyHomePageState extends State<MyHomePage> {
             4: const pw.FixedColumnWidth(60),
           },
           primaryColor: primaryColor
-        ),
-        _buildTable(
+        ) : Container(),
+        room.equipments != null ? _buildTable(
           tableHeaders: tableEquipmentsHeaders,
           array: room.equipments,
           columnWidths: <int, pw.TableColumnWidth>{
@@ -472,8 +493,8 @@ class _MyHomePageState extends State<MyHomePage> {
             4: const pw.FixedColumnWidth(60),
           },
           primaryColor: primaryColor
-        ),
-        _buildTableGeneralAspect(
+        ) : Container(),
+        room.generalAspect != null ? _buildTableGeneralAspect(
           tableHeaders: tableGeneralAspectsHeaders,
           roomName: room.name,
           generalAspect: room.generalAspect,
@@ -483,15 +504,25 @@ class _MyHomePageState extends State<MyHomePage> {
             2: const pw.FixedColumnWidth(60),
           },
           primaryColor: primaryColor
-        ),
+        ) : Container(),
       ]
     );
   }
 
   Future<void> _generatePdf() async {
-    final pw.Document pdf = pw.Document();
+
+    // TODO: Load Image From Internet
+    // http.Response response = await http.get(
+    //   'https://flutter.io/images/flutter-mark-square-100.png',
+    // );   
+    // response.bodyBytes //Uint8List
 
     PdfImage logo = PdfImage.file(
+      pdf.document,
+      bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+    );
+
+    PdfImage logoKitchen = PdfImage.file(
       pdf.document,
       bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
     );
@@ -912,7 +943,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 _buildRoom(
                   room: stateOfPlay.rooms[0],
-                  primaryColor: PdfColors.blue
+                  primaryColor: PdfColors.blue,
+                  logo: logoKitchen
                 ),
                 pw.Padding(
                   padding: pw.EdgeInsets.only(bottom: 25)
@@ -920,7 +952,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 _buildRoom(
                   room: stateOfPlay.rooms[1],
-                  primaryColor: PdfColors.pink
+                  primaryColor: PdfColors.pink,
+                  logo: logoKitchen
                 )
 
               ])
