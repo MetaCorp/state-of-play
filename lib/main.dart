@@ -18,6 +18,8 @@ import 'package:flutter_tests/models/StateOfPlayOptions.dart';
 import 'package:flutter_tests/models/StateOfPlayTexts.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
+import 'package:flutter_tests/widgets/PropertyForm.dart' as v;
+
 // import 'package:http/http.dart' as http;
 
 void main() {
@@ -104,29 +106,39 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
     firstname: 'Robert',
     lastname: 'Dupont',
     company: "SCI d'Investisseurs",
-    address: '3 rue des Mésanges, 75001 Paris'
+    address: '3 rue des Mésanges',
+    postalCode: '75001',
+    city: 'Paris'
   ),
   representative: sop.Representative(
     firstname: 'Elise',
     lastname: 'Lenotre',
     company: 'Marketin Immobilier',
-    address: '36 rue Paul Cézanne, 68200 Mulhouse'
+    address: '3 rue des Mésanges',
+    postalCode: '75001',
+    city: 'Paris'
   ),
   tenants: [
     sop.Tenant(
       firstname: 'Emilie',
       lastname: 'Dupond',
-      address: '36 rue des Vosges, 68000 Colmar',
+      address: '3 rue des Mésanges',
+      postalCode: '75001',
+      city: 'Paris'
     ),
     sop.Tenant(
       firstname: 'Schmitt',
       lastname: 'Albert',
-      address: '84 boulevard Kenedy, 68100 Mulhouse'
+      address: '3 rue des Mésanges',
+      postalCode: '75001',
+      city: 'Paris'
     )
   ],
   entryDate: DateTime(2020, 5, 2),// To be changed
   property: sop.Property(
-    address: '2 avenue de la Liberté, 68200 Mulhouse',
+    address: '3 rue des Mésanges',
+    postalCode: '75001',
+    city: 'Paris',
     type: 'appartement',
     reference: '3465',
     lot: '34',
@@ -388,30 +400,28 @@ class _MyHomePageState extends State<MyHomePage> {
   pw.Widget _buildRoomHeader({ String title, PdfColor primaryColor, PdfImage logo }) {
     return pw.Container(
       child: pw.Expanded(// TODO: ne s'étend pas en largeur
-        child: pw.Expanded(
-          child: pw.Row(
-          // mainAxisAlignment: pw.MainAxisAlignment.end,
-            crossAxisAlignment: pw.CrossAxisAlignment.end,
-            children: [
-              pw.Container(
-                height: 40,
-                child: pw.Image(logo)
+        child: pw.Row(
+        // mainAxisAlignment: pw.MainAxisAlignment.end,
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: [
+            pw.Container(
+              height: 40,
+              child: pw.Image(logo)
+            ),
+            pw.Container(
+              height: 30,
+              decoration: pw.BoxDecoration(
+                color: primaryColor
               ),
-              pw.Container(
-                height: 30,
-                decoration: pw.BoxDecoration(
-                  color: primaryColor
-                ),
-                child: pw.Row(
-                  children: [
-                    pw.Text(
-                      title.toUpperCase(),
-                    )
-                  ]
-                )
+              child: pw.Row(
+                children: [
+                  pw.Text(
+                    title.toUpperCase(),
+                  )
+                ]
               )
-            ]
-          )
+            )
+          ]
         )
       )
     );
@@ -539,14 +549,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         pw.Text(
-          tenant.address.split(', ')[0],
+          tenant.address,
           style: pw.TextStyle(
             color: PdfColors.black,
             fontSize: 9,
           ),
         ),
         pw.Text(
-          tenant.address.split(', ')[1],
+          tenant.postalCode + ' ' + tenant.city,
           style: pw.TextStyle(
             color: PdfColors.black,
             fontSize: 9,
@@ -666,14 +676,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ),
                                   pw.Text(
-                                    stateOfPlay.owner.address.split(', ')[0],
+                                    stateOfPlay.owner.address,
                                     style: pw.TextStyle(
                                       color: PdfColors.black,
                                       fontSize: 9,
                                     ),
                                   ),
                                   pw.Text(
-                                    stateOfPlay.owner.address.split(', ')[1],
+                                    stateOfPlay.owner.postalCode + ' ' + stateOfPlay.owner.city,
                                     style: pw.TextStyle(
                                       color: PdfColors.black,
                                       fontSize: 9,
@@ -731,14 +741,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ),
                                   pw.Text(
-                                    stateOfPlay.representative.address.split(', ')[0],
+                                    stateOfPlay.representative.address,
                                     style: pw.TextStyle(
                                       color: PdfColors.black,
                                       fontSize: 9,
                                     ),
                                   ),
                                   pw.Text(
-                                    stateOfPlay.representative.address.split(', ')[1],
+                                    stateOfPlay.representative.postalCode + ' ' + stateOfPlay.representative.city,
                                     style: pw.TextStyle(
                                       color: PdfColors.black,
                                       fontSize: 9,
@@ -825,7 +835,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             )
                           ),
                           pw.Text(
-                            stateOfPlay.property.address
+                            stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city
                           )
                       ])
                     ],
@@ -1017,6 +1027,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            v.PropertyForm(
+              property: stateOfPlay.property
+            ),
             Image(image: AssetImage('assets/images/logo.png')),
             RaisedButton(
               onPressed: _generatePdf,

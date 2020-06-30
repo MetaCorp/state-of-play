@@ -1,49 +1,62 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_tests/utils.dart';
 
 class Owner {
-  const Owner({
+  Owner({
     this.firstname,
     this.lastname,
     this.company,
-    this.address
+    this.address,
+    this.postalCode,
+    this.city
   });
 
-  final String firstname;
-  final String lastname;
-  final String company;
-  final String address;
+  String firstname;
+  String lastname;
+  String company;
+  String address;
+  String postalCode;
+  String city;
 }
 
 class Representative {
-  const Representative({
+  Representative({
     this.firstname,
     this.lastname,
     this.company,
-    this.address
+    this.address,
+    this.postalCode,
+    this.city
   });
 
-  final String firstname;
-  final String lastname;
-  final String company;
-  final String address;
+  String firstname;
+  String lastname;
+  String company;
+  String address;
+  String postalCode;
+  String city;
 }
 
 class Tenant {
-  const Tenant({
+  Tenant({
     this.firstname,
     this.lastname,
-    this.address
+    this.address,
+    this.postalCode,
+    this.city
   });
 
-  final String firstname;
-  final String lastname;
-  final String address;
+  String firstname;
+  String lastname;
+  String address;
+  String postalCode;
+  String city;
 }
 
 class Property {
-  const Property({
+  Property({
     this.address,
+    this.postalCode,
+    this.city,
     this.type,
     this.reference,
     this.lot,
@@ -55,16 +68,18 @@ class Property {
     this.hotWater
   });
 
-  final String address;
-  final String type;// To be replaced
-  final String reference;
-  final String lot;
-  final int floor;
-  final int roomCount;
-  final int area;
-  final String annexes;// To be replaced
-  final String heatingType;// To be replaced
-  final String hotWater;// To be replaced
+  String address;
+  String postalCode;
+  String city;
+  String type;// To be replaced
+  String reference;
+  String lot;
+  int floor;
+  int roomCount;
+  int area;
+  String annexes;// To be replaced
+  String heatingType;// To be replaced
+  String hotWater;// To be replaced
 }
 
 class StateOfPlay {
