@@ -1,55 +1,74 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-import 'package:flutter/services.dart';
-
-import 'package:flutter_tests/models/StateOfPlayOptions.dart';
-import 'package:flutter_tests/models/StateOfPlayTexts.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/PropertyForm.dart' as v;
 
+import 'package:flutter_tests/GeneratePdf.dart';
+import 'package:flutter_tests/widgets/StateOfPlays.dart';
+
+import 'package:graphql_flutter/graphql_flutter.dart';
+
+
 // import 'package:http/http.dart' as http;
+
+String get host {
+  if (Platform.isAndroid) {
+    return 'localhost';
+  } else {
+    return 'localhost';
+  }
+}
 
 void main() {
   runApp(MyApp());
 }
 
+final HttpLink httpLink = HttpLink(
+  uri: 'http://$host:9002/graphql',
+);
+
+// final AuthLink authLink = AuthLink(
+//   getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+//   // OR
+//   // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+// );
+
+// final Link link = authLink.concat(httpLink);
+
+ValueNotifier<GraphQLClient> client = ValueNotifier(
+  GraphQLClient(
+    cache: InMemoryCache(),
+    link: httpLink,
+  ),
+);
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return
+    GraphQLProvider(
+      client: client,
+      child:
+        MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+            '/state-of-plays': (context) => StateOfPlays(),
+          },
+        )
     );
   }
 }
@@ -71,34 +90,6 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
-// STATE_OF_PLAY TEXTS
-
-const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
-  'Ci-après le Propriétaire',
-  'Ci-après le Mandataire',
-  'Ci-après le(s) Locataire(s)',
-  "Date d'entrée",
-  'Adresse des lieux loués',
-  'Type de bien',
-  'Référence',
-  'Lot',
-  'Étage',
-  'Nombre de pièces',
-  'Surface',
-  'Annexes louées avec',
-  'Type de chauffage',
-  'Eau chaude'
-);
-
-// STATE_OF_PLAY OPTIONS
-
-const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
-  "État des lieux d'entrée",
-  'Dressé en commun et contradicatoire entre les soussignés',
-  'assets/images/logo.png'
-);
-
 // STATE_OF_PLAY MODEL
 
 sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
@@ -134,7 +125,7 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
       city: 'Paris'
     )
   ],
-  entryDate: DateTime(2020, 5, 2),// To be changed
+  entryDate: DateTime.now(),// To be changed
   property: sop.Property(
     address: '3 rue des Mésanges',
     postalCode: '75001',
@@ -158,14 +149,14 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           nature: 'Pas de porte',
           state: sop.States.good,
           comment: 'Il manque la porte',
-          photo: ''
+          photo: 0
         ),
         sop.Decoration(
           type: 'Porte',
           nature: 'Pas de porte',
           state: sop.States.good,
           comment: 'Il manque la porte',
-          photo: ''
+          photo: 0
         )
       ],
       electricsAndHeatings: [
@@ -174,14 +165,14 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           quantity: 1,
           state: sop.States.neww,
           comment: '',
-          photo: ''
+          photo: 0
         ),
         sop.ElectricAndHeating(
           type: 'Prise électrique',
           quantity: 3,
           state: sop.States.neww,
           comment: '',
-          photo: ''
+          photo: 0
         ),
       ],
       equipments: [
@@ -190,19 +181,19 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           brandOrObject: 'Brandt',
           stateOrQuantity: sop.States.good,
           comment: '',
-          photo: ''
+          photo: 0
         ),
         sop.Equipment(
           type: 'Interrupteur',
           brandOrObject: 'Brandt',
           stateOrQuantity: sop.States.good,
           comment: '',
-          photo: ''
+          photo: 0
         ),
       ],
       generalAspect: sop.GeneralAspect(
         comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-        photo: ''
+        photo: 0
       )
     ),
     sop.Room(
@@ -213,14 +204,14 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           nature: 'Pas de porte',
           state: sop.States.good,
           comment: 'Il manque la porte',
-          photo: ''
+          photo: 0
         ),
         sop.Decoration(
           type: 'Porte',
           nature: 'Pas de porte',
           state: sop.States.good,
           comment: 'Il manque la porte',
-          photo: ''
+          photo: 0
         )
       ],
       electricsAndHeatings: [
@@ -229,14 +220,14 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           quantity: 1,
           state: sop.States.neww,
           comment: '',
-          photo: ''
+          photo: 0
         ),
         sop.ElectricAndHeating(
           type: 'Prise électrique',
           quantity: 3,
           state: sop.States.neww,
           comment: '',
-          photo: ''
+          photo: 0
         ),
       ],
       equipments: [
@@ -245,22 +236,49 @@ sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
           brandOrObject: 'Brandt',
           stateOrQuantity: sop.States.good,
           comment: '',
-          photo: ''
+          photo: 0
         ),
         sop.Equipment(
           type: 'Interrupteur',
           brandOrObject: 'Brandt',
           stateOrQuantity: sop.States.good,
           comment: '',
-          photo: ''
+          photo: 0
         ),
       ],
       generalAspect: sop.GeneralAspect(
         comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-        photo: ''
+        photo: 0
       ),
     )
-  ]
+  ],
+  meters: [
+    sop.Meter(
+      type: 'Eau froide',
+      location: 'Cuisine',
+      dateOfSuccession: DateTime.now(),
+      index: 4567,
+      photo: 0
+    )
+  ],
+  keys: [
+    sop.Key(
+      type: 'Clé ascenceur',
+      count: 1,
+      comments: '',
+      photo: 0
+    )
+  ],
+  insurance: sop.Insurance(
+    company: 'Homestar',
+    number: '123465468',
+    dateStart: DateTime.now(),
+    dateEnd: DateTime.now(),
+  ),
+  comment: "L'appartement vient d'être repeint",
+  reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
+  city: 'Mulhouse',
+  date: DateTime.now()
 );
 
 // Comment convertir en data une enum ?
@@ -288,694 +306,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-  }
-
-  final pw.Document pdf = pw.Document();
-
-  Future<void> _saveAsFile(pdf) async {
-    final Uint8List bytes = pdf.save();
-
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final String appDocPath = appDocDir.path;
-    final File file = File(appDocPath + '/' + 'document.pdf');
-    print('Save as file ${file.path} ...');
-    await file.writeAsBytes(bytes);
-    setState(() {
-      _pdfPath = file.path;
-    });
-    OpenFile.open(file.path);
-  }
-
-  pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
-    print(array.length);
-
-    return pw.Table.fromTextArray(
-      columnWidths: columnWidths,
-      border: pw.TableBorder(
-        noGlobalBorder: true,
-        borderColor: PdfColors.grey400
-      ),
-      cellAlignment: pw.Alignment.centerLeft,
-      headerAlignment: pw.Alignment.centerLeft,
-      headerDecoration: pw.BoxDecoration(
-        // borderRadius: 2,
-        color: PdfColors.grey100
-      ),
-      headerHeight: 25,
-      // cellHeight: 40,
-      headerStyle: pw.TextStyle(
-        // color: _baseTextColor,
-        fontSize: 8,
-        fontWeight: pw.FontWeight.bold,
-      ),
-      firstHeaderStyle: pw.TextStyle(
-        color: primaryColor,
-        fontSize: 8,
-        fontWeight: pw.FontWeight.bold,
-      ),
-      cellStyle: const pw.TextStyle(
-        // color: _darkColor,
-        fontSize: 10,
-      ),
-      // rowDecoration: pw.BoxDecoration(
-      //   border: pw.BoxBorder(
-      //     bottom: true,
-      //     // color: accentColor,
-      //     width: .5,
-      //   ),
-      // ),
-      headers: List<String>.generate(
-        tableHeaders.length,
-        (col) => tableHeaders[col].toUpperCase(),
-      ),
-      data: List<List<String>>.generate(
-        array.length,
-        (row) => List<String>.generate(
-          tableHeaders.length,
-          (col) => array[row].getIndex(col),
-        ),
-      ),
-    );
-  }
-
-  pw.Widget _buildTableGeneralAspect({ List<String> tableHeaders, String roomName, sop.GeneralAspect generalAspect, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
-    return pw.Table.fromTextArray(
-      columnWidths: columnWidths,
-      border: pw.TableBorder(
-        noGlobalBorder: true,
-        borderColor: PdfColors.grey400
-      ),
-      cellAlignment: pw.Alignment.centerLeft,
-      headerAlignment: pw.Alignment.centerLeft,
-      headerDecoration: pw.BoxDecoration(
-        color: PdfColors.grey100
-      ),
-      headerHeight: 25,
-      headerStyle: pw.TextStyle(
-        fontSize: 8,
-        fontWeight: pw.FontWeight.bold,
-      ),
-      firstHeaderStyle: pw.TextStyle(
-        color: primaryColor,
-        fontSize: 8,
-        fontWeight: pw.FontWeight.bold,
-      ),
-      cellStyle: const pw.TextStyle(
-        fontSize: 10,
-      ),
-      headers: List<String>.generate(
-        tableHeaders.length,
-        (col) => tableHeaders[col].toUpperCase(),
-      ),
-      data: List<List<String>>.generate(
-        1,
-        (row) => List<String>.generate(
-          tableHeaders.length,
-          (col) => col == 0 ? roomName : col == 1 ? generalAspect.comment : generalAspect.photo,
-        ),
-      ),
-    );
-  }
-
-  pw.Widget _buildRoomHeader({ String title, PdfColor primaryColor, PdfImage logo }) {
-    return pw.Container(
-      child: pw.Expanded(// TODO: ne s'étend pas en largeur
-        child: pw.Row(
-        // mainAxisAlignment: pw.MainAxisAlignment.end,
-          crossAxisAlignment: pw.CrossAxisAlignment.end,
-          children: [
-            pw.Container(
-              height: 40,
-              child: pw.Image(logo)
-            ),
-            pw.Container(
-              height: 30,
-              decoration: pw.BoxDecoration(
-                color: primaryColor
-              ),
-              child: pw.Row(
-                children: [
-                  pw.Text(
-                    title.toUpperCase(),
-                  )
-                ]
-              )
-            )
-          ]
-        )
-      )
-    );
-  }
-  
-  pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
-    
-    const tableDecorationHeaders = [
-      'Decoration',
-      'Nature',
-      'État',
-      'Commentaires',
-      'Photo'
-    ];
-    
-    const tableElectricAndHeatingHeaders = [
-      'Électrique/Chauffage',
-      'Quantité',
-      'État',
-      'Commentaires',
-      'Photo'
-    ];
-
-    const tableEquipmentsHeaders = [
-      'Équipement',
-      'Marque/Objet',
-      'État/Qte',
-      'Commentaires',
-      'Photo'
-    ];
-    
-    const tableGeneralAspectsHeaders = [
-      'Aspect Général',
-      'Commentaires',
-      'Photo'
-    ];
-
-    return pw.Column(
-      children: [
-        _buildRoomHeader(
-          title: room.name,
-          primaryColor: primaryColor,
-          logo: logo
-        ),
-        room.decorations != null ? _buildTable(
-          tableHeaders: tableDecorationHeaders,
-          array: room.decorations,
-          columnWidths: <int, pw.TableColumnWidth>{
-            0: const pw.FixedColumnWidth(120),
-            1: const pw.FixedColumnWidth(100),
-            2: const pw.FixedColumnWidth(80),
-            3: const pw.FixedColumnWidth(120),
-            4: const pw.FixedColumnWidth(60),
-            // 1: const pw.FlexColumnWidth(2),
-            // 2: const pw.FractionColumnWidth(.2),
-          },
-          primaryColor: primaryColor//PdfColors.pink400
-        ) : Container(),
-        room.electricsAndHeatings != null ? _buildTable(
-          tableHeaders: tableElectricAndHeatingHeaders,
-          array: room.electricsAndHeatings,
-          columnWidths: <int, pw.TableColumnWidth>{
-            0: const pw.FixedColumnWidth(120),
-            1: const pw.FixedColumnWidth(100),
-            2: const pw.FixedColumnWidth(80),
-            3: const pw.FixedColumnWidth(120),
-            4: const pw.FixedColumnWidth(60),
-          },
-          primaryColor: primaryColor
-        ) : Container(),
-        room.equipments != null ? _buildTable(
-          tableHeaders: tableEquipmentsHeaders,
-          array: room.equipments,
-          columnWidths: <int, pw.TableColumnWidth>{
-            0: const pw.FixedColumnWidth(120),
-            1: const pw.FixedColumnWidth(100),
-            2: const pw.FixedColumnWidth(80),
-            3: const pw.FixedColumnWidth(120),
-            4: const pw.FixedColumnWidth(60),
-          },
-          primaryColor: primaryColor
-        ) : Container(),
-        room.generalAspect != null ? _buildTableGeneralAspect(
-          tableHeaders: tableGeneralAspectsHeaders,
-          roomName: room.name,
-          generalAspect: room.generalAspect,
-          columnWidths: <int, pw.TableColumnWidth>{
-            0: const pw.FixedColumnWidth(120),
-            1: const pw.FixedColumnWidth(300),
-            2: const pw.FixedColumnWidth(60),
-          },
-          primaryColor: primaryColor
-        ) : Container(),
-      ]
-    );
-  }
-
-  Future<void> _generatePdf() async {
-
-    // TODO: Load Image From Internet
-    // http.Response response = await http.get(
-    //   'https://flutter.io/images/flutter-mark-square-100.png',
-    // );   
-    // response.bodyBytes //Uint8List
-
-    PdfImage logo = PdfImage.file(
-      pdf.document,
-      bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
-    );
-
-    PdfImage logoKitchen = PdfImage.file(
-      pdf.document,
-      bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
-    );
-
-    List tenants = stateOfPlay.tenants.map((tenant) => pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Text(
-          stateOfPlay.representative.lastname.toUpperCase() + ' ' + tenant.firstname,
-          style: pw.TextStyle(
-            color: PdfColors.black,
-            fontWeight: pw.FontWeight.bold,
-            fontSize: 9,
-          ),
-        ),
-        pw.Text(
-          tenant.address,
-          style: pw.TextStyle(
-            color: PdfColors.black,
-            fontSize: 9,
-          ),
-        ),
-        pw.Text(
-          tenant.postalCode + ' ' + tenant.city,
-          style: pw.TextStyle(
-            color: PdfColors.black,
-            fontSize: 9,
-          ),
-        ),
-        pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
-      ]
-    )).toList();
-
-    tenants.add(pw.Column(
-      children: [
-        // pw.Expanded(
-        //   child:
-          pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.end,
-            mainAxisAlignment: pw.MainAxisAlignment.end,
-            children: [pw.Text(
-              stateOfPlayTexts.tenantsAux,
-              style: pw.TextStyle(
-                color: PdfColors.black,
-                fontStyle: pw.FontStyle.italic,
-                fontSize: 7,
-              ),
-            )
-          ])
-        // )
-      ])
-    );
-
-    pdf.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return [
-            pw.Column(
-              children: [
-
-                // HEADER
-                pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 20),
-                  child: pw.Row(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Expanded(
-                        child: pw.Column(
-                          children: [
-                            pw.Container(
-                              height: 30,
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Text(
-                                stateOfPlayOptions.title.toUpperCase(),
-                                style: pw.TextStyle(
-                                  color: PdfColors.black,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 22,
-                                ),
-                              ),
-                            ),
-                            pw.Container(
-                              height: 30,
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Text(
-                                stateOfPlayOptions.description,
-                                style: pw.TextStyle(
-                                  color: PdfColors.black,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                          ])
-                      ),
-                      pw.Column(
-                        children: [
-                          pw.Container(
-                            height: 90,
-                            child: pw.Image(logo)
-                          ),
-                      ])
-                  ]),
-                ),
-                
-                pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 30),
-                  child: pw.Row(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-
-                    // Box Owner
-                    pw.Expanded(
-                      child: pw.Column(
-                        children: [
-                          pw.Container(
-                            child: pw.Container(
-                              decoration: pw.BoxDecoration(
-                                color: PdfColors.grey100,
-                              ),
-                              height: 120,
-                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                              margin: const pw.EdgeInsets.only(right: 10),
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: [
-                                  pw.Text(
-                                    stateOfPlay.owner.company,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.owner.address,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.owner.postalCode + ' ' + stateOfPlay.owner.city,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Expanded(
-                                    child: pw.Row(
-                                      crossAxisAlignment: pw.CrossAxisAlignment.end,
-                                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                                      children: [pw.Text(
-                                        stateOfPlayTexts.ownerAux,
-                                        style: pw.TextStyle(
-                                          color: PdfColors.black,
-                                          fontStyle: pw.FontStyle.italic,
-                                          fontSize: 7,
-                                        ),
-                                      )
-                                    ])
-                                  )
-                                ]),
-                            )
-                          ),
-                        ])
-                    ),
-
-                    // Box Representative
-                    pw.Expanded(
-                      child: pw.Column(
-                        children: [
-                          pw.Container(
-                            child: pw.Container(
-                              decoration: pw.BoxDecoration(
-                                color: PdfColors.grey100,
-                              ),
-                              height: 120,
-                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                              margin: const pw.EdgeInsets.only(right: 10),
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: [
-                                  pw.Text(
-                                    stateOfPlay.representative.company,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.representative.address,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    stateOfPlay.representative.postalCode + ' ' + stateOfPlay.representative.city,
-                                    style: pw.TextStyle(
-                                      color: PdfColors.black,
-                                      fontSize: 9,
-                                    ),
-                                  ),
-                                  pw.Expanded(
-                                    child: pw.Row(
-                                      crossAxisAlignment: pw.CrossAxisAlignment.end,
-                                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                                      children: [pw.Text(
-                                        stateOfPlayTexts.representativeAux,
-                                        style: pw.TextStyle(
-                                          color: PdfColors.black,
-                                          fontStyle: pw.FontStyle.italic,
-                                          fontSize: 7,
-                                        ),
-                                      )
-                                    ])
-                                  )
-                                ]),
-                            )
-                          ),
-                        ])
-                    ),
-
-                    // Box Tenants
-                    pw.Expanded(
-                      child: pw.Column(
-                        children: [
-                          pw.Container(
-                            child: pw.Container(
-                              decoration: pw.BoxDecoration(
-                                color: PdfColors.grey100,
-                              ),
-                              height: 120,
-                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: tenants
-                              )
-                            )
-                          ),
-                          pw.Container(
-                              decoration: pw.BoxDecoration(
-                                color: PdfColors.grey500,
-                              ),
-                              height: 25,
-                              padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                              alignment: pw.Alignment.centerLeft,
-                              child: pw.Text(
-                                stateOfPlayTexts.entryDate + ' : ' + stateOfPlay.entryDate.toString(),
-                                style: pw.TextStyle(
-                                  color: PdfColors.white,
-                                  fontSize: 9
-                                )
-                              )
-                            )
-                        ])
-                    ),
-                  ]),
-                ),
-
-                // Property Array
-                pw.Table.fromTextArray(
-                  context: context,
-                  border: pw.TableBorder(
-                    color: PdfColors.grey400,
-                    borderColor: PdfColors.grey400
-                  ),
-                  cellAlignment: pw.Alignment.centerLeft,
-                  cellAlignments: {
-                    0: pw.Alignment.centerLeft,
-                  },
-                  data: <List<pw.Widget>>[
-
-                    <pw.Widget>[
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            stateOfPlayTexts.address + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city
-                          )
-                      ])
-                    ],
-
-                    <pw.Widget>[
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            stateOfPlayTexts.type + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.type + '           '
-                          ),
-                          pw.Text(
-                            stateOfPlayTexts.reference + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.reference + '           '
-                          ),
-                          pw.Text(
-                            stateOfPlayTexts.lot + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.lot
-                          )
-                      ])
-                    ],
-                    
-                    <pw.Widget>[
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            stateOfPlayTexts.floor + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.floor.toString() + '           '
-                          ),
-                          pw.Text(
-                            stateOfPlayTexts.roomCount + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.roomCount.toString() + '           '
-                          ),
-                          pw.Text(
-                            stateOfPlayTexts.area + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.area.toString() + 'm²'
-                          )
-                      ])
-                    ],
-                    
-                    <pw.Widget>[
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            stateOfPlayTexts.annexe + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.annexes
-                          )
-                      ])
-                    ],
-
-                    
-                    <pw.Widget>[
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            stateOfPlayTexts.heatingType + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.heatingType + '           '
-                          ),
-                          pw.Text(
-                            stateOfPlayTexts.hotWater + ':   ',
-                            style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                            )
-                          ),
-                          pw.Text(
-                            stateOfPlay.property.hotWater
-                          )
-                      ])
-                    ],
-                  ]
-                ),
-                pw.Padding(
-                  padding: pw.EdgeInsets.only(bottom: 25)
-                ),
-
-                _buildRoom(
-                  room: stateOfPlay.rooms[0],
-                  primaryColor: PdfColors.blue,
-                  logo: logoKitchen
-                ),
-                pw.Padding(
-                  padding: pw.EdgeInsets.only(bottom: 25)
-                ),
-
-                _buildRoom(
-                  room: stateOfPlay.rooms[1],
-                  primaryColor: PdfColors.pink,
-                  logo: logoKitchen
-                )
-
-              ])
-          ];
-      })
-    ); // Page
-
-    // final file = File("example.pdf");
-    // await file.writeAsBytes(pdf.save());
-
-    _saveAsFile(pdf);
-  
   }
   
   Future<void> _sendPdf() async {
@@ -1032,9 +362,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Image(image: AssetImage('assets/images/logo.png')),
             RaisedButton(
-              onPressed: _generatePdf,
+              onPressed: () => generatePdf(stateOfPlay),
               child: Text(
                 'Generate PDF'
+              )
+            ),
+            RaisedButton(
+              onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
+              child: Text(
+                'State of play list'
               )
             ),
             _pdfPath != null ? RaisedButton(

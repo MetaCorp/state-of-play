@@ -14,7 +14,15 @@ class StateOfPlayTexts {
     this.area,
     this.annexe,
     this.heatingType,
-    this.hotWater
+    this.hotWater,
+    this.property,
+    this.meter,
+    this.key,
+    this.comment,
+    this.reserve,
+    this.signatureOwnerOrRepresentative,
+    this.signatureTenant,
+    this.photoAnnexe
   );
 
   final String ownerAux;
@@ -31,4 +39,12 @@ class StateOfPlayTexts {
   final String annexe;
   final String heatingType;
   final String hotWater;
+  final String property;
+  final String meter;
+  final String key;
+  final String comment;
+  final String reserve;
+  final String signatureOwnerOrRepresentative;
+  final String signatureTenant;
+  final String photoAnnexe;
 }
