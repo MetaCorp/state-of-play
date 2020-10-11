@@ -11,6 +11,7 @@ import 'package:flutter_tests/widgets/PropertyForm.dart' as v;
 
 import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/widgets/StateOfPlays.dart';
+import 'package:flutter_tests/widgets/NewStateOfPlay.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -54,22 +55,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-    GraphQLProvider(
-      client: client,
-      child:
-        MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          initialRoute: '/',
-          routes: {
-            '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
-            '/state-of-plays': (context) => StateOfPlays(),
-          },
-        )
-    );
+      GraphQLProvider(
+        client: client,
+        child:
+          MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+              '/state-of-plays': (context) => StateOfPlays(),
+              '/new': (context) => NewStateOfPlay(),
+            },
+          )
+      );
   }
 }
 
@@ -371,6 +373,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
               child: Text(
                 'State of play list'
+              )
+            ),
+            RaisedButton(
+              onPressed: () => Navigator.pushNamed(context, '/new'),
+              child: Text(
+                'New state of play'
               )
             ),
             _pdfPath != null ? RaisedButton(
