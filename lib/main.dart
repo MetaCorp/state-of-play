@@ -59,16 +59,16 @@ class MyApp extends StatelessWidget {
         client: client,
         child:
           MaterialApp(
-            title: 'Flutter Demo',
+            title: 'State Of Play',
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             initialRoute: '/',
             routes: {
-              '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+              '/': (context) => MyHomePage(title: 'Home Page'),
               '/state-of-plays': (context) => StateOfPlays(),
-              '/new': (context) => NewStateOfPlay(),
+             '/new': (context) => NewStateOfPlayRouter(),
             },
           )
       );

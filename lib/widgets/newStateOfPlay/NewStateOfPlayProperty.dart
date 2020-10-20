@@ -5,6 +5,14 @@ class NewStateOfPlayProperty extends StatelessWidget {
   Widget build(BuildContext context) {
     // SignUpPage builds its own Navigator which ends up being a nested
     // Navigator in our app.
-    return Text('Property');
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Property'),
+        ]
+      ),
+    );
   }
 }
