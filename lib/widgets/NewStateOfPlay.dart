@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayInterlocutors.dart';
+import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayOwner.dart';
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayProperty.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -19,24 +20,39 @@ class NewStateOfPlay extends StatelessWidget {
       body: Container(
         child: Row(
           children: [
-            Container(
-              child: Column(
-                children: [
-                  RaisedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/new/interlocutors'),
-                    child: Text(
-                      'Interlocutors'
-                    )
-                  ),
-                  RaisedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/new/property'),
-                    child: Text(
-                      'Property'
-                    )
-                  ),
-                ],
-              )
-            ), 
+            Column(
+              children: [
+                RaisedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/new/owner'),
+                  child: Text(
+                    'Owner'
+                  )
+                ),
+                RaisedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/new/property'),
+                  child: Text(
+                    'Property'
+                  )
+                ),
+                RaisedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/new/estateAgent'),
+                  child: Text(
+                    'Estate Agent'
+                  )
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                //add co-tenant !! must be held as list !
+                RaisedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/new/tenants'),
+                  child: Text(
+                    'Tenants'
+                  )
+                ),
+              ],
+            ),           
           ]
         )
       ),
@@ -59,17 +75,31 @@ class NewStateOfPlayRouter extends StatelessWidget {
           // navigates to 'signup/choose_credentials'.
             builder = (BuildContext _) => NewStateOfPlay();
             break;
-          case '/new/interlocutors':
-          // Assume CollectPersonalInfoPage collects personal info and then
-          // navigates to 'signup/choose_credentials'.
-            builder = (BuildContext _) => NewStateOfPlayInterlocutors();
+          case '/new/estateAgent':
+          // Assume ChooseCredentialsPage collects new credentials and then
+          // invokes 'onSignupComplete()'.
+            builder = (BuildContext _) => NewStateOfPlayProperty();
+            break;
+          case '/new/tenants':
+          // Assume ChooseCredentialsPage collects new credentials and then
+          // invokes 'onSignupComplete()'.
+            builder = (BuildContext _) => NewStateOfPlayProperty();
+            break;
+          case '/new/owner':
+          // Assume ChooseCredentialsPage collects new credentials and then
+          // invokes 'onSignupComplete()'.
+            builder = (BuildContext _) => NewStateOfPlayOwner();
+            break;
+          case '/new/property/knownProperties':
+          // Assume ChooseCredentialsPage collects new credentials and then
+          // invokes 'onSignupComplete()'.
+            builder = (BuildContext _) => NewStateOfPlayProperty();
             break;
           case '/new/property':
           // Assume ChooseCredentialsPage collects new credentials and then
           // invokes 'onSignupComplete()'.
             builder = (BuildContext _) => NewStateOfPlayProperty();
             break;
-          
           default:
             throw Exception('Invalid route: ${settings.name}');
         }

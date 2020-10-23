@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:async';
 
@@ -54,6 +55,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Force Device Orientation 
+    //https://stackoverflow.com/questions/49418332/flutter-how-to-prevent-device-orientation-changes-and-force-portrait
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return
       GraphQLProvider(
         client: client,
@@ -312,38 +319,40 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            v.PropertyForm(
-              property: stateOfPlay.property
-            ),
-            Image(image: AssetImage('assets/images/logo.png')),
-            RaisedButton(
-              onPressed: () => generatePdf(stateOfPlay),
-              child: Text(
-                'Generate PDF'
-              )
-            ),
-            RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
-              child: Text(
-                'State of play list'
-              )
-            ),
-            RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, '/new'),
-              child: Text(
-                'New state of play'
-              )
-            ),
-            _pdfPath != null ? RaisedButton(
-              onPressed: _sendPdf,
-              child: Text(
-                'Send PDF'
-              )
-            ) : Container(),
-          ],
+        child: SingleChildScrollView(
+                  child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              v.PropertyForm(
+                property: stateOfPlay.property
+              ),
+              Image(image: AssetImage('assets/images/logo.png')),
+              RaisedButton(
+                onPressed: () => generatePdf(stateOfPlay),
+                child: Text(
+                  'Generate PDF'
+                )
+              ),
+              RaisedButton(
+                onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
+                child: Text(
+                  'State of play list'
+                )
+              ),
+              RaisedButton(
+                onPressed: () => Navigator.pushNamed(context, '/new'),
+                child: Text(
+                  'New state of play'
+                )
+              ),
+              _pdfPath != null ? RaisedButton(
+                onPressed: _sendPdf,
+                child: Text(
+                  'Send PDF'
+                )
+              ) : Container(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
