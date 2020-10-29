@@ -11,6 +11,9 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayPropertySignature.dart';
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayRoomDetail.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
 
 class NewStateOfPlay extends StatefulWidget {
   NewStateOfPlay({Key key}) : super(key: key);
@@ -43,85 +46,88 @@ class _NewStateOfPlayState extends State<NewStateOfPlay>{
     // Navigator in our app.
     double appBarHeight = MediaQuery.of(context).size.height/12;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        toolbarHeight: appBarHeight,
-        centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-            children :[
-              MaterialButton(
-                child: Text("Step 1\nInterlocuteurs", textAlign: TextAlign.center,),
-                onPressed: (){
-                  setState(() {
-                    _currentPage = 0;
-                  });
-                },
-              ),
-              Icon(Icons.chevron_right_sharp, color: iconColor,),
-              MaterialButton(
-                child: Text("Step 2\nPropriété", textAlign: TextAlign.center,),
-                onPressed: (){
-                  setState(() {
-                    _currentPage = 1;
-                  });  
-                },
-              ),
-              Icon(Icons.chevron_right_sharp, color: iconColor,),
+    return ChangeNotifierProvider(
+      create: (context) => NewStateOfPlayProvider(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          toolbarHeight: appBarHeight,
+          centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+              children :[
+                MaterialButton(
+                  child: Text("Step 1\nInterlocuteurs", textAlign: TextAlign.center,),
+                  onPressed: (){
+                    setState(() {
+                      _currentPage = 0;
+                    });
+                  },
+                ),
+                Icon(Icons.chevron_right_sharp, color: iconColor,),
+                MaterialButton(
+                  child: Text("Step 2\nPropriété", textAlign: TextAlign.center,),
+                  onPressed: (){
+                    setState(() {
+                      _currentPage = 1;
+                    });  
+                  },
+                ),
+                Icon(Icons.chevron_right_sharp, color: iconColor,),
 
-              MaterialButton(
-                child: Text("Step 3\nDétail pièces", textAlign: TextAlign.center,),
-                onPressed: (){
-                  setState(() {
-                    _currentPage = 2;
-                  }); 
-                },
-              ),
-              Icon(Icons.chevron_right_sharp, color: iconColor,),
-              MaterialButton(
-                child: Text("Step 4\nDivers"),
-                onPressed: (){
-                  setState(() {
-                    _currentPage = 3;
-                  }); 
-                },
-              ),
-              Icon(Icons.chevron_right_sharp, color: iconColor,),
-              MaterialButton(
-                child: Text("Step 5\nSignatures", textAlign: TextAlign.center,),
-                onPressed: (){
-                  setState(() {
-                    _currentPage = 4;
-                  }); 
-                },
-              ),
-            ],
-          ),       
-        leading: IconButton(
-          icon: Icon(Icons.save),
-          onPressed: () {
-            //save state          
-          },         
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.arrow_forward),
+                MaterialButton(
+                  child: Text("Step 3\nDétail pièces", textAlign: TextAlign.center,),
+                  onPressed: (){
+                    setState(() {
+                      _currentPage = 2;
+                    }); 
+                  },
+                ),
+                Icon(Icons.chevron_right_sharp, color: iconColor,),
+                MaterialButton(
+                  child: Text("Step 4\nDivers"),
+                  onPressed: (){
+                    setState(() {
+                      _currentPage = 3;
+                    }); 
+                  },
+                ),
+                Icon(Icons.chevron_right_sharp, color: iconColor,),
+                MaterialButton(
+                  child: Text("Step 5\nSignatures", textAlign: TextAlign.center,),
+                  onPressed: (){
+                    setState(() {
+                      _currentPage = 4;
+                    }); 
+                  },
+                ),
+              ],
+            ),       
+          leading: IconButton(
+            icon: Icon(Icons.save),
             onPressed: () {
-              setState(() {
-                //Todo send mails + end Page 
-                _currentPage = _currentPage == 4 ? 4 : _currentPage+=1;
-              });
-            },
+              //save state          
+            },         
           ),
-        ],
+          actions: [
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                setState(() {
+                  //Todo send mails + end Page 
+                  _currentPage = _currentPage == 4 ? 4 : _currentPage+=1;
+                });
+              },
+            ),
+          ],
+        ),
+        body: _currentPage == 0 ? NewStateOfPlayInterlocutors() :
+              _currentPage == 1 ? NewStateOfPlayProperty() :
+              _currentPage == 2 ? NewStateOfPlayRoomDetail() :
+              _currentPage == 3 ? NewStateOfPlayDivers() :
+              _currentPage == 4 ? NewStateOfPlaySignature() : null,
       ),
-      body: _currentPage == 0 ? NewStateOfPlayInterlocutors() :
-            _currentPage == 1 ? NewStateOfPlayProperty() :
-            _currentPage == 2 ? NewStateOfPlayRoomDetail() :
-            _currentPage == 3 ? NewStateOfPlayDivers() :
-            _currentPage == 4 ? NewStateOfPlaySignature() : null,
     );
   }
   

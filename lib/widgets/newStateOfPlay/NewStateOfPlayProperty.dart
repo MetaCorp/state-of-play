@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
 
+import 'package:provider/provider.dart';
 
 class NewStateOfPlayProperty extends StatefulWidget {
   NewStateOfPlayProperty({Key key}) : super(key: key);
@@ -88,16 +90,26 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 Container(
                   width: MediaQuery.of(context).size.width /3,
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextFormField(
-                    controller: _refController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Ref",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
+                  child: Consumer<NewStateOfPlayProvider>(
+                    builder: (context, newStateOfPlayState, child) {
+                      print("in builder for consumer: ");
+                      print(newStateOfPlayState.value.property.reference);
+                      if (_refController.text != newStateOfPlayState.value.property.reference) {
+                        _refController.text = newStateOfPlayState.value.property.reference ?? '';
+                      }
+                      return TextFormField(
+                        controller: _refController,
+                        onChanged: (value) => context.read<NewStateOfPlayProvider>().update(),
+                        decoration: InputDecoration(
+                          labelText: "Property's Ref",
+                        ),
+                        validator: (String value) {
+                          return value.trim().isEmpty ? "required" : null;
+                        },
+                      );
                     },
-                  ),
-                ),                
+                  )
+                ),
               ],
             ),
             SizedBox(height: sizedBoxHeight,),             
