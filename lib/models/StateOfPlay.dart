@@ -101,7 +101,10 @@ class Property {
     this.area,
     this.annexes,
     this.heatingType,
-    this.hotWater
+    this.hotWater,
+
+    this.door,
+    this.building
   });
 
   String address;
@@ -116,6 +119,8 @@ class Property {
   String annexes;// To be replaced
   String heatingType;// To be replaced
   String hotWater;// To be replaced
+  String door;
+  String building;
 
   factory Property.fromJSON(Map<String, dynamic> json) {
 
@@ -132,6 +137,8 @@ class Property {
       annexes: json["annexes"],
       heatingType: json["heatingType"],
       hotWater: json["hotWater"],
+      door: json["door"],
+      building: json["building"],
     );
   }
 }

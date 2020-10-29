@@ -21,7 +21,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
   TextEditingController _cityController= new TextEditingController();
 
   List<sop.Owner>  itemList;
-  
   sop.Owner currentOwner;
 
   @override
@@ -29,14 +28,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
     itemList = new List<sop.Owner>();
     _getDropDownMenuItems();
     currentOwner = new sop.Owner();
-    setState(() {
-      _firstnameController.text = currentOwner.firstname;
-      _lastnameController.text = currentOwner.lastname;
-      _companyController.text = currentOwner.company; 
-      _addressController.text = currentOwner.address;
-      _postalCodeController.text = currentOwner.postalCode;
-      _cityController.text = currentOwner.city;
-    });
     
     super.initState();
   }
@@ -65,7 +56,8 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
       resizeToAvoidBottomPadding: false,
       key: _scaffoldKey,
       appBar: AppBar(
-       title: Text('Owner'),
+        centerTitle: true,
+       title: Text('Propriétaire'),
         leading: GestureDetector(
           child: Icon(Icons.arrow_back),
           onTap: () {
@@ -263,9 +255,8 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
 
     return done;  
   }
-
+ //TODO Get Owners List
   void _getDropDownMenuItems() {
-    //TODO Get Owners List
     sop.Owner owner = new sop.Owner(firstname: "Leo", lastname:"Sza",company: "yolo", address: "75 rue duTest",postalCode: "94800",city: "Paris");
     sop.Owner owner2 = new sop.Owner(firstname: "Leo2", lastname:"Sza2");
     setState(() {

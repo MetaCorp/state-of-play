@@ -3,44 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 
-class NewStateOfPlayProperty extends StatefulWidget {
-  NewStateOfPlayProperty({Key key}) : super(key: key);
+class NewStateOfPlaySignature extends StatefulWidget {
+  NewStateOfPlaySignature({Key key}) : super(key: key);
 
   @override
-  _NewStateOfPlayPropertyState createState() => new _NewStateOfPlayPropertyState();
+  _NewStateOfPlaySignatureState createState() => new _NewStateOfPlaySignatureState();
 }
 
-class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
+class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController _refController= new TextEditingController();
+  TextEditingController _firstnameController= new TextEditingController();
+  TextEditingController _lastnameController= new TextEditingController();
+  TextEditingController _companyController= new TextEditingController();
   TextEditingController _addressController= new TextEditingController();
-  TextEditingController _floorController= new TextEditingController();
-  TextEditingController _buildingController= new TextEditingController();
-  TextEditingController _doorController= new TextEditingController();
   TextEditingController _postalCodeController= new TextEditingController();
   TextEditingController _cityController= new TextEditingController();
 
-  List<sop.Property>  _propertyList;
-  sop.Property currentProperty;
+  //List<sop.Signature>  itemList;
+  //sop.Signature currentSignature;
 
   @override
   void initState() {
-    _propertyList = new List<sop.Property>();
+    //itemList = new List<sop.Signature>();
     _getDropDownMenuItems();
-    currentProperty = new sop.Property();
+    //currentSignature = new sop.Signature();
     
     super.initState();
   }
 
   @override
   void dispose() {
-    _refController.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+    _companyController.dispose();
     _addressController.dispose();
-    _floorController.dispose();
-    _buildingController.dispose();
-    _doorController.dispose();
     _postalCodeController.dispose();
     _cityController.dispose();
 
@@ -71,9 +69,9 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                   width: MediaQuery.of(context).size.width /3,
                   child: MaterialButton(
                     color: Colors.blueGrey,
-                    child: Text("Known Property's"),
+                    child: Text("Known Signature's"),
                     onPressed: (){
-                      _showSelectKnownPropertyDialog(context);
+                      _showSelectKnownSignatureDialog(context);
                     },
                   ),
                 ),
@@ -89,15 +87,49 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                   width: MediaQuery.of(context).size.width /3,
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
-                    controller: _refController,
+                    controller: _firstnameController,
                     decoration: InputDecoration(
-                      labelText: "Property's Ref",
+                      labelText: "Signature's Firstname",
                     ),
                     validator: (String value) {
                       return value.trim().isEmpty ? "required" : null;
                     },
                   ),
-                ),                
+                ),
+                SizedBox(width: sizedBoxWidth,),             
+                Container(
+                  width: MediaQuery.of(context).size.width /3,
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: TextFormField(
+                    controller: _lastnameController,
+                    decoration: InputDecoration(
+                      labelText: "Signature's Lastname",
+                    ),
+                    validator: (String value) {
+                      return value.trim().isEmpty ? "required" : null;
+                    },
+                  ),
+                ),
+                SizedBox(width: sizedBoxWidth,),     
+              ],
+            ),
+            SizedBox(height: sizedBoxHeight,),             
+            Row(
+              children: [
+                SizedBox(width: sizedBoxWidth,),             
+                Container(
+                  width: MediaQuery.of(context).size.width /3,
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: TextFormField(
+                    controller: _companyController,
+                    decoration: InputDecoration(
+                      labelText: "Signature's Company name",
+                    ),
+                    validator: (String value) {
+                      return value.trim().isEmpty ? "required" : null;
+                    },
+                  ),
+                ),
               ],
             ),
             SizedBox(height: sizedBoxHeight,),             
@@ -110,65 +142,16 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                   child: TextFormField(
                     controller: _addressController,
                     decoration: InputDecoration(
-                      labelText: "Property's address",
+                      labelText: "Signature's Address",
                     ),
                     validator: (String value) {
                       return value.trim().isEmpty ? "required" : null;
                     },
                   ),
                 ),
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextFormField(
-                    controller: _floorController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Floor",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),     
               ],
             ),
-            SizedBox(height: sizedBoxHeight,),  
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextFormField(
-                    controller: _buildingController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Building",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextFormField(
-                    controller: _doorController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Door",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),     
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),                   
+            SizedBox(height: sizedBoxHeight,),             
             Row(
               children: [
                 SizedBox(width: sizedBoxWidth,),             
@@ -178,7 +161,7 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                   child: TextFormField(
                     controller: _postalCodeController,
                     decoration: InputDecoration(
-                      labelText: "Property's Postal Code",
+                      labelText: "Signature's Postal Code",
                     ),
                     validator: (String value) {
                       return value.trim().isEmpty ? "required" : null;
@@ -192,7 +175,7 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                   child: TextFormField(
                     controller: _cityController,
                     decoration: InputDecoration(
-                      labelText: "Property's City",
+                      labelText: "Signature's City",
                     ),
                     validator: (String value) {
                       return value.trim().isEmpty ? "required" : null;
@@ -215,8 +198,7 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                     child: Text("Save"),
                     color: Colors.blueGrey,
                     onPressed:()  {
-                      //_submit(context);
-
+                      _submit(context);
                     },
                   ),
                 ),
@@ -233,31 +215,29 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
     bool done = false;
     if (_formKey.currentState.validate() ) {
       _formKey.currentState.save();
-      currentProperty.address = _doorController.text;
-      currentProperty.postalCode = _postalCodeController.text;
-      currentProperty.city = _cityController.text;
+/*       currentSignature.address = _addressController.text;
+      currentSignature.postalCode = _postalCodeController.text;
+      currentSignature.city = _cityController.text; */
       done = true;
-    } 
-    else{
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Required Field's aren't filled"))); 
     }
+    
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Required Field's aren't filled"))); 
+
     return done;  
   }
- //TODO Get Propertys List
+ //TODO Get Signatures List
   void _getDropDownMenuItems() {
     setState(() {
-      _propertyList.add(new sop.Property(reference: "ref1", address: "007 Here Street"));
-      _propertyList.add(new sop.Property(reference: "ref1", address: "007 Here Street"));
+
     });
-    print('lilength:'+_propertyList.length.toString());
   }
 
-  void _showSelectKnownPropertyDialog(context) {
+  void _showSelectKnownSignatureDialog(context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Property's List"),
+          title: Text("Signature's List"),
           content: Container(
             height: MediaQuery.of(context).size.height /1.5,
             width: MediaQuery.of(context).size.width /3,
@@ -265,36 +245,32 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    labelText: "Search for Property",
+                    labelText: "Search for Signature",
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25.0))),
                   ),
                 ),                
-                SingleChildScrollView(
+                /* SingleChildScrollView(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: _propertyList.length,
+                    itemCount: itemList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      sop.Property  _property= _propertyList[index];
+                      var Signature = itemList[index];
                       return ListTile(
                         onTap: (){
                           setState(() {
-                            currentProperty = _property;
-                            _refController.text = currentProperty.reference;
-                            _addressController.text = currentProperty.address;
-                            _floorController.text = currentProperty.floor.toString();
-                            _buildingController.text = currentProperty.building;
-                            _doorController.text = currentProperty.door;
-                            _postalCodeController.text = currentProperty.postalCode;
-                            _cityController.text = currentProperty.city;
+                            currentSignature = Signature;
+                            _addressController.text = currentSignature.address;
+                            _postalCodeController.text = currentSignature.postalCode;
+                            _cityController.text = currentSignature.city;
                           });
                         },
-                        title: Text(_property.reference+" "+_property.address),
+                        title: Text(Signature.reference+" "+Signature.address),
                       );
                     },
                   ),
-                ),
+                ), */
               ],
             ),
           ),
