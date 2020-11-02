@@ -8,7 +8,7 @@ import 'package:flutter_tests/widgets/newStateOfPlay/InterlocutorsViews/NewState
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayProperty.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayPropertySignature.dart';
+import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlaySignature.dart';
 import 'package:flutter_tests/widgets/newStateOfPlay/NewStateOfPlayRoomDetail.dart';
 
 import 'package:provider/provider.dart';
