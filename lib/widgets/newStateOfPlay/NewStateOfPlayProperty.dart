@@ -99,7 +99,12 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                       }
                       return TextFormField(
                         controller: _refController,
-                        onChanged: (value) => context.read<NewStateOfPlayProvider>().update(),
+                        onChanged: (value) {
+                          print("TextField new value: ");
+                          print(value);
+                          newStateOfPlayState.value.property.reference = value;
+                          context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
+                        },
                         decoration: InputDecoration(
                           labelText: "Property's Ref",
                         ),
