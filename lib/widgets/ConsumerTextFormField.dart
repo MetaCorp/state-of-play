@@ -33,6 +33,6 @@ class ConsumerTextFormField extends StatelessWidget {
           validator: validator,
         );
       },
-    )
+    );
   }
 }

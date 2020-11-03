@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/GeneratePdf.dart';
 
+import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
+
+import 'package:provider/provider.dart';
 
 class NewStateOfPlaySignature extends StatefulWidget {
   NewStateOfPlaySignature({Key key}) : super(key: key);
@@ -139,7 +142,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     minWidth: MediaQuery.of(context).size.width /3,
                     color: Colors.blue,
                     child: Text("Visualiser l'état des lieux"),
-                    onPressed: ()=>{},
+                    onPressed: ()=> generatePdf(context.read<NewStateOfPlayProvider>().value),
                   ),            
                 ],
               ),
