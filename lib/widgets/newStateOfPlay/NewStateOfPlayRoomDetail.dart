@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 //import 'package:pdf/widgets.dart';
 
+import 'package:provider/provider.dart';
+import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
 
 class NewStateOfPlayRoomDetail extends StatefulWidget {
   NewStateOfPlayRoomDetail({Key key}) : super(key: key);
@@ -71,48 +73,52 @@ class _NewStateOfPlayRoomDetailState extends State<NewStateOfPlayRoomDetail> {
               color: Colors.blueGrey,
               child: Column(
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _roomList.length+1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if(index == 0){
-                        return Row(
-                          children: [
-                            SizedBox(width: sizedBoxWidth/8),
-                            Text("Liste des pièces", textScaleFactor: 2,),
-                            SizedBox(width: sizedBoxWidth/8),
-                            MaterialButton(
-                              minWidth: sizedBoxWidth/7,
-                              color: Colors.red,
-                              child: Icon(Icons.add),
-                              onPressed: (){
-                                print("pressed");
-                              },
+                  Consumer<NewStateOfPlayProvider>(
+                    builder: (context, newStateOfPlayState, child) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: newStateOfPlayState.value.rooms.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if(index == 0){
+                            return Row(
+                              children: [
+                                SizedBox(width: sizedBoxWidth/8),
+                                Text("Liste des pièces", textScaleFactor: 2,),
+                                SizedBox(width: sizedBoxWidth/8),
+                                MaterialButton(
+                                  minWidth: sizedBoxWidth/7,
+                                  color: Colors.red,
+                                  child: Icon(Icons.add),
+                                  onPressed: (){
+                                    print("pressed");
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                          index -=1;
+                          var room = newStateOfPlayState.value.rooms[index];
+                          return ListTile(
+                            title: Text(room.name),
+                            trailing: Switch(
+                              value: isSwitched,
+                              onChanged: (bool value) { 
+                                setState(() {
+                                  print("pressed");
+                                  isSwitched = value;
+                                });
+                              }, 
                             ),
-                          ],
-                        );
-                      }
-                      index -=1;
-                      var room = _roomList[index];
-                      return ListTile(
-                        title: Text(room.name),
-                        trailing: Switch(
-                          value: isSwitched,
-                          onChanged: (bool value) { 
-                            setState(() {
-                              print("pressed");
-                              isSwitched = value;
-                            });
-                          }, 
-                        ),
-                        onTap: (){
-                          setState(() {
+                            onTap: (){
+                              setState(() {
 
-                          });
+                              });
+                            },
+                          );
                         },
                       );
-                    },
-                  ),
+                    }
+                  )
                 ],
               ),
             ), 

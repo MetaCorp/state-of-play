@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
 
 import 'package:provider/provider.dart';
+import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
 
 class NewStateOfPlayProperty extends StatefulWidget {
   NewStateOfPlayProperty({Key key}) : super(key: key);
