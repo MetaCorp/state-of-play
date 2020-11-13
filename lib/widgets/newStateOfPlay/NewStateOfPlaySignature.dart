@@ -66,6 +66,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [  
             Container(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),             
               width: MediaQuery.of(context).size.width /2,
               child: Column(
                 children: [
@@ -98,7 +99,6 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                   ),
                   Text("Nouvelle adresse des locataires"),
                   Container(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextField(
                       decoration: InputDecoration(
                         labelText: "Nr° et Nom voie",
@@ -106,7 +106,6 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextField(
                       decoration: InputDecoration(
                         labelText: "Code Postal",
@@ -114,7 +113,6 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextField(
                       decoration: InputDecoration(
                         labelText: "Ville",

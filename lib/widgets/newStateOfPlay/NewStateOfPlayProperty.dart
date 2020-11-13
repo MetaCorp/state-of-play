@@ -89,7 +89,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Consumer<NewStateOfPlayProvider>(
                     builder: (context, newStateOfPlayState, child) {
                       print("in builder for consumer: ");
@@ -123,7 +122,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _addressController,
                     decoration: InputDecoration(
@@ -137,7 +135,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _floorController,
                     decoration: InputDecoration(
@@ -157,7 +154,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _buildingController,
                     decoration: InputDecoration(
@@ -171,7 +167,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _doorController,
                     decoration: InputDecoration(
@@ -191,7 +186,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _postalCodeController,
                     decoration: InputDecoration(
@@ -205,7 +199,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: sizedBoxWidth,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: TextFormField(
                     controller: _cityController,
                     decoration: InputDecoration(
@@ -227,7 +220,6 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                 SizedBox(width: MediaQuery.of(context).size.width /3,),             
                 Container(
                   width: MediaQuery.of(context).size.width /3,
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: MaterialButton( 
                     child: Text("Save"),
                     color: Colors.blueGrey,

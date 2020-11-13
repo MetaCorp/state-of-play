@@ -44,15 +44,15 @@ class _NewStateOfPlayState extends State<NewStateOfPlay>{
   Widget build(BuildContext context) {
     // SignUpPage builds its own Navigator which ends up being a nested
     // Navigator in our app.
-    double appBarHeight = MediaQuery.of(context).size.height/12;
+    double appBarHeight = MediaQuery.of(context).size.height/10;
 
     return ChangeNotifierProvider(
       create: (context) => NewStateOfPlayProvider(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          toolbarHeight: appBarHeight,
+          //toolbarHeight: appBarHeight,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
