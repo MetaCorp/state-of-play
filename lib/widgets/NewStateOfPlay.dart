@@ -52,7 +52,6 @@ class _NewStateOfPlayState extends State<NewStateOfPlay>{
         resizeToAvoidBottomInset: true,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          //toolbarHeight: appBarHeight,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
