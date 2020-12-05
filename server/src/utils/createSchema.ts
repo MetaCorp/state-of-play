@@ -15,6 +15,7 @@ import { RegisterResolver } from "../modules/user/Register";
 
 import { UserResolver } from "../modules/user/UserResolver";
 import { PropertyResolver } from "../modules/property/PropertyResolver";
+import { StateOfPlayResolver } from "../modules/stateOfPlay/StateOfPlayResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -32,10 +33,8 @@ export const createSchema = () =>
       AuthorBookResolver,
 
       UserResolver,
-
       PropertyResolver,
-
-      UserResolver
+      StateOfPlayResolver
     ],
     // authChecker: ({ context: { req: any } }) => {
     //   return !!req.session.userId;

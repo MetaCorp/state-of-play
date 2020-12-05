@@ -1,13 +1,12 @@
 {
   "name": "default",
   "type": "postgres",
-  "host": "ec2-54-75-246-118.eu-west-1.compute.amazonaws.com",
-  "port": 5432,
-  "username": "oiqwgjhgjzxnrw",
-  "password": "39e017154bdb8555d99ea38c873dbbf4d3954d4ef899624baa3a70612ba75e04",
-  "database": "d7vnloihnjhs64",
+  "host": "kandula.db.elephantsql.com",
+  "port": "5432",
+  "username": "psllomqe",
+  "password": "bseM4Y_NIigA24FwVAyYDdWT1UuwkZOV",
+  "database": "psllomqe",
   "synchronize": true,
   "logging": true,
-  "entities": ["src/entity/*.*"],
-  "ssl": true
+  "entities": ["src/entity/*.*"]
 }

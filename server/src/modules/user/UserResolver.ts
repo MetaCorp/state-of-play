@@ -9,7 +9,7 @@ import { User } from "../../entity/User";
 export class UserResolver {
   @Query(() => [User])
   async users() {
-    return User.find({ relations: ["properties"] });
+    return User.find({ relations: ["properties", "stateOfPlays", "stateOfPlays.property"] });
   }
 
   @Query(() => User, { nullable: true })
@@ -17,7 +17,7 @@ export class UserResolver {
 
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId }, { relations: ["properties"] })
+		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId }, { relations: ["properties", "stateOfPlays", "stateOfPlays.property"] })
 		if (!user) return
 
 		// console.log('properties: ', user.properties)

@@ -4,4 +4,7 @@ import { Field, InputType } from "type-graphql";
 export class CreateStateOfPlayInput {// TODO
   @Field()
   userId: string;
+
+  @Field()
+  propertyId: string;
 }

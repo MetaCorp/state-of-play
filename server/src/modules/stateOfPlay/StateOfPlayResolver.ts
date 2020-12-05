@@ -6,6 +6,7 @@ import { CreateStateOfPlayInput } from "./CreateStateOfPlayInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
+import { Property } from "../../entity/Property";
 
 import { StateOfPlayInput } from "./StateOfPlayInput"
 
@@ -19,6 +20,7 @@ export class StateOfPlayResolver {
 	@Query(() => StateOfPlay, { nullable: true })
 	async stateOfPlay(@Arg("data") data: StateOfPlayInput) {
 
+		// @ts-ignore
 		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user"] })
 		if (!stateOfPlay) return
 
@@ -34,10 +36,14 @@ export class StateOfPlayResolver {
 
 		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
 		if (!user) return
-
 		
+		// @ts-ignore
+		const property = await Property.findOne({ id: data.propertyId })
+		if (!property) return
+
 		const stateOfPlay = await StateOfPlay.create({
-			user: user
+			user: user,
+			property: property
 		}).save();
 
 		console.log(stateOfPlay)

@@ -20,7 +20,8 @@ export class PropertyResolver {
 	async property(@Arg("data") data: PropertyInput) {
 
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
-
+		
+		// @ts-ignore
 		const property = await Property.findOne({ id: data.propertyId }, { relations: ["user"] })
 		if (!property) return
 
@@ -37,10 +38,11 @@ export class PropertyResolver {
 
 		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
 		if (!user) return
-
 		
 		const property = await Property.create({
 			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 			user: user
 		}).save();
 

@@ -20,7 +20,7 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Field()
-  @Column("text", { unique: true })
+  @Column("text", { unique: true/* , length: 200 */ })
   email: string;
 
   @Field({ complexity: 3 })

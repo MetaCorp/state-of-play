@@ -8,5 +8,13 @@ export class CreatePropertyInput {
   address: string;
 
   @Field()
+  @Length(3, 10)
+  postalCode: string;
+
+  @Field()
+  @Length(1, 255)
+  city: string;
+
+  @Field()
   userId: string;
 }

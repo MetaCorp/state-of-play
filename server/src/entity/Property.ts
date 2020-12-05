@@ -16,11 +16,11 @@ export class Property extends BaseEntity {
   address: string;
   
   @Field()
-  @Column({ nullable: true })
+  @Column()
   postalCode: string;
 
   @Field()
-  @Column({ nullable: true })
+  @Column()
   city: string;
 
   // @Field()
