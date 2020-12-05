@@ -1,0 +1,12 @@
+import { Length } from "class-validator";
+import { Field, InputType } from "type-graphql";
+
+@InputType()
+export class CreatePropertyInput {
+  @Field()
+  @Length(1, 255)
+  address: string;
+
+  @Field()
+  userId: string;
+}

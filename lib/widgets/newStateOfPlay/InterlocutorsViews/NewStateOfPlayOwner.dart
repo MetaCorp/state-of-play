@@ -78,6 +78,7 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
         ],
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         reverse: true,
         child: Form(
           key: _formKey,
@@ -110,7 +111,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _firstnameController,
                       decoration: InputDecoration(
@@ -124,7 +124,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _lastnameController,
                       decoration: InputDecoration(
@@ -144,7 +143,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _companyController,
                       decoration: InputDecoration(
@@ -163,7 +161,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
@@ -182,7 +179,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _postalCodeController,
                       decoration: InputDecoration(
@@ -196,7 +192,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: sizedBoxWidth,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: TextFormField(
                       controller: _cityController,
                       decoration: InputDecoration(
@@ -218,7 +213,6 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
                   SizedBox(width: MediaQuery.of(context).size.width /3,),             
                   Container(
                     width: MediaQuery.of(context).size.width /3,
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: MaterialButton( 
                       child: Text("Save"),
                       color: Colors.blueGrey,
