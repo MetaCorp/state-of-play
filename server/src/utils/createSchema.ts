@@ -1,9 +1,9 @@
 import { buildSchema } from "type-graphql";
-import { AuthorBookResolver } from "../modules/author-book/AuthorBookResolver";
+// import { AuthorBookResolver } from "../modules/author-book/AuthorBookResolver";
 import { ChangePasswordResolver } from "../modules/user/ChangePassword";
 import { ConfirmUserResolver } from "../modules/user/ConfirmUser";
 import {
-  CreateProductResolver,
+  // CreateProductResolver,
   CreateUserResolver
 } from "../modules/user/CreateUser";
 import { ForgotPasswordResolver } from "../modules/user/ForgotPassword";
@@ -28,9 +28,9 @@ export const createSchema = () =>
       MeResolver,
       RegisterResolver,
       CreateUserResolver,
-      CreateProductResolver,
+      // CreateProductResolver,
       ProfilePictureResolver,
-      AuthorBookResolver,
+      // AuthorBookResolver,
 
       UserResolver,
       PropertyResolver,

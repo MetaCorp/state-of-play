@@ -7,7 +7,7 @@ import "reflect-metadata";
 // import { formatArgumentValidationError } from "type-graphql";
 import { createConnection } from "typeorm";
 import { redis } from "./redis";
-import { createAuthorsLoader } from "./utils/authorsLoader";
+// import { createAuthorsLoader } from "./utils/authorsLoader";
 import { createSchema } from "./utils/createSchema";
 
 const main = async () => {
@@ -21,7 +21,7 @@ const main = async () => {
     context: ({ req, res }: any) => ({
       req,
       res,
-      authorsLoader: createAuthorsLoader()
+      // authorsLoader: createAuthorsLoader()
     }),
     validationRules: [
       // queryComplexity({

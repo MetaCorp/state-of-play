@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 import { StateOfPlay } from "./StateOfPlay"
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -18,7 +19,11 @@ export class Representative extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Field(() => StateOfPlay)
+  @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.representative)
   stateOfPlays: StateOfPlay[];
+
+  @Field(() => User)
+  @ManyToOne(() => User, user => user.representatives)
+  user: User;
 }

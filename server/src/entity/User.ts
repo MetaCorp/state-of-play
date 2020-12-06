@@ -3,6 +3,8 @@ import { ObjectType, Field, ID, Root } from "type-graphql";
 
 import { Property } from "./Property";
 import { StateOfPlay } from "./StateOfPlay";
+import { Owner } from "./Owner";
+import { Representative } from "./Representative";
 
 @ObjectType()
 @Entity()
@@ -41,4 +43,12 @@ export class User extends BaseEntity {
   @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.user)
   stateOfPlays: StateOfPlay[];
+  
+  @Field(() => [Owner])
+  @OneToMany(() => Owner, owner => owner.user)
+  owners: Owner[];
+  
+  @Field(() => [Representative])
+  @OneToMany(() => Representative, representative => representative.user)
+  representatives: Representative[];
 }
