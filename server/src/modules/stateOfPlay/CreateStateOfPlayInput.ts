@@ -7,4 +7,10 @@ export class CreateStateOfPlayInput {// TODO
 
   @Field()
   propertyId: string;
+  
+  @Field()
+  ownerId: string;
+
+  @Field()
+  representativeId: string;
 }

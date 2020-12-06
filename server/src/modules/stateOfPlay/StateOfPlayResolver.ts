@@ -36,6 +36,14 @@ export class StateOfPlayResolver {
 
 		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
 		if (!user) return
+
+		// @ts-ignore
+		const owner = await User.findOne({ id: data.ownerId })
+		if (!owner) return
+		
+		// @ts-ignore
+		const representative = await User.findOne({ id: data.representativeId })
+		if (!representative) return
 		
 		// @ts-ignore
 		const property = await Property.findOne({ id: data.propertyId })
@@ -43,6 +51,8 @@ export class StateOfPlayResolver {
 
 		const stateOfPlay = await StateOfPlay.create({
 			user: user,
+			owner: owner,
+			representative: representative,
 			property: property
 		}).save();
 
