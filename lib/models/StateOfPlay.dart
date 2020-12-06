@@ -142,14 +142,14 @@ class Property {
     );
   }
 
-  Map<String, dynamic> toJSON(Property property) {
+  Map<String, dynamic> toJSON() {
     return {
-      "address": property.address,
-      "postalCode": property.postalCode,
-      "city": property.city,
-      "type": property.type,
-      "reference": property.reference,
-      "lot": property.lot,// TODO
+      "address": address,
+      "postalCode": postalCode,
+      "city": city,
+      // "type": type,
+      // "reference": reference,
+      // "lot": lot,// TODO
     };
   }
 }

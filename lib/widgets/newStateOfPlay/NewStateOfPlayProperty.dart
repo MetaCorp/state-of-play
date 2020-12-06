@@ -282,15 +282,10 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                             child: Text("Save"),
                             color: Colors.blueGrey,
                             onPressed:()  {
+                              var data = newStateOfPlayState.value.property.toJSON();
+                              data["userId"] = "1";
                               runMutation({
-                                "data": {
-                                  "address": newStateOfPlayState.value.property.address,
-                                  "postalCode": newStateOfPlayState.value.property.postalCode,
-                                  "city": newStateOfPlayState.value.property.city,
-                                  "userId": "1"
-                                }
-                                
-                                // jsonEncode(newStateOfPlayState.value.property)
+                                "data": data
                               });
                             },
                           ),
