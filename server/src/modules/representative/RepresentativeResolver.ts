@@ -1,8 +1,10 @@
 import { Resolver, Query, Mutation, Ctx, Arg } from "type-graphql";
+import { ILike } from 'typeorm';
 
 import { Representative } from "../../entity/Representative";
 
 import { CreateRepresentativeInput } from "./CreateRepresentativeInput";
+import { RepresentativesFilterInput } from "./RepresentativesFilterInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -12,8 +14,14 @@ import { User } from "../../entity/User";
 @Resolver()
 export class RepresentativeResolver {
 	@Query(() => [Representative])
-	representatives() {
-		return Representative.find()
+	representatives(@Arg("filter") filter: RepresentativesFilterInput) {
+		return Representative.find({
+            where: [
+                { lastName: ILike("%" + filter.search + "%") },
+                { firstName: ILike("%" + filter.search + "%") },
+            ],
+            order: { lastName: 'ASC', firstName: 'ASC' }
+        })
 	}
 
 	// @Query(() => Representative, { nullable: true })

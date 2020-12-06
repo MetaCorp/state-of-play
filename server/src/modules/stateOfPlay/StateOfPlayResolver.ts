@@ -9,19 +9,21 @@ import { User } from "../../entity/User";
 import { Property } from "../../entity/Property";
 
 import { StateOfPlayInput } from "./StateOfPlayInput"
+import { Owner } from "../../entity/Owner";
+import { Representative } from "../../entity/Representative";
 
 @Resolver()
 export class StateOfPlayResolver {
 	@Query(() => [StateOfPlay])
 	stateOfPlays() {
-		return StateOfPlay.find({ relations: ["user"] })
+		return StateOfPlay.find({ relations: ["user", "owner", "representative"] })
 	}
 
 	@Query(() => StateOfPlay, { nullable: true })
 	async stateOfPlay(@Arg("data") data: StateOfPlayInput) {
 
 		// @ts-ignore
-		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user"] })
+		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user", "owner", "representative"] })
 		if (!stateOfPlay) return
 
 
@@ -38,11 +40,11 @@ export class StateOfPlayResolver {
 		if (!user) return
 
 		// @ts-ignore
-		const owner = await User.findOne({ id: data.ownerId })
+		const owner = await Owner.findOne({ id: data.ownerId })
 		if (!owner) return
 		
 		// @ts-ignore
-		const representative = await User.findOne({ id: data.representativeId })
+		const representative = await Representative.findOne({ id: data.representativeId })
 		if (!representative) return
 		
 		// @ts-ignore

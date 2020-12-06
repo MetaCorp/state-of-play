@@ -16,6 +16,8 @@ import { RegisterResolver } from "../modules/user/Register";
 import { UserResolver } from "../modules/user/UserResolver";
 import { PropertyResolver } from "../modules/property/PropertyResolver";
 import { StateOfPlayResolver } from "../modules/stateOfPlay/StateOfPlayResolver";
+import { OwnerResolver } from "../modules/owner/OwnerResolver";
+import { RepresentativeResolver } from "../modules/representative/RepresentativeResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -34,7 +36,9 @@ export const createSchema = () =>
 
       UserResolver,
       PropertyResolver,
-      StateOfPlayResolver
+      StateOfPlayResolver,
+      OwnerResolver,
+      RepresentativeResolver
     ],
     // authChecker: ({ context: { req: any } }) => {
     //   return !!req.session.userId;
