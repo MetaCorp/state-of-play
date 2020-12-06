@@ -141,6 +141,17 @@ class Property {
       building: json["building"],
     );
   }
+
+  Map<String, dynamic> toJSON(Property property) {
+    return {
+      "address": property.address,
+      "postalCode": property.postalCode,
+      "city": property.city,
+      "type": property.type,
+      "reference": property.reference,
+      "lot": property.lot,// TODO
+    };
+  }
 }
 
 class StateOfPlay {
@@ -199,7 +210,7 @@ class StateOfPlay {
       // comment: json["comment"],
       // reserve: json["reserve"],
       // city: json["city"],
-      date: DateTime.parse(json["date"]),
+      date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       // photos: ??? TODO
     );
   }
@@ -526,9 +537,9 @@ class User {
 
     return User(
       firstname: json["firstname"],
-      lastname: json["lastname"],
-      stateOfPlays: (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList(),
-      // properties: (json["properties"] as List).map((property) => Property.fromJSON(property)).toList(),
+      lastname: json["lastname"],// TODO : pb ici avec la sérialisation
+      stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
+      properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
     );
   }
 }

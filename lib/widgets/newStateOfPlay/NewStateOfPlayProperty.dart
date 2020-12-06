@@ -1,9 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:provider/provider.dart';
 import 'package:flutter_tests/providers/NewStateOfPlayProvider.dart';
+
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class NewStateOfPlayProperty extends StatefulWidget {
   NewStateOfPlayProperty({Key key}) : super(key: key);
@@ -56,185 +60,251 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
     double sizedBoxHeight = MediaQuery.of(context).size.height / 22;    
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
-    return SingleChildScrollView(
-      reverse: true,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [  
-            SizedBox(height: sizedBoxHeight,),             
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  //width: sizedBoxWidth /3,
-                  width: MediaQuery.of(context).size.width /3,
-                  child: MaterialButton(
-                    color: Colors.blueGrey,
-                    child: Text("Known Property's"),
-                    onPressed: (){
-                      _showSelectKnownPropertyDialog(context);
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),             
-                SizedBox(width: sizedBoxWidth,),     
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),             
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: Consumer<NewStateOfPlayProvider>(
-                    builder: (context, newStateOfPlayState, child) {
-                      print("in builder for consumer: ");
-                      print(newStateOfPlayState.value.property.reference);
-                      if (_refController.text != newStateOfPlayState.value.property.reference) {
-                        _refController.text = newStateOfPlayState.value.property.reference ?? '';
-                      }
-                      return TextFormField(
-                        controller: _refController,
-                        onChanged: (value) {
-                          print("TextField new value: ");
-                          print(value);
-                          newStateOfPlayState.value.property.reference = value;
-                          context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Property's Ref",
-                        ),
-                        validator: (String value) {
-                          return value.trim().isEmpty ? "required" : null;
-                        },
-                      );
-                    },
-                  )
-                ),
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),             
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                      labelText: "Property's address",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _floorController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Floor",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),     
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),  
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _buildingController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Building",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _doorController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Door",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),     
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),                   
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _postalCodeController,
-                    decoration: InputDecoration(
-                      labelText: "Property's Postal Code",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: TextFormField(
-                    controller: _cityController,
-                    decoration: InputDecoration(
-                      labelText: "Property's City",
-                    ),
-                    validator: (String value) {
-                      return value.trim().isEmpty ? "required" : null;
-                    },
-                  ),
-                ),
-                SizedBox(width: sizedBoxWidth,),                       
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),  
-            Row(
-              children: [
-                SizedBox(width: sizedBoxWidth,),             
-                SizedBox(width: sizedBoxWidth,),             
-                SizedBox(width: MediaQuery.of(context).size.width /3,),             
-                Container(
-                  width: MediaQuery.of(context).size.width /3,
-                  child: MaterialButton( 
-                    child: Text("Save"),
-                    color: Colors.blueGrey,
-                    onPressed:()  {
-                      //_submit(context);
-
-                    },
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: sizedBoxHeight,),  
-          ],      
-        ),
+    return Mutation(
+      options: MutationOptions(
+        documentNode: gql('''
+          mutation createProperty(\$data: CreatePropertyInput!) {
+            createProperty(data: \$data) {
+              id
+              address
+              postalCode
+              city
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
+          }
+        '''), // this is the mutation string you just created
+        // you can update the cache based on results
+        update: (Cache cache, QueryResult result) {
+          return cache;
+        },
+        // or do something with the result.data on completion
+        onCompleted: (dynamic resultData) {
+          // print('onCompleted: ' + resultData.hasException);
+        },
       ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult result,
+      ) {
+        print('queryResult hasException: ' + result.hasException.toString());
+        print('queryResult loading: ' + result.loading.toString());
+        if(result.hasException) print('queryResult exception: ' + result.exception.graphqlErrors[0].toString());
+        return SingleChildScrollView(
+          reverse: true,
+          child: Form(
+            key: _formKey,
+            child: Consumer<NewStateOfPlayProvider>(
+              builder: (context, newStateOfPlayState, child) {
+                print("in builder for consumer: ");
+                print(newStateOfPlayState.value.property.reference);
+
+                if (_refController.text != newStateOfPlayState.value.property.reference) {
+                  _refController.text = newStateOfPlayState.value.property.reference ?? '';
+                }
+                if (_addressController.text != newStateOfPlayState.value.property.address) {
+                  _addressController.text = newStateOfPlayState.value.property.address ?? '';
+                }
+                if (_postalCodeController.text != newStateOfPlayState.value.property.postalCode) {
+                  _postalCodeController.text = newStateOfPlayState.value.property.postalCode ?? '';
+                }
+                if (_cityController.text != newStateOfPlayState.value.property.city) {
+                  _cityController.text = newStateOfPlayState.value.property.city ?? '';
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [  
+                    SizedBox(height: sizedBoxHeight,),             
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          //width: sizedBoxWidth /3,
+                          width: MediaQuery.of(context).size.width /3,
+                          child: MaterialButton(
+                            color: Colors.blueGrey,
+                            child: Text("Known Property's"),
+                            onPressed: (){
+                              _showSelectKnownPropertyDialog(context);
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),             
+                        SizedBox(width: sizedBoxWidth,),     
+                      ],
+                    ),
+                    SizedBox(height: sizedBoxHeight,),             
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _refController,
+                            onChanged: (value) {
+                              // print("TextField new value: ");
+                              // print(value);
+                              newStateOfPlayState.value.property.reference = value;
+                              context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Property's Ref",
+                            ),
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          )
+                        ),
+                      ]
+                    ),
+                    SizedBox(height: sizedBoxHeight,),             
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _addressController,
+                            decoration: InputDecoration(
+                              labelText: "Property's address",
+                            ),
+                            onChanged: (value) {
+                              newStateOfPlayState.value.property.address = value;
+                              context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
+                            },
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _floorController,
+                            decoration: InputDecoration(
+                              labelText: "Property's Floor",
+                            ),
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),     
+                      ],
+                    ),
+                    SizedBox(height: sizedBoxHeight,),  
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _buildingController,
+                            decoration: InputDecoration(
+                              labelText: "Property's Building",
+                            ),
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _doorController,
+                            decoration: InputDecoration(
+                              labelText: "Property's Door",
+                            ),
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),     
+                      ],
+                    ),
+                    SizedBox(height: sizedBoxHeight,),                   
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _postalCodeController,
+                            decoration: InputDecoration(
+                              labelText: "Property's Postal Code",
+                            ),
+                            onChanged: (value) {
+                              newStateOfPlayState.value.property.postalCode = value;
+                              context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
+                            },
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: TextFormField(
+                            controller: _cityController,
+                            decoration: InputDecoration(
+                              labelText: "Property's City",
+                            ),
+                            onChanged: (value) {
+                              newStateOfPlayState.value.property.city = value;
+                              context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
+                            },
+                            validator: (String value) {
+                              return value.trim().isEmpty ? "required" : null;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: sizedBoxWidth,),                       
+                      ],
+                    ),
+                    SizedBox(height: sizedBoxHeight,),  
+                    Row(
+                      children: [
+                        SizedBox(width: sizedBoxWidth,),             
+                        SizedBox(width: sizedBoxWidth,),             
+                        SizedBox(width: MediaQuery.of(context).size.width /3,),             
+                        Container(
+                          width: MediaQuery.of(context).size.width /3,
+                          child: MaterialButton( 
+                            child: Text("Save"),
+                            color: Colors.blueGrey,
+                            onPressed:()  {
+                              runMutation({
+                                "data": {
+                                  "address": newStateOfPlayState.value.property.address,
+                                  "postalCode": newStateOfPlayState.value.property.postalCode,
+                                  "city": newStateOfPlayState.value.property.city,
+                                  "userId": "1"
+                                }
+                                
+                                // jsonEncode(newStateOfPlayState.value.property)
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: sizedBoxHeight,),  
+                  ],      
+                );
+              }
+            )
+          ),
+        );
+      }
     );
   }
   

@@ -11,7 +11,10 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/PropertyForm.dart' as v;
 
 import 'package:flutter_tests/GeneratePdf.dart';
+
+import 'package:flutter_tests/widgets/Properties.dart';
 import 'package:flutter_tests/widgets/StateOfPlays.dart';
+
 import 'package:flutter_tests/widgets/NewStateOfPlay.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -32,7 +35,7 @@ void main() {
 }
 
 final HttpLink httpLink = HttpLink(
-  uri: 'http://$host:9002/graphql',
+  uri: 'http://$host:4000/graphql',
 );
 
 // final AuthLink authLink = AuthLink(
@@ -75,6 +78,7 @@ class MyApp extends StatelessWidget {
             routes: {
               '/': (context) => MyHomePage(title: 'Home Page'),
               '/state-of-plays': (context) => StateOfPlays(),
+              '/properties': (context) => Properties(),
              '/new': (context) => NewStateOfPlayRouter(),
             },
           )
@@ -337,6 +341,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
                 child: Text(
                   'State of play list'
+                )
+              ),
+              RaisedButton(
+                onPressed: () => Navigator.pushNamed(context, '/properties'),
+                child: Text(
+                  'Property list'
                 )
               ),
               RaisedButton(
