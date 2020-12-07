@@ -1,10 +1,11 @@
-import { Resolver, Query, Mutation, Ctx, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
 import { ILike } from "typeorm";
 
 import { Owner } from "../../entity/Owner";
 
 import { CreateOwnerInput } from "./CreateOwnerInput";
 import { OwnersFilterInput } from "./OwnersFilterInput";
+import { DeleteOwnerInput } from "./DeleteOwnerInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -14,12 +15,12 @@ import { User } from "../../entity/User";
 @Resolver()
 export class OwnerResolver {
 	@Query(() => [Owner])
-	owners(@Arg("filter") filter: OwnersFilterInput) {
+	owners(@Arg("filter", { nullable: true }) filter?: OwnersFilterInput) {
 		return Owner.find({
-            where: [
+            where: filter ? [
                 { lastName: ILike("%" + filter.search + "%") },
                 { firstName: ILike("%" + filter.search + "%") },
-            ],
+            ] : [],
             order: { lastName: 'ASC', firstName: 'ASC' }
         })
 	}
@@ -55,4 +56,17 @@ export class OwnerResolver {
 		// await owner.save();
 		return owner;
 	}
+	
+	@Mutation(() => Int)
+	async deleteOwner(@Arg("data") data: DeleteOwnerInput) {
+
+		const owner2 = await Owner.delete(data.ownerId)
+
+		console.log('delete owner: ', owner2)
+
+		if (owner2.affected !== 1) return 0
+
+		return 1
+	}
+
 }

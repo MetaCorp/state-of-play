@@ -1,8 +1,11 @@
-import { Resolver, Query, Mutation, Ctx, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { ILike } from "typeorm";
 
 import { StateOfPlay } from "../../entity/StateOfPlay";
 
 import { CreateStateOfPlayInput } from "./CreateStateOfPlayInput";
+import { StateOfPlaysFilterInput } from "./StateOfPlaysFilterInput";
+import { DeleteStateOfPlayInput } from "./DeleteStateOfPlayInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -15,22 +18,29 @@ import { Representative } from "../../entity/Representative";
 @Resolver()
 export class StateOfPlayResolver {
 	@Query(() => [StateOfPlay])
-	stateOfPlays() {
-		return StateOfPlay.find({ relations: ["user", "owner", "representative"] })
+	// @ts-ignore
+	stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput) {
+		return StateOfPlay.find({
+			where: filter ? [
+                { property: { address: ILike("%" + filter.search + "%") } },
+                { property: { postalCode: ILike("%" + filter.search + "%") } },
+                { property: { city: ILike("%" + filter.search + "%") } },
+            ] : [],
+			relations: ["user", "owner", "representative", "property"]
+		})
 	}
 
 	@Query(() => StateOfPlay, { nullable: true })
 	async stateOfPlay(@Arg("data") data: StateOfPlayInput) {
 
 		// @ts-ignore
-		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user", "owner", "representative"] })
+		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user", "owner", "representative", "property"] })
 		if (!stateOfPlay) return
 
 
 		return stateOfPlay;
 	}
 
-	// @Arg("data") data: CreateStateOfPlayInput, 
 	@Mutation(() => StateOfPlay, { nullable: true })
 	async createStateOfPlay(@Arg("data") data: CreateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
@@ -63,4 +73,17 @@ export class StateOfPlayResolver {
 		// await stateOfPlay.save();
 		return stateOfPlay;
 	}
+	
+	@Mutation(() => Int)
+	async deleteStateOfPlay(@Arg("data") data: DeleteStateOfPlayInput) {
+
+		const stateOfPlay2 = await StateOfPlay.delete(data.stateOfPlayId)
+
+		console.log('delete stateOfPlay: ', stateOfPlay2)
+
+		if (stateOfPlay2.affected !== 1) return 0
+
+		return 1
+	}
+
 }

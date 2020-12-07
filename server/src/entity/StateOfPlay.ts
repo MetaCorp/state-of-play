@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 import { User } from "./User";
@@ -27,5 +27,6 @@ export class StateOfPlay extends BaseEntity {
 
   @Field(() => Property)
   @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true })
+  @JoinColumn({ name: "propertyId" })// TODO: utile pour la recherche nested ?
   property: Property;
 }

@@ -1,10 +1,11 @@
-import { Resolver, Query, Mutation, Ctx, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
 import { ILike } from 'typeorm';
 
 import { Representative } from "../../entity/Representative";
 
 import { CreateRepresentativeInput } from "./CreateRepresentativeInput";
 import { RepresentativesFilterInput } from "./RepresentativesFilterInput";
+import { DeleteRepresentativeInput } from "./DeleteRepresentativeInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -14,12 +15,12 @@ import { User } from "../../entity/User";
 @Resolver()
 export class RepresentativeResolver {
 	@Query(() => [Representative])
-	representatives(@Arg("filter") filter: RepresentativesFilterInput) {
+	representatives(@Arg("filter", { nullable: true }) filter?: RepresentativesFilterInput) {
 		return Representative.find({
-            where: [
+            where: filter ? [
                 { lastName: ILike("%" + filter.search + "%") },
                 { firstName: ILike("%" + filter.search + "%") },
-            ],
+            ] : [],
             order: { lastName: 'ASC', firstName: 'ASC' }
         })
 	}
@@ -55,4 +56,17 @@ export class RepresentativeResolver {
 		// await representative.save();
 		return representative;
 	}
+
+	@Mutation(() => Int)
+	async deleteRepresentative(@Arg("data") data: DeleteRepresentativeInput) {
+
+		const representative2 = await Representative.delete(data.representativeId)
+
+		console.log('delete representative: ', representative2)
+
+		if (representative2.affected !== 1) return 0
+
+		return 1
+	}
+
 }

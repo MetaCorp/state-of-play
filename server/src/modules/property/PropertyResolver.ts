@@ -1,8 +1,11 @@
-import { Resolver, Query, Mutation, Ctx, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { ILike } from "typeorm";
 
 import { Property } from "../../entity/Property";
 
 import { CreatePropertyInput } from "./CreatePropertyInput";
+import { PropertyFilterInput } from "./PropertyFilterInput";
+import { DeletePropertyInput } from "./DeletePropertyInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -12,8 +15,15 @@ import { PropertyInput } from "./PropertyInput"
 @Resolver()
 export class PropertyResolver {
 	@Query(() => [Property])
-	properties() {
-		return Property.find({ relations: ["user"] })
+	properties(@Arg("filter") filter: PropertyFilterInput) {
+		return Property.find({
+			where: [
+                { address: ILike("%" + filter.search + "%") },
+                { postalCode: ILike("%" + filter.search + "%") },
+                { city: ILike("%" + filter.search + "%") },
+            ],
+			relations: ["user"]
+		})
 	}
 
 	@Query(() => Property, { nullable: true })
@@ -51,4 +61,17 @@ export class PropertyResolver {
 		// await property.save();
 		return property;
 	}
+
+	@Mutation(() => Int)
+	async deleteProperty(@Arg("data") data: DeletePropertyInput) {
+
+		const property2 = await Property.delete(data.propertyId)
+
+		console.log('delete property: ', property2)
+
+		if (property2.affected !== 1) return 0
+
+		return 1
+	}
+
 }
