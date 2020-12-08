@@ -90,6 +90,7 @@ class Tenant {
 
 class Property {
   Property({
+    this.id,
     this.address,
     this.postalCode,
     this.city,
@@ -106,6 +107,8 @@ class Property {
     this.door,
     this.building
   });
+
+  String id;
 
   String address;
   String postalCode;
@@ -125,6 +128,7 @@ class Property {
   factory Property.fromJSON(Map<String, dynamic> json) {
 
     return Property(
+      id: json["id"],
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
@@ -155,7 +159,8 @@ class Property {
 }
 
 class StateOfPlay {
-  const StateOfPlay({
+  StateOfPlay({
+    this.id,
     this.owner,
     this.representative,
     this.tenants,
@@ -172,32 +177,35 @@ class StateOfPlay {
     this.photos
   });
 
-  final Owner owner;
-  final Representative representative;
-  final List<Tenant> tenants;
+  String id;
 
-  final DateTime entryDate;// To be changed
+  Owner owner;
+  Representative representative;
+  List<Tenant> tenants;
 
-  final Property property;
+  DateTime entryDate;// To be changed
 
-  final List<Room> rooms;
+  Property property;
 
-  final List<Meter> meters;
+  List<Room> rooms;
 
-  final List<Key> keys;
+  List<Meter> meters;
 
-  final Insurance insurance;
-  final String comment;
-  final String reserve;
+  List<Key> keys;
 
-  final String city;
-  final DateTime date;
+  Insurance insurance;
+  String comment;
+  String reserve;
 
-  final List<String> photos;
+  String city;
+  DateTime date;
+
+  List<String> photos;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
+      id: json["id"],
       // owner: Owner.fromJSON(json["owner"]),
       // representative: Representative.fromJSON(json["representative"]),
       // tenants: (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList(),
