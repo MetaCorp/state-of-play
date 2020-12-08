@@ -23,6 +23,10 @@ class _StateOfPlaysState extends State<StateOfPlays> {
         title: Text('États des lieux'),
         actions: [
           IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+          ),
+          IconButton(
             icon: Icon(Icons.add),
             onPressed: () => Navigator.pushNamed(context, '/new-state-of-play'),
           ),

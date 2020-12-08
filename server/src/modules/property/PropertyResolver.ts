@@ -7,6 +7,7 @@ import { CreatePropertyInput } from "./CreatePropertyInput";
 import { PropertyFilterInput } from "./PropertyFilterInput";
 import { DeletePropertyInput } from "./DeletePropertyInput";
 import { UpdatePropertyInput } from "./UpdatePropertyInput";
+import { PropertiesInput } from "./PropertiesInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -16,9 +17,11 @@ import { PropertyInput } from "./PropertyInput"
 @Resolver()
 export class PropertyResolver {
 	@Query(() => [Property])
-	properties(@Arg("filter") filter: PropertyFilterInput) {
+	//@ts-ignore
+	properties(@Arg("data", { nullable: true }) data?: PropertiesInput, @Arg("filter") filter: PropertyFilterInput) {
 		return Property.find({
 			where: [
+				// { user: { id: data.userId } }, // TODO: test search by user
                 { address: ILike("%" + filter.search + "%") },
                 { postalCode: ILike("%" + filter.search + "%") },
                 { city: ILike("%" + filter.search + "%") },

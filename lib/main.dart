@@ -8,9 +8,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlay.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlays.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/SearchStateOfPlays.dart';
 
 import 'package:flutter_tests/widgets/property/Property.dart';
 import 'package:flutter_tests/widgets/property/Properties.dart';
+import 'package:flutter_tests/widgets/property/NewProperty.dart';
+import 'package:flutter_tests/widgets/property/SearchProperties.dart';
 
 class StateOfPlayArguments {
   final String stateOfPlayId;
@@ -86,19 +89,28 @@ class MyApp extends StatelessWidget {
             // //  '/new': (context) => NewStateOfPlayRouter(),
             // },
             onGenerateRoute: (settings) {
+
               if (settings.name == "/state-of-plays") 
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlays());
               else if (settings.name == '/state-of-play') {
                 print('args: ' + settings.arguments.toString());
-                final StateOfPlayArguments args = settings.arguments;
+                final StateOfPlayArguments args = settings.arguments;// TODO: doesnt cast
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlay(stateOfPlayId: args.stateOfPlayId));
               }
               else if (settings.name == '/new-state-of-play')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay());
+              else if (settings.name == '/search-state-of-plays')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays());
+
               else if (settings.name == '/properties')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => Properties());
               else if (settings.name == '/property')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => Property());
+              else if (settings.name == '/new-property')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewProperty());
+              else if (settings.name == '/search-properties')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
+              
 
               return null;
             },
