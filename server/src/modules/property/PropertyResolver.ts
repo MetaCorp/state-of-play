@@ -6,6 +6,7 @@ import { Property } from "../../entity/Property";
 import { CreatePropertyInput } from "./CreatePropertyInput";
 import { PropertyFilterInput } from "./PropertyFilterInput";
 import { DeletePropertyInput } from "./DeletePropertyInput";
+import { UpdatePropertyInput } from "./UpdatePropertyInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -21,7 +22,7 @@ export class PropertyResolver {
                 { address: ILike("%" + filter.search + "%") },
                 { postalCode: ILike("%" + filter.search + "%") },
                 { city: ILike("%" + filter.search + "%") },
-            ],
+            ],// TODO: OrderInput
 			relations: ["user"]
 		})
 	}
@@ -63,13 +64,28 @@ export class PropertyResolver {
 	}
 
 	@Mutation(() => Int)
+	async updateProperty(@Arg("data") data: UpdatePropertyInput) {
+
+		const property = await Property.update(data.propertyId, {
+			address: data.property.address,
+			postalCode: data.property.postalCode,
+			city: data.property.city,
+		})
+		console.log('updateProperty: ', property)
+
+		if (property.affected !== 1) return 0
+
+		return 1
+	}
+
+	@Mutation(() => Int)
 	async deleteProperty(@Arg("data") data: DeletePropertyInput) {
 
-		const property2 = await Property.delete(data.propertyId)
+		const property = await Property.delete(data.propertyId)
 
-		console.log('delete property: ', property2)
+		console.log('deleteProperty: ', property)
 
-		if (property2.affected !== 1) return 0
+		if (property.affected !== 1) return 0
 
 		return 1
 	}

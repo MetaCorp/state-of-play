@@ -6,6 +6,7 @@ import { StateOfPlay } from "../../entity/StateOfPlay";
 import { CreateStateOfPlayInput } from "./CreateStateOfPlayInput";
 import { StateOfPlaysFilterInput } from "./StateOfPlaysFilterInput";
 import { DeleteStateOfPlayInput } from "./DeleteStateOfPlayInput";
+import { UpdateStateOfPlayInput } from "./UpdateStateOfPlayInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -74,6 +75,18 @@ export class StateOfPlayResolver {
 		return stateOfPlay;
 	}
 	
+	@Mutation(() => Int)
+	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput) {
+
+		const stateOfPlay = await StateOfPlay.update(data.stateOfPlayId, {
+		})
+		console.log('updateOwner: ', stateOfPlay)
+
+		if (stateOfPlay.affected !== 1) return 0
+
+		return 1
+	}
+
 	@Mutation(() => Int)
 	async deleteStateOfPlay(@Arg("data") data: DeleteStateOfPlayInput) {
 

@@ -6,6 +6,7 @@ import { Representative } from "../../entity/Representative";
 import { CreateRepresentativeInput } from "./CreateRepresentativeInput";
 import { RepresentativesFilterInput } from "./RepresentativesFilterInput";
 import { DeleteRepresentativeInput } from "./DeleteRepresentativeInput";
+import { UpdateRepresentativeInput } from "./UpdateRepresentativeInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -58,13 +59,27 @@ export class RepresentativeResolver {
 	}
 
 	@Mutation(() => Int)
+	async updateRepresentative(@Arg("data") data: UpdateRepresentativeInput) {
+
+		const representative = await Representative.update(data.representativeId, {
+            firstName: data.representative.firstName,
+            lastName: data.representative.lastName,
+		})
+		console.log('updateRepresentative: ', representative)
+
+		if (representative.affected !== 1) return 0
+
+		return 1
+	}
+
+	@Mutation(() => Int)
 	async deleteRepresentative(@Arg("data") data: DeleteRepresentativeInput) {
 
-		const representative2 = await Representative.delete(data.representativeId)
+		const representative = await Representative.delete(data.representativeId)
 
-		console.log('delete representative: ', representative2)
+		console.log('deleteRepresentative: ', representative)
 
-		if (representative2.affected !== 1) return 0
+		if (representative.affected !== 1) return 0
 
 		return 1
 	}

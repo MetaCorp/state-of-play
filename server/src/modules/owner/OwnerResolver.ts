@@ -6,6 +6,7 @@ import { Owner } from "../../entity/Owner";
 import { CreateOwnerInput } from "./CreateOwnerInput";
 import { OwnersFilterInput } from "./OwnersFilterInput";
 import { DeleteOwnerInput } from "./DeleteOwnerInput";
+import { UpdateOwnerInput } from "./UpdateOwnerInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -55,6 +56,20 @@ export class OwnerResolver {
 
 		// await owner.save();
 		return owner;
+	}
+	
+	@Mutation(() => Int)
+	async updateOwner(@Arg("data") data: UpdateOwnerInput) {
+
+		const owner = await Owner.update(data.ownerId, {
+            firstName: data.owner.firstName,
+            lastName: data.owner.lastName,
+		})
+		console.log('updateOwner: ', owner)
+
+		if (owner.affected !== 1) return 0
+
+		return 1
 	}
 	
 	@Mutation(() => Int)
