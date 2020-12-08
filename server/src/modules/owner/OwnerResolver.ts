@@ -75,11 +75,11 @@ export class OwnerResolver {
 	@Mutation(() => Int)
 	async deleteOwner(@Arg("data") data: DeleteOwnerInput) {
 
-		const owner2 = await Owner.delete(data.ownerId)
+		const owner = await Owner.delete(data.ownerId)
 
-		console.log('delete owner: ', owner2)
+		console.log('deleteOwner: ', owner)
 
-		if (owner2.affected !== 1) return 0
+		if (owner.affected !== 1) return 0
 
 		return 1
 	}

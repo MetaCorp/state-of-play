@@ -1,7 +1,9 @@
-import { Query, Resolver, Ctx, Arg  } from "type-graphql";
+import { Query, Resolver, Ctx, Arg, Mutation, Int  } from "type-graphql";
 import { MyContext } from "../../types/MyContext";
 
 import { UserInput } from "./UserInput";
+import { UpdateUserInput } from "./UpdateUserInput";
+import { DeleteUserInput } from "./DeleteUserInput";
 
 import { User } from "../../entity/User";
 
@@ -23,5 +25,32 @@ export class UserResolver {
 		// console.log('properties: ', user.properties)
 
 		return user;
+	}
+
+	
+	@Mutation(() => Int)
+	async updateUser(@Arg("data") data: UpdateUserInput) {
+
+		const user = await User.update(data.userId, {
+			firstName: data.user.firstName,
+			lastName: data.user.lastName
+		})
+		console.log('updateOwner: ', user)
+
+		if (user.affected !== 1) return 0
+
+		return 1
+	}
+
+	@Mutation(() => Int)
+	async deleteUser(@Arg("data") data: DeleteUserInput) {
+
+		const user = await User.delete(data.userId)
+
+		console.log('deleteUser: ', user)
+
+		if (user.affected !== 1) return 0
+
+		return 1
 	}
 }

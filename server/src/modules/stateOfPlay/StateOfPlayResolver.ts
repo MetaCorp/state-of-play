@@ -90,11 +90,11 @@ export class StateOfPlayResolver {
 	@Mutation(() => Int)
 	async deleteStateOfPlay(@Arg("data") data: DeleteStateOfPlayInput) {
 
-		const stateOfPlay2 = await StateOfPlay.delete(data.stateOfPlayId)
+		const stateOfPlay = await StateOfPlay.delete(data.stateOfPlayId)
 
-		console.log('delete stateOfPlay: ', stateOfPlay2)
+		console.log('deleteStateOfPlay: ', stateOfPlay)
 
-		if (stateOfPlay2.affected !== 1) return 0
+		if (stateOfPlay.affected !== 1) return 0
 
 		return 1
 	}
