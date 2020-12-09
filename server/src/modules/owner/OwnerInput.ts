@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class PropertiesInput {
+export class OwnerInput {
   @Field()
-  userId: string;
+  ownerId: string;
 }

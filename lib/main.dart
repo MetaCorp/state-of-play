@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 import 'package:flutter_tests/widgets/login_register/Login.dart';
 import 'package:flutter_tests/widgets/login_register/Register.dart';
@@ -45,28 +48,39 @@ void main() {
   runApp(MyApp());
 }
 
-final HttpLink httpLink = HttpLink(
-  uri: 'http://$host:4000/graphql',
-);
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+  _MyAppState createState() => _MyAppState();
+}
 
-
-// final AuthLink authLink = AuthLink(
-//   getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-//   // OR
-//   // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-// );
-
-// final Link link = authLink.concat(httpLink);
-
-ValueNotifier<GraphQLClient> client = ValueNotifier(
-  GraphQLClient(
-    cache: InMemoryCache(),
-    link: httpLink,
-  ),
-);
-
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+  ValueNotifier<GraphQLClient> client;
+  @override
+  void initState() {
+    
+    final HttpLink httpLink = HttpLink(
+      uri: 'http://$host:4000/graphql',
+    );
+
+    final AuthLink authLink = AuthLink(
+      getToken: () async {
+        final prefs = await SharedPreferences.getInstance();
+        return "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTYwNzUyODU3MSwiZXhwIjoxNjA3NjE0OTcxfQ.jmTUOftZbhXJgNSiwwiIKnOlU4JjblJR0NE4hbwIZNg";// prefs.getString("token");
+      },
+    );
+
+    final Link link = authLink.concat(httpLink);
+
+    client = ValueNotifier(
+      GraphQLClient(
+        cache: InMemoryCache(),
+        link: link,
+      ),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

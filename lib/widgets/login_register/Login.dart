@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
 
@@ -14,8 +17,18 @@ class _LoginState extends State<Login> {
   TextEditingController _emailController = TextEditingController(text: 'bob1@bob.com');
   TextEditingController _passwordController = TextEditingController(text: 'test123');
 
+  var prefs;
+
+  @override
+  void initState() async {
+    prefs = await SharedPreferences.getInstance();
+    
+    super.initState();
+  }
+    
   @override
   Widget build(BuildContext context) {
+    
     return Mutation(
       options: MutationOptions(
         documentNode: gql('''
@@ -54,6 +67,7 @@ class _LoginState extends State<Login> {
               // TODO: show error
             }
             else if (result.data["login"] != null) {
+              prefs.setString("token", result.data["login"]);
               Navigator.popAndPushNamed(context, '/state-of-plays');
             }
           }

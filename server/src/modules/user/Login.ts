@@ -1,16 +1,18 @@
 import bcrypt from "bcryptjs";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { sign } from "jsonwebtoken";
+
 import { User } from "../../entity/User";
 import { MyContext } from "../../types/MyContext";
 
 @Resolver()
 export class LoginResolver {
-  @Mutation(() => User, { nullable: true })
+  @Mutation(() => String, { nullable: true })
   async login(
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Ctx() ctx: MyContext
-  ): Promise<User | null> {
+  ): Promise<String | null> {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -32,6 +34,8 @@ export class LoginResolver {
     // TODO: Fix req.session === undefined
     // ctx.req.session!.userId = user.id;
 
-    return user;
+    return sign({ userId: user.id }, "TypeGraphQL", {
+      expiresIn: "1d"
+    });
   }
 }

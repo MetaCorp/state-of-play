@@ -40,7 +40,9 @@ export const createSchema = () =>
       OwnerResolver,
       RepresentativeResolver
     ],
-    // authChecker: ({ context: { req: any } }) => {
-    //   return !!req.session.userId;
-    // }
+    // @ts-ignore
+    authChecker: ({ context }) => {
+      console.log('authChecker: ', context.userId);
+      return context.userId;
+    }
   });

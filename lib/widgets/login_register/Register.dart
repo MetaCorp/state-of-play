@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
 
@@ -15,6 +17,16 @@ class _RegisterState extends State<Register> {
   TextEditingController _passwordController = TextEditingController(text: 'test123');
   TextEditingController _firstNameController = TextEditingController(text: 'bob1');
   TextEditingController _lastNameController = TextEditingController(text: 'Name');
+
+
+  var prefs;
+
+  @override
+  void initState() async {
+    prefs = await SharedPreferences.getInstance();
+    
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +68,7 @@ class _RegisterState extends State<Register> {
               // TODO: show error
             }
             else if (result.data["register"] != null) {
+              prefs.setString("token", result.data["register"]);
               Navigator.popAndPushNamed(context, '/state-of-plays');
             }
           }

@@ -14,7 +14,4 @@ export class CreatePropertyInput {
   @Field()
   @Length(1, 255)
   city: string;
-
-  @Field()
-  userId: string;
 }

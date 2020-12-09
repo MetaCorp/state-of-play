@@ -1,13 +1,16 @@
 import { ApolloServer } from "apollo-server-express";
-import connectRedis from "connect-redis";
+// import connectRedis from "connect-redis";
 import cors from "cors";
 import Express from "express";
-import session from "express-session";
+// import session from "express-session";
 import "reflect-metadata";
 // import { formatArgumentValidationError } from "type-graphql";
 import { createConnection } from "typeorm";
-import { redis } from "./redis";
+// import { redis } from "./redis";
 // import { createAuthorsLoader } from "./utils/authorsLoader";
+
+const jwt = require("express-jwt");
+
 import { createSchema } from "./utils/createSchema";
 
 const main = async () => {
@@ -15,7 +18,7 @@ const main = async () => {
 
   const app = Express();
 
-  const RedisStore = connectRedis(session);
+  // const RedisStore = connectRedis(session);
 
   app.use(
     cors({
@@ -24,21 +27,48 @@ const main = async () => {
     })
   );
 
+  // app.use(s
+  //   session({
+  //     store: new RedisStore({
+  //       client: redis as any
+  //     }),
+  //     name: "qid",
+  //     secret: "aslkdfjoiq12312",
+  //     resave: false,
+  //     saveUninitialized: false,
+  //     cookie: {
+  //       httpOnly: true,
+  //       secure: false,// process.env.NODE_ENV === "production",
+  //       maxAge: 1000 * 60 * 60 * 24 * 7 * 365 // 7 years
+  //     }
+  //   })
+  // );
+
   app.use(
-    session({
-      store: new RedisStore({
-        client: redis as any
-      }),
-      name: "qid",
-      secret: "aslkdfjoiq12312",
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: true,
-        secure: false,// process.env.NODE_ENV === "production",
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 365 // 7 years
+    '/graphql',
+    jwt({
+      secret: "TypeGraphQL",
+      credentialsRequired: false,
+      algorithms: ['HS256'],
+      // getToken: (req: any) => {
+      //   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      //       console.log('getToken: ', req.headers.authorization)
+      //       return req.headers.authorization.split(' ')[1];
+      //   }
+      //   return null;
+      // }
+    }),
+    (_: any, __: any, next: any) => {
+      // Do stuff here if we have a logged in user, such as:
+      // if (!req.user.admin) return res.sendStatus(401);
+      // res.sendStatus(200);
+      next();
+    },
+    (err: any, _: any, res: any, __: any) => {
+      if (err.name === 'UnauthorizedError') { 
+        return(res.status(401).send('Invalid authorization token'));
       }
-    })
+    }
   );
   
   const schema = await createSchema();
@@ -48,10 +78,11 @@ const main = async () => {
     // formatError: formatArgumentValidationError,
     context: ({ req, res }: any) => {
       
-      console.log('req.session: ', req.session)
+      console.log('req.user: ', req.user)
       return {
         req,
         res,
+        userId: req.user && req.user.userId
         // authorsLoader: createAuthorsLoader()
       }
     },
@@ -78,10 +109,10 @@ const main = async () => {
       //     })
       //   ]
       // }) as any
-    ]
+    ],
   });
 
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({ app, cors: false, path: '/graphql' });
 
   app.listen(4000, () => {
     console.log("server started on http://localhost:4000/graphql");

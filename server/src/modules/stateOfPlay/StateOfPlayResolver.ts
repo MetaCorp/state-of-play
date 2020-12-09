@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
 import { ILike } from "typeorm";
 
 import { StateOfPlay } from "../../entity/StateOfPlay";
@@ -18,19 +18,23 @@ import { Representative } from "../../entity/Representative";
 
 @Resolver()
 export class StateOfPlayResolver {
+	@Authorized()
 	@Query(() => [StateOfPlay])
 	// @ts-ignore
-	stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput) {
-		return StateOfPlay.find({
+	stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput, @Ctx() ctx: MyContext) {
+		return StateOfPlay.find({// TODO: filter ne marche pas, trouver une autre solution. => QueryBuilder
 			where: filter ? [
                 { property: { address: ILike("%" + filter.search + "%") } },
                 { property: { postalCode: ILike("%" + filter.search + "%") } },
                 { property: { city: ILike("%" + filter.search + "%") } },
-            ] : [],
+            ] : [
+				{ user: { id: ctx.userId }}
+			],
 			relations: ["user", "owner", "representative", "property"]
 		})
 	}
 
+	@Authorized()
 	@Query(() => StateOfPlay, { nullable: true })
 	async stateOfPlay(@Arg("data") data: StateOfPlayInput) {
 
@@ -42,12 +46,12 @@ export class StateOfPlayResolver {
 		return stateOfPlay;
 	}
 
+	@Authorized()
 	@Mutation(() => StateOfPlay, { nullable: true })
 	async createStateOfPlay(@Arg("data") data: CreateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
-
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
 
 		// @ts-ignore
@@ -75,6 +79,7 @@ export class StateOfPlayResolver {
 		return stateOfPlay;
 	}
 	
+	@Authorized()
 	@Mutation(() => Int)
 	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput) {
 
@@ -87,6 +92,7 @@ export class StateOfPlayResolver {
 		return 1
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async deleteStateOfPlay(@Arg("data") data: DeleteStateOfPlayInput) {
 

@@ -10,7 +10,4 @@ export class CreateRepresentativeInput {
   @Field()
   @Length(1, 255)
   lastName: string;
-
-  @Field()
-  userId: string;
 }

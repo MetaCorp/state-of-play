@@ -10,7 +10,4 @@ export class CreateOwnerInput {
   @Field()
   @Length(1, 255)
   lastName: string;
-
-  @Field()
-  userId: string;
 }

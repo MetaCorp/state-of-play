@@ -36,17 +36,12 @@ class _PropertiesState extends State<Properties> {
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query User {
-              user(data: { userId: "1" }) {
+            query properties {
+              properties {
                 id
-                firstName
-                lastName
-                properties {
-                  id
-                  address
-                  postalCode
-                  city
-                }
+                address
+                postalCode
+                city
               }
             }
             ''')
@@ -69,18 +64,19 @@ class _PropertiesState extends State<Properties> {
               return CircularProgressIndicator();
             }
 
-            sop.User user = sop.User.fromJSON(result.data["user"]);
+            List<sop.Property> properties = (result.data["properties"] as List).map((property) => sop.Property.fromJSON(property)).toList();
 
-            print('parsed data: ' + user.toString());
+            print('parsed data: ' + properties.toString());
 
-            if (user.properties.length == 0) {
+            if (properties.length == 0) {
               return Text("no properties");
             }
 
             return ListView.separated(
-              itemCount: user.properties.length,
+              itemCount: properties.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(user.properties[i].address + ', ' + user.properties[i].postalCode + ' ' + user.properties[i].city),
+                title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
+                onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();

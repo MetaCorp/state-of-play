@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
 import { ILike } from "typeorm";
 
 import { Property } from "../../entity/Property";
@@ -7,7 +7,6 @@ import { CreatePropertyInput } from "./CreatePropertyInput";
 import { PropertyFilterInput } from "./PropertyFilterInput";
 import { DeletePropertyInput } from "./DeletePropertyInput";
 import { UpdatePropertyInput } from "./UpdatePropertyInput";
-import { PropertiesInput } from "./PropertiesInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -16,16 +15,19 @@ import { PropertyInput } from "./PropertyInput"
 
 @Resolver()
 export class PropertyResolver {
+	@Authorized()
 	@Query(() => [Property])
-	//@ts-ignore
-	properties(@Arg("data", { nullable: true }) data?: PropertiesInput, @Arg("filter") filter: PropertyFilterInput) {
+	// @ts-ignore
+	properties(@Arg("filter", { nullable: true }) filter?: PropertyFilterInput, @Ctx() ctx: MyContext) {
+		console.log('properties: ', ctx.userId)
 		return Property.find({
-			where: [
-				// { user: { id: data.userId } }, // TODO: test search by user
-                { address: ILike("%" + filter.search + "%") },
-                { postalCode: ILike("%" + filter.search + "%") },
-                { city: ILike("%" + filter.search + "%") },
-            ],// TODO: OrderInput
+			where: filter ? [
+                { address: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+                { postalCode: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+                { city: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [
+				{ user: { id: ctx.userId } }
+			],// TODO: OrderInput
 			relations: ["user"]
 		})
 	}
@@ -44,13 +46,12 @@ export class PropertyResolver {
 		return property;
 	}
 
-	// @Arg("data") data: CreatePropertyInput, 
+	@Authorized()
 	@Mutation(() => Property, { nullable: true })
 	async createProperty(@Arg("data") data: CreatePropertyInput, @Ctx() ctx: MyContext) {
 
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
-
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
 		
 		const property = await Property.create({
@@ -66,6 +67,7 @@ export class PropertyResolver {
 		return property;
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async updateProperty(@Arg("data") data: UpdatePropertyInput) {
 
@@ -81,6 +83,7 @@ export class PropertyResolver {
 		return 1
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async deleteProperty(@Arg("data") data: DeletePropertyInput) {
 
