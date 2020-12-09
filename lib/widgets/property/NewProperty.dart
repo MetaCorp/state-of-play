@@ -7,7 +7,7 @@ class NewProperty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nouvel propriété'),
+        title: Text('Nouvelle propriété'),
       ),
       body: Text("new property")
     );

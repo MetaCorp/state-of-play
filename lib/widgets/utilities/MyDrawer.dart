@@ -27,6 +27,11 @@ class MyDrawer extends StatelessWidget {
             title: Text('Propriétés'),
             onTap: () => Navigator.popAndPushNamed(context, '/properties'),
           ),
+          Spacer(),
+          ListTile(
+            title: Text('Paramêtres'),
+            onTap: () => Navigator.popAndPushNamed(context, '/settings'),
+          )
         ],
       ),
     );

@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 
+import 'package:flutter_tests/widgets/login_register/Login.dart';
+import 'package:flutter_tests/widgets/login_register/Register.dart';
+
 import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlay.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlays.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.dart';
@@ -14,6 +17,9 @@ import 'package:flutter_tests/widgets/property/Property.dart';
 import 'package:flutter_tests/widgets/property/Properties.dart';
 import 'package:flutter_tests/widgets/property/NewProperty.dart';
 import 'package:flutter_tests/widgets/property/SearchProperties.dart';
+
+import 'package:flutter_tests/widgets/settings/Settings.dart';
+
 
 class StateOfPlayArguments {
   final String stateOfPlayId;
@@ -89,8 +95,13 @@ class MyApp extends StatelessWidget {
             // //  '/new': (context) => NewStateOfPlayRouter(),
             // },
             onGenerateRoute: (settings) {
+              
+              if (settings.name == "/login") 
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Login());
+              else if (settings.name == "/register") 
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Register());
 
-              if (settings.name == "/state-of-plays") 
+              else if (settings.name == "/state-of-plays") 
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlays());
               else if (settings.name == '/state-of-play') {
                 print('args: ' + settings.arguments.toString());
@@ -111,6 +122,8 @@ class MyApp extends StatelessWidget {
               else if (settings.name == '/search-properties')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
               
+              else if (settings.name == '/settings')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());
 
               return null;
             },

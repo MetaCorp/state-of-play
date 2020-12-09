@@ -27,7 +27,10 @@ export class LoginResolver {
     //   return null;
     // }
 
-    ctx.req.session!.userId = user.id;
+    console.log('ctx.req.session: ', ctx.req.session)
+
+    // TODO: Fix req.session === undefined
+    // ctx.req.session!.userId = user.id;
 
     return user;
   }
