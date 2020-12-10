@@ -402,7 +402,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(
-        stateOfPlay.representative.lastname.toUpperCase() + ' ' + tenant.firstname,
+        stateOfPlay.representative.lastName.toUpperCase() + ' ' + tenant.firstName,
         style: pw.TextStyle(
           color: PdfColors.black,
           fontWeight: pw.FontWeight.bold,
@@ -510,7 +510,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                                   ),
                                 ),
                                 pw.Text(
-                                  stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
+                                  stateOfPlay.owner.lastName.toUpperCase() + ' ' + stateOfPlay.owner.firstName,
                                   style: pw.TextStyle(
                                     color: PdfColors.black,
                                     fontSize: 9,
@@ -575,7 +575,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                                   ),
                                 ),
                                 pw.Text(
-                                  stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
+                                  stateOfPlay.representative.lastName.toUpperCase() + ' ' + stateOfPlay.representative.firstName,
                                   style: pw.TextStyle(
                                     color: PdfColors.black,
                                     fontSize: 9,
