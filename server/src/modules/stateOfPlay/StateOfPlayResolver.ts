@@ -7,14 +7,15 @@ import { CreateStateOfPlayInput } from "./CreateStateOfPlayInput";
 import { StateOfPlaysFilterInput } from "./StateOfPlaysFilterInput";
 import { DeleteStateOfPlayInput } from "./DeleteStateOfPlayInput";
 import { UpdateStateOfPlayInput } from "./UpdateStateOfPlayInput";
+import { StateOfPlayInput } from "./StateOfPlayInput"
 
 import { MyContext } from "../../types/MyContext";
+
 import { User } from "../../entity/User";
 import { Property } from "../../entity/Property";
-
-import { StateOfPlayInput } from "./StateOfPlayInput"
 import { Owner } from "../../entity/Owner";
 import { Representative } from "../../entity/Representative";
+import { Tenant } from "../../entity/Tenant";
 
 @Resolver()
 export class StateOfPlayResolver {
@@ -70,28 +71,66 @@ export class StateOfPlayResolver {
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
+		console.log('user: ', user)
 
 		// @ts-ignore
-		const owner = await Owner.findOne({ id: data.ownerId })
-		if (!owner) return
+		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
+		if (!owner) {
+			owner = await Owner.create({
+				firstName: data.owner.firstName,
+				lastName: data.owner.lastName,
+				user: user,
+			}).save();
+		}
+		console.log('owner: ', owner)
 		
 		// @ts-ignore
-		const representative = await Representative.findOne({ id: data.representativeId })
-		if (!representative) return
+		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
+		if (!representative) {
+			representative = await Representative.create({
+				firstName: data.representative.firstName,
+				lastName: data.representative.lastName,
+				user: user,
+			}).save();
+		}
+		console.log('representative: ', representative)
+
+		const tenants = []
+		for(let i = 0; i < data.tenants.length; i++) {
+			// @ts-ignore
+			var tenant = data.tenants[i].id && await Tenant.findOne({ id: data.tenants[i].id })
+			if (!tenant) {
+				tenant = await Tenant.create({
+					firstName: data.tenants[i].firstName,
+					lastName: data.tenants[i].lastName,
+					user: user,
+				}).save();
+			}
+			tenants.push(tenant)
+		}
+		console.log('tenants[0]: ', tenants[0])
 		
 		// @ts-ignore
-		const property = await Property.findOne({ id: data.propertyId })
-		if (!property) return
+		var property = data.property.id && await Property.findOne({ id: data.property.id })
+		if (!property) {
+			property = await Property.create({
+				address: data.property.address,
+				postalCode: data.property.postalCode,
+				city: data.property.city,
+				user: user
+			}).save();
+		}
+		console.log('property: ', property)
 
 		const stateOfPlay = await StateOfPlay.create({
-			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,
+			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)
 			user: user,
 			owner: owner,
 			representative: representative,
+			tenants: tenants,
 			property: property
 		}).save();
-
-		console.log(stateOfPlay)
+		console.log('stateOfPlay: ', stateOfPlay)
 
 		// await stateOfPlay.save();
 		return stateOfPlay;

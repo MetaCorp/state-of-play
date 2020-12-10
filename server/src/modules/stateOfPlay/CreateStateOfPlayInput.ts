@@ -1,16 +1,21 @@
 import { Field, InputType } from "type-graphql";
 
+import { CreateOwnerInput } from "../owner/CreateOwnerInput";
+import { CreatePropertyInput } from "../property/CreatePropertyInput";
+import { CreateRepresentativeInput } from "../representative/CreateRepresentativeInput";
+import { CreateTenantInput } from "../tenant/CreateTenantInput";
+
 @InputType()
 export class CreateStateOfPlayInput {// TODO
-  @Field()
-  userId: string;
-
-  @Field()
-  propertyId: string;
+  @Field(() => CreatePropertyInput)
+  property: CreatePropertyInput;
   
-  @Field()
-  ownerId: string;
+  @Field(() => CreateOwnerInput)
+  owner: CreateOwnerInput;
+  
+  @Field(() => CreateRepresentativeInput)
+  representative: CreateRepresentativeInput;
 
-  @Field()
-  representativeId: string;
+  @Field(() => [CreateTenantInput])
+  tenants: [CreateTenantInput]
 }

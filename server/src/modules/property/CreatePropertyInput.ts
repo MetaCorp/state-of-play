@@ -3,6 +3,9 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class CreatePropertyInput {
+  @Field({ nullable: true })
+  id: string;
+
   @Field()
   @Length(1, 255)
   address: string;

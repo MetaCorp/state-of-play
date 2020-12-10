@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+typedef SaveCallback = void Function();
+
+
 class NewStateOfPlaySignature extends StatefulWidget {
-  NewStateOfPlaySignature({Key key}) : super(key: key);
+  NewStateOfPlaySignature({ Key key, this.onSave}) : super(key: key);
+
+  final SaveCallback onSave;
 
   @override
   _NewStateOfPlaySignatureState createState() => new _NewStateOfPlaySignatureState();
@@ -10,6 +15,14 @@ class NewStateOfPlaySignature extends StatefulWidget {
 class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
   @override
   Widget build(BuildContext context) {
-    return Text("Signature");
+    return Column(
+      children: [
+        Text("Signature"),
+        RaisedButton(
+          child: Text("Visualiser l'état des lieux"),
+          onPressed: widget.onSave,
+        )
+      ]
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, /*JoinColumn, */ManyToMany, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, /*JoinColumn, */ManyToMany, Column, JoinTable } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 import { User } from "./User";
@@ -26,8 +26,9 @@ export class StateOfPlay extends BaseEntity {
   @ManyToOne(() => Representative, representative => representative.stateOfPlays)
   representative: Representative;
 
-  @Field(() => Tenant)
+  @Field(() => [Tenant])
   @ManyToMany(() => Tenant, tenant => tenant.stateOfPlays)
+  @JoinTable()
   tenants: [Tenant];
 
   @Field(() => User)
