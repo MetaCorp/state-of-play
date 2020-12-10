@@ -17,12 +17,19 @@ class _LoginState extends State<Login> {
   TextEditingController _emailController = TextEditingController(text: 'bob1@bob.com');
   TextEditingController _passwordController = TextEditingController(text: 'test123');
 
-  var prefs;
+  SharedPreferences _prefs;
+
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _prefs = prefs;
+    });
+  }
 
   @override
-  void initState() async {
-    prefs = await SharedPreferences.getInstance();
+  void initState() {
     
+    getSharedPrefs();
     super.initState();
   }
     
@@ -33,13 +40,7 @@ class _LoginState extends State<Login> {
       options: MutationOptions(
         documentNode: gql('''
           mutation Login(\$email: String!, \$password: String!) {
-            login(email: \$email, password: \$password) {
-              id
-              firstName
-              lastName
-              email
-              name
-            }
+            login(email: \$email, password: \$password)
           }
         '''), // this is the mutation string you just created
         // you can update the cache based on results
@@ -58,20 +59,8 @@ class _LoginState extends State<Login> {
 
         print('queryResult hasException: ' + result.hasException.toString());
         print('queryResult loading: ' + result.loading.toString());
-        if(result.hasException) print('queryResult exception: ' + result.exception.graphqlErrors[0].toString());
-
-        if (!result.hasException) {
-          print('queryResult data: ' + result.data.toString());
-          if (result.data != null) {
-            if (result.data["login"] == null) {
-              // TODO: show error
-            }
-            else if (result.data["login"] != null) {
-              prefs.setString("token", result.data["login"]);
-              Navigator.popAndPushNamed(context, '/state-of-plays');
-            }
-          }
-        }
+        if(result.hasException && result.exception.graphqlErrors.length > 0) print('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
+        else if(result.hasException) print('queryResult clientException: ' + result.exception.clientException.message);
 
         return Scaffold(
           appBar: AppBar(
@@ -93,11 +82,29 @@ class _LoginState extends State<Login> {
               ),
               RaisedButton(
                 child: Text('Se connecter'),
-                onPressed: () {
-                  runMutation({
+                onPressed: () async {
+                  MultiSourceResult result = runMutation({
                     "email": _emailController.text,
                     "password": _passwordController.text
                   });
+
+                  QueryResult networkResult = await result.networkResult;
+
+                  if (networkResult.hasException) {
+                  
+                  }
+                  else {
+                    print('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["login"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["login"] != null) {
+                        _prefs.setString("token", networkResult.data["login"]);
+                        Navigator.popAndPushNamed(context, '/state-of-plays');
+                      }
+                    }
+                  }
                 }
               ),
               RaisedButton(

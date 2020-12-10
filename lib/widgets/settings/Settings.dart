@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatelessWidget {
   const Settings({ Key key }) : super(key: key);
@@ -11,7 +12,9 @@ class Settings extends StatelessWidget {
       ),
       body: RaisedButton(
         child: Text('Déconnection'),
-        onPressed: () {
+        onPressed: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setStringList("token", null);
           Navigator.popAndPushNamed(context, '/login');
         },
       )

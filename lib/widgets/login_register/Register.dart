@@ -19,11 +19,18 @@ class _RegisterState extends State<Register> {
   TextEditingController _lastNameController = TextEditingController(text: 'Name');
 
 
-  var prefs;
+  SharedPreferences _prefs;
+
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _prefs = prefs;
+    });
+  }
 
   @override
-  void initState() async {
-    prefs = await SharedPreferences.getInstance();
+  void initState() {
+    getSharedPrefs();
     
     super.initState();
   }
@@ -34,13 +41,7 @@ class _RegisterState extends State<Register> {
       options: MutationOptions(
         documentNode: gql('''
           mutation Register(\$data: RegisterInput!) {
-            register(data: \$data) {
-              id
-              firstName
-              lastName
-              email
-              name
-            }
+            register(data: \$data)
           }
         '''), // this is the mutation string you just created
         // you can update the cache based on results
@@ -59,20 +60,8 @@ class _RegisterState extends State<Register> {
 
         print('queryResult hasException: ' + result.hasException.toString());
         print('queryResult loading: ' + result.loading.toString());
-        if(result.hasException) print('queryResult exception: ' + result.exception.graphqlErrors[0].toString());
-
-        if (!result.hasException) {
-          print('queryResult data: ' + result.data.toString());
-          if (result.data != null) {
-            if (result.data["register"] == null) {
-              // TODO: show error
-            }
-            else if (result.data["register"] != null) {
-              prefs.setString("token", result.data["register"]);
-              Navigator.popAndPushNamed(context, '/state-of-plays');
-            }
-          }
-        }
+        if(result.hasException && result.exception.graphqlErrors.length > 0) print('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
+        else if(result.hasException) print('queryResult clientException: ' + result.exception.clientException.message);
 
         print('');
 
@@ -108,8 +97,8 @@ class _RegisterState extends State<Register> {
               ),
               RaisedButton(
                 child: Text('S\'inscrire'),
-                onPressed: () {
-                  runMutation({
+                onPressed: () async {
+                  MultiSourceResult result = runMutation({
                     "data": {
                       "email": _emailController.text,
                       "firstName": _firstNameController.text,
@@ -117,6 +106,23 @@ class _RegisterState extends State<Register> {
                       "password": _passwordController.text
                     }
                   });
+
+                  QueryResult networkResult =  await result.networkResult;
+
+                  if (networkResult.hasException) {
+                    // TODO display snackbar (email already in use)
+                  } else {
+                    print('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["register"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["register"] != null) {
+                        _prefs.setString("token", networkResult.data["register"]);
+                        Navigator.popAndPushNamed(context, '/state-of-plays');
+                      }
+                    }
+                  }
                 }
               ),
               RaisedButton(

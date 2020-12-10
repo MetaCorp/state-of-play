@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
     final AuthLink authLink = AuthLink(
       getToken: () async {
         final prefs = await SharedPreferences.getInstance();
-        return "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTYwNzUyODU3MSwiZXhwIjoxNjA3NjE0OTcxfQ.jmTUOftZbhXJgNSiwwiIKnOlU4JjblJR0NE4hbwIZNg";// prefs.getString("token");
+        return prefs.getString("token") != null ? "Bearer " + prefs.getString("token") : "";
       },
     );
 
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            initialRoute: '/state-of-plays',
+            initialRoute: '/login',
             // routes: {
             //   '/state-of-plays': (context) => StateOfPlays(),
             //   '/state-of-play': (context) => StateOfPlay(),
