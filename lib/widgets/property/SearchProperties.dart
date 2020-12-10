@@ -4,8 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
-
 class SearchProperties extends StatefulWidget {
   SearchProperties({Key key}) : super(key: key);
 
@@ -89,7 +87,7 @@ class _SearchPropertiesState extends State<SearchProperties> {
 
         }
 
-        return MyScaffold(
+        return Scaffold(
           appBar: AppBar(
             title: TextField(
               controller: _searchController,
@@ -106,7 +104,10 @@ class _SearchPropertiesState extends State<SearchProperties> {
               }
             ),
             actions: [
-              Icon(Icons.search),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => null,
+              ),
             ],
             backgroundColor: Colors.grey,
           ),

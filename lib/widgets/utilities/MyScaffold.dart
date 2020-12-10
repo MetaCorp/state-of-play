@@ -15,6 +15,10 @@ class MyScaffold extends StatelessWidget {
       appBar: appBar,
       body: body,
       drawer: MyDrawer(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.pushNamed(context, '/new-state-of-play'),
+      ),
     );
   }
 }

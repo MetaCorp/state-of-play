@@ -4,8 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
-
 class SearchStateOfPlays extends StatefulWidget {
   SearchStateOfPlays({Key key}) : super(key: key);
 
@@ -16,83 +14,114 @@ class SearchStateOfPlays extends StatefulWidget {
 // adb reverse tcp:9002 tcp:9002
 
 class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
+
+  TextEditingController _searchController = TextEditingController(text: "");
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
-      appBar: AppBar(
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: 'Entrez votre recherche'
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => null,
-          ),
-        ],
-        backgroundColor: Colors.grey,
-      ),
-      body: 
-        Query(
-          options: QueryOptions(
-            documentNode: gql('''
-            query User {
-              user(data: { userId: "1" }, ) {
+    return Query(
+      options: QueryOptions(
+        documentNode: gql('''
+          query stateOfPlays(\$filter: StateOfPlaysFilterInput!) {
+            stateOfPlays (filter: \$filter) {
+              id
+              owner {
                 id
                 firstName
                 lastName
-                stateOfPlays {
-                  id
-                  property {
-                    id
-                    address
-                    postalCode
-                    city
-                  }
-                }
+              }
+              property {
+                id
+                address
+                postalCode
+                city
               }
             }
-            ''')
-          ),
-          builder: (
-            QueryResult result, {
-            Refetch refetch,
-            FetchMore fetchMore,
-          }) {
-            print('loading: ' + result.loading.toString());
-            print('exception: ' + result.exception.toString());
-            print('data: ' + result.data.toString());
-            print('');
+          }
+        '''),
+        variables: {
+          "filter": {
+            "search": _searchController.text
+          }
+        } 
+      ),
+      builder: (
+        QueryResult result, {
+        Refetch refetch,
+        FetchMore fetchMore,
+      }) {
 
-            if (result.hasException) {
-              return Text(result.exception.toString());
-            }
+        Widget body;
+        
+        print('loading: ' + result.loading.toString());
+        print('exception: ' + result.exception.toString());
+        print('data: ' + result.data.toString());
+        print('');
 
-            if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
-            }
+        if (result.hasException) {
+          body = Text(result.exception.toString());
+        }
+        else if (result.loading || result.data == null) {
+          body = CircularProgressIndicator();// TODO center
+        }
+        else {
 
-            sop.User user = sop.User.fromJSON(result.data["user"]);
-            print('stateOfPlays length: ' + user.stateOfPlays.length.toString());
+          List<sop.StateOfPlay> stateOfPlays = (result.data["stateOfPlays"] as List).map((stateOfPlay) => sop.StateOfPlay.fromJSON(stateOfPlay)).toList();
+          print('stateOfPlays length: ' + stateOfPlays.length.toString());
 
-            if (user.stateOfPlays.length == 0) {
-              return Text("no stateOfplays");
-            }
-
-            return ListView.separated(
-              itemCount: user.stateOfPlays.length,
+          if (stateOfPlays.length == 0) {
+            body = Text("no stateOfplays");
+          }
+          else {
+            body = ListView.separated(
+              itemCount: stateOfPlays.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(user.stateOfPlays[i].property.address + ', ' + user.stateOfPlays[i].property.postalCode + ' ' + user.stateOfPlays[i].property.city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(user.stateOfPlays[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/state-of-play', arguments: { "stateOfPlayId": user.stateOfPlays[i].id }),
+                title: Text(stateOfPlays[i].property.address + ', ' + stateOfPlays[i].property.postalCode + ' ' + stateOfPlays[i].property.city),
+                // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)) ,
+                onTap: () => Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();
               },
             );
           }
-        )
+
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Entrez votre recherche'
+              ),
+              onChanged: (value) {
+                fetchMore(FetchMoreOptions(
+                  variables: { "filter": { "search": value } },
+                  updateQuery: (existing, newStateOfPlays) => ({
+                    "stateOfPlays": newStateOfPlays["stateOfPlays"]
+                  }),
+                ));
+              }
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => null,
+              ),
+            ],
+            backgroundColor: Colors.grey,
+          ),
+          body: body
+        );
+      }
     );
   }
 }

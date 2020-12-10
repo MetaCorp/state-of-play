@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, JoinColumn, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, /*JoinColumn, */ManyToMany, Column } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 import { User } from "./User";
@@ -13,6 +13,10 @@ export class StateOfPlay extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Field()
+  @Column()
+  fullAddress: string;
 
   @Field(() => Owner)
   @ManyToOne(() => Owner, owner => owner.stateOfPlays)
@@ -32,6 +36,6 @@ export class StateOfPlay extends BaseEntity {
 
   @Field(() => Property)
   @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true })
-  @JoinColumn({ name: "propertyId" })// TODO: utile pour la recherche nested ?
+  // @JoinColumn({ name: "propertyId" })// TODO: utile pour la recherche nested ?
   property: Property;
 }

@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
-import { ILike } from "typeorm";
+import { /*getManager,*/ ILike } from "typeorm";
 
 import { StateOfPlay } from "../../entity/StateOfPlay";
 
@@ -21,17 +21,34 @@ export class StateOfPlayResolver {
 	@Authorized()
 	@Query(() => [StateOfPlay])
 	// @ts-ignore
-	stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput, @Ctx() ctx: MyContext) {
+	async stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput, @Ctx() ctx: MyContext) {
 		return StateOfPlay.find({// TODO: filter ne marche pas, trouver une autre solution. => QueryBuilder
 			where: filter ? [
-                { property: { address: ILike("%" + filter.search + "%") } },
-                { property: { postalCode: ILike("%" + filter.search + "%") } },
-                { property: { city: ILike("%" + filter.search + "%") } },
+                // { property: { address: ILike("%" + filter.search + "%") } },
+                // { property: { postalCode: ILike("%" + filter.search + "%") } },
+                // { property: { city: ILike("%" + filter.search + "%") } },
+                { fullAddress: ILike("%" + filter.search + "%") },
             ] : [
 				{ user: { id: ctx.userId }}
 			],
 			relations: ["user", "owner", "representative", "property"]
 		})
+
+		// const stateOfPlays = await getManager()
+		// 	.createQueryBuilder(StateOfPlay, "stateOfPlay")
+		// 	.leftJoinAndSelect('stateOfPlay.user', 'user')
+		// 	.leftJoinAndSelect('stateOfPlay.owner', 'owner')
+		// 	.leftJoinAndSelect('stateOfPlay.representative', 'representative')
+		// 	.leftJoinAndSelect('stateOfPlay.property', 'property')
+		// 	.where('stateOfPlay.user.id = :userId', { userId: ctx.userId })
+		// 	.andWhere("stateOfPlay.property.address ilike '%' || :address || '%'", { address: filter ? filter.search : "" })
+		// 	// .orWhere("stateOfPlay.property.postalCode ilike '%' || :postalCode || '%'", { postalCode: filter ? filter.search : "" })
+		// 	// .orWhere("stateOfPlay.property.city ilike '%' || :city || '%'", { city: filter ? filter.search : "" })
+		// 	// .take(pagination && pagination.take)
+		// 	// .skip(pagination && pagination.skip)
+		// 	.getMany();
+
+		// return stateOfPlays
 	}
 
 	@Authorized()
@@ -67,6 +84,7 @@ export class StateOfPlayResolver {
 		if (!property) return
 
 		const stateOfPlay = await StateOfPlay.create({
+			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,
 			user: user,
 			owner: owner,
 			representative: representative,

@@ -34,7 +34,12 @@ class _PropertyState extends State<Property> {
                 city
               }
             }
-            ''')
+            '''),
+            variables: {
+              "data": {
+                "propertyId": "1"// TODO: bind to args
+              }
+            }
           ),
           builder: (
             QueryResult result, {
