@@ -5,6 +5,7 @@ import { Property } from "./Property";
 import { StateOfPlay } from "./StateOfPlay";
 import { Owner } from "./Owner";
 import { Representative } from "./Representative";
+import { Tenant } from "./Tenant";
 
 @ObjectType()
 @Entity()
@@ -51,4 +52,8 @@ export class User extends BaseEntity {
   @Field(() => [Representative])
   @OneToMany(() => Representative, representative => representative.user)
   representatives: Representative[];
+  
+  @Field(() => [Tenant])
+  @OneToMany(() => Tenant, tenant => tenant.user)
+  tenants: Tenant[];
 }

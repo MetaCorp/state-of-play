@@ -4,7 +4,7 @@ import { ILike } from "typeorm";
 import { Property } from "../../entity/Property";
 
 import { CreatePropertyInput } from "./CreatePropertyInput";
-import { PropertyFilterInput } from "./PropertyFilterInput";
+import { PropertiesFilterInput } from "./PropertiesFilterInput";
 import { DeletePropertyInput } from "./DeletePropertyInput";
 import { UpdatePropertyInput } from "./UpdatePropertyInput";
 
@@ -18,7 +18,7 @@ export class PropertyResolver {
 	@Authorized()
 	@Query(() => [Property])
 	// @ts-ignore
-	properties(@Arg("filter", { nullable: true }) filter?: PropertyFilterInput, @Ctx() ctx: MyContext) {
+	properties(@Arg("filter", { nullable: true }) filter?: PropertiesFilterInput, @Ctx() ctx: MyContext) {
 		console.log('properties: ', ctx.userId)
 		return Property.find({
 			where: filter ? [
@@ -32,6 +32,7 @@ export class PropertyResolver {
 		})
 	}
 
+	@Authorized()
 	@Query(() => Property, { nullable: true })
 	async property(@Arg("data") data: PropertyInput) {
 

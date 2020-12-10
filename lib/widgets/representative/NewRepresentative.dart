@@ -3,30 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 
-class NewProperty extends StatefulWidget {
-  NewProperty({Key key}) : super(key: key);
+class NewRepresentative extends StatefulWidget {
+  NewRepresentative({Key key}) : super(key: key);
 
   @override
-  _NewPropertyState createState() => new _NewPropertyState();
+  _NewRepresentativeState createState() => new _NewRepresentativeState();
 }
 
-class _NewPropertyState extends State<NewProperty> {
+class _NewRepresentativeState extends State<NewRepresentative> {
 
-  TextEditingController _addressController = TextEditingController(text: "14 rue du test");
-  TextEditingController _postalCodeController = TextEditingController(text: "75001");
-  TextEditingController _cityController = TextEditingController(text: "Paris");
+  TextEditingController _firstNameController = TextEditingController(text: "Jean");
+  TextEditingController _lastNameController = TextEditingController(text: "Mandataire");
 
   @override
   Widget build(BuildContext context) {
     return Mutation(
       options: MutationOptions(
         documentNode: gql('''
-          mutation createProperty(\$data: CreatePropertyInput!) {
-            createProperty(data: \$data) {
+          mutation createRepresentative(\$data: CreateRepresentativeInput!) {
+            createRepresentative(data: \$data) {
               id
-              address
-              postalCode
-              city
+              firstName
+              lastName
             }
           }
         '''), // this is the mutation string you just created
@@ -46,30 +44,25 @@ class _NewPropertyState extends State<NewProperty> {
         
         return Scaffold(
           appBar: AppBar(
-            title: Text('Nouvelle propriété'),
+            title: Text('Nouveau mandataire'),
           ),
           body: Column(
             children: [
               TextField(
-                controller: _addressController,
-                decoration: InputDecoration(hintText: 'Adresse'),
+                controller: _firstNameController,
+                decoration: InputDecoration(hintText: 'Prénom'),
               ),
               TextField(
-                controller: _postalCodeController,
-                decoration: InputDecoration(hintText: 'Code postal'),
-              ),
-              TextField(
-                controller: _cityController,
-                decoration: InputDecoration(hintText: 'Ville'),
+                controller: _lastNameController,
+                decoration: InputDecoration(hintText: 'Nom'),
               ),
               RaisedButton(
                 child: Text('Sauvegarder'),
                 onPressed: () async {
                   MultiSourceResult result = runMutation({
                     "data": {
-                      "address": _addressController.text,
-                      "postalCode": _postalCodeController.text,
-                      "city": _cityController.text,
+                      "firstName": _firstNameController.text,
+                      "lastName": _lastNameController.text,
                     }
                   });
                   QueryResult networkResult = await result.networkResult;
@@ -80,11 +73,11 @@ class _NewPropertyState extends State<NewProperty> {
                   else {
                     print('queryResult data: ' + networkResult.data.toString());
                     if (networkResult.data != null) {
-                      if (networkResult.data["createProperty"] == null) {
+                      if (networkResult.data["createRepresentative"] == null) {
                         // TODO: show error
                       }
-                      else if (networkResult.data["createProperty"] != null) {
-                        Navigator.popAndPushNamed(context, '/properties');
+                      else if (networkResult.data["createRepresentative"] != null) {
+                        Navigator.popAndPushNamed(context, '/representatives');
                       }
                     }
                   }

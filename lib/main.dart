@@ -21,6 +21,21 @@ import 'package:flutter_tests/widgets/property/Properties.dart';
 import 'package:flutter_tests/widgets/property/NewProperty.dart';
 import 'package:flutter_tests/widgets/property/SearchProperties.dart';
 
+import 'package:flutter_tests/widgets/owner/Owner.dart';
+import 'package:flutter_tests/widgets/owner/Owners.dart';
+import 'package:flutter_tests/widgets/owner/NewOwner.dart';
+import 'package:flutter_tests/widgets/owner/SearchOwners.dart';
+
+import 'package:flutter_tests/widgets/representative/Representative.dart';
+import 'package:flutter_tests/widgets/representative/Representatives.dart';
+import 'package:flutter_tests/widgets/representative/NewRepresentative.dart';
+import 'package:flutter_tests/widgets/representative/SearchRepresentatives.dart';
+
+import 'package:flutter_tests/widgets/tenant/Tenant.dart';
+import 'package:flutter_tests/widgets/tenant/Tenants.dart';
+import 'package:flutter_tests/widgets/tenant/NewTenant.dart';
+import 'package:flutter_tests/widgets/tenant/SearchTenants.dart';
+
 import 'package:flutter_tests/widgets/settings/Settings.dart';
 
 
@@ -135,6 +150,33 @@ class _MyAppState extends State<MyApp> {
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => NewProperty());
               else if (settings.name == '/search-properties')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
+                
+              else if (settings.name == '/owners')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Owners());
+              else if (settings.name == '/owner')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Owner());
+              else if (settings.name == '/new-owner')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwner());
+              else if (settings.name == '/search-owners')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchOwners());
+                
+              else if (settings.name == '/representatives')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Representatives());
+              else if (settings.name == '/representative')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Representative());
+              else if (settings.name == '/new-representative')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentative());
+              else if (settings.name == '/search-representatives')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchRepresentatives());
+                
+              else if (settings.name == '/tenants')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenants());
+              else if (settings.name == '/tenant')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenant());
+              else if (settings.name == '/new-tenant')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenant());
+              else if (settings.name == '/search-tenants')
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants());
               
               else if (settings.name == '/settings')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());

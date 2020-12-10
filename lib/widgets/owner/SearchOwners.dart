@@ -6,16 +6,16 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 
-class SearchProperties extends StatefulWidget {
-  SearchProperties({Key key}) : super(key: key);
+class SearchOwners extends StatefulWidget {
+  SearchOwners({Key key}) : super(key: key);
 
   @override
-  _SearchPropertiesState createState() => _SearchPropertiesState();
+  _SearchOwnersState createState() => _SearchOwnersState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _SearchPropertiesState extends State<SearchProperties> {
+class _SearchOwnersState extends State<SearchOwners> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
@@ -31,12 +31,11 @@ class _SearchPropertiesState extends State<SearchProperties> {
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query properties(\$filter: PropertiesFilterInput!) {
-            properties (filter: \$filter) {
+          query owners(\$filter: OwnersFilterInput!) {
+            owners (filter: \$filter) {
               id
-              address
-              postalCode
-              city
+              firstName
+              lastName
             }
           }
         '''),
@@ -67,19 +66,19 @@ class _SearchPropertiesState extends State<SearchProperties> {
         }
         else {
 
-          List<sop.Property> properties = (result.data["properties"] as List).map((property) => sop.Property.fromJSON(property)).toList();
-          print('stateOfPlays length: ' + properties.length.toString());
+          List<sop.Owner> owners = (result.data["owners"] as List).map((owner) => sop.Owner.fromJSON(owner)).toList();
+          print('stateOfPlays length: ' + owners.length.toString());
 
-          if (properties.length == 0) {
-            body = Text("no stateOfplays");
+          if (owners.length == 0) {
+            body = Text("no owners");
           }
           else {
             body = ListView.separated(
-              itemCount: properties.length,
+              itemCount: owners.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(properties[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
+                title: Text(owners[i].firstName + ', ' + owners[i].lastName),
+                // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
+                onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();
@@ -99,8 +98,8 @@ class _SearchPropertiesState extends State<SearchProperties> {
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newProperties) => ({
-                    "properties": newProperties["properties"]
+                  updateQuery: (existing, newOwners) => ({
+                    "owners": newOwners["owners"]
                   }),
                 ));
               }

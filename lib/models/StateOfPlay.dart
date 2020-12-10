@@ -3,16 +3,18 @@ import 'package:intl/intl.dart';// DateFormat
 
 class Owner {
   Owner({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.company,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String company;
   String address;
   String postalCode;
@@ -21,8 +23,9 @@ class Owner {
   factory Owner.fromJSON(Map<String, dynamic> json) {
 
     return Owner(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       company: json["company"],
       address: json["address"],
       postalCode: json["postalCode"],
@@ -33,16 +36,18 @@ class Owner {
 
 class Representative {
   Representative({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.company,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String company;
   String address;
   String postalCode;
@@ -51,8 +56,9 @@ class Representative {
   factory Representative.fromJSON(Map<String, dynamic> json) {
 
     return Representative(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       company: json["company"],
       address: json["address"],
       postalCode: json["postalCode"],
@@ -63,15 +69,17 @@ class Representative {
 
 class Tenant {
   Tenant({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String address;
   String postalCode;
   String city;
@@ -79,8 +87,9 @@ class Tenant {
   factory Tenant.fromJSON(Map<String, dynamic> json) {
 
     return Tenant(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
@@ -530,22 +539,22 @@ class Insurance {
 
 class User {
   User({
-    this.firstname,
-    this.lastname,
+    this.firstName,
+    this.lastName,
     this.stateOfPlays,
     this.properties
   });
 
-  final String firstname;
-  final String lastname;
+  final String firstName;
+  final String lastName;
   final List<StateOfPlay> stateOfPlays;
   final List<Property> properties;
 
   factory User.fromJSON(Map<String, dynamic> json) {
 
     return User(
-      firstname: json["firstname"],
-      lastname: json["lastname"],// TODO : pb ici avec la sérialisation
+      firstName: json["firstName"],
+      lastName: json["lastName"],// TODO : pb ici avec la sérialisation
       stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
     );

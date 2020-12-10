@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/main2.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -8,41 +7,34 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 
 class StateOfPlay extends StatefulWidget {
-  StateOfPlay({ Key key, @required this.stateOfPlayId }) : super(key: key);
+  StateOfPlay({Key key, this.stateOfPlayId}) : super(key: key);
 
   final String stateOfPlayId;
-
+  
   @override
-  _StateOfPlayState createState() => _StateOfPlayState();
+  _PropertyState createState() => _PropertyState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _StateOfPlayState extends State<StateOfPlay> {
+class _PropertyState extends State<StateOfPlay> {
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
       appBar: AppBar(
-        title: Text('État des lieux : ' + widget.stateOfPlayId),
+        title: Text('Propriété'),
       ),
       body: 
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query User {
-              user(data: { userId: "1" }) {
+            query stateOfPlay(\$data: PropertyInput!) {
+              stateOfPlay(data: \$data) {
                 id
-                firstName
-                lastName
-                stateOfPlays {
-                  id
-                  property {
-                    id
-                    address
-                    postalCode
-                    city
-                  }
-                }
+                address
+                postalCode
+                city
               }
             }
             ''')
@@ -65,23 +57,11 @@ class _StateOfPlayState extends State<StateOfPlay> {
               return CircularProgressIndicator();
             }
 
-            sop.User user = sop.User.fromJSON(result.data["user"]);
-            print('stateOfPlays length: ' + user.stateOfPlays.length.toString());
+            sop.StateOfPlay stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
 
-            if (user.stateOfPlays.length == 0) {
-              return Text("no stateOfplays");
-            }
+            print('parsed data: ' + stateOfPlay.toString());
 
-            return ListView.separated(
-              itemCount: user.stateOfPlays.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(user.stateOfPlays[i].property.address + ', ' + user.stateOfPlays[i].property.postalCode + ' ' + user.stateOfPlays[i].property.city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(user.stateOfPlays[i].date)) ,
-              ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-            );
+            return Text(stateOfPlay.id);
           }
         )
     );

@@ -27,7 +27,21 @@ class MyDrawer extends StatelessWidget {
             title: Text('Propriétés'),
             onTap: () => Navigator.popAndPushNamed(context, '/properties'),
           ),
-          Spacer(),
+          Divider(),
+          ListTile(
+            title: Text('Propriétaires'),
+            onTap: () => Navigator.popAndPushNamed(context, '/owners'),
+          ),
+          ListTile(
+            title: Text('Mandataires'),
+            onTap: () => Navigator.popAndPushNamed(context, '/representatives'),
+          ),
+          ListTile(
+            title: Text('Locataires'),
+            onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
+          ),
+          Divider(),
+          Spacer(),// TODO: doesnt work
           ListTile(
             title: Text('Paramêtres'),
             onTap: () => Navigator.popAndPushNamed(context, '/settings'),

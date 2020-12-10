@@ -18,6 +18,7 @@ import { PropertyResolver } from "../modules/property/PropertyResolver";
 import { StateOfPlayResolver } from "../modules/stateOfPlay/StateOfPlayResolver";
 import { OwnerResolver } from "../modules/owner/OwnerResolver";
 import { RepresentativeResolver } from "../modules/representative/RepresentativeResolver";
+import { TenantResolver } from "../modules/tenant/TenantResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -38,7 +39,8 @@ export const createSchema = () =>
       PropertyResolver,
       StateOfPlayResolver,
       OwnerResolver,
-      RepresentativeResolver
+      RepresentativeResolver,
+      TenantResolver,
     ],
     // @ts-ignore
     authChecker: ({ context }) => {

@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class PropertyFilterInput {
+export class DeleteTenantInput {
   @Field()
-  search: string;
+  tenantId: string;
 }

@@ -20,23 +20,18 @@ class _PropertyState extends State<Property> {
   Widget build(BuildContext context) {
     return MyScaffold(
       appBar: AppBar(
-        title: Text('Property'),
+        title: Text('Propriété'),
       ),
       body: 
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query User {
-              user(data: { userId: "1" }) {
+            query property(\$data: PropertyInput!) {
+              property(data: \$data) {
                 id
-                firstName
-                lastName
-                properties {
-                  id
-                  address
-                  postalCode
-                  city
-                }
+                address
+                postalCode
+                city
               }
             }
             ''')
@@ -59,23 +54,11 @@ class _PropertyState extends State<Property> {
               return CircularProgressIndicator();
             }
 
-            sop.User user = sop.User.fromJSON(result.data["user"]);
+            sop.Property property = sop.Property.fromJSON(result.data["property"]);
 
-            print('parsed data: ' + user.toString());
+            print('parsed data: ' + property.toString());
 
-            if (user.properties.length == 0) {
-              return Text("no properties");
-            }
-
-            return ListView.separated(
-              itemCount: user.properties.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(user.properties[i].address + ', ' + user.properties[i].postalCode + ' ' + user.properties[i].city),
-              ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-            );
+            return Text(property.id);
           }
         )
     );
