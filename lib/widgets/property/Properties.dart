@@ -16,6 +16,9 @@ class Properties extends StatefulWidget {
 // adb reverse tcp:9002 tcp:9002
 
 class _PropertiesState extends State<Properties> {
+  
+  ScrollController _scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
@@ -36,15 +39,28 @@ class _PropertiesState extends State<Properties> {
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query properties {
-              properties {
-                id
-                address
-                postalCode
-                city
+            query properties(\$pagination: PropertyPaginationInput!) {
+              properties (pagination: \$pagination) {
+                cursor {
+                  afterCursor
+                  beforeCursor
+                }
+                data {
+                  id
+                  address
+                  postalCode
+                  city
+                }
               }
             }
-            ''')
+            '''),
+            variables: {
+              "pagination": {
+                "afterCursor": "",
+                "beforeCursor": "",
+                "limit": 20
+              }
+            }
           ),
           builder: (
             QueryResult result, {
@@ -56,6 +72,32 @@ class _PropertiesState extends State<Properties> {
             print('data: ' + result.data.toString());
             print('');
 
+            _scrollController
+              ..addListener(() {
+                if (_scrollController.position.pixels ==
+                    _scrollController.position.maxScrollExtent) {
+                  if (!result.loading && result.data["properties"]["cursor"]["afterCursor"] != null) {
+                    print('fetchMore: ' + result.data["properties"]["cursor"]["afterCursor"]);
+                    FetchMoreOptions opts = FetchMoreOptions(
+                      variables: {
+                        "afterCursor": result.data["properties"]["cursor"]["afterCursor"],
+                        "beforeCursor": "",
+                        "limit": 20
+                      },
+                      updateQuery: (previousResultData, fetchMoreResultData) {
+                        // final List<dynamic> newProperties = fetchMoreResultData["properties"]["data"] as List;
+
+                        // fetchMoreResultData["properties"]["cursor"] = fetchMoreResultData["properties"]["cursor"];
+                        // fetchMoreResultData["properties"]["data"] = newProperties;
+
+                        return fetchMoreResultData;
+                      },
+                    );
+                    fetchMore(opts);
+                  }
+                }
+              });
+
             if (result.hasException) {
               return Text(result.exception.toString());
             }
@@ -64,7 +106,7 @@ class _PropertiesState extends State<Properties> {
               return CircularProgressIndicator();
             }
 
-            List<sop.Property> properties = (result.data["properties"] as List).map((property) => sop.Property.fromJSON(property)).toList();
+            List<sop.Property> properties = (result.data["properties"]["data"] as List).map((property) => sop.Property.fromJSON(property)).toList();
 
             print('parsed data: ' + properties.toString());
 
@@ -73,6 +115,7 @@ class _PropertiesState extends State<Properties> {
             }
 
             return ListView.separated(
+              controller: _scrollController,
               itemCount: properties.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),

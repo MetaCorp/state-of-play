@@ -47,7 +47,7 @@ class _NewPropertyState extends State<NewProperty> {
       builder: (
         RunMutation runMutation,
         QueryResult result,
-      ) {
+      ) {// TODO: load indicator
         
         return Scaffold(
           appBar: AppBar(
@@ -77,6 +77,7 @@ class _NewPropertyState extends State<NewProperty> {
                       "city": _cityController.text,
                     }
                   });
+
                   QueryResult networkResult = await result.networkResult;
 
                   if (networkResult.hasException) {

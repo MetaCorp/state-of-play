@@ -1,5 +1,8 @@
 import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
-import { ILike } from "typeorm";
+import { /* ILike, */getManager } from "typeorm";
+import { buildPaginator } from "typeorm-cursor-pagination";
+
+// import { GraphQLJSONObject } from 'graphql-type-json';
 
 import { Property } from "../../entity/Property";
 
@@ -7,6 +10,9 @@ import { CreatePropertyInput } from "./CreatePropertyInput";
 import { PropertyFilterInput } from "./PropertyFilterInput";
 import { DeletePropertyInput } from "./DeletePropertyInput";
 import { UpdatePropertyInput } from "./UpdatePropertyInput";
+import { PropertyPaginationInput } from "./PropertyPaginationInput";
+
+import { PropertiesOutput } from "./PropertiesOutput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -16,20 +22,54 @@ import { PropertyInput } from "./PropertyInput"
 @Resolver()
 export class PropertyResolver {
 	@Authorized()
-	@Query(() => [Property])
+	@Query(() => PropertiesOutput)// TODO: récupérer le schema graphql et définir un bon schema output
 	// @ts-ignore
-	properties(@Arg("filter", { nullable: true }) filter?: PropertyFilterInput, @Ctx() ctx: MyContext) {
+	async properties(@Arg("filter", { nullable: true }) filter?: PropertyFilterInput, @Arg("pagination", { nullable: true }) pagination?: PropertyPaginationInput, @Ctx() ctx: MyContext) {
 		console.log('properties: ', ctx.userId)
-		return Property.find({
-			where: filter ? [
-                { address: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
-                { postalCode: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
-                { city: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
-            ] : [
-				{ user: { id: ctx.userId } }
-			],// TODO: OrderInput
-			relations: ["user"]
+		
+		// const properties2 = Property.find({
+		// 	where: filter ? [
+        //         { address: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+        //         { postalCode: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+        //         { city: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+        //     ] : [
+		// 		{ user: { id: ctx.userId } }
+		// 	],// TODO: OrderInput
+		// 	take: pagination && pagination.take,
+		// 	skip: pagination && pagination.skip,
+		// 	relations: ["user"]
+		// })
+
+
+		const queryBuilder = await getManager()
+			.createQueryBuilder(Property, "property")
+			.leftJoinAndSelect('property.user', 'user')
+			.where('property.user.id = :userId', { userId: ctx.userId })
+			.andWhere("property.address ilike '%' || :address || '%'", { address: filter ? filter.search : "" })
+			.orWhere("property.postalCode ilike '%' || :postalCode || '%'", { postalCode: filter ? filter.search : "" })
+			.orWhere("property.city ilike '%' || :city || '%'", { city: filter ? filter.search : "" })
+			// .take(pagination && pagination.take)
+			// .skip(pagination && pagination.skip)
+			// .getMany();
+
+		const paginator = buildPaginator({
+			entity: Property,
+			query: {
+				limit: pagination && pagination.limit ? pagination.limit : 10,
+				order: 'ASC',
+				afterCursor: pagination && pagination.afterCursor,
+				beforeCursor: pagination && pagination.beforeCursor
+			},
 		})
+
+		const { data, cursor } = await paginator.paginate(queryBuilder)
+
+		console.log('cursor: ', cursor)
+
+		return {
+			data,
+			cursor
+		}
 	}
 
 	@Query(() => Property, { nullable: true })

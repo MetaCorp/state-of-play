@@ -24,6 +24,7 @@
     "reflect-metadata": "^0.1.12",
     "type-graphql": "^0.18.0-beta.17",
     "typeorm": "^0.2.29",
+    "typeorm-cursor-pagination": "^0.4.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
