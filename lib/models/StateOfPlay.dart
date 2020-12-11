@@ -242,17 +242,17 @@ class StateOfPlay {
 //   window
 // }
 
-enum States {
-  neww,
-  good,
-  used,
-  defaillant,// TODO traduction
-  bonFonctionnement,
-  mauvaisFonctionnement
-}
+// enum String {
+//   neww,
+//   good,
+//   used,
+//   defaillant,// TODO traduction
+//   bonFonctionnement,
+//   mauvaisFonctionnement
+// }
 
 class Decoration {
-  const Decoration({
+  Decoration({
     this.type,
     this.nature,
     this.state,
@@ -260,11 +260,11 @@ class Decoration {
     this.photo// TODO
   });
 
-  final String type;
-  final String nature;
-  final States state;
-  final String comment;
-  final int photo;
+  String type;
+  String nature;
+  String state;
+  String comment;
+  int photo;
 
   String getIndex(int index) {
     switch (index) {
@@ -273,7 +273,7 @@ class Decoration {
       case 1:
         return nature;
       case 2:
-        return enumToString(state);
+        return state;
       case 3:
         return comment;
       case 4:
@@ -287,7 +287,7 @@ class Decoration {
     return Decoration(
       type: json["type"],
       nature: json["brandOrObject"],
-      state: enumFromString(json["state"], States.values),// TODO parse dual type
+      state: json["state"],// TODO parse dual type
       comment: json["comment"],
       photo: int.parse(json["photo"])
     );
@@ -302,7 +302,7 @@ class Decoration {
 // }
 
 class ElectricAndHeating {
-  const ElectricAndHeating({
+  ElectricAndHeating({
     this.type,
     this.quantity,
     this.state,
@@ -310,11 +310,11 @@ class ElectricAndHeating {
     this.photo// TODO
   });
 
-  final String type;
-  final int quantity;
-  final States state;
-  final String comment;
-  final int photo;
+  String type;
+  int quantity;
+  String state;
+  String comment;
+  int photo;
 
   String getIndex(int index) {
     switch (index) {
@@ -323,7 +323,7 @@ class ElectricAndHeating {
       case 1:
         return quantity.toString();
       case 2:
-        return enumToString(state);
+        return state;
       case 3:
         return comment;
       case 4:
@@ -337,7 +337,7 @@ class ElectricAndHeating {
     return ElectricAndHeating(
       type: json["type"],
       quantity: int.parse(json["brandOrObject"]),
-      state: enumFromString(json["state"], States.values),// TODO parse dual type
+      state: json["state"],// TODO parse dual type
       comment: json["comment"],
       photo: int.parse(json["photo"])
     );
@@ -345,7 +345,7 @@ class ElectricAndHeating {
 }
 
 class Equipment {
-  const Equipment({
+  Equipment({
     this.type,
     this.brandOrObject,
     this.stateOrQuantity,
@@ -353,11 +353,11 @@ class Equipment {
     this.photo// TODO
   });
 
-  final String type;
-  final String brandOrObject;
-  final dynamic stateOrQuantity;
-  final String comment;
-  final int photo;
+  String type;
+  String brandOrObject;
+  dynamic stateOrQuantity;
+  String comment;
+  int photo;
 
   String getIndex(int index) {
     switch (index) {
@@ -366,7 +366,7 @@ class Equipment {
       case 1:
         return brandOrObject;
       case 2:
-        return stateOrQuantity is int ? stateOrQuantity.toString() : enumToString(stateOrQuantity);
+        return stateOrQuantity is int ? stateOrQuantity.toString() : stateOrQuantity;
       case 3:
         return comment;
       case 4:
@@ -388,13 +388,13 @@ class Equipment {
 }
 
 class GeneralAspect {
-  const GeneralAspect({
+  GeneralAspect({
     this.comment,
     this.photo// TODO
   });
 
-  final String comment;
-  final int photo;
+  String comment;
+  int photo;
   
   factory GeneralAspect.fromJSON(Map<String, dynamic> json) {
 

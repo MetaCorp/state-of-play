@@ -71,14 +71,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
-            state: sop.States.good,
+            state: 'Bon',
             comment: 'Il manque la porte',
             photo: 0
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
-            state: sop.States.good,
+            state: 'Bon',
             comment: 'Il manque la porte',
             photo: 0
           )
@@ -87,14 +87,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.ElectricAndHeating(
             type: 'Interrupteur',
             quantity: 1,
-            state: sop.States.neww,
+            state: 'Neuf',
             comment: '',
             photo: 0
           ),
           sop.ElectricAndHeating(
             type: 'Prise électrique',
             quantity: 3,
-            state: sop.States.neww,
+            state: 'Neuf',
             comment: '',
             photo: 0
           ),
@@ -103,14 +103,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: sop.States.good,
+            stateOrQuantity: 'Bon',
             comment: '',
             photo: 0
           ),
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: sop.States.good,
+            stateOrQuantity: 'Bon',
             comment: '',
             photo: 0
           ),
@@ -126,14 +126,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
-            state: sop.States.good,
+            state: 'Bon',
             comment: 'Il manque la porte',
             photo: 0
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
-            state: sop.States.good,
+            state: 'Bon',
             comment: 'Il manque la porte',
             photo: 0
           )
@@ -142,14 +142,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.ElectricAndHeating(
             type: 'Interrupteur',
             quantity: 1,
-            state: sop.States.neww,
+            state: 'Neuf',
             comment: '',
             photo: 0
           ),
           sop.ElectricAndHeating(
             type: 'Prise électrique',
             quantity: 3,
-            state: sop.States.neww,
+            state: 'Neuf',
             comment: '',
             photo: 0
           ),
@@ -158,14 +158,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: sop.States.good,
+            stateOrQuantity: 'Bon',
             comment: '',
             photo: 0
           ),
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: sop.States.good,
+            stateOrQuantity: 'Bon',
             comment: '',
             photo: 0
           ),
