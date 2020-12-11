@@ -215,11 +215,11 @@ class StateOfPlay {
 
     return StateOfPlay(
       id: json["id"],
-      // owner: Owner.fromJSON(json["owner"]),
-      // representative: Representative.fromJSON(json["representative"]),
-      // tenants: (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList(),
+      owner: json["owner"] != null ? Owner.fromJSON(json["owner"]) : null,
+      representative: json["representative"] != null ? Representative.fromJSON(json["representative"]) : null,
+      tenants: (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList(),
       // entryDate: DateTime.parse(json["entryDate"]),
-      property: Property.fromJSON(json["property"]),
+      property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
       // rooms: (json["rooms"] as List).map((room) => Room.fromJSON(room)).toList(),
       // meters: (json["meters"] as List).map((meter) => Meter.fromJSON(meter)).toList(),
       // keys: (json["keys"] as List).map((key) => Key.fromJSON(key)).toList(),
