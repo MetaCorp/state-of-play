@@ -18,7 +18,7 @@ class Property extends StatefulWidget {
 class _PropertyState extends State<Property> {
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Propriété'),
       ),

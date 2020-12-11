@@ -36,19 +36,13 @@ class _StateOfPlaysState extends State<StateOfPlays> {
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query User {
-              user(data: { userId: "1" }) {
-                id
-                firstName
-                lastName
-                stateOfPlays {
+            query stateOfPlays {
+              stateOfPlays {
+                property {
                   id
-                  property {
-                    id
-                    address
-                    postalCode
-                    city
-                  }
+                  address
+                  postalCode
+                  city
                 }
               }
             }
@@ -72,19 +66,19 @@ class _StateOfPlaysState extends State<StateOfPlays> {
               return CircularProgressIndicator();
             }
 
-            sop.User user = sop.User.fromJSON(result.data["user"]);
-            print('stateOfPlays length: ' + user.stateOfPlays.length.toString());
+            List<sop.StateOfPlay> stateOfPlays = (result.data["stateOfPlays"] as List).map((stateOfPlay) => sop.StateOfPlay.fromJSON(stateOfPlay)).toList();
+            print('stateOfPlays length: ' + stateOfPlays.length.toString());
 
-            if (user.stateOfPlays.length == 0) {
+            if (stateOfPlays.length == 0) {
               return Text("no stateOfplays");
             }
 
             return ListView.separated(
-              itemCount: user.stateOfPlays.length,
+              itemCount: stateOfPlays.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(user.stateOfPlays[i].property.address + ', ' + user.stateOfPlays[i].property.postalCode + ' ' + user.stateOfPlays[i].property.city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(user.stateOfPlays[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/state-of-play', arguments: { "stateOfPlayId": user.stateOfPlays[i].id }),
+                title: Text(stateOfPlays[i].property.address + ', ' + stateOfPlays[i].property.postalCode + ' ' + stateOfPlays[i].property.city),
+                // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)) ,
+                onTap: () => Navigator.pushNamed(context, '/state-of-play', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();

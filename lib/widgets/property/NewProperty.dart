@@ -84,6 +84,7 @@ class _NewPropertyState extends State<NewProperty> {
                         // TODO: show error
                       }
                       else if (networkResult.data["createProperty"] != null) {
+                        Navigator.pop(context);
                         Navigator.popAndPushNamed(context, '/properties');
                       }
                     }

@@ -32,7 +32,7 @@ class DoubleButton extends StatelessWidget {
           child: Icon(Icons.close),
           onPressed: onPressRemove,
         ) : Container(),
-        onPressAdd != null ? RaisedButton(
+        onPressAdd != null && text == null ? RaisedButton(
           child: Icon(Icons.add),
           onPressed: onPressAdd,
         ) : Container()

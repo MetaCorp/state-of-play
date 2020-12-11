@@ -4,8 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
-
 class Tenant extends StatefulWidget {
   Tenant({Key key}) : super(key: key);
 
@@ -18,7 +16,7 @@ class Tenant extends StatefulWidget {
 class _TenantState extends State<Tenant> {
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Locataire'),
       ),

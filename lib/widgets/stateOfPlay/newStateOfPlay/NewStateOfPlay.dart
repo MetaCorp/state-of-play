@@ -19,7 +19,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
   final sop.StateOfPlay _stateOfPlay = sop.StateOfPlay(
     owner: sop.Owner(
       firstName: 'Robert',
-      lastName: '',
+      lastName: 'Dupont',
       company: "SCI d'Investisseurs",
       address: '3 rue des Mésanges',
       postalCode: '75001',
@@ -212,9 +212,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           mutation createStateOfPlay(\$data: CreateStateOfPlayInput!) {
             createStateOfPlay(data: \$data) {
               id
-              address
-              postalCode
-              city
+              fullAddress
             }
           }
         '''), // this is the mutation string you just created
@@ -233,8 +231,45 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
       ) {
         
         return NewStateOfPlayContent(
-          onSave: () {
-            print('onSave');
+          onSave: () async {
+            print("onSave");
+            MultiSourceResult result = runMutation({
+              "data": {
+                "owner": {
+                  "id": _stateOfPlay.owner.id,
+                  "firstName": _stateOfPlay.owner.firstName,
+                  "lastName": _stateOfPlay.owner.lastName,
+                },
+                "representative": {
+                  "id": _stateOfPlay.representative.id,
+                  "firstName": _stateOfPlay.representative.firstName,
+                  "lastName": _stateOfPlay.representative.lastName,
+                },
+                "tenants": _stateOfPlay.tenants.map((tenant) => {
+                  "id": tenant.id,
+                  "firstName": tenant.firstName,
+                  "lastName": tenant.lastName,
+                }).toList(),
+                "property": {
+                  "id": _stateOfPlay.property.id,
+                  "address": _stateOfPlay.property.address,
+                  "postalCode": _stateOfPlay.property.postalCode,
+                  "city": _stateOfPlay.property.city,
+                },
+              }
+            });
+
+            QueryResult networkResult = await result.networkResult;
+
+            print("networkResult hasException: " + networkResult.hasException.toString());
+            if (networkResult.hasException)
+              print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+            print("");
+            print("");
+            
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, "/state-of-plays");
+
           },
           stateOfPlay: _stateOfPlay
         );

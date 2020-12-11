@@ -63,7 +63,7 @@ class _OwnersState extends State<Representatives> {
               return CircularProgressIndicator();
             }
 
-            List<sop.Owner> representatives = (result.data["representatives"] as List).map((representative) => sop.Owner.fromJSON(representative)).toList();
+            List<sop.Representative> representatives = (result.data["representatives"] as List).map((representative) => sop.Representative.fromJSON(representative)).toList();
 
             print('parsed data: ' + representatives.toString());
 

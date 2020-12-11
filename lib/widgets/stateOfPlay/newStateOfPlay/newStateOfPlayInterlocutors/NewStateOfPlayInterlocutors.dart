@@ -44,7 +44,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
               owner: sop.Owner(),
               onSave : (owner) {
                 widget.stateOfPlay.owner = owner;
-                setState(() { }); // To rerender widget
+                setState(() { });
               }
             )));
           },
@@ -63,7 +63,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
               onSelect : (representative) {
                 widget.stateOfPlay.representative = representative;
-                setState(() { }); // To rerender widget
+                setState(() { });
               }
             )));
           },
@@ -123,7 +123,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
               onSelect : (property) {
                 widget.stateOfPlay.property = property;
-                setState(() { }); // To rerender widget
+                setState(() { });
               }
             )));
           },

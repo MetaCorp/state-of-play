@@ -77,6 +77,7 @@ class _NewOwnerState extends State<NewOwner> {
                         // TODO: show error
                       }
                       else if (networkResult.data["createOwner"] != null) {
+                        Navigator.pop(context);
                         Navigator.popAndPushNamed(context, '/owners');
                       }
                     }

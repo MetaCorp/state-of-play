@@ -77,6 +77,7 @@ class _NewRepresentativeState extends State<NewRepresentative> {
                         // TODO: show error
                       }
                       else if (networkResult.data["createRepresentative"] != null) {
+                        Navigator.pop(context);
                         Navigator.popAndPushNamed(context, '/representatives');
                       }
                     }

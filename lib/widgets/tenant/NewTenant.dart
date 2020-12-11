@@ -77,6 +77,7 @@ class _NewTenantState extends State<NewTenant> {
                         // TODO: show error
                       }
                       else if (networkResult.data["createTenant"] != null) {
+                        Navigator.pop(context);
                         Navigator.popAndPushNamed(context, '/tenants');
                       }
                     }

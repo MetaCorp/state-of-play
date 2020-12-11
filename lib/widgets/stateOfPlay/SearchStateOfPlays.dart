@@ -32,11 +32,6 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           query stateOfPlays(\$filter: StateOfPlaysFilterInput!) {
             stateOfPlays (filter: \$filter) {
               id
-              owner {
-                id
-                firstName
-                lastName
-              }
               property {
                 id
                 address
