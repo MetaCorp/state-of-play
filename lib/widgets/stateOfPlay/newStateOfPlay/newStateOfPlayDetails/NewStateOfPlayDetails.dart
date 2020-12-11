@@ -12,15 +12,6 @@ class NewStateOfPlayDetails extends StatefulWidget {
 }
 
 class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
-  List<bool> _isSwitch;
-
-  @override
-  void initState() { 
-    super.initState();
-
-    _isSwitch = widget.rooms.map((room) => true).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -43,12 +34,12 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
           children: [
             Text(entry.value.name),
             Spacer(),
-            Switch(
-              value: _isSwitch[entry.key],
-              onChanged: (value) {
-                setState(() {
-                  _isSwitch[entry.key] = value;
-                });
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                // TODO : show confirmation popup
+                widget.rooms.removeAt(entry.key);
+                setState(() { });
               },
             )
           ]

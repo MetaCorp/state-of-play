@@ -29,6 +29,8 @@ export class StateOfPlayResolver {
                 // { property: { postalCode: ILike("%" + filter.search + "%") } },
                 // { property: { city: ILike("%" + filter.search + "%") } },
                 { fullAddress: ILike("%" + filter.search + "%") },
+				{ ownerFullName: ILike("%" + filter.search + "%") },
+				{ tenantsFullName: ILike("%" + filter.search + "%") }
             ] : [
 				{ user: { id: ctx.userId }}
 			],
@@ -124,6 +126,8 @@ export class StateOfPlayResolver {
 
 		const stateOfPlay = await StateOfPlay.create({
 			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)
+			ownerFullName: owner.firstName + ' ' + owner.lastName,
+			tenantsFullName: tenants.map(tenant => tenant.firstName + ' ' + tenant.lastName),
 			user: user,
 			owner: owner,
 			representative: representative,

@@ -13,11 +13,11 @@ export class Owner extends BaseEntity {
 
   @Field()
   @Column()
-  firstName: string;
+  firstName: String;
 
   @Field()
   @Column()
-  lastName: string;
+  lastName: String;
 
   @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.owner)

@@ -13,11 +13,11 @@ export class Tenant extends BaseEntity {
 
   @Field()
   @Column()
-  firstName: string;
+  firstName: String;
 
   @Field()
   @Column()
-  lastName: string;
+  lastName: String;
 
   @Field(() => [StateOfPlay])
   @ManyToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.tenants)

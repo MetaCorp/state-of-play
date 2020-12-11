@@ -38,6 +38,16 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                 postalCode
                 city
               }
+              owner {
+                id
+                firstName
+                lastName
+              }
+              tenants {
+                id
+                firstName
+                lastName
+              }
             }
           }
         '''),
@@ -77,11 +87,22 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           else {
             body = ListView.separated(
               itemCount: stateOfPlays.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(stateOfPlays[i].property.address + ', ' + stateOfPlays[i].property.postalCode + ' ' + stateOfPlays[i].property.city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
-              ),
+              itemBuilder: (_, i) {
+                
+                String tenantsString = "";
+
+                for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
+                  tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
+                  if (j < stateOfPlays[i].tenants.length - 1)
+                    tenantsString += ', ';
+                }  
+
+                return ListTile(
+                  title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                  subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
+                  onTap: () => Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                );
+              },
               separatorBuilder: (context, index) {
                 return Divider();
               },
@@ -95,7 +116,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             title: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Entrez votre recherche'
+                hintText: 'Recherchez parmis les propriétaires, locataires et adresses...'
               ),
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(

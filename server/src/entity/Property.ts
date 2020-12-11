@@ -13,27 +13,27 @@ export class Property extends BaseEntity {
 
   @Field()
   @Column()
-  address: string;
+  address: String;
   
   @Field()
   @Column()
-  postalCode: string;
+  postalCode: String;
 
   @Field()
   @Column()
-  city: string;
+  city: String;
 
   // @Field()
   // @Column()
-  // type: string;
+  // type: String;
 
   // @Field()
   // @Column()
-  // reference: string;
+  // reference: String;
 
   // @Field()
   // @Column()
-  // lot: string;
+  // lot: String;
 
   // @Field()
   // @Column()
@@ -49,15 +49,15 @@ export class Property extends BaseEntity {
 
   // // @Field()
   // // @Column()
-  // // annexes: [string];
+  // // annexes: [String];
 
   // @Field()
   // @Column()
-  // heatingType: string;
+  // heatingType: String;
 
   // @Field()
   // @Column()
-  // hotWater: string;
+  // hotWater: String;
 
   @Field(() => User)
   @ManyToOne(() => User, user => user.properties)

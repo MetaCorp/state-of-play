@@ -217,7 +217,7 @@ class StateOfPlay {
       id: json["id"],
       owner: json["owner"] != null ? Owner.fromJSON(json["owner"]) : null,
       representative: json["representative"] != null ? Representative.fromJSON(json["representative"]) : null,
-      tenants: (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList(),
+      tenants: json["tenants"] != null ? (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList() : null,
       // entryDate: DateTime.parse(json["entryDate"]),
       property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
       // rooms: (json["rooms"] as List).map((room) => Room.fromJSON(room)).toList(),

@@ -16,7 +16,15 @@ export class StateOfPlay extends BaseEntity {
 
   @Field()
   @Column()
-  fullAddress: string;
+  fullAddress: String;
+  
+  @Field()
+  @Column()
+  ownerFullName: String;
+  
+  @Field(() => [String])
+  @Column()
+  tenantsFullName: String;
 
   @Field(() => Owner)
   @ManyToOne(() => Owner, owner => owner.stateOfPlays)
