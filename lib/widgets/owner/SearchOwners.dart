@@ -74,7 +74,7 @@ class _SearchOwnersState extends State<SearchOwners> {
             body = ListView.separated(
               itemCount: owners.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(owners[i].firstName + ', ' + owners[i].lastName),
+                title: Text(owners[i].firstName + ' ' + owners[i].lastName),
                 // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
                 onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
               ),

@@ -4,16 +4,20 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-class SearchRepresentatives extends StatefulWidget {
-  SearchRepresentatives({Key key}) : super(key: key);
+typedef SelectCallback = void Function(sop.Representative);
+
+class NewStateOfPlayInterlocutorsSearchRepresentatives extends StatefulWidget {
+  NewStateOfPlayInterlocutorsSearchRepresentatives({ Key key, this.onSelect }) : super(key: key);
+
+  final SelectCallback onSelect;
 
   @override
-  _SearchRepresentativesState createState() => _SearchRepresentativesState();
+  _NewStateOfPlayInterlocutorsSearchRepresentativesState createState() => _NewStateOfPlayInterlocutorsSearchRepresentativesState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _SearchRepresentativesState extends State<SearchRepresentatives> {
+class _NewStateOfPlayInterlocutorsSearchRepresentativesState extends State<NewStateOfPlayInterlocutorsSearchRepresentatives> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
@@ -76,7 +80,10 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
               itemBuilder: (_, i) => ListTile(
                 title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
                 // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onSelect(representatives[i]);
+                },
               ),
               separatorBuilder: (context, index) {
                 return Divider();

@@ -4,16 +4,20 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-class SearchRepresentatives extends StatefulWidget {
-  SearchRepresentatives({Key key}) : super(key: key);
+typedef SelectCallback = void Function(sop.Owner);
+
+class NewStateOfPlayInterlocutorsSearchOwners extends StatefulWidget {
+  NewStateOfPlayInterlocutorsSearchOwners({ Key key, this.onSelect }) : super(key: key);
+
+  final SelectCallback onSelect;
 
   @override
-  _SearchRepresentativesState createState() => _SearchRepresentativesState();
+  _NewStateOfPlayInterlocutorsSearchOwnersState createState() => _NewStateOfPlayInterlocutorsSearchOwnersState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _SearchRepresentativesState extends State<SearchRepresentatives> {
+class _NewStateOfPlayInterlocutorsSearchOwnersState extends State<NewStateOfPlayInterlocutorsSearchOwners> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
@@ -29,8 +33,8 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query representatives(\$filter: RepresentativesFilterInput!) {
-            representatives (filter: \$filter) {
+          query owners(\$filter: OwnersFilterInput!) {
+            owners (filter: \$filter) {
               id
               firstName
               lastName
@@ -64,19 +68,22 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
         }
         else {
 
-          List<sop.Representative> representatives = (result.data["representatives"] as List).map((representative) => sop.Representative.fromJSON(representative)).toList();
-          print('stateOfPlays length: ' + representatives.length.toString());
+          List<sop.Owner> owners = (result.data["owners"] as List).map((owner) => sop.Owner.fromJSON(owner)).toList();
+          print('stateOfPlays length: ' + owners.length.toString());
 
-          if (representatives.length == 0) {
-            body = Text("no representatives");
+          if (owners.length == 0) {
+            body = Text("no owners");
           }
           else {
             body = ListView.separated(
-              itemCount: representatives.length,
+              itemCount: owners.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+                title: Text(owners[i].firstName + ' ' + owners[i].lastName),
+                // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onSelect(owners[i]);
+                },
               ),
               separatorBuilder: (context, index) {
                 return Divider();
@@ -96,8 +103,8 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newRepresentatives) => ({
-                    "representatives": newRepresentatives["representatives"]
+                  updateQuery: (existing, newOwners) => ({
+                    "owners": newOwners["owners"]
                   }),
                 ));
               }

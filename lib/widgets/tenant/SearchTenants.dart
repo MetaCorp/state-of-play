@@ -74,7 +74,7 @@ class _SearchTenantsState extends State<SearchTenants> {
             body = ListView.separated(
               itemCount: tenants.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(tenants[i].firstName + ', ' + tenants[i].lastName),
+                title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
                 // subtitle: Text(DateFormat('dd/MM/yyyy').format(tenants[i].date)) ,
                 onTap: () => Navigator.pushNamed(context, '/tenant', arguments: { "tenantId": tenants[i].id }),
               ),

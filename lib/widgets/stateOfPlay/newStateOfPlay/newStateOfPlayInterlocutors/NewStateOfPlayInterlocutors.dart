@@ -5,6 +5,10 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayI
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsOwner.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsProperty.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsRepresentative.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsTenant.dart';
 
 
@@ -25,8 +29,16 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
       children: [
         Text("Propriétaire"),
         DoubleButton(
-          text: widget.stateOfPlay.owner.lastName != "" ? widget.stateOfPlay.owner.firstName + ' ' + widget.stateOfPlay.owner.lastName : null,
+          text: widget.stateOfPlay.owner.lastName != null ? widget.stateOfPlay.owner.firstName + ' ' + widget.stateOfPlay.owner.lastName : null,
           hintText: "Sélectionner un propriétaire",
+          onPress: () {
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchOwners(
+              onSelect : (owner) {
+                widget.stateOfPlay.owner = owner;
+                setState(() { }); // To rerender widget
+              }
+            )));
+          },
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsOwner(
               owner: sop.Owner(),
@@ -36,50 +48,97 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
               }
             )));
           },
+          onPressRemove: () {
+            widget.stateOfPlay.owner = sop.Owner();
+            setState(() { });
+          },
         ),
+
+        Divider(),
         Text("Mandataire"),
         DoubleButton(
-          text: widget.stateOfPlay.representative.lastName != "" ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
+          text: widget.stateOfPlay.representative.lastName != null ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
           hintText: "Sélectionner un mandataire",
-          onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsRepresentative(
-              representative: sop.Representative(),
-              onSave : (representative) {
+          onPress: () {
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
+              onSelect : (representative) {
                 widget.stateOfPlay.representative = representative;
                 setState(() { }); // To rerender widget
               }
             )));
           },
+          onPressAdd: () {
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsRepresentative(
+              representative: sop.Representative(),
+              onSave : (representative) {
+                widget.stateOfPlay.representative = representative;
+                setState(() { });
+              }
+            )));
+          },
+          onPressRemove: () {
+            widget.stateOfPlay.representative = sop.Representative();
+            setState(() { });
+          },
         ),
+
+        Divider(),
         Text("Locataires"),
         DoubleButton(
-          hintText: "Sélectionner un locataire",
+          hintText: "Selectionner un locataire",
+          onPress: () {
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchTenants(
+              onSelect : (tenant) {
+                widget.stateOfPlay.tenants.add(tenant);
+                setState(() { });
+              }
+            )));
+          },
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsTenant(
               tenant: sop.Tenant(),
               onSave : (tenant) {
                 widget.stateOfPlay.tenants.add(tenant);
+                setState(() { });
+              }
+            )));
+          }, 
+        ),
+        Column(
+          children: widget.stateOfPlay.tenants.map((tenant) => DoubleButton(
+            text: tenant.firstName + ' ' + tenant.lastName,
+            onPressRemove: () {
+              widget.stateOfPlay.tenants.remove(tenant);
+              setState(() { });
+            },
+          ),).toList()
+        ),
+
+        Divider(),
+        Text("Propriété"),
+        DoubleButton(
+          text: widget.stateOfPlay.property.address != null ? widget.stateOfPlay.property.address + ', ' + widget.stateOfPlay.property.postalCode + ' ' + widget.stateOfPlay.property.city : null,
+          hintText: "Sélectionner une propriété",
+          onPress: () {
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
+              onSelect : (property) {
+                widget.stateOfPlay.property = property;
                 setState(() { }); // To rerender widget
               }
             )));
           },
-        ),
-        Column(
-          children: widget.stateOfPlay.tenants.map((tenant) => Text(tenant.firstName + ' ' + tenant.lastName)).toList()
-        ),
-        Divider(),
-        Text("Propriété"),
-        DoubleButton(
-          text: widget.stateOfPlay.property.address != "" ? widget.stateOfPlay.property.address + ', ' + widget.stateOfPlay.property.postalCode + ' ' + widget.stateOfPlay.property.city : null,
-          hintText: "Sélectionner une propriété",
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsProperty(
               property: sop.Property(),
               onSave : (property) {
                 widget.stateOfPlay.property = property;
-                setState(() { }); // To rerender widget
+                setState(() { });
               }
             )));
+          },
+          onPressRemove: () {
+            widget.stateOfPlay.property = sop.Property();
+            setState(() { });
           },
         ),
       ],
