@@ -4,10 +4,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
-
 class StateOfPlay extends StatefulWidget {
-  StateOfPlay({Key key, this.stateOfPlayId}) : super(key: key);
+  StateOfPlay({ Key key, this.stateOfPlayId }) : super(key: key);
 
   final String stateOfPlayId;
   
@@ -21,49 +19,84 @@ class _PropertyState extends State<StateOfPlay> {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
-      appBar: AppBar(
-        title: Text('Propriété'),
-      ),
-      body: 
-        Query(
-          options: QueryOptions(
-            documentNode: gql('''
-            query stateOfPlay(\$data: PropertyInput!) {
-              stateOfPlay(data: \$data) {
-                id
-                address
-                postalCode
-                city
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        Navigator.popAndPushNamed(context, '/state-of-plays');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('État des lieux'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => Navigator.pushNamed(context, '/edit-state-of-play', arguments: { "stateOfPlayId": widget.stateOfPlayId }),
+            )
+          ],
+        ),
+        body: 
+          Query(
+            options: QueryOptions(
+              documentNode: gql('''
+              query stateOfPlay(\$data: StateOfPlayInput!) {
+                stateOfPlay(data: \$data) {
+                  id
+                  property {
+                    address
+                    postalCode
+                    city
+                  }
+                  owner {
+                    id
+                    firstName
+                    lastName
+                  }
+                  representative {
+                    id
+                    firstName
+                    lastName
+                  }
+                  tenants {
+                    id
+                    firstName
+                    lastName
+                  }
+                }
               }
+              '''),
+              variables: {
+                "data": {
+                  "stateOfPlayId": widget.stateOfPlayId
+                }
+              }
+            ),
+            builder: (
+              QueryResult result, {
+              Refetch refetch,
+              FetchMore fetchMore,
+            }) {
+              print('loading: ' + result.loading.toString());
+              print('exception: ' + result.exception.toString());
+              print('data: ' + result.data.toString());
+              print('');
+
+              if (result.hasException) {
+                return Text(result.exception.toString());
+              }
+
+              if (result.loading || result.data == null) {
+                return CircularProgressIndicator();
+              }
+
+              sop.StateOfPlay stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
+
+              print('parsed data: ' + stateOfPlay.toString());
+
+              return Text(stateOfPlay.id);
             }
-            ''')
-          ),
-          builder: (
-            QueryResult result, {
-            Refetch refetch,
-            FetchMore fetchMore,
-          }) {
-            print('loading: ' + result.loading.toString());
-            print('exception: ' + result.exception.toString());
-            print('data: ' + result.data.toString());
-            print('');
-
-            if (result.hasException) {
-              return Text(result.exception.toString());
-            }
-
-            if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
-            }
-
-            sop.StateOfPlay stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
-
-            print('parsed data: ' + stateOfPlay.toString());
-
-            return Text(stateOfPlay.id);
-          }
-        )
+          )
+      ),
     );
   }
 }

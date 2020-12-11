@@ -38,6 +38,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             documentNode: gql('''
             query stateOfPlays {
               stateOfPlays {
+                id
                 property {
                   id
                   address

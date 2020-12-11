@@ -1,11 +1,16 @@
+import { Length } from "class-validator";
 import { Field, InputType } from "type-graphql";
-import { CreateTenantInput } from "./CreateTenantInput";
 
 @InputType()
-export class UpdateTenantInput {  
-    @Field()
-    tenantId: string;
+export class UpdateTenantInput {
+  @Field({ nullable: true })
+  id: string;
+  
+  @Field()
+  @Length(1, 255)
+  firstName: string;
 
-    @Field()
-    tenant: CreateTenantInput
+  @Field()
+  @Length(1, 255)
+  lastName: string;
 }

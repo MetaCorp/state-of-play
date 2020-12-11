@@ -1,11 +1,16 @@
+import { Length } from "class-validator";
 import { Field, InputType } from "type-graphql";
-import { CreateOwnerInput } from "./CreateOwnerInput";
 
 @InputType()
-export class UpdateOwnerInput {  
+export class UpdateOwnerInput {
+    @Field({ nullable: true })
+    id: string;
+    
     @Field()
-    ownerId: string;
+    @Length(1, 255)
+    firstName: string;
 
     @Field()
-    owner: CreateOwnerInput
+    @Length(1, 255)
+    lastName: string;
 }

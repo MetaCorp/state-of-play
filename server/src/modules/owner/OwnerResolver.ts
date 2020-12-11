@@ -66,9 +66,9 @@ export class OwnerResolver {
 	@Mutation(() => Int)
 	async updateOwner(@Arg("data") data: UpdateOwnerInput) {
 
-		const owner = await Owner.update(data.ownerId, {
-            firstName: data.owner.firstName,
-            lastName: data.owner.lastName,
+		const owner = await Owner.update(data.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
 		})
 		console.log('updateOwner: ', owner)
 

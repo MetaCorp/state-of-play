@@ -4,10 +4,10 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
-
 class Property extends StatefulWidget {
-  Property({Key key}) : super(key: key);
+  Property({ Key key, this.propertyId }) : super(key: key);
+
+  final String propertyId;
 
   @override
   _PropertyState createState() => _PropertyState();
@@ -18,54 +18,67 @@ class Property extends StatefulWidget {
 class _PropertyState extends State<Property> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Propriété'),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        Navigator.popAndPushNamed(context, '/properties');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Propriété'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": widget.propertyId }),
+            )
+          ],
+        ),
+        body: 
+          Query(
+            options: QueryOptions(
+              documentNode: gql('''
+              query property(\$data: PropertyInput!) {
+                property(data: \$data) {
+                  id
+                  address
+                  postalCode
+                  city
+                }
+              }
+              '''),
+              variables: {
+                "data": {
+                  "propertyId": widget.propertyId
+                }
+              }
+            ),
+            builder: (
+              QueryResult result, {
+              Refetch refetch,
+              FetchMore fetchMore,
+            }) {
+              print('loading: ' + result.loading.toString());
+              print('exception: ' + result.exception.toString());
+              print('data: ' + result.data.toString());
+              print('');
+
+              if (result.hasException) {
+                return Text(result.exception.toString());
+              }
+
+              if (result.loading || result.data == null) {
+                return CircularProgressIndicator();
+              }
+
+              sop.Property property = sop.Property.fromJSON(result.data["property"]);
+
+              print('parsed data: ' + property.toString());
+
+              return Text(property.id);
+            }
+          )
       ),
-      body: 
-        Query(
-          options: QueryOptions(
-            documentNode: gql('''
-            query property(\$data: PropertyInput!) {
-              property(data: \$data) {
-                id
-                address
-                postalCode
-                city
-              }
-            }
-            '''),
-            variables: {
-              "data": {
-                "propertyId": "1"// TODO: bind to args
-              }
-            }
-          ),
-          builder: (
-            QueryResult result, {
-            Refetch refetch,
-            FetchMore fetchMore,
-          }) {
-            print('loading: ' + result.loading.toString());
-            print('exception: ' + result.exception.toString());
-            print('data: ' + result.data.toString());
-            print('');
-
-            if (result.hasException) {
-              return Text(result.exception.toString());
-            }
-
-            if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
-            }
-
-            sop.Property property = sop.Property.fromJSON(result.data["property"]);
-
-            print('parsed data: ' + property.toString());
-
-            return Text(property.id);
-          }
-        )
     );
   }
 }

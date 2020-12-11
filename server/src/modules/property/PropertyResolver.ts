@@ -72,10 +72,10 @@ export class PropertyResolver {
 	@Mutation(() => Int)
 	async updateProperty(@Arg("data") data: UpdatePropertyInput) {
 
-		const property = await Property.update(data.propertyId, {
-			address: data.property.address,
-			postalCode: data.property.postalCode,
-			city: data.property.city,
+		const property = await Property.update(data.id, {
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 		})
 		console.log('updateProperty: ', property)
 

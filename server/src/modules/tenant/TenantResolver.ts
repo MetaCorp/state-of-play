@@ -66,9 +66,9 @@ export class TenantResolver {
 	@Mutation(() => Int)
 	async updateTenant(@Arg("data") data: UpdateTenantInput) {
 
-		const tenant = await Tenant.update(data.tenantId, {
-            firstName: data.tenant.firstName,
-            lastName: data.tenant.lastName,
+		const tenant = await Tenant.update(data.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
 		})
 		console.log('updateTenant: ', tenant)
 

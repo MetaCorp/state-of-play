@@ -66,9 +66,9 @@ export class RepresentativeResolver {
 	@Mutation(() => Int)
 	async updateRepresentative(@Arg("data") data: UpdateRepresentativeInput) {
 
-		const representative = await Representative.update(data.representativeId, {
-            firstName: data.representative.firstName,
-            lastName: data.representative.lastName,
+		const representative = await Representative.update(data.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
 		})
 		console.log('updateRepresentative: ', representative)
 

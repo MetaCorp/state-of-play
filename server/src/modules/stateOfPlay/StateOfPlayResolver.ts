@@ -23,7 +23,7 @@ export class StateOfPlayResolver {
 	@Query(() => [StateOfPlay])
 	// @ts-ignore
 	async stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput, @Ctx() ctx: MyContext) {
-		return StateOfPlay.find({// TODO: filter ne marche pas, trouver une autre solution. => QueryBuilder
+		return StateOfPlay.find({// TODO: filter ne marche pas, trouver une autre solution. => QueryBuilder, ne marche pas non plus => solution implémenter sauvegarder fullAdress sur l'entité StateOfPlay
 			where: filter ? [
                 // { property: { address: ILike("%" + filter.search + "%") } },
                 // { property: { postalCode: ILike("%" + filter.search + "%") } },
@@ -32,7 +32,7 @@ export class StateOfPlayResolver {
             ] : [
 				{ user: { id: ctx.userId }}
 			],
-			relations: ["user", "owner", "representative", "property"]
+			relations: ["user", "owner", "representative", "property", "tenants"]
 		})
 
 		// const stateOfPlays = await getManager()
@@ -57,7 +57,7 @@ export class StateOfPlayResolver {
 	async stateOfPlay(@Arg("data") data: StateOfPlayInput) {
 
 		// @ts-ignore
-		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user", "owner", "representative", "property"] })
+		const stateOfPlay = await StateOfPlay.findOne({ id: data.stateOfPlayId }, { relations: ["user", "owner", "representative", "property", "tenants"] })
 		if (!stateOfPlay) return
 
 
