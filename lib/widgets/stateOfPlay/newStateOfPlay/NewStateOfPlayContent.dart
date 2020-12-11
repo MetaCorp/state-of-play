@@ -4,8 +4,8 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayDetails.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayMisc.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayInterlocutors.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayProperty.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
+// import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayProperty.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature.dart';
 
 typedef SaveCallback = void Function();
@@ -24,12 +24,24 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   
   int _selectedIndex = 0;
 
+  void onNext() {
+    print('property: ' + widget.stateOfPlay.property.address);
+    setState(() {
+      _selectedIndex = _selectedIndex + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final List<Widget> _tabsContent = [
-      NewStateOfPlayInterlocutors(),
-      NewStateOfPlayProperty(),
+      NewStateOfPlayInterlocutors(
+        stateOfPlay: widget.stateOfPlay,
+      ),
+      // NewStateOfPlayProperty(
+      //   property: widget.stateOfPlay.property,
+      //   onNext: onNext,
+      // ),
       NewStateOfPlayDetails(),
       NewStateOfPlayMisc(),
       NewStateOfPlaySignature(
@@ -47,12 +59,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            label: 'Interlocuteurs',
+            label: 'Interlocuteurs & Propriété',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.house),
-            label: 'Propriété',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.house),
+          //   label: 'Propriété',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.apps),
             label: 'Détail des pièces',

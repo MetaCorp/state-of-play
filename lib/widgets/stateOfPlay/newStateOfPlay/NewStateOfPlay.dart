@@ -19,7 +19,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
   final sop.StateOfPlay _stateOfPlay = sop.StateOfPlay(
     owner: sop.Owner(
       firstName: 'Robert',
-      lastName: 'Dupont',
+      lastName: '',
       company: "SCI d'Investisseurs",
       address: '3 rue des Mésanges',
       postalCode: '75001',

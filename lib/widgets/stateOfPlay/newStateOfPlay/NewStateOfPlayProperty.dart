@@ -1,15 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
-class NewStateOfPlayProperty extends StatefulWidget {
-  NewStateOfPlayProperty({Key key}) : super(key: key);
+typedef NextCallback = void Function();
 
-  @override
-  _NewStateOfPlayPropertyState createState() => new _NewStateOfPlayPropertyState();
-}
+class NewStateOfPlayProperty extends StatelessWidget {
+  NewStateOfPlayProperty({ Key key, this.property, this.onNext }) : super(key: key);
 
-class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
+  final sop.Property property;
+  final NextCallback onNext;
+
   @override
   Widget build(BuildContext context) {
-    return Text("Propriété");
+
+    // TextEditingController _addressController = TextEditingController(text: widget.property.address);
+    // TextEditingController _postalCodeController = TextEditingController(text: "75001");
+    // TextEditingController _cityController = TextEditingController(text: "Paris");
+
+    return Column(
+      children: [
+        TextField(
+          controller: TextEditingController(text: property.address),
+          decoration: InputDecoration(hintText: 'Adresse'),
+          onChanged: (value) => property.address = value,
+        ),
+        TextField(
+          controller: TextEditingController(text: property.postalCode),
+          decoration: InputDecoration(hintText: 'Code postal'),
+          onChanged: (value) => property.postalCode = value,
+        ),
+        TextField(
+          controller: TextEditingController(text: property.city),
+          decoration: InputDecoration(hintText: 'Ville'),
+          onChanged: (value) => property.city = value,
+        ),
+        RaisedButton(
+          child: Text('Suivant'),
+          onPressed: onNext
+        )
+      ],
+    );
   }
 }
