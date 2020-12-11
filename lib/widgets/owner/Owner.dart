@@ -22,7 +22,7 @@ class _OwnerState extends State<Owner> {
       onWillPop: () async {
         Navigator.pop(context);
         Navigator.popAndPushNamed(context, '/owners');
-        return true;
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(

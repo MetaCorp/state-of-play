@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayDetails.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetails.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayMisc.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
 // import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayProperty.dart';
@@ -42,7 +42,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       //   property: widget.stateOfPlay.property,
       //   onNext: onNext,
       // ),
-      NewStateOfPlayDetails(),
+      NewStateOfPlayDetails(
+        rooms: widget.stateOfPlay.rooms,
+      ),
       NewStateOfPlayMisc(),
       NewStateOfPlaySignature(
         onSave: widget.onSave
