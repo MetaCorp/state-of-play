@@ -143,7 +143,7 @@ export class StateOfPlayResolver {
 	
 	@Authorized()
 	@Mutation(() => Int)
-	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput) {
+	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
@@ -210,6 +210,8 @@ export class StateOfPlayResolver {
 			property: property,
 			rooms: JSON.stringify(data.rooms)
 		})
+
+		// const stateOfPlay = { affected: 0}
 		console.log('stateOfPlay: ', stateOfPlay)
 
 		console.log('updateOwner: ', stateOfPlay)

@@ -166,8 +166,8 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "nature": decoration.nature,
                           "state": decoration.state,
                           "comment": decoration.comment
-                        })
-                      })
+                        }).toList()
+                      }).toList()
                     }
                   });
 

@@ -59,6 +59,9 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                 for (var i = 0; i < decorations.length; i++) {
                   widget.room.decorations.add(sop.Decoration(
                     type: decorations[i],
+                    state: "Neuf",
+                    nature: "",
+                    comment: "",
                   ));
                   
                 }
