@@ -10,42 +10,78 @@ class MyDrawer extends StatelessWidget {
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
+         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            child: Text('Bienvenue'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
+          SizedBox(
+            height: 150.0,
+            child: UserAccountsDrawerHeader(
+              accountEmail: new Text(""),//to keep since needed
+              accountName:  Row(
+                children: <Widget>[
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.cyan,
+                      child: new Text("txt"),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('user'),
+                      SizedBox(height: 4),
+                      Text('@User'),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
             title: Text('États des lieux'),
+            leading: Icon(Icons.home),
             onTap: () => Navigator.popAndPushNamed(context, '/state-of-plays'),
           ),
+          Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Propriétés'),
+            leading: Icon(Icons.home),
             onTap: () => Navigator.popAndPushNamed(context, '/properties'),
           ),
-          Divider(),
+          Divider(thickness: 2.0),
           ListTile(
             title: Text('Propriétaires'),
+            leading: Icon(Icons.home),
             onTap: () => Navigator.popAndPushNamed(context, '/owners'),
           ),
+          Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Mandataires'),
+            leading: Icon(Icons.home),
             onTap: () => Navigator.popAndPushNamed(context, '/representatives'),
           ),
+          Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Locataires'),
+            leading: Icon(Icons.text_snippet),
             onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
           ),
-          Divider(),
-          Spacer(),// TODO: doesnt work
-          ListTile(
-            title: Text('Paramêtres'),
-            onTap: () => Navigator.popAndPushNamed(context, '/settings'),
-          )
+          Divider(thickness: 2.0),
+          // TODO align not working
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ListTile(
+                title: Text('Paramêtres'),
+                leading: Icon(Icons.home),
+                onTap: () => Navigator.popAndPushNamed(context, '/settings'),
+              ),
+            ),
+          ),
         ],
       ),
     );
