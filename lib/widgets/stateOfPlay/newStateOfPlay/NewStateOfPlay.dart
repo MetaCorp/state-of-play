@@ -215,14 +215,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               fullAddress
             }
           }
-        '''), // this is the mutation string you just created
-        // you can update the cache based on results
+        '''),
         update: (Cache cache, QueryResult result) {
           return cache;
         },
-        // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
-          // print('onCompleted: ' + resultData.hasException);
         },
       ),
       builder: (

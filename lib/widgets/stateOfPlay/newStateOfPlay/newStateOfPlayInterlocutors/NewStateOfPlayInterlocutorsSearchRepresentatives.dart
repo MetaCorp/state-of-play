@@ -69,7 +69,7 @@ class _NewStateOfPlayInterlocutorsSearchRepresentativesState extends State<NewSt
         else {
 
           List<sop.Representative> representatives = (result.data["representatives"] as List).map((representative) => sop.Representative.fromJSON(representative)).toList();
-          print('stateOfPlays length: ' + representatives.length.toString());
+          print('representatives length: ' + representatives.length.toString());
 
           if (representatives.length == 0) {
             body = Text("no representatives");

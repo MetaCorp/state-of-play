@@ -69,7 +69,7 @@ class _NewStateOfPlayInterlocutorsSearchOwnersState extends State<NewStateOfPlay
         else {
 
           List<sop.Owner> owners = (result.data["owners"] as List).map((owner) => sop.Owner.fromJSON(owner)).toList();
-          print('stateOfPlays length: ' + owners.length.toString());
+          print('owners length: ' + owners.length.toString());
 
           if (owners.length == 0) {
             body = Text("no owners");

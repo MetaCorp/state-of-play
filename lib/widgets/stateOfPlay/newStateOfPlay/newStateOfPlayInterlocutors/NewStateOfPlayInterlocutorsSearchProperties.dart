@@ -70,10 +70,10 @@ class _NewStateOfPlayInterlocutorsSearchPropertiesState extends State<NewStateOf
         else {
 
           List<sop.Property> properties = (result.data["properties"] as List).map((property) => sop.Property.fromJSON(property)).toList();
-          print('stateOfPlays length: ' + properties.length.toString());
+          print('properties length: ' + properties.length.toString());
 
           if (properties.length == 0) {
-            body = Text("no stateOfplays");
+            body = Text("no properties");
           }
           else {
             body = ListView.separated(

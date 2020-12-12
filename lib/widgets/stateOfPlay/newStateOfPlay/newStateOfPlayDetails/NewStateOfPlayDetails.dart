@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoom.dart';
 
 class NewStateOfPlayDetails extends StatefulWidget {
@@ -17,37 +18,50 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
     print('rooms: ' + widget.rooms.toString());
 
-    return ReorderableListView(
-      header: Text("Liste des pièces"),
-      onReorder: (oldIndex, newIndex) {
-        setState(() {
-          if (newIndex > oldIndex)
-            newIndex -= 1;
-
-          final room = widget.rooms.removeAt(oldIndex);
-          widget.rooms.insert(newIndex, room);
-        });
-      },
-      children: widget.rooms.asMap().entries.map((entry) => ListTile(// TODO: Add divider
-        key: ValueKey(entry.value.name),
-        title: Row(
+    return Column(
+      children: [
+        Row(
           children: [
-            Text(entry.value.name),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                // TODO : show confirmation popup
-                widget.rooms.removeAt(entry.key);
-                setState(() { });
-              },
+            Text("Liste des pièces"),
+            RaisedButton(
+              child: Icon(Icons.add),
+              onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
+                onSelect: (room) {
+
+                },
+              ))),
             )
           ]
         ),
-        onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
-          room: entry.value,
-        )))
-      )).toList()
+        Flexible(
+          child: ListView.separated(
+            itemCount: widget.rooms.length,
+            itemBuilder: (_, i) => ListTile(
+              title: Row(
+                children: [
+                  Text(widget.rooms[i].name),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      // TODO show confirmation popup
+                      widget.rooms.removeAt(i);
+                      setState(() { });
+                    },
+                  )
+                ]
+              ),
+              // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
+              onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
+                room: widget.rooms[i],
+              )))
+            ),
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -69,7 +69,7 @@ class _NewStateOfPlayInterlocutorsSearchTenantsState extends State<NewStateOfPla
         else {
 
           List<sop.Tenant> tenants = (result.data["tenants"] as List).map((tenant) => sop.Tenant.fromJSON(tenant)).toList();
-          print('stateOfPlays length: ' + tenants.length.toString());
+          print('tenants length: ' + tenants.length.toString());
 
           if (tenants.length == 0) {
             body = Text("no tenants");

@@ -20,6 +20,9 @@ import { OwnerResolver } from "../modules/owner/OwnerResolver";
 import { RepresentativeResolver } from "../modules/representative/RepresentativeResolver";
 import { TenantResolver } from "../modules/tenant/TenantResolver";
 
+import { RoomResolver } from "../modules/room/RoomResolver";
+import { DecorationResolver } from "../modules/decoration/DecorationResolver";
+
 export const createSchema = () =>
   buildSchema({
     resolvers: [
@@ -41,6 +44,9 @@ export const createSchema = () =>
       OwnerResolver,
       RepresentativeResolver,
       TenantResolver,
+
+      RoomResolver,
+      DecorationResolver
     ],
     // @ts-ignore
     authChecker: ({ context }) => {

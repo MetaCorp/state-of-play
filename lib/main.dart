@@ -66,7 +66,6 @@ class _MyAppState extends State<MyApp> {
   ValueNotifier<GraphQLClient> client;
   @override
   void initState() {
-    
     final HttpLink httpLink = HttpLink(
       uri: 'http://$host:4000/graphql',
     );
