@@ -16,6 +16,7 @@ class Header extends StatelessWidget {
     return Row(
       children: [
         Text(title),
+        Spacer(),
         RaisedButton(
           child: Icon(Icons.add),
           onPressed: onPressAdd

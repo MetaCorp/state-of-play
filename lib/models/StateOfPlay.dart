@@ -302,8 +302,8 @@ class Decoration {
   
 // }
 
-class ElectricAndHeating {
-  ElectricAndHeating({
+class Electricity {
+  Electricity({
     this.type,
     this.quantity,
     this.state,
@@ -333,14 +333,14 @@ class ElectricAndHeating {
     return '';
   }
 
-  factory ElectricAndHeating.fromJSON(Map<String, dynamic> json) {
+  factory Electricity.fromJSON(Map<String, dynamic> json) {
 
-    return ElectricAndHeating(
+    return Electricity(
       type: json["type"],
-      quantity: int.parse(json["brandOrObject"]),
+      quantity: json["quantity"] ? int.parse(json["quantity"]) : null,
       state: json["state"],// TODO parse dual type
       comment: json["comment"],
-      photo: int.parse(json["photo"])
+      photo: json["photo"]
     );
   }
 }
@@ -349,15 +349,17 @@ class Equipment {
   Equipment({
     this.type,
     this.brandOrObject,
-    this.stateOrQuantity,
+    this.state,
     this.comment,
+    this.quantity,
     this.photo// TODO
   });
 
   String type;
   String brandOrObject;
-  dynamic stateOrQuantity;
+  dynamic state;
   String comment;
+  int quantity;
   int photo;
 
   String getIndex(int index) {
@@ -367,7 +369,7 @@ class Equipment {
       case 1:
         return brandOrObject;
       case 2:
-        return stateOrQuantity is int ? stateOrQuantity.toString() : stateOrQuantity;
+        return state + ' / ' + quantity.toString();
       case 3:
         return comment;
       case 4:
@@ -381,7 +383,8 @@ class Equipment {
     return Equipment(
       type: json["type"],
       brandOrObject: json["brandOrObject"],
-      stateOrQuantity: json["stateOrQuantity"],// TODO parse dual type
+      state: json["state"],
+      quantity: json["quantity"],
       comment: json["comment"],
       photo: int.parse(json["photo"])
     );
@@ -410,14 +413,14 @@ class Room {
   Room({
     this.name,
     this.decorations,
-    this.electricsAndHeatings,
+    this.electricities,
     this.equipments,
     this.generalAspect
   });
 
   final String name;
   final List<Decoration> decorations;
-  final List<ElectricAndHeating> electricsAndHeatings;
+  final List<Electricity> electricities;
   final List<Equipment> equipments;
   final GeneralAspect generalAspect;
   
@@ -426,7 +429,7 @@ class Room {
     return Room(
       name: json["name"],
       decorations: json["decorations"] != null ? (json["decorations"] as List).map((decoration) => Decoration.fromJSON(decoration)).toList() : null,
-      electricsAndHeatings: json["electricsAndHeatings"] != null ? (json["electricsAndHeatings"] as List).map((electricsAndHeating) => ElectricAndHeating.fromJSON(electricsAndHeating)).toList() : null,
+      electricities: json["electricities"] != null ? (json["electricities"] as List).map((electricsAndHeating) => Electricity.fromJSON(electricsAndHeating)).toList() : null,
       equipments: json["equipments"] != null ? (json["equipments"] as List).map((equipment) => Equipment.fromJSON(equipment)).toList() : null,
       generalAspect: json["generalAspect"] != null ? GeneralAspect.fromJSON(json["generalAspect"]) : null,
     );

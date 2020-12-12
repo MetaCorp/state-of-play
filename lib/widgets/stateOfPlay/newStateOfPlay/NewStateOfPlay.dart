@@ -83,15 +83,15 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             photo: 0
           )
         ],
-        electricsAndHeatings: [
-          sop.ElectricAndHeating(
+        electricities: [
+          sop.Electricity(
             type: 'Interrupteur',
             quantity: 1,
             state: 'Neuf',
             comment: '',
             photo: 0
           ),
-          sop.ElectricAndHeating(
+          sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
@@ -103,14 +103,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: 'Bon',
+            quantity: 1,
+            state: 'Bon',
             comment: '',
             photo: 0
           ),
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: 'Bon',
+            quantity: 1,
+            state: 'Bon',
             comment: '',
             photo: 0
           ),
@@ -138,15 +140,15 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             photo: 0
           )
         ],
-        electricsAndHeatings: [
-          sop.ElectricAndHeating(
+        electricities: [
+          sop.Electricity(
             type: 'Interrupteur',
             quantity: 1,
             state: 'Neuf',
             comment: '',
             photo: 0
           ),
-          sop.ElectricAndHeating(
+          sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
@@ -158,14 +160,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: 'Bon',
+            quantity: 1,
+            state: 'Bon',
             comment: '',
             photo: 0
           ),
           sop.Equipment(
             type: 'Interrupteur',
             brandOrObject: 'Brandt',
-            stateOrQuantity: 'Bon',
+            quantity: 1,
+            state: 'Bon',
             comment: '',
             photo: 0
           ),
