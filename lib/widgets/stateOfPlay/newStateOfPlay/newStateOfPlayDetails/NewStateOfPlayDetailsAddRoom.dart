@@ -4,7 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(List<String>);
 
 class NewStateOfPlayDetailsAddRoom extends StatefulWidget {
   NewStateOfPlayDetailsAddRoom({ Key key, this.onSelect }) : super(key: key);
@@ -21,6 +21,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
 
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newRoomController = TextEditingController(text: "");
+
+  List<String> _selectedRooms = []; 
 
   @override
   void dispose() {
@@ -141,9 +143,11 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               itemCount: rooms.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(rooms[i]),
+                selected: _selectedRooms.contains(rooms[i]),
                 onTap: () {
-                  Navigator.pop(context);
-                  widget.onSelect(rooms[i]);
+                  setState(() {
+                    _selectedRooms.add(rooms[i]);
+                  });
                 },
               ),
               separatorBuilder: (context, index) {
@@ -178,6 +182,13 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () => _showDialogNewRoom(context)
+              ),
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: () {
+                  widget.onSelect(_selectedRooms);
+                  Navigator.pop(context);
+                }
               ),
             ],
             backgroundColor: Colors.grey,

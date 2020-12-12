@@ -26,8 +26,19 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
             RaisedButton(
               child: Icon(Icons.add),
               onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
-                onSelect: (room) {
-
+                onSelect: (rooms) {
+                  print('rooms: ' + rooms.toString());
+                  for (var i = 0; i < rooms.length; i++) {
+                    print('roomAdd: ' + rooms[i]);
+                    widget.rooms.add(sop.Room(
+                      name: rooms[i],
+                      decorations: [],
+                      equipments: [],
+                      generalAspect: sop.GeneralAspect()
+                    ));
+                    
+                  }
+                  setState(() { });
                 },
               ))),
             )
