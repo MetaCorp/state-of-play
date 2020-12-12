@@ -4,13 +4,13 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class CreateTenantInput {
   @Field({ nullable: true })
-  id: string;
+  id: String;
   
   @Field()
   @Length(1, 255)
-  firstName: string;
+  firstName: String;
 
   @Field()
   @Length(1, 255)
-  lastName: string;
+  lastName: String;
 }

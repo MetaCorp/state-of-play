@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoom.dart';
 
@@ -46,28 +47,23 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
     return Column(
       children: [
-        Row(
-          children: [
-            Text("Liste des pièces"),
-            RaisedButton(
-              child: Icon(Icons.add),
-              onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
-                onSelect: (rooms) {
-                  print('rooms: ' + rooms.toString());
-                  for (var i = 0; i < rooms.length; i++) {
-                    widget.rooms.add(sop.Room(
-                      name: rooms[i],
-                      decorations: [],
-                      equipments: [],
-                      generalAspect: sop.GeneralAspect()
-                    ));
-                    
-                  }
-                  setState(() { });
-                },
-              ))),
-            )
-          ]
+        Header(
+          title: "Liste des pièces",
+          onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
+            onSelect: (rooms) {
+              print('rooms: ' + rooms.toString());
+              for (var i = 0; i < rooms.length; i++) {
+                widget.rooms.add(sop.Room(
+                  name: rooms[i],
+                  decorations: [],
+                  equipments: [],
+                  generalAspect: sop.GeneralAspect()
+                ));
+                
+              }
+              setState(() { });
+            },
+          ))),
         ),
         Flexible(
           child: ListView.separated(

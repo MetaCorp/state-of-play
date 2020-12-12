@@ -11,8 +11,9 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayS
 typedef SaveCallback = void Function();
 
 class NewStateOfPlayContent extends StatefulWidget {
-  NewStateOfPlayContent({ Key key, this.stateOfPlay, this.onSave }) : super(key: key);
+  NewStateOfPlayContent({ Key key, this.stateOfPlay, this.onSave, this.title }) : super(key: key);
   
+  final String title;
   final sop.StateOfPlay stateOfPlay;
   final SaveCallback onSave;
 
@@ -53,7 +54,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nouvel état des lieux'),
+        title: Text(widget.title),
       ),
       body: _tabsContent[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

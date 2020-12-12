@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, /*JoinColumn, */ManyToMany, Column, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, ManyToMany, Column, JoinTable } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 
 import { User } from "./User";
@@ -6,6 +6,31 @@ import { Property } from "./Property";
 import { Owner } from "./Owner";
 import { Representative } from "./Representative";
 import { Tenant } from "./Tenant";
+
+// @ObjectType()
+// class Decoration extends BaseEntity {
+//   @Field()
+//   type: String
+  
+//   @Field()
+//   nature: String
+  
+//   @Field()
+//   state: String
+  
+//   @Field()
+//   comment: String
+// }
+
+
+// @ObjectType()
+// class Room extends BaseEntity {
+//   @Field()
+//   name: String
+
+//   @Field(() => [Decoration])
+//   decorations: [Decoration]
+// }
 
 @ObjectType()
 @Entity()
@@ -26,6 +51,12 @@ export class StateOfPlay extends BaseEntity {
   @Column()
   tenantsFullName: String;
 
+
+  @Field(() => String)
+  @Column("simple-json")
+  rooms: String
+
+
   @Field(() => Owner)
   @ManyToOne(() => Owner, owner => owner.stateOfPlays)
   owner: Owner;
@@ -45,6 +76,5 @@ export class StateOfPlay extends BaseEntity {
 
   @Field(() => Property)
   @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true })
-  // @JoinColumn({ name: "propertyId" })// TODO: utile pour la recherche nested ?
   property: Property;
 }

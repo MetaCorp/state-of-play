@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddDecoration.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 
@@ -50,26 +51,21 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
       ),
       body: Column(
         children: [
-          Row(
-          children: [
-            Text("Décorations"),
-            RaisedButton(
-              child: Icon(Icons.add),
-              onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
-                onSelect: (decorations) {
-                  print('decorations: ' + decorations.toString());
-                  for (var i = 0; i < decorations.length; i++) {
-                    widget.room.decorations.add(sop.Decoration(
-                      type: decorations[i],
-                    ));
-                    
-                  }
-                  setState(() { });
-                },
-              ))),
-            )
-          ]
-        ),
+          Header(
+            title: "Décorations",
+            onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
+              onSelect: (decorations) {
+                print('decorations: ' + decorations.toString());
+                for (var i = 0; i < decorations.length; i++) {
+                  widget.room.decorations.add(sop.Decoration(
+                    type: decorations[i],
+                  ));
+                  
+                }
+                setState(() { });
+              },
+            ))),
+          ),
           Flexible(
             child: ListView.separated(
               itemCount: widget.room.decorations.length,

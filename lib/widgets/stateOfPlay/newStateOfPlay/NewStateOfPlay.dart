@@ -257,6 +257,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         ) {
           
           return NewStateOfPlayContent(
+            title: "Nouvel état des lieux",
             onSave: () async {
               print("onSave");
               MultiSourceResult result = runMutation({
@@ -282,14 +283,28 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "postalCode": _stateOfPlay.property.postalCode,
                     "city": _stateOfPlay.property.city,
                   },
+                  "rooms": _stateOfPlay.rooms.map((room) => {
+                    "name": room.name,
+                    "decorations": room.decorations.map((decoration) => {
+                      "type": decoration.type,
+                      "nature": decoration.nature,
+                      "state": decoration.state,
+                      "comment": decoration.comment
+                    }).toList()
+                  }).toList()
                 }
               });
 
               QueryResult networkResult = await result.networkResult;
 
               print("networkResult hasException: " + networkResult.hasException.toString());
-              if (networkResult.hasException)
-                print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+              if (networkResult.hasException) {
+                if (networkResult.exception.graphqlErrors.length > 0)
+                  print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                else
+                  print("networkResult clientException: " + networkResult.exception.clientException.message);
+                return;//TODO: show error
+              }
               print("");
               print("");
               

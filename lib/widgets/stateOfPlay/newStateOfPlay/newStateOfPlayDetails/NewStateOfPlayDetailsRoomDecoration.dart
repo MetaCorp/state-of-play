@@ -40,6 +40,16 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                 widget.decoration.state = value;
               });
             },
+          ),
+          TextField(
+            controller: TextEditingController(text: widget.decoration.nature),
+            decoration: InputDecoration(labelText: 'Nature'),
+            onChanged: (value) => widget.decoration.nature = value,
+          ),
+          TextField(
+            controller: TextEditingController(text: widget.decoration.comment),
+            decoration: InputDecoration(labelText: 'Commentaires'),
+            onChanged: (value) => widget.decoration.comment = value,
           )
         ]
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter_tests/utils.dart';
 import 'package:intl/intl.dart';// DateFormat
+import 'dart:convert';
 
 class Owner {
   Owner({
@@ -220,7 +221,7 @@ class StateOfPlay {
       tenants: json["tenants"] != null ? (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList() : null,
       // entryDate: DateTime.parse(json["entryDate"]),
       property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
-      // rooms: (json["rooms"] as List).map((room) => Room.fromJSON(room)).toList(),
+      rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
       // meters: (json["meters"] as List).map((meter) => Meter.fromJSON(meter)).toList(),
       // keys: (json["keys"] as List).map((key) => Key.fromJSON(key)).toList(),
       // insurance: Insurance.fromJSON(json["insurance"]),
@@ -286,10 +287,10 @@ class Decoration {
 
     return Decoration(
       type: json["type"],
-      nature: json["brandOrObject"],
+      nature: json["nature"],
       state: json["state"],// TODO parse dual type
       comment: json["comment"],
-      photo: int.parse(json["photo"])
+      photo: json["photo"]
     );
   }
 }
@@ -424,10 +425,10 @@ class Room {
 
     return Room(
       name: json["name"],
-      decorations: (json["decorations"] as List).map((decoration) => Decoration.fromJSON(decoration)).toList(),
-      electricsAndHeatings: (json["electricsAndHeatings"] as List).map((electricsAndHeating) => ElectricAndHeating.fromJSON(electricsAndHeating)).toList(),
-      equipments: (json["equipments"] as List).map((equipment) => Equipment.fromJSON(equipment)).toList(),
-      generalAspect: GeneralAspect.fromJSON(json["generalAspect"]),
+      decorations: json["decorations"] != null ? (json["decorations"] as List).map((decoration) => Decoration.fromJSON(decoration)).toList() : null,
+      electricsAndHeatings: json["electricsAndHeatings"] != null ? (json["electricsAndHeatings"] as List).map((electricsAndHeating) => ElectricAndHeating.fromJSON(electricsAndHeating)).toList() : null,
+      equipments: json["equipments"] != null ? (json["equipments"] as List).map((equipment) => Equipment.fromJSON(equipment)).toList() : null,
+      generalAspect: json["generalAspect"] != null ? GeneralAspect.fromJSON(json["generalAspect"]) : null,
     );
   }
 }

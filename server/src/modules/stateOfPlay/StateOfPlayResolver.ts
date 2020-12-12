@@ -132,7 +132,8 @@ export class StateOfPlayResolver {
 			owner: owner,
 			representative: representative,
 			tenants: tenants,
-			property: property
+			property: property,
+			rooms: JSON.stringify(data.rooms)
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -144,8 +145,73 @@ export class StateOfPlayResolver {
 	@Mutation(() => Int)
 	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput) {
 
-		const stateOfPlay = await StateOfPlay.update(data.stateOfPlayId, {
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
+		if (!user) return
+		console.log('user: ', user)
+
+		// @ts-ignore
+		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
+		if (!owner) {
+			owner = await Owner.create({
+				firstName: data.owner.firstName,
+				lastName: data.owner.lastName,
+				user: user,
+			}).save();
+		}
+		console.log('owner: ', owner)
+		
+		// @ts-ignore
+		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
+		if (!representative) {
+			representative = await Representative.create({
+				firstName: data.representative.firstName,
+				lastName: data.representative.lastName,
+				user: user,
+			}).save();
+		}
+		console.log('representative: ', representative)
+
+		const tenants = []
+		for(let i = 0; i < data.tenants.length; i++) {
+			// @ts-ignore
+			var tenant = data.tenants[i].id && await Tenant.findOne({ id: data.tenants[i].id })
+			if (!tenant) {
+				tenant = await Tenant.create({
+					firstName: data.tenants[i].firstName,
+					lastName: data.tenants[i].lastName,
+					user: user,
+				}).save();
+			}
+			tenants.push(tenant)
+		}
+		console.log('tenants[0]: ', tenants[0])
+		
+		// @ts-ignore
+		var property = data.property.id && await Property.findOne({ id: data.property.id })
+		if (!property) {
+			property = await Property.create({
+				address: data.property.address,
+				postalCode: data.property.postalCode,
+				city: data.property.city,
+				user: user
+			}).save();
+		}
+		console.log('property: ', property)
+
+		const stateOfPlay = await StateOfPlay.update(data.id, {
+			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)
+			ownerFullName: owner.firstName + ' ' + owner.lastName,
+			tenantsFullName: tenants.map(tenant => tenant.firstName + ' ' + tenant.lastName),
+			user: user,
+			owner: owner,
+			representative: representative,
+			tenants: tenants,
+			property: property,
+			rooms: JSON.stringify(data.rooms)
 		})
+		console.log('stateOfPlay: ', stateOfPlay)
+
 		console.log('updateOwner: ', stateOfPlay)
 
 		if (stateOfPlay.affected !== 1) return 0
