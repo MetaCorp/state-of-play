@@ -21,9 +21,9 @@ export class DecorationResolver {
 	decorations(@Arg("filter", { nullable: true }) filter?: DecorationsFilterInput) {
 		return Decoration.find({
             where: filter ? [
-                { name: ILike("%" + filter.search + "%") },
+                { type: ILike("%" + filter.search + "%") },
             ] : [],
-			order: { name: 'ASC' },
+			order: { type: 'ASC' },
 			relations: ["user"]
         })
 	}
@@ -50,7 +50,7 @@ export class DecorationResolver {
 		if (!user) return
 
 		const decoration = await Decoration.create({
-            name: data.name,
+            type: data.type,
 			user: user,
 		}).save();
 
@@ -65,7 +65,7 @@ export class DecorationResolver {
 	async updateDecoration(@Arg("data") data: UpdateDecorationInput) {
 
 		const decoration = await Decoration.update(data.id, {
-            name: data.name,
+            type: data.type,
 		})
 		console.log('updateDecoration: ', decoration)
 

@@ -6,23 +6,23 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 typedef SelectCallback = void Function(List<String>);
 
-class NewStateOfPlayDetailsAddRoom extends StatefulWidget {
-  NewStateOfPlayDetailsAddRoom({ Key key, this.onSelect }) : super(key: key);
+class NewStateOfPlayDetailsRoomAddDecoration extends StatefulWidget {
+  NewStateOfPlayDetailsRoomAddDecoration({ Key key, this.onSelect }) : super(key: key);
 
   final SelectCallback onSelect;
 
   @override
-  _NewStateOfPlayDetailsAddRoomState createState() => _NewStateOfPlayDetailsAddRoomState();
+  _NewStateOfPlayDetailsRoomAddDecorationState createState() => _NewStateOfPlayDetailsRoomAddDecorationState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddRoom> {
+class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayDetailsRoomAddDecoration> {
 
   TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newRoomController = TextEditingController(text: "");
+  TextEditingController _newDecorationController = TextEditingController(text: "");
 
-  List<String> _selectedRooms = []; 
+  List<String> _selectedDecorations = []; 
 
   @override
   void dispose() {
@@ -31,16 +31,16 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
     super.dispose();
   }
 
-  void _showDialogNewRoom (context) async {
+  void _showDialogNewDecoration (context) async {
     await showDialog(
       context: context,
       child: Mutation(
         options: MutationOptions(
           documentNode: gql('''
-            mutation createRoom(\$data: CreateRoomInput!) {
-              createRoom(data: \$data) {
+            mutation createDecoration(\$data: CreateDecorationInput!) {
+              createDecoration(data: \$data) {
                 id
-                name
+                type
               }
             }
           '''),
@@ -57,17 +57,17 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
             
           return AlertDialog(
             content: TextField(
-              controller: _newRoomController,
+              controller: _newDecorationController,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: "Entrez un nom de pièce"
+                labelText: "Entrez un nom de décoration"
               ),
             ),
             actions: [
               new FlatButton(
                 child: Text('ANNULER'),
                 onPressed: () {
-                  _newRoomController.text = "";
+                  _newDecorationController.text = "";
                   Navigator.pop(context);
                 }
               ),
@@ -76,7 +76,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                 onPressed: () async {
                   MultiSourceResult result = runMutation({
                     "data": {
-                      "name": _newRoomController.text
+                      "type": _newDecorationController.text
                     }
                   });
 
@@ -85,7 +85,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                   setState(() { });
                   Navigator.pop(context);
 
-                  _newRoomController.text = "";
+                  _newDecorationController.text = "";
                 }
               )
             ],
@@ -100,10 +100,10 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query rooms(\$filter: RoomsFilterInput!) {
-            rooms (filter: \$filter) {
+          query decorations(\$filter: DecorationsFilterInput!) {
+            decorations (filter: \$filter) {
               id
-              name
+              type
             }
           }
         '''),
@@ -134,24 +134,24 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
         }
         else {
 
-          List<String> rooms = (result.data["rooms"] as List).map((room) => room["name"].toString()).toList();
-          print('rooms length: ' + rooms.length.toString());
+          List<String> decorations = (result.data["decorations"] as List).map((decoration) => decoration["type"].toString()).toList();
+          print('decorations length: ' + decorations.length.toString());
 
-          if (rooms.length == 0) {
-            body = Text("no room");
+          if (decorations.length == 0) {
+            body = Text("no decoration");
           }
           else {
             body = ListView.separated(
-              itemCount: rooms.length,
+              itemCount: decorations.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(rooms[i]),
-                selected: _selectedRooms.contains(rooms[i]),
+                title: Text(decorations[i]),
+                selected: _selectedDecorations.contains(decorations[i]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedRooms.contains(rooms[i]))
-                      _selectedRooms.add(rooms[i]);
+                    if (!_selectedDecorations.contains(decorations[i]))
+                      _selectedDecorations.add(decorations[i]);
                     else
-                      _selectedRooms.remove(rooms[i]);
+                      _selectedDecorations.remove(decorations[i]);
                   });
                 },
               ),
@@ -173,8 +173,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newRooms) => ({
-                    "rooms": newRooms["rooms"]
+                  updateQuery: (existing, newDecorations) => ({
+                    "decorations": newDecorations["decorations"]
                   }),
                 ));
               }
@@ -186,12 +186,12 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewRoom(context)
+                onPressed: () => _showDialogNewDecoration(context)
               ),
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedRooms);
+                  widget.onSelect(_selectedDecorations);
                   Navigator.pop(context);
                 }
               ),

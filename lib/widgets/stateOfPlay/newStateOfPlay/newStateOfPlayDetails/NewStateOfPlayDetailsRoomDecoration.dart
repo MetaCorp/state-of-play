@@ -3,9 +3,10 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/utils.dart';
 
 class NewStateOfPlayDetailsRoomDecoration extends StatefulWidget {
-  NewStateOfPlayDetailsRoomDecoration({ Key key, this.decoration }) : super(key: key);
+  NewStateOfPlayDetailsRoomDecoration({ Key key, this.decoration, this.roomName }) : super(key: key);
 
   sop.Decoration decoration;
+  String roomName;
 
   @override
   _NewStateOfPlayDetailsRoomDecorationState createState() => new _NewStateOfPlayDetailsRoomDecorationState();
@@ -18,11 +19,11 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   @override
   Widget build(BuildContext context) {
 
-    print('decoration.state: ' + widget.decoration.state);
+    // print('decoration.state: ' + widget.decoration.state);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Décoration")
+        title: Text(widget.roomName + ' / ' + widget.decoration.type)
       ),
       body: Column(
         children: [
@@ -33,7 +34,12 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
             items: stateValues.map((stateValue) => DropdownMenuItem(
               value: stateValue,
               child: Text(stateValue)
-            )).toList()
+            )).toList(),
+            onChanged: (value) {
+              setState(() {
+                widget.decoration.state = value;
+              });
+            },
           )
         ]
       ),

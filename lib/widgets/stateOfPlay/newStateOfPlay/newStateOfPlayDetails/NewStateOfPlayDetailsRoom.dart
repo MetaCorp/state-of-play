@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddDecoration.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 
 class NewStateOfPlayDetailsRoom extends StatefulWidget {
@@ -13,6 +14,31 @@ class NewStateOfPlayDetailsRoom extends StatefulWidget {
 
 class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
 
+  void _showDialogDeleteDecoration (context, sop.Decoration decoration) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + decoration.type + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              widget.room.decorations.remove(decoration);
+              setState(() { });
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -20,11 +46,30 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Détails d'une pièce")
+        title: Text(widget.room.name)
       ),
       body: Column(
         children: [
-          Text("Décorations"),
+          Row(
+          children: [
+            Text("Décorations"),
+            RaisedButton(
+              child: Icon(Icons.add),
+              onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
+                onSelect: (decorations) {
+                  print('decorations: ' + decorations.toString());
+                  for (var i = 0; i < decorations.length; i++) {
+                    widget.room.decorations.add(sop.Decoration(
+                      type: decorations[i],
+                    ));
+                    
+                  }
+                  setState(() { });
+                },
+              ))),
+            )
+          ]
+        ),
           Flexible(
             child: ListView.separated(
               itemCount: widget.room.decorations.length,
@@ -36,9 +81,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
-                        // TODO show confirmation popup
-                        widget.room.decorations.removeAt(i);
-                        setState(() { });
+                        _showDialogDeleteDecoration(context, widget.room.decorations[i]);
                       },
                     )
                   ]
@@ -46,6 +89,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                 // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
                 onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomDecoration(
                   decoration: widget.room.decorations[i],
+                  roomName: widget.room.name,
                 )))
               ),
               separatorBuilder: (context, index) {

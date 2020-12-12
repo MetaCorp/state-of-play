@@ -8,5 +8,5 @@ export class UpdateDecorationInput {
   
   @Field()
   @Length(1, 255)
-  name: string;
+  type: string;
 }

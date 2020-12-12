@@ -12,7 +12,7 @@ export class Decoration extends BaseEntity {
 
   @Field()
   @Column()
-  name: String;
+  type: String;
 
   @Field(() => User)
   @ManyToOne(() => User, user => user.rooms)

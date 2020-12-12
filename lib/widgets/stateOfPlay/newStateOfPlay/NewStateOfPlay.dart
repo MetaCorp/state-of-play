@@ -205,72 +205,102 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     date: DateTime.now()
   );
 
-  Widget build(BuildContext context) {
-    return Mutation(
-      options: MutationOptions(
-        documentNode: gql('''
-          mutation createStateOfPlay(\$data: CreateStateOfPlayInput!) {
-            createStateOfPlay(data: \$data) {
-              id
-              fullAddress
+  void _showDialogLeave (context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Quitter la création de l'état des lieux ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
             }
-          }
-        '''),
-        update: (Cache cache, QueryResult result) {
-          return cache;
-        },
-        onCompleted: (dynamic resultData) {
-        },
-      ),
-      builder: (
-        RunMutation runMutation,
-        QueryResult result,
-      ) {
-        
-        return NewStateOfPlayContent(
-          onSave: () async {
-            print("onSave");
-            MultiSourceResult result = runMutation({
-              "data": {
-                "owner": {
-                  "id": _stateOfPlay.owner.id,
-                  "firstName": _stateOfPlay.owner.firstName,
-                  "lastName": _stateOfPlay.owner.lastName,
-                },
-                "representative": {
-                  "id": _stateOfPlay.representative.id,
-                  "firstName": _stateOfPlay.representative.firstName,
-                  "lastName": _stateOfPlay.representative.lastName,
-                },
-                "tenants": _stateOfPlay.tenants.map((tenant) => {
-                  "id": tenant.id,
-                  "firstName": tenant.firstName,
-                  "lastName": tenant.lastName,
-                }).toList(),
-                "property": {
-                  "id": _stateOfPlay.property.id,
-                  "address": _stateOfPlay.property.address,
-                  "postalCode": _stateOfPlay.property.postalCode,
-                  "city": _stateOfPlay.property.city,
-                },
+          ),
+          new FlatButton(
+            child: Text('QUITTER'),
+            onPressed: () async {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        _showDialogLeave(context);
+        return false;
+      },
+      child: Mutation(
+        options: MutationOptions(
+          documentNode: gql('''
+            mutation createStateOfPlay(\$data: CreateStateOfPlayInput!) {
+              createStateOfPlay(data: \$data) {
+                id
+                fullAddress
               }
-            });
-
-            QueryResult networkResult = await result.networkResult;
-
-            print("networkResult hasException: " + networkResult.hasException.toString());
-            if (networkResult.hasException)
-              print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
-            print("");
-            print("");
-            
-            Navigator.pop(context);
-            Navigator.popAndPushNamed(context, "/state-of-plays");
-
+            }
+          '''),
+          update: (Cache cache, QueryResult result) {
+            return cache;
           },
-          stateOfPlay: _stateOfPlay
-        );
-      }
+          onCompleted: (dynamic resultData) {
+          },
+        ),
+        builder: (
+          RunMutation runMutation,
+          QueryResult result,
+        ) {
+          
+          return NewStateOfPlayContent(
+            onSave: () async {
+              print("onSave");
+              MultiSourceResult result = runMutation({
+                "data": {
+                  "owner": {
+                    "id": _stateOfPlay.owner.id,
+                    "firstName": _stateOfPlay.owner.firstName,
+                    "lastName": _stateOfPlay.owner.lastName,
+                  },
+                  "representative": {
+                    "id": _stateOfPlay.representative.id,
+                    "firstName": _stateOfPlay.representative.firstName,
+                    "lastName": _stateOfPlay.representative.lastName,
+                  },
+                  "tenants": _stateOfPlay.tenants.map((tenant) => {
+                    "id": tenant.id,
+                    "firstName": tenant.firstName,
+                    "lastName": tenant.lastName,
+                  }).toList(),
+                  "property": {
+                    "id": _stateOfPlay.property.id,
+                    "address": _stateOfPlay.property.address,
+                    "postalCode": _stateOfPlay.property.postalCode,
+                    "city": _stateOfPlay.property.city,
+                  },
+                }
+              });
+
+              QueryResult networkResult = await result.networkResult;
+
+              print("networkResult hasException: " + networkResult.hasException.toString());
+              if (networkResult.hasException)
+                print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+              print("");
+              print("");
+              
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, "/state-of-plays");
+
+            },
+            stateOfPlay: _stateOfPlay
+          );
+        }
+      ),
     );
   }
 }

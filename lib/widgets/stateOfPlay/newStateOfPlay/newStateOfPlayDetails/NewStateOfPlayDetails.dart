@@ -13,6 +13,32 @@ class NewStateOfPlayDetails extends StatefulWidget {
 }
 
 class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
+
+  void _showDialogDeleteRoom (context, sop.Room room) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + room.name + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              widget.rooms.remove(room);
+              setState(() { });
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -29,7 +55,6 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
                 onSelect: (rooms) {
                   print('rooms: ' + rooms.toString());
                   for (var i = 0; i < rooms.length; i++) {
-                    print('roomAdd: ' + rooms[i]);
                     widget.rooms.add(sop.Room(
                       name: rooms[i],
                       decorations: [],
@@ -55,9 +80,7 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
                   IconButton(
                     icon: Icon(Icons.close),
                     onPressed: () {
-                      // TODO show confirmation popup
-                      widget.rooms.removeAt(i);
-                      setState(() { });
+                      _showDialogDeleteRoom(context, widget.rooms[i]);
                     },
                   )
                 ]
