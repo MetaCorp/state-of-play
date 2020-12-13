@@ -17,6 +17,14 @@ class NewStateOfPlaySignature extends StatefulWidget {
 // TODO Get liste interlocuteurs pour les signatures et locataires pour misa à jour adresse
 class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
+  var _signature;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -107,12 +115,26 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
   Widget buildSignatures(){
     return Column(
       children: [
+        // TODO foreach on list 
         MaterialButton(
           child: Text("@Interlo1"),
-          onPressed: () { 
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
+          onPressed: () async { 
+            final data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
+            //TODO catch null
+            setState(() {
+              _signature = Image.memory(data);
+              print(_signature.toString());
+            }); 
           },
-        )     
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+          ), 
+          height: 100,
+          width: 100,
+          child: _signature ?? null,          
+        ),
       ],
     );
   }

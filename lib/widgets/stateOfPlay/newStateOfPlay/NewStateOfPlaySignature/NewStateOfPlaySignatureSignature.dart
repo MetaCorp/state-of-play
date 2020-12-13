@@ -18,8 +18,8 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
 
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 5,
-    penColor: Colors.red,
-    exportBackgroundColor: Colors.blue,
+    penColor: Colors.black,
+    exportBackgroundColor: Colors.white,
   );
 
   @override
@@ -37,27 +37,39 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
     return Scaffold(
       appBar: AppBar(
         // TODO center title not working
-        title:  Center(child: Text("@interlo1")),
-      ),    
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: sizedBoxHeight),             
-          Text("Signature :"),
-          Container(
-            margin: const EdgeInsets.all(margin),
-            padding: const EdgeInsets.all(margin),      
-            decoration: BoxDecoration(
-              border: Border.all(),
-            ), 
-            child: Signature(
-                controller: _controller,
-                backgroundColor: Colors.lightBlueAccent,
-                height: 300,
-                width: MediaQuery.of(context).size.width -(margin*4+2),
-              ),
+        centerTitle: true,
+        title: Text("@interlo1"),
+        actions : [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () async {
+              var data = await _controller.toPngBytes();
+              Navigator.pop(context,data);
+            },
           ),
         ],
+      ),    
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: sizedBoxHeight),             
+            Text("Signature :"),
+            SizedBox(height: sizedBoxHeight),             
+            Container(
+              margin: const EdgeInsets.all(margin),
+              decoration: BoxDecoration(
+                border: Border.all(width: 2),
+              ), 
+              child: Signature(
+                controller: _controller,
+                backgroundColor: Colors.white70,
+                height: 300,
+                width: MediaQuery.of(context).size.width -(margin*2+2*2),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
