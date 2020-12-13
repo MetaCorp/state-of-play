@@ -98,6 +98,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
   Widget build(BuildContext context) {
 
     print('room.decorations: ' + widget.room.decorations.toString());
+    print('room.electricities: ' + widget.room.electricities.toString());
+    print('room.equipments: ' + widget.room.equipments.toString());
 
     // TODO: Flexible messed up layout (used because of an error)
     return Scaffold(

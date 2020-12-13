@@ -5,7 +5,6 @@ import { UpdatePropertyInput } from "../property/UpdatePropertyInput";
 import { UpdateRepresentativeInput } from "../representative/UpdateRepresentativeInput";
 import { UpdateTenantInput } from "../tenant/UpdateTenantInput";
 
-
 @InputType()
 class UpdateStateOfPlayDecorationInput {
     @Field()
@@ -22,12 +21,51 @@ class UpdateStateOfPlayDecorationInput {
 }
 
 @InputType()
+class UpdateStateOfPlayElectricityInput {
+  @Field()
+  type: String
+  
+  @Field()
+  quantity: Number
+  
+  @Field()
+  state: String
+  
+  @Field()
+  comment: String
+}
+
+@InputType()
+class UpdateStateOfPlayEquipmentInput {
+  @Field()
+  type: String
+  
+  @Field()
+  quantity: Number
+
+  @Field()
+  brandOrObject: String
+  
+  @Field()
+  state: String
+  
+  @Field()
+  comment: String
+}
+
+@InputType()
 class UpdateStateOfPlayRoomInput {
     @Field()
     name: String
 
     @Field(() => [UpdateStateOfPlayDecorationInput])
     decorations: [UpdateStateOfPlayDecorationInput]
+
+    @Field(() => [UpdateStateOfPlayElectricityInput])
+    electricities: [UpdateStateOfPlayElectricityInput]
+  
+    @Field(() => [UpdateStateOfPlayEquipmentInput])
+    equipments: [UpdateStateOfPlayEquipmentInput]
 }
 
 @InputType()

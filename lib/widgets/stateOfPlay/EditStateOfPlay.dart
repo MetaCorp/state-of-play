@@ -141,7 +141,6 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   MultiSourceResult result = runMutation({
                     "data": {
                       "id": _stateOfPlay.id,
-                      "out": _stateOfPlay.out,
                       "owner": {
                         "id": _stateOfPlay.owner.id,
                         "firstName": _stateOfPlay.owner.firstName,
@@ -170,6 +169,19 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "nature": decoration.nature,
                           "state": decoration.state,
                           "comment": decoration.comment
+                        }).toList(),
+                        "electricities": room.electricities.map((electricity) => {
+                          "type": electricity.type,
+                          "quantity": electricity.quantity,
+                          "state": electricity.state,
+                          "comment": electricity.comment
+                        }).toList(),
+                        "equipments": room.equipments.map((equipment) => {
+                          "type": equipment.type,
+                          "brandOrObject": equipment.brandOrObject,
+                          "quantity": equipment.quantity,
+                          "state": equipment.state,
+                          "comment": equipment.comment
                         }).toList()
                       }).toList()
                     }

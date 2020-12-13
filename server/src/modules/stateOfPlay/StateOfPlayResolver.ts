@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
-import { /*getManager,*/ ILike } from "typeorm";
+import { /*getManager,*/ ILike, getConnection } from "typeorm";
 
 import { StateOfPlay } from "../../entity/StateOfPlay";
 
@@ -209,24 +209,29 @@ export class StateOfPlayResolver {
 		}
 		console.log('property: ', property)
 
-		const stateOfPlay = await StateOfPlay.update(data.id, {
-			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)
-			ownerFullName: owner.firstName + ' ' + owner.lastName,
-			tenantsFullName: tenants.map(tenant => tenant.firstName + ' ' + tenant.lastName),
-			user: user,
-			owner: owner,
-			representative: representative,
-			tenants: tenants,
-			property: property,
-			rooms: JSON.stringify(data.rooms)
-		})
+		const connection = getConnection();
+
+		const stateOfPlay2 = await connection.getRepository(StateOfPlay).findOne(data.id);
+		if (!stateOfPlay2) return 0
+
+		stateOfPlay2.fullAddress = property.address + ', ' + property.postalCode + ' ' + property.city// needed for search (issue nested search doesnt work)
+		stateOfPlay2.ownerFullName = owner.firstName + ' ' + owner.lastName
+		// @ts-ignore
+		stateOfPlay2.tenantsFullName = tenants.map(tenant => tenant.firstName + ' ' + tenant.lastName)
+		stateOfPlay2.user = user
+		stateOfPlay2.owner = owner
+		stateOfPlay2.representative = representative
+		// @ts-ignore
+		stateOfPlay2.tenants = tenants
+		stateOfPlay2.property = property
+		stateOfPlay2.rooms = JSON.stringify(data.rooms)
+
+		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 
 		// const stateOfPlay = { affected: 0}
-		console.log('stateOfPlay: ', stateOfPlay)
+		console.log('stateOfPlay: ', ret)
 
-		console.log('updateOwner: ', stateOfPlay)
-
-		if (stateOfPlay.affected !== 1) return 0
+		// if (stateOfPlay.affected !== 1) return 0
 
 		return 1
 	}
