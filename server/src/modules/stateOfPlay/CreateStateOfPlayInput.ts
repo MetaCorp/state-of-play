@@ -71,14 +71,17 @@ class CreateStateOfPlayRoomInput {
 
 @InputType()
 export class CreateStateOfPlayInput {// TODO
+  @Field()
+  out: boolean;
+
   @Field(() => CreatePropertyInput)
-  property: CreatePropertyInput;
+  property: CreatePropertyInput
   
   @Field(() => CreateOwnerInput)
-  owner: CreateOwnerInput;
+  owner: CreateOwnerInput
   
   @Field(() => CreateRepresentativeInput)
-  representative: CreateRepresentativeInput;
+  representative: CreateRepresentativeInput
 
   @Field(() => [CreateTenantInput])
   tenants: [CreateTenantInput]

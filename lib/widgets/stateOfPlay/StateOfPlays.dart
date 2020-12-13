@@ -16,6 +16,56 @@ class StateOfPlays extends StatefulWidget {
 // adb reverse tcp:9002 tcp:9002
 
 class _StateOfPlaysState extends State<StateOfPlays> {
+
+  bool _in = false;
+  bool _out = true;
+
+  void _showDialogFilter (context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Column(
+          children: [
+            Text("Filtres"),
+            CheckboxListTile(
+              title: Text("Entrée"),
+              value: _in,
+              onChanged: (value) {// TODO: doesnt work -> https://stackoverflow.com/questions/51578824/flutter-checkbox-doesnt-work
+                print('onChanged: ' + value.toString());
+                setState(() {
+                  _in = value; 
+                }); 
+              },
+            ),
+            CheckboxListTile(
+              title: Text("Sortie"),
+              value: _out,
+              onChanged: (value) { 
+                setState(() {
+                  _out = value; 
+                }); 
+              },
+            )
+          ],
+        ),
+        actions: [
+          FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () async {
+              Navigator.pop(context);
+            }
+          ),
+          FlatButton(
+            child: Text('APPLIQUER'),
+            onPressed: () async {
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
@@ -25,6 +75,10 @@ class _StateOfPlaysState extends State<StateOfPlays> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+          ),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () => _showDialogFilter(context),
           ),
           IconButton(
             icon: Icon(Icons.add),

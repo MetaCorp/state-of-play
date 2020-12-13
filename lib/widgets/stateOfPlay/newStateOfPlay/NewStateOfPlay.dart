@@ -8,9 +8,10 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayC
 
 
 class NewStateOfPlay extends StatefulWidget {
-  NewStateOfPlay({ Key key, this.stateOfPlayId }) : super(key: key);
+  NewStateOfPlay({ Key key, this.stateOfPlayId, this.out }) : super(key: key);
 
   String stateOfPlayId;
+  bool out;
 
   @override
   _NewStateOfPlayState createState() => new _NewStateOfPlayState();
@@ -259,9 +260,13 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         RunMutation runMutation,
         QueryResult result,
       ) {
+        print('NewStateOfPlay: ' + widget.stateOfPlayId);
 
-        if (_stateOfPlay == null)
+        if (_stateOfPlay == null) {
+          print('new stateOfPlay');
           _stateOfPlay = _stateOfPlay2;
+          _stateOfPlay.out = widget.out;
+        }
         
         return NewStateOfPlayContent(
           title: "Nouvel état des lieux",
@@ -269,6 +274,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             print("onSave");
             MultiSourceResult result = runMutation({
               "data": {
+                "out": _stateOfPlay.out,
                 "owner": {
                   "id": _stateOfPlay.owner.id,
                   "firstName": _stateOfPlay.owner.firstName,
@@ -345,6 +351,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             query stateOfPlay(\$data: StateOfPlayInput!) {
               stateOfPlay(data: \$data) {
                 id
+                out
                 property {
                   id
                   address
@@ -382,6 +389,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           FetchMore fetchMore,
         }) {
 
+          print('newStateOfPlay: ' + _stateOfPlay.toString() + ' ' + result.data.toString());
           if (_stateOfPlay == null && result.data != null) {
             print('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
             _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
@@ -416,7 +424,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         _showDialogLeave(context);
         return false;
       },
-      child: widget.stateOfPlayId != null ? content2 : content
+      child: widget.stateOfPlayId != null ? content : content2
     );
   }
 }

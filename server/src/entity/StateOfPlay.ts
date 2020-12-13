@@ -37,29 +37,31 @@ import { Tenant } from "./Tenant";
 export class StateOfPlay extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Field()
   @Column()
-  fullAddress: String;
+  fullAddress: String
   
   @Field()
   @Column()
-  ownerFullName: String;
+  ownerFullName: String
   
   @Field(() => [String])
   @Column()
   tenantsFullName: String;
 
-
   @Field(() => String)
   @Column("simple-json")
   rooms: String
 
+  @Field(() => Boolean)
+  @Column()
+  out: Boolean
 
   @Field(() => Owner)
   @ManyToOne(() => Owner, owner => owner.stateOfPlays)
-  owner: Owner;
+  owner: Owner
   
   @Field(() => Representative)
   @ManyToOne(() => Representative, representative => representative.stateOfPlays)
@@ -68,13 +70,13 @@ export class StateOfPlay extends BaseEntity {
   @Field(() => [Tenant])
   @ManyToMany(() => Tenant, tenant => tenant.stateOfPlays)
   @JoinTable()
-  tenants: [Tenant];
+  tenants: [Tenant]
 
   @Field(() => User)
   @ManyToOne(() => User, user => user.stateOfPlays)
-  user: User;
+  user: User
 
   @Field(() => Property)
   @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true })
-  property: Property;
+  property: Property
 }

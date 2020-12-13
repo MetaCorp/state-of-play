@@ -141,6 +141,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   MultiSourceResult result = runMutation({
                     "data": {
                       "id": _stateOfPlay.id,
+                      "out": _stateOfPlay.out,
                       "owner": {
                         "id": _stateOfPlay.owner.id,
                         "firstName": _stateOfPlay.owner.firstName,

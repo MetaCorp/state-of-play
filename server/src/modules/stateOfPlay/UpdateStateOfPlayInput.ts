@@ -36,13 +36,13 @@ export class UpdateStateOfPlayInput {
     id: string;
 
     @Field(() => UpdatePropertyInput)
-    property: UpdatePropertyInput;
+    property: UpdatePropertyInput
     
     @Field(() => UpdateOwnerInput)
-    owner: UpdateOwnerInput;
+    owner: UpdateOwnerInput
     
     @Field(() => UpdateRepresentativeInput)
-    representative: UpdateRepresentativeInput;
+    representative: UpdateRepresentativeInput
 
     @Field(() => [UpdateTenantInput])
     tenants: [UpdateTenantInput]

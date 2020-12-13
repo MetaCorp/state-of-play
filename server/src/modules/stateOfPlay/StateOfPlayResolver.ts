@@ -133,6 +133,7 @@ export class StateOfPlayResolver {
 			representative: representative,
 			tenants: tenants,
 			property: property,
+			out: data.out,
 			rooms: JSON.stringify(data.rooms)
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)

@@ -171,6 +171,7 @@ class Property {
 class StateOfPlay {
   StateOfPlay({
     this.id,
+    this.out,
     this.owner,
     this.representative,
     this.tenants,
@@ -188,6 +189,8 @@ class StateOfPlay {
   });
 
   String id;
+
+  bool out;
 
   Owner owner;
   Representative representative;
@@ -216,6 +219,7 @@ class StateOfPlay {
 
     return StateOfPlay(
       id: json["id"],
+      out: json["out"],
       owner: json["owner"] != null ? Owner.fromJSON(json["owner"]) : null,
       representative: json["representative"] != null ? Representative.fromJSON(json["representative"]) : null,
       tenants: json["tenants"] != null ? (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList() : null,
