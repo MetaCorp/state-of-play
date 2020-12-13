@@ -260,7 +260,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         RunMutation runMutation,
         QueryResult result,
       ) {
-        print('NewStateOfPlay: ' + widget.stateOfPlayId);
+        // print('NewStateOfPlay: ' + widget.stateOfPlayId);
 
         if (_stateOfPlay == null) {
           print('new stateOfPlay');

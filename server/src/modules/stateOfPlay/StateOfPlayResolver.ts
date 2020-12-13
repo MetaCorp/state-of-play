@@ -35,8 +35,6 @@ export class StateOfPlayResolver {
 			{ user: { id: ctx.userId }}
 		]
 
-		console.log('filter: ', filter && filter.in)
-
 		if (!filter || filter && filter.in === undefined && filter.out === undefined || filter && filter.in && filter.out) {}
 		else
 			for (let i = 0; i < wheres.length; i++) {

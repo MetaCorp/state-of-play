@@ -7,10 +7,11 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 typedef SelectCallback = void Function(String);
 
 class SearchStateOfPlays extends StatefulWidget {
-  SearchStateOfPlays({ Key key, this.onSelect, this.out }) : super(key: key);
+  SearchStateOfPlays({ Key key, this.onSelect, this.out, this.sIn }) : super(key: key);
 
   final SelectCallback onSelect;
   final bool out;
+  final bool sIn;
 
   @override
   _SearchStateOfPlaysState createState() => _SearchStateOfPlaysState();
@@ -60,9 +61,9 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           "filter": {
             "search": _searchController.text,
             "out": widget.out || widget.out == null,
-            "in": !widget.out || widget.out == null,
+            "in": widget.sIn || widget.out == null,
           }
-        } 
+        }
       ),
       builder: (
         QueryResult result, {

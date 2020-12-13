@@ -55,32 +55,34 @@ class _MyScaffoldState extends State<MyScaffold> {
                             onPressed: () {
                               Navigator.pop(context);
                               Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                out: false,
+                                out: true,
+                                sIn: false,
                                 onSelect: (stateOfPlayId) {
                                   print("onSelect");
                                   Navigator.pop(globalKey.currentContext);
-                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId)));
+                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
                                 }))
                               );
                             },
                           ),
                           FlatButton(
-                            child: Text("Créer un nouvel état des lieux"),
+                            child: Text("Créer un nouvel état des lieux de sortie"),
                             onPressed: () {
                               Navigator.pop(context);
                               Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
                             },
                           ),
                           FlatButton(
-                            child: Text("À partir d'une sortie"),
+                            child: Text("À partir d'une entrée"),
                             onPressed: () {
                               Navigator.pop(context);
                               Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                out: true,
+                                out: false,
+                                sIn: true,
                                 onSelect: (stateOfPlayId) {
                                   print("onSelect");
                                   Navigator.pop(globalKey.currentContext);
-                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId)));
+                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
                                 }))
                               );
                             },
