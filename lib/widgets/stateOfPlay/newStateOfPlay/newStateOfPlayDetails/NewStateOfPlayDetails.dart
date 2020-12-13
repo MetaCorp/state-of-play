@@ -57,6 +57,7 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
                   name: rooms[i],
                   decorations: [],
                   equipments: [],
+                  electricities: [],
                   generalAspect: sop.GeneralAspect()
                 ));
                 

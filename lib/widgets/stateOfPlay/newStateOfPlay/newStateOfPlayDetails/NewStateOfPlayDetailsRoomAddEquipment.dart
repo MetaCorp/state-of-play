@@ -138,7 +138,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           print('equipments length: ' + equipments.length.toString());
 
           if (equipments.length == 0) {
-            body = Text("no electricity");
+            body = Text("no equipment");
           }
           else {
             body = ListView.separated(

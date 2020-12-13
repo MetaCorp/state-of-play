@@ -99,6 +99,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
 
     print('room.decorations: ' + widget.room.decorations.toString());
 
+    // TODO: Flexible messed up layout (used because of an error)
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.room.name)

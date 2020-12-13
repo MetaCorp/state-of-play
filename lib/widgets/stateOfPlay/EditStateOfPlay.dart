@@ -111,8 +111,10 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
               FetchMore fetchMore,
             }) {
 
-              if (_stateOfPlay == null && result.data != null)
+              if (_stateOfPlay == null && result.data != null) {
+                print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
                 _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
+              }
 
               if (result.hasException) {
                 return Scaffold(
@@ -138,6 +140,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   print("onSave");
                   MultiSourceResult result = runMutation({
                     "data": {
+                      "id": _stateOfPlay.id,
                       "owner": {
                         "id": _stateOfPlay.owner.id,
                         "firstName": _stateOfPlay.owner.firstName,
@@ -179,6 +182,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
                     else
                       print("networkResult clientException: " + networkResult.exception.clientException.message);
+                    return;//TODO: show error
                   }
                   print("");
                   print("");

@@ -22,12 +22,51 @@ class CreateStateOfPlayDecorationInput {
 }
 
 @InputType()
+class CreateStateOfPlayElectricityInput {
+  @Field()
+  type: String
+  
+  @Field()
+  quantity: Number
+  
+  @Field()
+  state: String
+  
+  @Field()
+  comment: String
+}
+
+@InputType()
+class CreateStateOfPlayEquipmentInput {
+  @Field()
+  type: String
+  
+  @Field()
+  quantity: Number
+
+  @Field()
+  brandOrObject: String
+  
+  @Field()
+  state: String
+  
+  @Field()
+  comment: String
+}
+
+@InputType()
 class CreateStateOfPlayRoomInput {
   @Field()
   name: String
 
   @Field(() => [CreateStateOfPlayDecorationInput])
   decorations: [CreateStateOfPlayDecorationInput]
+
+  @Field(() => [CreateStateOfPlayElectricityInput])
+  electricities: [CreateStateOfPlayElectricityInput]
+
+  @Field(() => [CreateStateOfPlayEquipmentInput])
+  equipments: [CreateStateOfPlayEquipmentInput]
 }
 
 @InputType()

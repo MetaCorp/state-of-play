@@ -294,6 +294,19 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                       "nature": decoration.nature,
                       "state": decoration.state,
                       "comment": decoration.comment
+                    }).toList(),
+                    "electricities": room.electricities.map((electricity) => {
+                      "type": electricity.type,
+                      "quantity": electricity.quantity,
+                      "state": electricity.state,
+                      "comment": electricity.comment
+                    }).toList(),
+                    "equipments": room.equipments.map((equipment) => {
+                      "type": equipment.type,
+                      "brandOrObject": equipment.brandOrObject,
+                      "quantity": equipment.quantity,
+                      "state": equipment.state,
+                      "comment": equipment.comment
                     }).toList()
                   }).toList()
                 }

@@ -4,7 +4,7 @@ import { ILike } from 'typeorm';
 import { Electricity } from "../../entity/Electricity";
 
 import { CreateElectricityInput } from "./CreateElectricityInput";
-import { ElectricitysFilterInput } from "./ElectricitysFilterInput";
+import { ElectricitiesFilterInput } from "./ElectricitiesFilterInput";
 import { DeleteElectricityInput } from "./DeleteElectricityInput";
 import { UpdateElectricityInput } from "./UpdateElectricityInput";
 import { ElectricityInput } from "./ElectricityInput";
@@ -18,7 +18,7 @@ import { User } from "../../entity/User";
 export class ElectricityResolver {
 	@Authorized()
 	@Query(() => [Electricity])
-	electricitys(@Arg("filter", { nullable: true }) filter?: ElectricitysFilterInput) {
+	electricities(@Arg("filter", { nullable: true }) filter?: ElectricitiesFilterInput) {
 		return Electricity.find({
             where: filter ? [
                 { type: ILike("%" + filter.search + "%") },

@@ -145,9 +145,9 @@ class Property {
       type: json["type"],
       reference: json["reference"],
       lot: json["lot"],
-      // floor: int.parse(json["floor"]),
-      // roomCount: int.parse(json["roomCount"]),
-      // area: int.parse(json["area"]),
+      // floor: json["floor"],
+      // roomCount: json["roomCount"],
+      // area: json["area"],
       annexes: json["annexes"],
       heatingType: json["heatingType"],
       hotWater: json["hotWater"],
@@ -337,7 +337,7 @@ class Electricity {
 
     return Electricity(
       type: json["type"],
-      quantity: json["quantity"] ? int.parse(json["quantity"]) : null,
+      quantity: json["quantity"],
       state: json["state"],// TODO parse dual type
       comment: json["comment"],
       photo: json["photo"]
@@ -386,7 +386,7 @@ class Equipment {
       state: json["state"],
       quantity: json["quantity"],
       comment: json["comment"],
-      photo: int.parse(json["photo"])
+      photo: json["photo"]
     );
   }
 }
@@ -404,7 +404,7 @@ class GeneralAspect {
 
     return GeneralAspect(
       comment: json["comment"],
-      photo: int.parse(json["photo"])
+      photo: json["photo"]
     );
   }
 }
@@ -473,8 +473,8 @@ class Meter {
       type: json["type"],
       location: json["location"],
       dateOfSuccession: DateTime.parse(json["dateOfSuccession"]),
-      index: int.parse(json["index"]),
-      photo: int.parse(json["photo"])
+      index: json["index"],
+      photo: json["photo"]
     );
   }
 }
@@ -510,9 +510,9 @@ class Key {
 
     return Key(
       type: json["type"],
-      count: int.parse(json["count"]),
+      count: json["count"],
       comments: json["comments"],
-      photo: int.parse(json["photo"])
+      photo: json["photo"]
     );
   }
 }
