@@ -14,7 +14,7 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           SizedBox(
-            height: 150.0,
+            height: 120.0,
             child: UserAccountsDrawerHeader(
               accountEmail: new Text(""),//to keep since needed
               accountName:  Row(
@@ -43,7 +43,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Text('États des lieux'),
-            leading: Icon(Icons.home),
+            leading: Icon(Icons.text_snippet),
             onTap: () => Navigator.popAndPushNamed(context, '/state-of-plays'),
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
@@ -55,33 +55,28 @@ class MyDrawer extends StatelessWidget {
           Divider(thickness: 2.0),
           ListTile(
             title: Text('Propriétaires'),
-            leading: Icon(Icons.home),
+            leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/owners'),
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Mandataires'),
-            leading: Icon(Icons.home),
+            leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/representatives'),
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Locataires'),
-            leading: Icon(Icons.text_snippet),
+            leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
           ),
           Divider(thickness: 2.0),
           // TODO align not working
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: ListTile(
-                title: Text('Paramêtres'),
-                leading: Icon(Icons.home),
-                onTap: () => Navigator.popAndPushNamed(context, '/settings'),
-              ),
-            ),
-          ),
+          ListTile(
+            title: Text('Paramêtres'),
+            leading: Icon(Icons.settings),
+            onTap: () => Navigator.popAndPushNamed(context, '/settings'),
+          ),  
         ],
       ),
     );
