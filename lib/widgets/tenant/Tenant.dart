@@ -38,13 +38,13 @@ class _TenantState extends State<Tenant> {
           Query(
             options: QueryOptions(
               documentNode: gql('''
-              query tenant(\$data: TenantInput!) {
-                tenant(data: \$data) {
-                  id
-                  firstName
-                  lastName
+                query tenant(\$data: TenantInput!) {
+                  tenant(data: \$data) {
+                    id
+                    firstName
+                    lastName
+                  }
                 }
-              }
               '''),
               variables: {
                 "data": {

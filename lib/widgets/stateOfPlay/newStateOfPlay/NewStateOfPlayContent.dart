@@ -55,6 +55,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          _selectedIndex == _tabsContent.length - 1 ? IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () => widget.onSave(),
+          ) : Container()
+        ]
       ),
       body: _tabsContent[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

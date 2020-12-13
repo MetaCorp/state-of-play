@@ -22,7 +22,15 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.roomName + ' / ' + widget.equipment.type)
+        title: Text(widget.roomName + ' / ' + widget.equipment.type),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [

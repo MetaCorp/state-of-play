@@ -22,7 +22,15 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.roomName + ' / ' + widget.electricity.type)
+        title: Text(widget.roomName + ' / ' + widget.electricity.type),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [

@@ -23,7 +23,15 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.roomName + ' / ' + widget.decoration.type)
+        title: Text(widget.roomName + ' / ' + widget.decoration.type),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [

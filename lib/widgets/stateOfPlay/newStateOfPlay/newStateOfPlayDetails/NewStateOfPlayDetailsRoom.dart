@@ -102,7 +102,15 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
     // TODO: Flexible messed up layout (used because of an error)
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.room.name)
+        title: Text(widget.room.name),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [
