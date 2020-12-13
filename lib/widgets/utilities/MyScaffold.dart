@@ -44,21 +44,45 @@ class _MyScaffoldState extends State<MyScaffold> {
                       Row(
                         children: [
                           FlatButton(
-                            child: Text("Créer un nouvel état des lieux"),
+                            child: Text("Créer un nouvel état des lieux d'entrée"),
                             onPressed: () {
                               Navigator.pop(context);
-                              Navigator.pushNamed(context, '/new-state-of-play');
+                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
                             },
                           ),
                           FlatButton(
                             child: Text("À partir d'une sortie"),
                             onPressed: () {
                               Navigator.pop(context);
-                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(onSelect: (stateOfPlayId) {
-                                print("onSelect");
-                                Navigator.pop(globalKey.currentContext);
-                                Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId)));
-                              })));
+                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                out: false,
+                                onSelect: (stateOfPlayId) {
+                                  print("onSelect");
+                                  Navigator.pop(globalKey.currentContext);
+                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId)));
+                                }))
+                              );
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("Créer un nouvel état des lieux"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("À partir d'une sortie"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                out: true,
+                                onSelect: (stateOfPlayId) {
+                                  print("onSelect");
+                                  Navigator.pop(globalKey.currentContext);
+                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId)));
+                                }))
+                              );
                             },
                           )
                         ],

@@ -23,17 +23,28 @@ export class StateOfPlayResolver {
 	@Query(() => [StateOfPlay])
 	// @ts-ignore
 	async stateOfPlays(@Arg("filter", { nullable: true }) filter?: StateOfPlaysFilterInput, @Ctx() ctx: MyContext) {
+
+		const wheres : any = filter ? [
+			// { property: { address: ILike("%" + filter.search + "%") } },
+			// { property: { postalCode: ILike("%" + filter.search + "%") } },
+			// { property: { city: ILike("%" + filter.search + "%") } },
+			{ fullAddress: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+			{ ownerFullName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+			{ tenantsFullName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } }
+		] : [
+			{ user: { id: ctx.userId }}
+		]
+
+		console.log('filter: ', filter && filter.in)
+
+		if (!filter || filter && filter.in === undefined && filter.out === undefined || filter && filter.in && filter.out) {}
+		else
+			for (let i = 0; i < wheres.length; i++) {
+				wheres[i].out = filter.out
+			}
+
 		return StateOfPlay.find({// TODO: filter ne marche pas, trouver une autre solution. => QueryBuilder, ne marche pas non plus => solution implémenter sauvegarder fullAdress sur l'entité StateOfPlay
-			where: filter ? [
-                // { property: { address: ILike("%" + filter.search + "%") } },
-                // { property: { postalCode: ILike("%" + filter.search + "%") } },
-                // { property: { city: ILike("%" + filter.search + "%") } },
-                { fullAddress: ILike("%" + filter.search + "%") },
-				{ ownerFullName: ILike("%" + filter.search + "%") },
-				{ tenantsFullName: ILike("%" + filter.search + "%") }
-            ] : [
-				{ user: { id: ctx.userId }}
-			],
+			where: wheres,
 			relations: ["user", "owner", "representative", "property", "tenants"]
 		})
 
