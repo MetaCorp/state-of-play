@@ -8,7 +8,9 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayC
 
 
 class NewStateOfPlay extends StatefulWidget {
-  NewStateOfPlay({Key key}) : super(key: key);
+  NewStateOfPlay({ Key key, this.stateOfPlayId }) : super(key: key);
+
+  String stateOfPlayId;
 
   @override
   _NewStateOfPlayState createState() => new _NewStateOfPlayState();
@@ -16,7 +18,9 @@ class NewStateOfPlay extends StatefulWidget {
 
 class _NewStateOfPlayState extends State<NewStateOfPlay> {
   
-  final sop.StateOfPlay _stateOfPlay = sop.StateOfPlay(
+  sop.StateOfPlay _stateOfPlay;
+  
+  sop.StateOfPlay _stateOfPlay2 = sop.StateOfPlay(
     owner: sop.Owner(
       firstName: 'Robert',
       lastName: 'Dupont',
@@ -234,105 +238,185 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
   }
 
   Widget build(BuildContext context) {
+
+    Widget content2 = Mutation(
+      options: MutationOptions(
+        documentNode: gql('''
+          mutation createStateOfPlay(\$data: CreateStateOfPlayInput!) {
+            createStateOfPlay(data: \$data) {
+              id
+              fullAddress
+            }
+          }
+        '''),
+        update: (Cache cache, QueryResult result) {
+          return cache;
+        },
+        onCompleted: (dynamic resultData) {
+        },
+      ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult result,
+      ) {
+
+        if (_stateOfPlay == null)
+          _stateOfPlay = _stateOfPlay2;
+        
+        return NewStateOfPlayContent(
+          title: "Nouvel état des lieux",
+          onSave: () async {
+            print("onSave");
+            MultiSourceResult result = runMutation({
+              "data": {
+                "owner": {
+                  "id": _stateOfPlay.owner.id,
+                  "firstName": _stateOfPlay.owner.firstName,
+                  "lastName": _stateOfPlay.owner.lastName,
+                },
+                "representative": {
+                  "id": _stateOfPlay.representative.id,
+                  "firstName": _stateOfPlay.representative.firstName,
+                  "lastName": _stateOfPlay.representative.lastName,
+                },
+                "tenants": _stateOfPlay.tenants.map((tenant) => {
+                  "id": tenant.id,
+                  "firstName": tenant.firstName,
+                  "lastName": tenant.lastName,
+                }).toList(),
+                "property": {
+                  "id": _stateOfPlay.property.id,
+                  "address": _stateOfPlay.property.address,
+                  "postalCode": _stateOfPlay.property.postalCode,
+                  "city": _stateOfPlay.property.city,
+                },
+                "rooms": _stateOfPlay.rooms.map((room) => {
+                  "name": room.name,
+                  "decorations": room.decorations.map((decoration) => {
+                    "type": decoration.type,
+                    "nature": decoration.nature,
+                    "state": decoration.state,
+                    "comment": decoration.comment
+                  }).toList(),
+                  "electricities": room.electricities.map((electricity) => {
+                    "type": electricity.type,
+                    "quantity": electricity.quantity,
+                    "state": electricity.state,
+                    "comment": electricity.comment
+                  }).toList(),
+                  "equipments": room.equipments.map((equipment) => {
+                    "type": equipment.type,
+                    "brandOrObject": equipment.brandOrObject,
+                    "quantity": equipment.quantity,
+                    "state": equipment.state,
+                    "comment": equipment.comment
+                  }).toList()
+                }).toList()
+              }
+            });
+
+            QueryResult networkResult = await result.networkResult;
+
+            print("networkResult hasException: " + networkResult.hasException.toString());
+            if (networkResult.hasException) {
+              if (networkResult.exception.graphqlErrors.length > 0)
+                print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+              else
+                print("networkResult clientException: " + networkResult.exception.clientException.message);
+              return;//TODO: show error
+            }
+            print("");
+            print("");
+            
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, "/state-of-plays");
+
+          },
+          stateOfPlay: _stateOfPlay
+        );
+      }
+    );
+
+    Widget content;
+    if (widget.stateOfPlayId != null) {
+      content = Query(
+        options: QueryOptions(
+          documentNode: gql('''
+            query stateOfPlay(\$data: StateOfPlayInput!) {
+              stateOfPlay(data: \$data) {
+                id
+                property {
+                  id
+                  address
+                  postalCode
+                  city
+                }
+                owner {
+                  id
+                  firstName
+                  lastName
+                }
+                representative {
+                  id
+                  firstName
+                  lastName
+                }
+                tenants {
+                  id
+                  firstName
+                  lastName
+                }
+                rooms
+              }
+            }
+          '''),
+          variables: {
+            "data": {
+              "stateOfPlayId": widget.stateOfPlayId
+            }
+          }
+        ),
+        builder: (
+          QueryResult result, {
+          Refetch refetch,
+          FetchMore fetchMore,
+        }) {
+
+          if (_stateOfPlay == null && result.data != null) {
+            print('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
+            _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
+            print('loaded stateOfPlay: ' + _stateOfPlay.toString());
+          }
+
+          if (result.hasException) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Création d'un état des lieux"),
+              ),
+              body: Text(result.exception.toString())
+            );
+          }
+
+          if (result.loading || result.data == null) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Création d'un état des lieux"),
+              ),
+              body: CircularProgressIndicator()
+            );
+          }
+          
+          return content2;
+        }
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async {
         _showDialogLeave(context);
         return false;
       },
-      child: Mutation(
-        options: MutationOptions(
-          documentNode: gql('''
-            mutation createStateOfPlay(\$data: CreateStateOfPlayInput!) {
-              createStateOfPlay(data: \$data) {
-                id
-                fullAddress
-              }
-            }
-          '''),
-          update: (Cache cache, QueryResult result) {
-            return cache;
-          },
-          onCompleted: (dynamic resultData) {
-          },
-        ),
-        builder: (
-          RunMutation runMutation,
-          QueryResult result,
-        ) {
-          
-          return NewStateOfPlayContent(
-            title: "Nouvel état des lieux",
-            onSave: () async {
-              print("onSave");
-              MultiSourceResult result = runMutation({
-                "data": {
-                  "owner": {
-                    "id": _stateOfPlay.owner.id,
-                    "firstName": _stateOfPlay.owner.firstName,
-                    "lastName": _stateOfPlay.owner.lastName,
-                  },
-                  "representative": {
-                    "id": _stateOfPlay.representative.id,
-                    "firstName": _stateOfPlay.representative.firstName,
-                    "lastName": _stateOfPlay.representative.lastName,
-                  },
-                  "tenants": _stateOfPlay.tenants.map((tenant) => {
-                    "id": tenant.id,
-                    "firstName": tenant.firstName,
-                    "lastName": tenant.lastName,
-                  }).toList(),
-                  "property": {
-                    "id": _stateOfPlay.property.id,
-                    "address": _stateOfPlay.property.address,
-                    "postalCode": _stateOfPlay.property.postalCode,
-                    "city": _stateOfPlay.property.city,
-                  },
-                  "rooms": _stateOfPlay.rooms.map((room) => {
-                    "name": room.name,
-                    "decorations": room.decorations.map((decoration) => {
-                      "type": decoration.type,
-                      "nature": decoration.nature,
-                      "state": decoration.state,
-                      "comment": decoration.comment
-                    }).toList(),
-                    "electricities": room.electricities.map((electricity) => {
-                      "type": electricity.type,
-                      "quantity": electricity.quantity,
-                      "state": electricity.state,
-                      "comment": electricity.comment
-                    }).toList(),
-                    "equipments": room.equipments.map((equipment) => {
-                      "type": equipment.type,
-                      "brandOrObject": equipment.brandOrObject,
-                      "quantity": equipment.quantity,
-                      "state": equipment.state,
-                      "comment": equipment.comment
-                    }).toList()
-                  }).toList()
-                }
-              });
-
-              QueryResult networkResult = await result.networkResult;
-
-              print("networkResult hasException: " + networkResult.hasException.toString());
-              if (networkResult.hasException) {
-                if (networkResult.exception.graphqlErrors.length > 0)
-                  print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
-                else
-                  print("networkResult clientException: " + networkResult.exception.clientException.message);
-                return;//TODO: show error
-              }
-              print("");
-              print("");
-              
-              Navigator.pop(context);
-              Navigator.popAndPushNamed(context, "/state-of-plays");
-
-            },
-            stateOfPlay: _stateOfPlay
-          );
-        }
-      ),
+      child: widget.stateOfPlayId != null ? content2 : content
     );
   }
 }

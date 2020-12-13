@@ -10,6 +10,10 @@ class NewStateOfPlayMisc extends StatefulWidget {
 class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
   @override
   Widget build(BuildContext context) {
-    return Text("Divers");
+    return Column(
+      children: [
+        Text("Divers")
+      ]
+    );
   }
 }

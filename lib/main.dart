@@ -128,14 +128,17 @@ class _MyAppState extends State<MyApp> {
                 final Map args = settings.arguments;
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
               }
-              else if (settings.name == '/new-state-of-play')
-                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay());
+              else if (settings.name == '/new-state-of-play') {
+                final Map args = settings.arguments;
+                return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: args != null ? args["stateOfPlayId"] : null));
+              }
               else if (settings.name == '/edit-state-of-play') {
                 final Map args = settings.arguments;
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => EditStateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
               }
-              else if (settings.name == '/search-state-of-plays')
+              else if (settings.name == '/search-state-of-plays') {
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays());
+              }
 
 
               else if (settings.name == '/properties')

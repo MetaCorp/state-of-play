@@ -4,8 +4,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
+typedef SelectCallback = void Function(String);
+
 class SearchStateOfPlays extends StatefulWidget {
-  SearchStateOfPlays({Key key}) : super(key: key);
+  SearchStateOfPlays({ Key key, this.onSelect }) : super(key: key);
+
+  final SelectCallback onSelect;
 
   @override
   _SearchStateOfPlaysState createState() => _SearchStateOfPlaysState();
@@ -100,7 +104,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                 return ListTile(
                   title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
                   subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                  onTap: () => Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                  onTap: () => widget.onSelect != null ? widget.onSelect(stateOfPlays[i].id) : Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
                 );
               },
               separatorBuilder: (context, index) {
