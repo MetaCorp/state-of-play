@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 class NewStateOfPlayMiscComments extends StatefulWidget {
-  NewStateOfPlayMiscComments({Key key}) : super(key: key);
+  NewStateOfPlayMiscComments({ Key key, this.stateOfPlay }) : super(key: key);
+
+  sop.StateOfPlay stateOfPlay;
 
   @override
   _NewStateOfPlayMiscCommentsState createState() => _NewStateOfPlayMiscCommentsState();
@@ -22,7 +25,20 @@ class _NewStateOfPlayMiscCommentsState extends State<NewStateOfPlayMiscComments>
           )
         ],
       ),
-      body: Text('Comments'),
+      body: Column(
+        children: [
+          TextField(
+            controller: TextEditingController(text: widget.stateOfPlay.comments),
+            decoration: InputDecoration(labelText: 'Commentaires'),
+            onChanged: (value) => widget.stateOfPlay.comments = value,
+          ),
+          TextField(
+            controller: TextEditingController(text: widget.stateOfPlay.reserve),
+            decoration: InputDecoration(labelText: 'Réserve'),
+            onChanged: (value) => widget.stateOfPlay.reserve = value,
+          )
+        ],
+      ),
     );
   }
 }

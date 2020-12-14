@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 class NewStateOfPlayMiscInsurance extends StatefulWidget {
-  NewStateOfPlayMiscInsurance({Key key}) : super(key: key);
+  NewStateOfPlayMiscInsurance({ Key key, this.insurance }) : super(key: key);
+
+  sop.Insurance insurance;
 
   @override
   _NewStateOfPlayMiscInsuranceState createState() => _NewStateOfPlayMiscInsuranceState();
@@ -22,7 +25,20 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
           )
         ],
       ),
-      body: Text('Comments'),
+      body:  Column(
+        children: [
+          TextField(
+            controller: TextEditingController(text: widget.insurance.company),
+            decoration: InputDecoration(labelText: "Compagnie d'assurance"),
+            onChanged: (value) => widget.insurance.company = value,
+          ),
+          TextField(
+            controller: TextEditingController(text: widget.insurance.number),
+            decoration: InputDecoration(labelText: "No de police d'assurance"),
+            onChanged: (value) => widget.insurance.number = value,
+          )
+        ],
+      ),
     );
   }
 }

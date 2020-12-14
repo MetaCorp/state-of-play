@@ -126,7 +126,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     type: decorations[i],
                     state: "Neuf",
                     nature: "",
-                    comment: "",
+                    comments: "",
                   ));
                   
                 }
@@ -173,7 +173,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     type: electricities[i],
                     state: "Neuf",
                     quantity: 1,
-                    comment: "",
+                    comments: "",
                   ));
                   
                 }
@@ -222,7 +222,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     brandOrObject: "",
                     state: "Neuf",
                     quantity: 1,
-                    comment: "",
+                    comments: "",
                   ));
                 }
                 setState(() { });

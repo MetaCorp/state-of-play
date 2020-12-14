@@ -144,7 +144,10 @@ export class StateOfPlayResolver {
 			property: property,
 			out: data.out,
 			rooms: JSON.stringify(data.rooms),
-			meters: JSON.stringify(data.meters)
+			meters: JSON.stringify(data.meters),
+			insurance: JSON.stringify(data.insurance),
+			comments: data.comments,
+			reserve: data.reserve
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -227,6 +230,9 @@ export class StateOfPlayResolver {
 		stateOfPlay2.property = property
 		stateOfPlay2.rooms = JSON.stringify(data.rooms)
 		stateOfPlay2.meters = JSON.stringify(data.meters)
+		stateOfPlay2.insurance = JSON.stringify(data.insurance),
+		stateOfPlay2.comments = data.comments,
+		stateOfPlay2.reserve = data.reserve
 
 		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 

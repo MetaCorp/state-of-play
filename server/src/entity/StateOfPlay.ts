@@ -59,6 +59,18 @@ export class StateOfPlay extends BaseEntity {
   @Column("simple-json")
   meters: String
 
+  @Field(() => String)
+  @Column("simple-json")
+  insurance: String
+  
+  @Field(() => String)
+  @Column()
+  comments: String
+  
+  @Field(() => String)
+  @Column()
+  reserve: String
+
   @Field(() => Boolean)
   @Column()
   out: Boolean

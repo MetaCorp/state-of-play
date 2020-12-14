@@ -54,9 +54,9 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
             onChanged: (value) => widget.equipment.brandOrObject = value,
           ),
           TextField(
-            controller: TextEditingController(text: widget.equipment.comment),
+            controller: TextEditingController(text: widget.equipment.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.equipment.comment = value,
+            onChanged: (value) => widget.equipment.comments = value,
           )
         ]
       ),

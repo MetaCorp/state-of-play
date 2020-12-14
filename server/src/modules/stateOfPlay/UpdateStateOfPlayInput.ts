@@ -17,7 +17,7 @@ class UpdateStateOfPlayDecorationInput {
     state: String
     
     @Field()
-    comment: String
+    comments: String
 }
 
 @InputType()
@@ -32,7 +32,7 @@ class UpdateStateOfPlayElectricityInput {
   state: String
   
   @Field()
-  comment: String
+  comments: String
 }
 
 @InputType()
@@ -50,7 +50,7 @@ class UpdateStateOfPlayEquipmentInput {
   state: String
   
   @Field()
-  comment: String
+  comments: String
 }
 
 @InputType()
@@ -81,6 +81,15 @@ class UpdateStateOfPlayRoomInput {
 }
 
 @InputType()
+class UpdateStateOfPlayInsuranceInput {
+  @Field()
+  company: String
+
+  @Field()
+  number: String
+}
+
+@InputType()
 export class UpdateStateOfPlayInput {
     @Field()
     id: string;
@@ -102,4 +111,13 @@ export class UpdateStateOfPlayInput {
   
     @Field(() => [UpdateStateOfPlayMeterInput])
     meters: [UpdateStateOfPlayMeterInput]
+    
+    @Field(() => UpdateStateOfPlayInsuranceInput)
+    insurance: UpdateStateOfPlayInsuranceInput
+
+    @Field()
+    comments: String
+    
+    @Field()
+    reserve: String
 }

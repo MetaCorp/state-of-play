@@ -49,9 +49,9 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
             },
           ),
           TextField(
-            controller: TextEditingController(text: widget.electricity.comment),
+            controller: TextEditingController(text: widget.electricity.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.electricity.comment = value,
+            onChanged: (value) => widget.electricity.comments = value,
           )
         ]
       ),

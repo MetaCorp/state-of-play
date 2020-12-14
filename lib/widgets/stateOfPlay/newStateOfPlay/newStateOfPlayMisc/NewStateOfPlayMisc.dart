@@ -26,7 +26,9 @@ class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
       ),
     }, {
       "title": "Commentaires / Réserves",
-      "route": NewStateOfPlayMiscComments(),
+      "route": NewStateOfPlayMiscComments(
+        stateOfPlay: widget.stateOfPlay,
+      ),
     }, {
       "title": "Clés",
       "route": NewStateOfPlayMiscKeys(
@@ -34,7 +36,9 @@ class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
       ),
     }, {
       "title": "Assurance",
-      "route": NewStateOfPlayMiscInsurance(),
+      "route": NewStateOfPlayMiscInsurance(
+        insurance: widget.stateOfPlay.insurance,
+      ),
     }];
 
     return Column(

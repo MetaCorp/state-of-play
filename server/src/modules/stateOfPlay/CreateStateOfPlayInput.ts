@@ -18,7 +18,7 @@ class CreateStateOfPlayDecorationInput {
   state: String
   
   @Field()
-  comment: String
+  comments: String
 }
 
 @InputType()
@@ -33,7 +33,7 @@ class CreateStateOfPlayElectricityInput {
   state: String
   
   @Field()
-  comment: String
+  comments: String
 }
 
 @InputType()
@@ -51,7 +51,7 @@ class CreateStateOfPlayEquipmentInput {
   state: String
   
   @Field()
-  comment: String
+  comments: String
 }
 
 @InputType()
@@ -83,6 +83,15 @@ class CreateStateOfPlayRoomInput {
 }
 
 @InputType()
+class CreateStateOfPlayInsuranceInput {
+  @Field()
+  company: String
+
+  @Field()
+  number: String
+}
+
+@InputType()
 export class CreateStateOfPlayInput {// TODO
   @Field()
   out: boolean;
@@ -104,4 +113,13 @@ export class CreateStateOfPlayInput {// TODO
   
   @Field(() => [CreateStateOfPlayMeterInput])
   meters: [CreateStateOfPlayMeterInput]
+
+  @Field(() => CreateStateOfPlayInsuranceInput)
+  insurance: CreateStateOfPlayInsuranceInput
+
+  @Field()
+  comments: String
+  
+  @Field()
+  reserve: String
 }

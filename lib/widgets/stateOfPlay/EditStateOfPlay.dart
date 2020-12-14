@@ -97,6 +97,9 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     }
                     rooms
                     meters
+                    insurance
+                    comments
+                    reserve
                   }
                 }
               '''),
@@ -169,27 +172,33 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "type": decoration.type,
                           "nature": decoration.nature,
                           "state": decoration.state,
-                          "comment": decoration.comment
+                          "comments": decoration.comments
                         }).toList(),
                         "electricities": room.electricities.map((electricity) => {
                           "type": electricity.type,
                           "quantity": electricity.quantity,
                           "state": electricity.state,
-                          "comment": electricity.comment
+                          "comments": electricity.comments
                         }).toList(),
                         "equipments": room.equipments.map((equipment) => {
                           "type": equipment.type,
                           "brandOrObject": equipment.brandOrObject,
                           "quantity": equipment.quantity,
                           "state": equipment.state,
-                          "comment": equipment.comment
+                          "comments": equipment.comments
                         }).toList()
                       }).toList(),
                       "meters": _stateOfPlay.meters.map((meter) => {
                         "type": meter.type,
                         "location": meter.location,
                         "index": meter.index,// TODO : complete data
-                      }).toList()
+                      }).toList(),
+                      "comments": _stateOfPlay.comments,
+                      "reserve": _stateOfPlay.reserve,
+                      "insurance": {
+                        "company": _stateOfPlay.insurance.company,
+                        "number": _stateOfPlay.insurance.number
+                      }
                     }
                   });
 

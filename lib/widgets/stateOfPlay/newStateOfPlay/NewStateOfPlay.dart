@@ -77,14 +77,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
-            comment: 'Il manque la porte',
+            comments: 'Il manque la porte',
             photo: 0
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
-            comment: 'Il manque la porte',
+            comments: 'Il manque la porte',
             photo: 0
           )
         ],
@@ -93,14 +93,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             type: 'Interrupteur',
             quantity: 1,
             state: 'Neuf',
-            comment: '',
+            comments: '',
             photo: 0
           ),
           sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
-            comment: '',
+            comments: '',
             photo: 0
           ),
         ],
@@ -110,7 +110,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             brandOrObject: 'Brandt',
             quantity: 1,
             state: 'Bon',
-            comment: '',
+            comments: '',
             photo: 0
           ),
           sop.Equipment(
@@ -118,12 +118,12 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             brandOrObject: 'Brandt',
             quantity: 1,
             state: 'Bon',
-            comment: '',
+            comments: '',
             photo: 0
           ),
         ],
         generalAspect: sop.GeneralAspect(
-          comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+          comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
           photo: 0
         )
       ),
@@ -134,14 +134,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
-            comment: 'Il manque la porte',
+            comments: 'Il manque la porte',
             photo: 0
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
-            comment: 'Il manque la porte',
+            comments: 'Il manque la porte',
             photo: 0
           )
         ],
@@ -150,14 +150,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             type: 'Interrupteur',
             quantity: 1,
             state: 'Neuf',
-            comment: '',
+            comments: '',
             photo: 0
           ),
           sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
-            comment: '',
+            comments: '',
             photo: 0
           ),
         ],
@@ -167,7 +167,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             brandOrObject: 'Brandt',
             quantity: 1,
             state: 'Bon',
-            comment: '',
+            comments: '',
             photo: 0
           ),
           sop.Equipment(
@@ -175,12 +175,12 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             brandOrObject: 'Brandt',
             quantity: 1,
             state: 'Bon',
-            comment: '',
+            comments: '',
             photo: 0
           ),
         ],
         generalAspect: sop.GeneralAspect(
-          comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+          comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
           photo: 0
         ),
       )
@@ -208,7 +208,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
       dateStart: DateTime.now(),
       dateEnd: DateTime.now(),
     ),
-    comment: "L'appartement vient d'être repeint",
+    comments: "L'appartement vient d'être repeint",
     reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
     city: 'Mulhouse',
     date: DateTime.now()
@@ -302,27 +302,33 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "type": decoration.type,
                     "nature": decoration.nature,
                     "state": decoration.state,
-                    "comment": decoration.comment
+                    "comments": decoration.comments
                   }).toList(),
                   "electricities": room.electricities.map((electricity) => {
                     "type": electricity.type,
                     "quantity": electricity.quantity,
                     "state": electricity.state,
-                    "comment": electricity.comment
+                    "comments": electricity.comments
                   }).toList(),
                   "equipments": room.equipments.map((equipment) => {
                     "type": equipment.type,
                     "brandOrObject": equipment.brandOrObject,
                     "quantity": equipment.quantity,
                     "state": equipment.state,
-                    "comment": equipment.comment
+                    "comments": equipment.comments
                   }).toList()
                 }).toList(),
                 "meters": _stateOfPlay.meters.map((meter) => {
                   "type": meter.type,
                   "location": meter.location,
                   "index": meter.index,// TODO : complete data
-                }).toList()
+                }).toList(),
+                "comments": _stateOfPlay.comments,
+                "reserve": _stateOfPlay.reserve,
+                "insurance": {
+                  "company": _stateOfPlay.insurance.company,
+                  "number": _stateOfPlay.insurance.number
+                }
               }
             });
 

@@ -181,7 +181,7 @@ class StateOfPlay {
     this.meters,
     this.keys,
     this.insurance,
-    this.comment,
+    this.comments,
     this.reserve,
     this.city,
     this.date,
@@ -207,7 +207,7 @@ class StateOfPlay {
   List<Key> keys;
 
   Insurance insurance;
-  String comment;
+  String comments;
   String reserve;
 
   String city;
@@ -228,9 +228,9 @@ class StateOfPlay {
       rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
       meters: json["meters"] != null ? (jsonDecode(json["meters"]) as List).map((meter) => Meter.fromJSON(meter)).toList() : null,
       keys: json["keys"] != null ? (jsonDecode(json["keys"]) as List).map((key) => Key.fromJSON(key)).toList() : null,
-      // insurance: Insurance.fromJSON(json["insurance"]),
-      // comment: json["comment"],
-      // reserve: json["reserve"],
+      insurance: json["insurance"] != null ? Insurance.fromJSON(jsonDecode(json["insurance"])) : null,
+      comments: json["comments"],
+      reserve: json["reserve"],
       // city: json["city"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       // photos: ??? TODO
@@ -261,14 +261,14 @@ class Decoration {
     this.type,
     this.nature,
     this.state,
-    this.comment,
+    this.comments,
     this.photo// TODO
   });
 
   String type;
   String nature;
   String state;
-  String comment;
+  String comments;
   int photo;
 
   String getIndex(int index) {
@@ -280,7 +280,7 @@ class Decoration {
       case 2:
         return state;
       case 3:
-        return comment;
+        return comments;
       case 4:
         return photo.toString();
     }
@@ -293,7 +293,7 @@ class Decoration {
       type: json["type"],
       nature: json["nature"],
       state: json["state"],// TODO parse dual type
-      comment: json["comment"],
+      comments: json["comments"],
       photo: json["photo"]
     );
   }
@@ -311,14 +311,14 @@ class Electricity {
     this.type,
     this.quantity,
     this.state,
-    this.comment,
+    this.comments,
     this.photo// TODO
   });
 
   String type;
   int quantity;
   String state;
-  String comment;
+  String comments;
   int photo;
 
   String getIndex(int index) {
@@ -330,7 +330,7 @@ class Electricity {
       case 2:
         return state;
       case 3:
-        return comment;
+        return comments;
       case 4:
         return photo.toString();
     }
@@ -343,7 +343,7 @@ class Electricity {
       type: json["type"],
       quantity: json["quantity"],
       state: json["state"],// TODO parse dual type
-      comment: json["comment"],
+      comments: json["comments"],
       photo: json["photo"]
     );
   }
@@ -354,7 +354,7 @@ class Equipment {
     this.type,
     this.brandOrObject,
     this.state,
-    this.comment,
+    this.comments,
     this.quantity,
     this.photo// TODO
   });
@@ -362,7 +362,7 @@ class Equipment {
   String type;
   String brandOrObject;
   dynamic state;
-  String comment;
+  String comments;
   int quantity;
   int photo;
 
@@ -375,7 +375,7 @@ class Equipment {
       case 2:
         return state + ' / ' + quantity.toString();
       case 3:
-        return comment;
+        return comments;
       case 4:
         return photo.toString();
     }
@@ -389,7 +389,7 @@ class Equipment {
       brandOrObject: json["brandOrObject"],
       state: json["state"],
       quantity: json["quantity"],
-      comment: json["comment"],
+      comments: json["comments"],
       photo: json["photo"]
     );
   }
@@ -397,17 +397,17 @@ class Equipment {
 
 class GeneralAspect {
   GeneralAspect({
-    this.comment,
+    this.comments,
     this.photo// TODO
   });
 
-  String comment;
+  String comments;
   int photo;
   
   factory GeneralAspect.fromJSON(Map<String, dynamic> json) {
 
     return GeneralAspect(
-      comment: json["comment"],
+      comments: json["comments"],
       photo: json["photo"]
     );
   }
@@ -539,8 +539,8 @@ class Insurance {
     return Insurance(
       company: json["company"],
       number: json["number"],
-      dateStart: DateTime.parse(json["dateStart"]),
-      dateEnd: DateTime.parse(json["dateEnd"])
+      dateStart: json["dateStart"] != null ? DateTime.parse(json["dateStart"]) : null,
+      dateEnd: json["dateEnd"] != null ? DateTime.parse(json["dateEnd"]) : null
     );
   }
 }

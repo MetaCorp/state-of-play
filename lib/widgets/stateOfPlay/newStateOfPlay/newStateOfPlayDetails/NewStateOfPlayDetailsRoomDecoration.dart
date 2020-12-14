@@ -55,9 +55,9 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
             onChanged: (value) => widget.decoration.nature = value,
           ),
           TextField(
-            controller: TextEditingController(text: widget.decoration.comment),
+            controller: TextEditingController(text: widget.decoration.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.decoration.comment = value,
+            onChanged: (value) => widget.decoration.comments = value,
           )
         ]
       ),
