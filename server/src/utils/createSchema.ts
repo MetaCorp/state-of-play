@@ -25,6 +25,7 @@ import { DecorationResolver } from "../modules/decoration/DecorationResolver";
 import { ElectricityResolver } from "../modules/electricity/ElectricityResolver";
 import { EquipmentResolver } from "../modules/equipment/EquipmentResolver";
 import { MeterResolver } from "../modules/meter/MeterResolver";
+import { KeyResolver } from "../modules/key/KeyResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -52,7 +53,8 @@ export const createSchema = () =>
       DecorationResolver,
       ElectricityResolver,
       EquipmentResolver,
-      MeterResolver
+      MeterResolver,
+      KeyResolver
     ],
     // @ts-ignore
     authChecker: ({ context }) => {

@@ -227,7 +227,7 @@ class StateOfPlay {
       property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
       rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
       meters: json["meters"] != null ? (jsonDecode(json["meters"]) as List).map((meter) => Meter.fromJSON(meter)).toList() : null,
-      // keys: (json["keys"] as List).map((key) => Key.fromJSON(key)).toList(),
+      keys: json["keys"] != null ? (jsonDecode(json["keys"]) as List).map((key) => Key.fromJSON(key)).toList() : null,
       // insurance: Insurance.fromJSON(json["insurance"]),
       // comment: json["comment"],
       // reserve: json["reserve"],
@@ -484,17 +484,17 @@ class Meter {
 }
 
 class Key {
-  const Key({
+  Key({
     this.type,
     this.count,
     this.comments,
     this.photo// TODO
   });
 
-  final String type;
-  final int count;
-  final String comments;
-  final int photo;
+  String type;
+  int count;
+  String comments;
+  int photo;
 
   String getIndex(int index) {
     switch (index) {
@@ -522,17 +522,17 @@ class Key {
 }
 
 class Insurance {
-  const Insurance({
+  Insurance({
     this.company,
     this.number,
     this.dateStart,
     this.dateEnd
   });
 
-  final String company;
-  final String number;
-  final DateTime dateStart;
-  final DateTime dateEnd;
+  String company;
+  String number;
+  DateTime dateStart;
+  DateTime dateEnd;
 
   factory Insurance.fromJSON(Map<String, dynamic> json) {
 

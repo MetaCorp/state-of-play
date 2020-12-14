@@ -25,11 +25,13 @@ class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
         meters: widget.stateOfPlay.meters,
       ),
     }, {
-      "title": "Commentaires / Réservers",
+      "title": "Commentaires / Réserves",
       "route": NewStateOfPlayMiscComments(),
     }, {
       "title": "Clés",
-      "route": NewStateOfPlayMiscKeys(),
+      "route": NewStateOfPlayMiscKeys(
+        keys: widget.stateOfPlay.keys
+      ),
     }, {
       "title": "Assurance",
       "route": NewStateOfPlayMiscInsurance(),
