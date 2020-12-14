@@ -6,7 +6,7 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayD
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMisc.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
 // import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayProperty.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignature.dart';
 
 typedef SaveCallback = void Function();
 
@@ -50,6 +50,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         stateOfPlay: widget.stateOfPlay,
       ),
       NewStateOfPlaySignature(
+        owner: widget.stateOfPlay.owner,
+        representative: widget.stateOfPlay.representative,
+        tenants: widget.stateOfPlay.tenants,        
         onSave: widget.onSave
       )
     ];

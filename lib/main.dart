@@ -64,8 +64,15 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
   ValueNotifier<GraphQLClient> client;
+
+  deleteToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("token",null);
+  }
+
   @override
   void initState() {
+    //deleteToken();
     final HttpLink httpLink = HttpLink(
       uri: 'http://$host:4000/graphql',
     );
@@ -92,10 +99,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Force Device Orientation 
     //https://stackoverflow.com/questions/49418332/flutter-how-to-prevent-device-orientation-changes-and-force-portrait
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
     return
       GraphQLProvider(
         client: client,
