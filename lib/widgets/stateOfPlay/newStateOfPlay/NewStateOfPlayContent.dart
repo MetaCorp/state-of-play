@@ -47,6 +47,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       ),
       NewStateOfPlayMisc(),
       NewStateOfPlaySignature(
+        owner: widget.stateOfPlay.owner,
+        representative: widget.stateOfPlay.representative,
+        tenants: widget.stateOfPlay.tenants,        
         onSave: widget.onSave
       )
     ];

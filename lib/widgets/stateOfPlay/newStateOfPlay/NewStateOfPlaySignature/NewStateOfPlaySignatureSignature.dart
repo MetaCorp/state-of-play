@@ -13,7 +13,7 @@ class NewStateOfPlaySignatureSignature extends StatefulWidget {
   _NewStateOfPlaySignatureSignatureState createState() => new _NewStateOfPlaySignatureSignatureState();
 }
 
-// TODO Get liste interlocuteurs pour les signatures et locataires pour misa à jour adresse
+// TODO Get liste interlocuteurs pour les signatures et locataires pour mise à jour adresse
 class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatureSignature> {
 
   final SignatureController _controller = SignatureController(
