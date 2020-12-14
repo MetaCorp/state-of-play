@@ -143,7 +143,8 @@ export class StateOfPlayResolver {
 			tenants: tenants,
 			property: property,
 			out: data.out,
-			rooms: JSON.stringify(data.rooms)
+			rooms: JSON.stringify(data.rooms),
+			meters: JSON.stringify(data.meters)
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -225,6 +226,7 @@ export class StateOfPlayResolver {
 		stateOfPlay2.tenants = tenants
 		stateOfPlay2.property = property
 		stateOfPlay2.rooms = JSON.stringify(data.rooms)
+		stateOfPlay2.meters = JSON.stringify(data.meters)
 
 		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 

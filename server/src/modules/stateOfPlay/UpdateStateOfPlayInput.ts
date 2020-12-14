@@ -54,6 +54,18 @@ class UpdateStateOfPlayEquipmentInput {
 }
 
 @InputType()
+class UpdateStateOfPlayMeterInput {
+  @Field()
+  type: String
+  
+  @Field()
+  location: String
+
+  @Field()
+  index: Number
+}
+
+@InputType()
 class UpdateStateOfPlayRoomInput {
     @Field()
     name: String
@@ -87,4 +99,7 @@ export class UpdateStateOfPlayInput {
 
     @Field(() => [UpdateStateOfPlayRoomInput])
     rooms: [UpdateStateOfPlayRoomInput]
+  
+    @Field(() => [UpdateStateOfPlayMeterInput])
+    meters: [UpdateStateOfPlayMeterInput]
 }

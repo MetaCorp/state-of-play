@@ -226,7 +226,7 @@ class StateOfPlay {
       // entryDate: DateTime.parse(json["entryDate"]),
       property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
       rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
-      // meters: (json["meters"] as List).map((meter) => Meter.fromJSON(meter)).toList(),
+      meters: json["meters"] != null ? (jsonDecode(json["meters"]) as List).map((meter) => Meter.fromJSON(meter)).toList() : null,
       // keys: (json["keys"] as List).map((key) => Key.fromJSON(key)).toList(),
       // insurance: Insurance.fromJSON(json["insurance"]),
       // comment: json["comment"],
@@ -476,7 +476,7 @@ class Meter {
     return Meter(
       type: json["type"],
       location: json["location"],
-      dateOfSuccession: DateTime.parse(json["dateOfSuccession"]),
+      dateOfSuccession: json["dateOfSuccession"] != null ? DateTime.parse(json["dateOfSuccession"]) : null,
       index: json["index"],
       photo: json["photo"]
     );

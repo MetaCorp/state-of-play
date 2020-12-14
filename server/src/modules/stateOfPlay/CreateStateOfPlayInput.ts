@@ -55,6 +55,19 @@ class CreateStateOfPlayEquipmentInput {
 }
 
 @InputType()
+class CreateStateOfPlayMeterInput {
+  @Field()
+  type: String
+  
+  @Field()
+  location: String
+
+  @Field()
+  index: Number
+}
+
+
+@InputType()
 class CreateStateOfPlayRoomInput {
   @Field()
   name: String
@@ -88,4 +101,7 @@ export class CreateStateOfPlayInput {// TODO
 
   @Field(() => [CreateStateOfPlayRoomInput])
   rooms: [CreateStateOfPlayRoomInput]
+  
+  @Field(() => [CreateStateOfPlayMeterInput])
+  meters: [CreateStateOfPlayMeterInput]
 }

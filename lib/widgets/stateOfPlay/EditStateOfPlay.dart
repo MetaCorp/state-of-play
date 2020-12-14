@@ -96,6 +96,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       lastName
                     }
                     rooms
+                    meters
                   }
                 }
               '''),
@@ -183,6 +184,11 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "state": equipment.state,
                           "comment": equipment.comment
                         }).toList()
+                      }).toList(),
+                      "meters": _stateOfPlay.meters.map((meter) => {
+                        "type": meter.type,
+                        "location": meter.location,
+                        "index": meter.index,// TODO : complete data
                       }).toList()
                     }
                   });

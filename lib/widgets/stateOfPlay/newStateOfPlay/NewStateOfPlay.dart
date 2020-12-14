@@ -317,6 +317,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "state": equipment.state,
                     "comment": equipment.comment
                   }).toList()
+                }).toList(),
+                "meters": _stateOfPlay.meters.map((meter) => {
+                  "type": meter.type,
+                  "location": meter.location,
+                  "index": meter.index,// TODO : complete data
                 }).toList()
               }
             });
