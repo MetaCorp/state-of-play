@@ -24,6 +24,7 @@ import { RoomResolver } from "../modules/room/RoomResolver";
 import { DecorationResolver } from "../modules/decoration/DecorationResolver";
 import { ElectricityResolver } from "../modules/electricity/ElectricityResolver";
 import { EquipmentResolver } from "../modules/equipment/EquipmentResolver";
+import { MeterResolver } from "../modules/meter/MeterResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -50,7 +51,8 @@ export const createSchema = () =>
       RoomResolver,
       DecorationResolver,
       ElectricityResolver,
-      EquipmentResolver
+      EquipmentResolver,
+      MeterResolver
     ],
     // @ts-ignore
     authChecker: ({ context }) => {

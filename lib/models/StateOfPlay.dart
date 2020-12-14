@@ -441,7 +441,7 @@ class Room {
 }
 
 class Meter {
-  const Meter({
+  Meter({
     this.type,
     this.location,
     this.dateOfSuccession,
@@ -449,11 +449,11 @@ class Meter {
     this.photo// TODO
   });
 
-  final String type;
-  final String location;
-  final DateTime dateOfSuccession;
-  final int index;
-  final int photo;
+  String type;
+  String location;
+  DateTime dateOfSuccession;
+  int index;
+  int photo;
 
   String getIndex(int index) {
     switch (index) {
