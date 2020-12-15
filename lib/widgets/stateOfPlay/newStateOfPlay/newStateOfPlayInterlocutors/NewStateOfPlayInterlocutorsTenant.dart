@@ -20,13 +20,28 @@ class NewStateOfPlayInterlocutorsTenant extends StatelessWidget {
           children: [
             TextField(
               controller: TextEditingController(text: tenant.firstName),
-              decoration: InputDecoration(hintText: 'Prénom'),
+              decoration: InputDecoration(labelText: 'Prénom'),
               onChanged: (value) => tenant.firstName = value,
             ),
             TextField(
               controller: TextEditingController(text: tenant.lastName),
-              decoration: InputDecoration(hintText: 'Nom'),
+              decoration: InputDecoration(labelText: 'Nom'),
               onChanged: (value) => tenant.lastName = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: tenant.address),
+              decoration: InputDecoration(labelText: 'Adresse'),
+              onChanged: (value) => tenant.address = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: tenant.postalCode),
+              decoration: InputDecoration(labelText: 'Code postal'),
+              onChanged: (value) => tenant.postalCode = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: tenant.city),
+              decoration: InputDecoration(labelText: 'Ville'),
+              onChanged: (value) => tenant.city = value,
             ),
             RaisedButton(
               child: Text('Sauvegarder'),

@@ -52,15 +52,15 @@ class _NewPropertyState extends State<NewProperty> {
             children: [
               TextField(
                 controller: _addressController,
-                decoration: InputDecoration(hintText: 'Adresse'),
+                decoration: InputDecoration(labelText: 'Adresse'),
               ),
               TextField(
                 controller: _postalCodeController,
-                decoration: InputDecoration(hintText: 'Code postal'),
+                decoration: InputDecoration(labelText: 'Code postal'),
               ),
               TextField(
                 controller: _cityController,
-                decoration: InputDecoration(hintText: 'Ville'),
+                decoration: InputDecoration(labelText: 'Ville'),
               ),
               RaisedButton(
                 child: Text('Sauvegarder'),

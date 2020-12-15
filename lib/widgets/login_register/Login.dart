@@ -71,13 +71,13 @@ class _LoginState extends State<Login> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  hintText: 'Email'
+                  labelText: 'Email'
                 ),
               ),
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  hintText: 'Password'
+                  labelText: 'Password'
                 ),
               ),
               RaisedButton(

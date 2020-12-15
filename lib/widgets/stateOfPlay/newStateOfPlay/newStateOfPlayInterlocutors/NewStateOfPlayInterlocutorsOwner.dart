@@ -20,13 +20,28 @@ class NewStateOfPlayInterlocutorsOwner extends StatelessWidget {
           children: [
             TextField(
               controller: TextEditingController(text: owner.firstName),
-              decoration: InputDecoration(hintText: 'Prénom'),
+              decoration: InputDecoration(labelText: 'Prénom'),
               onChanged: (value) => owner.firstName = value,
             ),
             TextField(
               controller: TextEditingController(text: owner.lastName),
-              decoration: InputDecoration(hintText: 'Nom'),
+              decoration: InputDecoration(labelText: 'Nom'),
               onChanged: (value) => owner.lastName = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: owner.address),
+              decoration: InputDecoration(labelText: 'Adresse'),
+              onChanged: (value) => owner.address = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: owner.postalCode),
+              decoration: InputDecoration(labelText: 'Code postal'),
+              onChanged: (value) => owner.postalCode = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: owner.city),
+              decoration: InputDecoration(labelText: 'Ville'),
+              onChanged: (value) => owner.city = value,
             ),
             RaisedButton(
               child: Text('Sauvegarder'),

@@ -13,4 +13,16 @@ export class CreateRepresentativeInput {
   @Field()
   @Length(1, 255)
   lastName: string;
+
+  @Field()
+  @Length(1, 255)
+  address: string;
+
+  @Field()
+  @Length(3, 10)
+  postalCode: string;
+
+  @Field()
+  @Length(1, 255)
+  city: string;
 }

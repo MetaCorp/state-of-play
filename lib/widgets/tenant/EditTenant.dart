@@ -16,6 +16,9 @@ class _EditTenantState extends State<EditTenant> {
 
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _postalCodeController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,9 @@ class _EditTenantState extends State<EditTenant> {
             id
             firstName
             lastName
+            address
+            postalCode
+            city
           }
         }
         '''),
@@ -42,9 +48,12 @@ class _EditTenantState extends State<EditTenant> {
         FetchMore fetchMore,
       }) {
 
-        if (_lastNameController.text == "") {
+        if (result.data != null && _lastNameController.text == "") {
           _firstNameController.text = result.data["tenant"]["firstName"];
           _lastNameController.text = result.data["tenant"]["lastName"];
+          _addressController.text = result.data["tenant"]["address"];
+          _postalCodeController.text = result.data["tenant"]["postalCode"];
+          _cityController.text = result.data["tenant"]["city"];
         }
         
         return Mutation(
@@ -76,11 +85,23 @@ class _EditTenantState extends State<EditTenant> {
                 children: [
                   TextField(
                     controller: _firstNameController,
-                    decoration: InputDecoration(hintText: 'Prénom'),
+                    decoration: InputDecoration(labelText: 'Prénom'),
                   ),
                   TextField(
                     controller: _lastNameController,
-                    decoration: InputDecoration(hintText: 'Nom'),
+                    decoration: InputDecoration(labelText: 'Nom'),
+                  ),
+                  TextField(
+                    controller: _addressController,
+                    decoration: InputDecoration(labelText: 'Adresse'),
+                  ),
+                  TextField(
+                    controller: _postalCodeController,
+                    decoration: InputDecoration(labelText: 'Code postal'),
+                  ),
+                  TextField(
+                    controller: _cityController,
+                    decoration: InputDecoration(labelText: 'Ville'),
                   ),
                   RaisedButton(
                     child: Text('Sauvegarder'),
@@ -90,6 +111,9 @@ class _EditTenantState extends State<EditTenant> {
                           "id": result.data["tenant"]["id"],
                           "firstName": _firstNameController.text,
                           "lastName": _lastNameController.text,
+                          "address": _addressController.text,
+                          "postalCode": _postalCodeController.text,
+                          "city": _cityController.text,
                         }
                       });
                       QueryResult networkResult = await mutationResult.networkResult;

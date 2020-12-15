@@ -7,10 +7,10 @@ typedef PressAddCallback = void Function();
 typedef PressRemoveCallback = void Function();
 
 class DoubleButton extends StatelessWidget {
-  const DoubleButton({ Key key, this.text, this.hintText, this.onPress, this.onPressAdd, this.onPressRemove }) : super(key: key);
+  const DoubleButton({ Key key, this.text, this.labelText, this.onPress, this.onPressAdd, this.onPressRemove }) : super(key: key);
 
   final String text;
-  final String hintText;
+  final String labelText;
   final PressCallback onPress;
   final PressAddCallback onPressAdd;
   final PressRemoveCallback onPressRemove;
@@ -21,7 +21,7 @@ class DoubleButton extends StatelessWidget {
       children: [
         RaisedButton(
           child: Text(
-            text != null ? text : hintText,
+            text != null ? text : labelText,
             style: TextStyle(
               color: text != null ? Colors.black : Colors.black
             ),

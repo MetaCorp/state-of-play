@@ -43,7 +43,7 @@ class _EditPropertyState extends State<EditProperty> {
         FetchMore fetchMore,
       }) {
 
-        if (_addressController.text == "") {
+        if (result.data != null && _addressController.text == "") {
           _addressController.text = result.data["property"]["address"];
           _postalCodeController.text = result.data["property"]["postalCode"];
           _cityController.text = result.data["property"]["city"];
@@ -78,15 +78,15 @@ class _EditPropertyState extends State<EditProperty> {
                 children: [
                   TextField(
                     controller: _addressController,
-                    decoration: InputDecoration(hintText: 'Adresse'),
+                    decoration: InputDecoration(labelText: 'Adresse'),
                   ),
                   TextField(
                     controller: _postalCodeController,
-                    decoration: InputDecoration(hintText: 'Code postal'),
+                    decoration: InputDecoration(labelText: 'Code postal'),
                   ),
                   TextField(
                     controller: _cityController,
-                    decoration: InputDecoration(hintText: 'Ville'),
+                    decoration: InputDecoration(labelText: 'Ville'),
                   ),
                   RaisedButton(
                     child: Text('Sauvegarder'),

@@ -130,6 +130,9 @@ export class StateOfPlayResolver {
 			owner = await Owner.create({
 				firstName: data.owner.firstName,
 				lastName: data.owner.lastName,
+				address: data.property.address,
+				postalCode: data.property.postalCode,
+				city: data.property.city,
 				user: user,
 			}).save();
 		}
@@ -141,6 +144,9 @@ export class StateOfPlayResolver {
 			representative = await Representative.create({
 				firstName: data.representative.firstName,
 				lastName: data.representative.lastName,
+				address: data.property.address,
+				postalCode: data.property.postalCode,
+				city: data.property.city,
 				user: user,
 			}).save();
 		}
@@ -154,6 +160,9 @@ export class StateOfPlayResolver {
 				tenant = await Tenant.create({
 					firstName: data.tenants[i].firstName,
 					lastName: data.tenants[i].lastName,
+					address: data.property.address,
+					postalCode: data.property.postalCode,
+					city: data.property.city,
 					user: user,
 				}).save();
 			}
@@ -265,6 +274,9 @@ export class StateOfPlayResolver {
 			owner = await Owner.create({
 				firstName: data.owner.firstName,
 				lastName: data.owner.lastName,
+				address: data.owner.address,
+				postalCode: data.owner.postalCode,
+				city: data.owner.city,
 				user: user,
 			}).save();
 		}
@@ -276,6 +288,9 @@ export class StateOfPlayResolver {
 			representative = await Representative.create({
 				firstName: data.representative.firstName,
 				lastName: data.representative.lastName,
+				address: data.representative.address,
+				postalCode: data.representative.postalCode,
+				city: data.representative.city,
 				user: user,
 			}).save();
 		}
@@ -289,6 +304,9 @@ export class StateOfPlayResolver {
 				tenant = await Tenant.create({
 					firstName: data.tenants[i].firstName,
 					lastName: data.tenants[i].lastName,
+					address: data.tenants[i].address,
+					postalCode: data.tenants[i].postalCode,
+					city: data.tenants[i].city,
 					user: user,
 				}).save();
 			}

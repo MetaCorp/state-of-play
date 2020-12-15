@@ -74,25 +74,25 @@ class _RegisterState extends State<Register> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  hintText: 'Email'
+                  labelText: 'Email'
                 ),
               ),
               TextField(
                 controller: _firstNameController,
                 decoration: InputDecoration(
-                  hintText: 'Prénom'
+                  labelText: 'Prénom'
                 ),
               ),
               TextField(
                 controller: _lastNameController,
                 decoration: InputDecoration(
-                  hintText: 'Nom'
+                  labelText: 'Nom'
                 ),
               ),
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  hintText: 'Password'
+                  labelText: 'Password'
                 ),
               ),
               RaisedButton(

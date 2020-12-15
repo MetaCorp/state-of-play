@@ -18,6 +18,18 @@ export class Owner extends BaseEntity {
   @Field()
   @Column()
   lastName: String;
+  
+  @Field()
+  @Column()
+  address: String;
+  
+  @Field()
+  @Column()
+  postalCode: String;
+
+  @Field()
+  @Column()
+  city: String;
 
   @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.owner)

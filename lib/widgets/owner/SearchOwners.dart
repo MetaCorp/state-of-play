@@ -91,7 +91,7 @@ class _SearchOwnersState extends State<SearchOwners> {
             title: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Entrez votre recherche'
+                labelText: 'Entrez votre recherche'
               ),
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(

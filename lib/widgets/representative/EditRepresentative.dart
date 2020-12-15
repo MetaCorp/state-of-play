@@ -16,6 +16,10 @@ class _EditRepresentativeState extends State<EditRepresentative> {
 
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _postalCodeController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,9 @@ class _EditRepresentativeState extends State<EditRepresentative> {
             id
             firstName
             lastName
+            address
+            postalCode
+            city
           }
         }
         '''),
@@ -42,9 +49,12 @@ class _EditRepresentativeState extends State<EditRepresentative> {
         FetchMore fetchMore,
       }) {
 
-        if (_lastNameController.text == "") {
+        if (result.data != null && _lastNameController.text == "") {
           _firstNameController.text = result.data["representative"]["firstName"];
           _lastNameController.text = result.data["representative"]["lastName"];
+          _addressController.text = result.data["representative"]["address"];
+          _postalCodeController.text = result.data["representative"]["postalCode"];
+          _cityController.text = result.data["representative"]["city"];
         }
         
         return Mutation(
@@ -76,11 +86,23 @@ class _EditRepresentativeState extends State<EditRepresentative> {
                 children: [
                   TextField(
                     controller: _firstNameController,
-                    decoration: InputDecoration(hintText: 'Prénom'),
+                    decoration: InputDecoration(labelText: 'Prénom'),
                   ),
                   TextField(
                     controller: _lastNameController,
-                    decoration: InputDecoration(hintText: 'Nom'),
+                    decoration: InputDecoration(labelText: 'Nom'),
+                  ),
+                  TextField(
+                    controller: _addressController,
+                    decoration: InputDecoration(labelText: 'Adresse'),
+                  ),
+                  TextField(
+                    controller: _postalCodeController,
+                    decoration: InputDecoration(labelText: 'Code postal'),
+                  ),
+                  TextField(
+                    controller: _cityController,
+                    decoration: InputDecoration(labelText: 'Ville'),
                   ),
                   RaisedButton(
                     child: Text('Sauvegarder'),
@@ -90,6 +112,9 @@ class _EditRepresentativeState extends State<EditRepresentative> {
                           "id": result.data["representative"]["id"],
                           "firstName": _firstNameController.text,
                           "lastName": _lastNameController.text,
+                          "address": _addressController.text,
+                          "postalCode": _postalCodeController.text,
+                          "city": _cityController.text,
                         }
                       });
                       QueryResult networkResult = await mutationResult.networkResult;

@@ -20,17 +20,17 @@ class NewStateOfPlayInterlocutorsProperty extends StatelessWidget {
           children: [
             TextField(
               controller: TextEditingController(text: property.address),
-              decoration: InputDecoration(hintText: 'Adresse'),
+              decoration: InputDecoration(labelText: 'Adresse'),
               onChanged: (value) => property.address = value,
             ),
             TextField(
               controller: TextEditingController(text: property.postalCode),
-              decoration: InputDecoration(hintText: 'Code postal'),
+              decoration: InputDecoration(labelText: 'Code postal'),
               onChanged: (value) => property.postalCode = value,
             ),
             TextField(
               controller: TextEditingController(text: property.city),
-              decoration: InputDecoration(hintText: 'Ville'),
+              decoration: InputDecoration(labelText: 'Ville'),
               onChanged: (value) => property.city = value,
             ),
             RaisedButton(

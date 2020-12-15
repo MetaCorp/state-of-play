@@ -30,7 +30,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         Text("Propriétaire"),
         DoubleButton(
           text: widget.stateOfPlay.owner.lastName != null ? widget.stateOfPlay.owner.firstName + ' ' + widget.stateOfPlay.owner.lastName : null,
-          hintText: "Sélectionner un propriétaire",
+          labelText: "Sélectionner un propriétaire",
           onPress: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchOwners(
               onSelect : (owner) {
@@ -58,7 +58,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         Text("Mandataire"),
         DoubleButton(
           text: widget.stateOfPlay.representative.lastName != null ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
-          hintText: "Sélectionner un mandataire",
+          labelText: "Sélectionner un mandataire",
           onPress: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
               onSelect : (representative) {
@@ -85,7 +85,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         Divider(),
         Text("Locataires"),
         DoubleButton(
-          hintText: "Selectionner un locataire",
+          labelText: "Selectionner un locataire",
           onPress: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchTenants(
               onSelect : (tenant) {
@@ -118,7 +118,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         Text("Propriété"),
         DoubleButton(
           text: widget.stateOfPlay.property.address != null ? widget.stateOfPlay.property.address + ', ' + widget.stateOfPlay.property.postalCode + ' ' + widget.stateOfPlay.property.city : null,
-          hintText: "Sélectionner une propriété",
+          labelText: "Sélectionner une propriété",
           onPress: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
               onSelect : (property) {

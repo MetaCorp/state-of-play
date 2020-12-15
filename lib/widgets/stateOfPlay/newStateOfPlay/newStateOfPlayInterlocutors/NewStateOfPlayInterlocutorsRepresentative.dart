@@ -20,13 +20,28 @@ class NewStateOfPlayInterlocutorsRepresentative extends StatelessWidget {
           children: [
             TextField(
               controller: TextEditingController(text: representative.firstName),
-              decoration: InputDecoration(hintText: 'Prénom'),
+              decoration: InputDecoration(labelText: 'Prénom'),
               onChanged: (value) => representative.firstName = value,
             ),
             TextField(
               controller: TextEditingController(text: representative.lastName),
-              decoration: InputDecoration(hintText: 'Nom'),
+              decoration: InputDecoration(labelText: 'Nom'),
               onChanged: (value) => representative.lastName = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: representative.address),
+              decoration: InputDecoration(labelText: 'Adresse'),
+              onChanged: (value) => representative.address = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: representative.postalCode),
+              decoration: InputDecoration(labelText: 'Code postal'),
+              onChanged: (value) => representative.postalCode = value,
+            ),
+            TextField(
+              controller: TextEditingController(text: representative.city),
+              decoration: InputDecoration(labelText: 'Ville'),
+              onChanged: (value) => representative.city = value,
             ),
             RaisedButton(
               child: Text('Sauvegarder'),

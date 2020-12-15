@@ -14,6 +14,9 @@ class _NewOwnerState extends State<NewOwner> {
 
   TextEditingController _firstNameController = TextEditingController(text: "Jean");
   TextEditingController _lastNameController = TextEditingController(text: "Propriétaire");
+  TextEditingController _addressController = TextEditingController(text: "42 rue du Test");
+  TextEditingController _postalCodeController = TextEditingController(text: "75001");
+  TextEditingController _cityController = TextEditingController(text: "Paris");
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,9 @@ class _NewOwnerState extends State<NewOwner> {
               id
               firstName
               lastName
+              address
+              postalCode
+              city
             }
           }
         '''), // this is the mutation string you just created
@@ -50,11 +56,23 @@ class _NewOwnerState extends State<NewOwner> {
             children: [
               TextField(
                 controller: _firstNameController,
-                decoration: InputDecoration(hintText: 'Prénom'),
+                decoration: InputDecoration(labelText: 'Prénom'),
               ),
               TextField(
                 controller: _lastNameController,
-                decoration: InputDecoration(hintText: 'Nom'),
+                decoration: InputDecoration(labelText: 'Nom'),
+              ),
+              TextField(
+                controller: _addressController,
+                decoration: InputDecoration(labelText: 'Adresse'),
+              ),
+              TextField(
+                controller: _postalCodeController,
+                decoration: InputDecoration(labelText: 'Code postal'),
+              ),
+              TextField(
+                controller: _cityController,
+                decoration: InputDecoration(labelText: 'Ville'),
               ),
               RaisedButton(
                 child: Text('Sauvegarder'),
@@ -63,12 +81,19 @@ class _NewOwnerState extends State<NewOwner> {
                     "data": {
                       "firstName": _firstNameController.text,
                       "lastName": _lastNameController.text,
+                      "address": _addressController.text,
+                      "postalCode": _postalCodeController.text,
+                      "city": _cityController.text,
                     }
                   });
                   QueryResult networkResult = await result.networkResult;
 
                   if (networkResult.hasException) {
-                  
+                    print('networkResult.hasException: ' + networkResult.hasException.toString());
+                    if (networkResult.exception.clientException != null)
+                      print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                    else
+                      print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                   }
                   else {
                     print('queryResult data: ' + networkResult.data.toString());

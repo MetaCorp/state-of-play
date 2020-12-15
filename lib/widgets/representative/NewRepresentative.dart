@@ -50,11 +50,11 @@ class _NewRepresentativeState extends State<NewRepresentative> {
             children: [
               TextField(
                 controller: _firstNameController,
-                decoration: InputDecoration(hintText: 'Prénom'),
+                decoration: InputDecoration(labelText: 'Prénom'),
               ),
               TextField(
                 controller: _lastNameController,
-                decoration: InputDecoration(hintText: 'Nom'),
+                decoration: InputDecoration(labelText: 'Nom'),
               ),
               RaisedButton(
                 child: Text('Sauvegarder'),

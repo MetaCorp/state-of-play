@@ -53,6 +53,9 @@ export class RepresentativeResolver {
 		const representative = await Representative.create({
             firstName: data.firstName,
             lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 			user: user,
 		}).save();
 
@@ -69,6 +72,9 @@ export class RepresentativeResolver {
 		const representative = await Representative.update(data.id, {
             firstName: data.firstName,
             lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 		})
 		console.log('updateRepresentative: ', representative)
 
