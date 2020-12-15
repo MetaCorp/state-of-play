@@ -4,7 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
-
 import 'package:uuid/uuid.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -345,6 +344,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   "type": meter.type,
                   "location": meter.location,
                   "index": meter.index,// TODO : complete data
+                }).toList(),
+                "keys": _stateOfPlay.keys.map((key) => {
+                  "type": key.type,
+                  "count": key.count,
+                  "comments": key.comments,// TODO : complete data
                 }).toList(),
                 "comments": _stateOfPlay.comments,
                 "reserve": _stateOfPlay.reserve,

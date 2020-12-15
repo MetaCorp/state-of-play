@@ -74,6 +74,18 @@ class CreateStateOfPlayMeterInput {
   index: Number
 }
 
+@InputType()
+class CreateStateOfPlayKeyInput {
+  @Field()
+  type: String
+
+  @Field()
+  comments: String
+
+  @Field()
+  count: Number
+}
+
 
 @InputType()
 class CreateStateOfPlayRoomInput {
@@ -121,6 +133,9 @@ export class CreateStateOfPlayInput {// TODO
   
   @Field(() => [CreateStateOfPlayMeterInput])
   meters: [CreateStateOfPlayMeterInput]
+
+  @Field(() => [CreateStateOfPlayKeyInput])
+  keys: [CreateStateOfPlayKeyInput]
 
   @Field(() => CreateStateOfPlayInsuranceInput)
   insurance: CreateStateOfPlayInsuranceInput

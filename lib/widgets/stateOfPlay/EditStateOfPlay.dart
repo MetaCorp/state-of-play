@@ -102,6 +102,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     }
                     rooms
                     meters
+                    keys
                     insurance
                     comments
                     reserve
@@ -203,6 +204,11 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "state": equipment.state,
                           "comments": equipment.comments
                         }).toList()
+                      }).toList(),
+                      "keys": _stateOfPlay.keys.map((key) => {
+                        "type": key.type,
+                        "count": key.count,
+                        "comments": key.comments,// TODO : complete data
                       }).toList(),
                       "meters": _stateOfPlay.meters.map((meter) => {
                         "type": meter.type,

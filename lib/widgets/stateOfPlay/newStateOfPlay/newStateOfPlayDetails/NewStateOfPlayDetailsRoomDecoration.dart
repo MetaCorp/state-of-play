@@ -3,8 +3,6 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 
-import 'dart:io';
-
 class ImageType {
   ImageType({ this.type, this.image });
 
@@ -44,13 +42,6 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
         image: widget.decoration.newImages[i]
       ));
     }
-
-    // widget.decoration.newImages.map((newImage) {
-    //   imagesType.add({
-    //     "type": "file",
-    //     "image": newImage
-    //   });
-    // });
 
     print('imagesType: ' + imagesType.toString());
 

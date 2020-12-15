@@ -74,6 +74,18 @@ class UpdateStateOfPlayMeterInput {
 }
 
 @InputType()
+class UpdateStateOfPlayKeyInput {
+  @Field()
+  type: String
+
+  @Field()
+  comments: String
+
+  @Field()
+  count: Number
+}
+
+@InputType()
 class UpdateStateOfPlayRoomInput {
     @Field()
     name: String
@@ -116,6 +128,9 @@ export class UpdateStateOfPlayInput {
 
     @Field(() => [UpdateStateOfPlayRoomInput])
     rooms: [UpdateStateOfPlayRoomInput]
+
+    @Field(() => [UpdateStateOfPlayKeyInput])
+    keys: [UpdateStateOfPlayKeyInput]
   
     @Field(() => [UpdateStateOfPlayMeterInput])
     meters: [UpdateStateOfPlayMeterInput]
