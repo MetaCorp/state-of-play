@@ -8,10 +8,19 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 // import { redis } from "./redis";
 // import { createAuthorsLoader } from "./utils/authorsLoader";
+// @ts-ignore
+import { graphqlUploadExpress } from 'graphql-upload';
 
 const jwt = require("express-jwt");
 
 import { createSchema } from "./utils/createSchema";
+
+import './utils/createAWS';
+
+// ID de clé d'accès :
+// AKIAJKVUXSE567WOAJTQ
+// Clé d'accès secrète :
+// S+ghdb9YhLNHcE3HhvwFdRwx5m7okpKOJmkqDr4h
 
 const main = async () => {
   await createConnection();
@@ -70,6 +79,8 @@ const main = async () => {
       }
     }
   );
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
   
   const schema = await createSchema();
 
@@ -110,6 +121,7 @@ const main = async () => {
       //   ]
       // }) as any
     ],
+    uploads: false // disable apollo upload property
   });
 
   apolloServer.applyMiddleware({ app, cors: false, path: '/graphql' });

@@ -17,8 +17,48 @@ import { Owner } from "../../entity/Owner";
 import { Representative } from "../../entity/Representative";
 import { Tenant } from "../../entity/Tenant";
 
+// @ts-ignore
+import { GraphQLUpload, FileUpload } from "graphql-upload";
+// import { createWriteStream } from "fs";
+
+import { uploadFile } from '../../utils/createAWS';
+
+
 @Resolver()
 export class StateOfPlayResolver {
+
+	@Mutation(() => [Boolean])
+	async multiUpload(@Arg('files', () => [GraphQLUpload]) files: [FileUpload]) {
+
+		console.log('files : ', files)
+
+		const locations = []
+
+		const mapFiles = async (file : any) => {
+			const { createReadStream, filename } = await file;
+			// const writableStream = createWriteStream(
+			// 	`${__dirname}/${filename}`,
+			// 	{ autoClose: true }
+			// );
+			
+			
+			// const promise = new Promise((res, rej) => {
+			// 	createReadStream()
+			// 		.pipe(writableStream)
+			// 		.on("finish", () => res(true))
+			// 		.on("error", () => rej(false));
+			// });
+
+			// await promise;
+
+			locations.push(await uploadFile(filename, createReadStream()))
+		}
+
+		const ret = files.map(mapFiles)
+
+		return ret
+	}
+
 	@Authorized()
 	@Query(() => [StateOfPlay])
 	// @ts-ignore
@@ -132,6 +172,20 @@ export class StateOfPlayResolver {
 			}).save();
 		}
 		console.log('property: ', property)
+
+		for (let i = 0; i < data.rooms.length; i++) {
+			
+			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
+				data.rooms[i].decorations[j];
+				
+				for (let k = 0; k < data.rooms[i].decorations[j].images.length; k++) {
+					const image = data.rooms[i].decorations[j].images[k];
+					const { createReadStream, filename } = await image;
+
+					data.rooms[i].decorations[j].images[k] = await uploadFile(filename, createReadStream())
+				}
+			}
+		}
 
 		const stateOfPlay = await StateOfPlay.create({
 			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)

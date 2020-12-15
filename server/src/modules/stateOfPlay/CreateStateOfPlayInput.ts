@@ -1,4 +1,6 @@
 import { Field, InputType } from "type-graphql";
+// @ts-ignore
+import { GraphQLUpload, FileUpload } from "graphql-upload";
 
 import { CreateOwnerInput } from "../owner/CreateOwnerInput";
 import { CreatePropertyInput } from "../property/CreatePropertyInput";
@@ -19,6 +21,9 @@ class CreateStateOfPlayDecorationInput {
   
   @Field()
   comments: String
+
+  @Field(() => [GraphQLUpload])
+  images: [FileUpload]
 }
 
 @InputType()

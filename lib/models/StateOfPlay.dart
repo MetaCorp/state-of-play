@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_tests/utils.dart';
 import 'package:intl/intl.dart';// DateFormat
 import 'dart:convert';
@@ -262,14 +264,16 @@ class Decoration {
     this.nature,
     this.state,
     this.comments,
-    this.photo// TODO
+    this.imageFiles,
+    this.images
   });
 
   String type;
   String nature;
   String state;
   String comments;
-  int photo;
+  List<File> imageFiles;
+  List<String> images;
 
   String getIndex(int index) {
     switch (index) {
@@ -282,19 +286,20 @@ class Decoration {
       case 3:
         return comments;
       case 4:
-        return photo.toString();
+        return "0";// TODO image indexes
     }
     return '';
   }
   
   factory Decoration.fromJSON(Map<String, dynamic> json) {
+    print('fromJSON images: ' + json["images"].toString());
 
     return Decoration(
       type: json["type"],
       nature: json["nature"],
       state: json["state"],// TODO parse dual type
       comments: json["comments"],
-      photo: json["photo"]
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }

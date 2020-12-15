@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
+
+import 'package:uuid/uuid.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayContent.dart';
@@ -18,6 +23,8 @@ class NewStateOfPlay extends StatefulWidget {
 }
 
 class _NewStateOfPlayState extends State<NewStateOfPlay> {
+
+  var uuid = Uuid(); 
   
   sop.StateOfPlay _stateOfPlay;
   
@@ -78,14 +85,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            photo: 0
+            imageFiles: []
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            photo: 0
+            imageFiles: []
           )
         ],
         electricities: [
@@ -135,14 +142,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            photo: 0
+            imageFiles: []
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            photo: 0
+            imageFiles: []
           )
         ],
         electricities: [
@@ -302,7 +309,18 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "type": decoration.type,
                     "nature": decoration.nature,
                     "state": decoration.state,
-                    "comments": decoration.comments
+                    "comments": decoration.comments,
+                    "images": decoration.imageFiles.map((imageFile) {
+                      print('imageFile');
+                      var byteData = imageFile.readAsBytesSync();
+
+                      return MultipartFile.fromBytes(
+                        'photo',
+                        byteData,
+                        filename: '${uuid.v1()}.jpg',
+                        contentType: MediaType("image", "jpg"),
+                      );
+                    }).toList()
                   }).toList(),
                   "electricities": room.electricities.map((electricity) => {
                     "type": electricity.type,

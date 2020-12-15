@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/utils.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 
 class NewStateOfPlayDetailsRoomDecoration extends StatefulWidget {
   NewStateOfPlayDetailsRoomDecoration({ Key key, this.decoration, this.roomName }) : super(key: key);
@@ -19,7 +20,8 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   @override
   Widget build(BuildContext context) {
 
-    // print('decoration.state: ' + widget.decoration.state);
+    print('decoration.images: ' + widget.decoration.images.toString());
+    print('decoration.imageFiles: ' + widget.decoration.imageFiles.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -58,6 +60,16 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
             controller: TextEditingController(text: widget.decoration.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
             onChanged: (value) => widget.decoration.comments = value,
+          ),
+          MyImagePicker(
+            onSelect: (imageFile) {
+              widget.decoration.imageFiles.add(imageFile);
+              setState(() { });
+            },
+          ),
+          ImageList(
+            images: widget.decoration.images != null ? widget.decoration.images : widget.decoration.imageFiles,
+            type: widget.decoration.images != null ? "network" : "file",
           )
         ]
       ),
