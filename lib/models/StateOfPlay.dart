@@ -187,7 +187,6 @@ class StateOfPlay {
     this.reserve,
     this.city,
     this.date,
-    this.photos
   });
 
   String id;
@@ -215,8 +214,6 @@ class StateOfPlay {
   String city;
   DateTime date;
 
-  List<String> photos;
-
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
@@ -235,7 +232,6 @@ class StateOfPlay {
       reserve: json["reserve"],
       // city: json["city"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
-      // photos: ??? TODO
     );
   }
 }
@@ -318,14 +314,16 @@ class Electricity {
     this.quantity,
     this.state,
     this.comments,
-    this.photo// TODO
+    this.newImages,
+    this.images
   });
 
   String type;
   int quantity;
   String state;
   String comments;
-  int photo;
+  List<File> newImages;
+  List<String> images;
 
   String getIndex(int index) {
     switch (index) {
@@ -338,7 +336,7 @@ class Electricity {
       case 3:
         return comments;
       case 4:
-        return photo.toString();
+        return "0";
     }
     return '';
   }
@@ -350,7 +348,8 @@ class Electricity {
       quantity: json["quantity"],
       state: json["state"],// TODO parse dual type
       comments: json["comments"],
-      photo: json["photo"]
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
@@ -362,7 +361,8 @@ class Equipment {
     this.state,
     this.comments,
     this.quantity,
-    this.photo// TODO
+    this.newImages,
+    this.images
   });
 
   String type;
@@ -370,7 +370,8 @@ class Equipment {
   dynamic state;
   String comments;
   int quantity;
-  int photo;
+  List<File> newImages;
+  List<String> images;
 
   String getIndex(int index) {
     switch (index) {
@@ -383,7 +384,7 @@ class Equipment {
       case 3:
         return comments;
       case 4:
-        return photo.toString();
+        return "0";
     }
     return '';
   }
@@ -396,7 +397,8 @@ class Equipment {
       state: json["state"],
       quantity: json["quantity"],
       comments: json["comments"],
-      photo: json["photo"]
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
@@ -452,14 +454,16 @@ class Meter {
     this.location,
     this.dateOfSuccession,
     this.index,
-    this.photo// TODO
+    this.newImages,
+    this.images
   });
 
   String type;
   String location;
   DateTime dateOfSuccession;
   int index;
-  int photo;
+  List<File> newImages;
+  List<String> images;
 
   String getIndex(int index) {
     switch (index) {
@@ -472,7 +476,7 @@ class Meter {
       case 3:
         return index.toString();
       case 4:
-        return photo.toString();
+        return "0";// TODO
     }
     return '';
   }
@@ -484,7 +488,8 @@ class Meter {
       location: json["location"],
       dateOfSuccession: json["dateOfSuccession"] != null ? DateTime.parse(json["dateOfSuccession"]) : null,
       index: json["index"],
-      photo: json["photo"]
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
@@ -494,13 +499,15 @@ class Key {
     this.type,
     this.count,
     this.comments,
-    this.photo// TODO
+    this.newImages,
+    this.images
   });
 
   String type;
   int count;
   String comments;
-  int photo;
+  List<File> newImages;
+  List<String> images;
 
   String getIndex(int index) {
     switch (index) {
@@ -511,7 +518,7 @@ class Key {
       case 2:
         return comments;
       case 3:
-        return photo.toString();
+        return "0";
     }
     return '';
   }
@@ -522,7 +529,8 @@ class Key {
       type: json["type"],
       count: json["count"],
       comments: json["comments"],
-      photo: json["photo"]
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }

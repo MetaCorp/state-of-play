@@ -195,25 +195,69 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "type": electricity.type,
                           "quantity": electricity.quantity,
                           "state": electricity.state,
-                          "comments": electricity.comments
+                          "comments": electricity.comments,
+                          "images": electricity.images,
+                          "newImages": electricity.newImages.map((imageFile) {
+                            var byteData = imageFile.readAsBytesSync();
+
+                            return MultipartFile.fromBytes(
+                              'photo',
+                              byteData,
+                              filename: '${uuid.v1()}.jpg',
+                              contentType: MediaType("image", "jpg"),
+                            );
+                          }).toList()
                         }).toList(),
                         "equipments": room.equipments.map((equipment) => {
                           "type": equipment.type,
                           "brandOrObject": equipment.brandOrObject,
                           "quantity": equipment.quantity,
                           "state": equipment.state,
-                          "comments": equipment.comments
+                          "comments": equipment.comments,
+                          "images": equipment.images,
+                          "newImages": equipment.newImages.map((imageFile) {
+                            var byteData = imageFile.readAsBytesSync();
+
+                            return MultipartFile.fromBytes(
+                              'photo',
+                              byteData,
+                              filename: '${uuid.v1()}.jpg',
+                              contentType: MediaType("image", "jpg"),
+                            );
+                          }).toList()
                         }).toList()
                       }).toList(),
                       "keys": _stateOfPlay.keys.map((key) => {
                         "type": key.type,
                         "count": key.count,
-                        "comments": key.comments,// TODO : complete data
+                        "comments": key.comments,// TODO : complete data,
+                        "images": key.images,
+                        "newImages": key.newImages.map((imageFile) {
+                          var byteData = imageFile.readAsBytesSync();
+
+                          return MultipartFile.fromBytes(
+                            'photo',
+                            byteData,
+                            filename: '${uuid.v1()}.jpg',
+                            contentType: MediaType("image", "jpg"),
+                          );
+                        }).toList()
                       }).toList(),
                       "meters": _stateOfPlay.meters.map((meter) => {
                         "type": meter.type,
                         "location": meter.location,
-                        "index": meter.index,// TODO : complete data
+                        "index": meter.index,// TODO : complete data,
+                        "images": meter.images,
+                        "newImages": meter.newImages.map((imageFile) {
+                          var byteData = imageFile.readAsBytesSync();
+
+                          return MultipartFile.fromBytes(
+                            'photo',
+                            byteData,
+                            filename: '${uuid.v1()}.jpg',
+                            contentType: MediaType("image", "jpg"),
+                          );
+                        }).toList()
                       }).toList(),
                       "comments": _stateOfPlay.comments,
                       "reserve": _stateOfPlay.reserve,

@@ -41,6 +41,12 @@ class UpdateStateOfPlayElectricityInput {
   
   @Field()
   comments: String
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -59,6 +65,12 @@ class UpdateStateOfPlayEquipmentInput {
   
   @Field()
   comments: String
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -71,6 +83,12 @@ class UpdateStateOfPlayMeterInput {
 
   @Field()
   index: Number
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -83,6 +101,12 @@ class UpdateStateOfPlayKeyInput {
 
   @Field()
   count: Number
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()

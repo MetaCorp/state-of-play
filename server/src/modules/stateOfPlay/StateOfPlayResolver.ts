@@ -184,6 +184,44 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+				
+				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
+					const image = data.rooms[i].electricities[j].newImages[k];
+					const { createReadStream, filename } = await image;
+
+					// @ts-ignore
+					data.rooms[i].electricities[j].images.push(await uploadFile(filename, createReadStream()))
+				}
+
+				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
+					const image = data.rooms[i].equipments[j].newImages[k];
+					const { createReadStream, filename } = await image;
+
+					// @ts-ignore
+					data.rooms[i].equipments[j].images.push(await uploadFile(filename, createReadStream()))
+				}
+			}
+		}
+
+		for (let i = 0; i < data.meters.length; i++) {
+				
+			for (let j = 0; j < data.meters[i].newImages.length; j++) {
+				const image = data.meters[i].newImages[j];
+				const { createReadStream, filename } = await image;
+
+				// @ts-ignore
+				data.meters[i].images.push(await uploadFile(filename, createReadStream()))
+			}
+		}
+
+		for (let i = 0; i < data.keys.length; i++) {
+				
+			for (let j = 0; j < data.keys[i].newImages.length; j++) {
+				const image = data.keys[i].newImages[j];
+				const { createReadStream, filename } = await image;
+
+				// @ts-ignore
+				data.keys[i].images.push(await uploadFile(filename, createReadStream()))
 			}
 		}
 
@@ -273,8 +311,6 @@ export class StateOfPlayResolver {
 		const stateOfPlay2 = await connection.getRepository(StateOfPlay).findOne(data.id);
 		if (!stateOfPlay2) return 0
 
-		
-		
 		for (let i = 0; i < data.rooms.length; i++) {
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
@@ -286,6 +322,44 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+				
+				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
+					const image = data.rooms[i].electricities[j].newImages[k];
+					const { createReadStream, filename } = await image;
+
+					// @ts-ignore
+					data.rooms[i].electricities[j].images.push(await uploadFile(filename, createReadStream()))
+				}
+
+				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
+					const image = data.rooms[i].equipments[j].newImages[k];
+					const { createReadStream, filename } = await image;
+
+					// @ts-ignore
+					data.rooms[i].equipments[j].images.push(await uploadFile(filename, createReadStream()))
+				}
+			}
+		}
+
+		for (let i = 0; i < data.meters.length; i++) {
+				
+			for (let j = 0; j < data.meters[i].newImages.length; j++) {
+				const image = data.meters[i].newImages[j];
+				const { createReadStream, filename } = await image;
+
+				// @ts-ignore
+				data.meters[i].images.push(await uploadFile(filename, createReadStream()))
+			}
+		}
+
+		for (let i = 0; i < data.keys.length; i++) {
+				
+			for (let j = 0; j < data.keys[i].newImages.length; j++) {
+				const image = data.keys[i].newImages[j];
+				const { createReadStream, filename } = await image;
+
+				// @ts-ignore
+				data.keys[i].images.push(await uploadFile(filename, createReadStream()))
 			}
 		}
 

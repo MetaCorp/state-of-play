@@ -42,6 +42,12 @@ class CreateStateOfPlayElectricityInput {
   
   @Field()
   comments: String
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -60,6 +66,12 @@ class CreateStateOfPlayEquipmentInput {
   
   @Field()
   comments: String
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -72,6 +84,12 @@ class CreateStateOfPlayMeterInput {
 
   @Field()
   index: Number
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -84,6 +102,12 @@ class CreateStateOfPlayKeyInput {
 
   @Field()
   count: Number
+
+  @Field(() => [String])
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  newImages: [FileUpload]
 }
 
 

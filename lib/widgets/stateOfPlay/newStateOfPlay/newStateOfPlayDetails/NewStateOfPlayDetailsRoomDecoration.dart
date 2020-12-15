@@ -28,8 +28,8 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   @override
   Widget build(BuildContext context) {
 
-    print('decoration.images: ' + widget.decoration.images.toString());
-    print('decoration.newImages: ' + widget.decoration.newImages.length.toString());
+    // print('decoration.images: ' + widget.decoration.images.toString());
+    // print('decoration.newImages: ' + widget.decoration.newImages.length.toString());
 
     List<ImageType> imagesType = widget.decoration.images.map((image) => ImageType(
       type: "network",
@@ -43,7 +43,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
       ));
     }
 
-    print('imagesType: ' + imagesType.toString());
+    // print('imagesType: ' + imagesType.toString());
 
 
     return Scaffold(

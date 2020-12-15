@@ -102,14 +102,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Neuf',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
           sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
         ],
         equipments: [
@@ -119,7 +121,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Bon',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
           sop.Equipment(
             type: 'Interrupteur',
@@ -127,12 +130,12 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Bon',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
         ],
         generalAspect: sop.GeneralAspect(
           comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-          photo: 0
         )
       ),
       sop.Room(
@@ -161,14 +164,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Neuf',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
           sop.Electricity(
             type: 'Prise électrique',
             quantity: 3,
             state: 'Neuf',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
         ],
         equipments: [
@@ -178,7 +183,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Bon',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
           sop.Equipment(
             type: 'Interrupteur',
@@ -186,7 +192,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             quantity: 1,
             state: 'Bon',
             comments: '',
-            photo: 0
+            images: [],
+            newImages: []
           ),
         ],
         generalAspect: sop.GeneralAspect(
@@ -201,7 +208,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         location: 'Cuisine',
         dateOfSuccession: DateTime.now(),
         index: 4567,
-        photo: 0
+        images: [],
+        newImages: []
       )
     ],
     keys: [
@@ -209,7 +217,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         type: 'Clé ascenceur',
         count: 1,
         comments: '',
-        photo: 0
+        images: [],
+        newImages: []
       )
     ],
     insurance: sop.Insurance(
@@ -330,25 +339,69 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "type": electricity.type,
                     "quantity": electricity.quantity,
                     "state": electricity.state,
-                    "comments": electricity.comments
+                    "comments": electricity.comments,
+                    "images": [],
+                    "newImages": electricity.newImages.map((imageFile) {
+                      var byteData = imageFile.readAsBytesSync();
+
+                      return MultipartFile.fromBytes(
+                        'photo',
+                        byteData,
+                        filename: '${uuid.v1()}.jpg',
+                        contentType: MediaType("image", "jpg"),
+                      );
+                    }).toList()
                   }).toList(),
                   "equipments": room.equipments.map((equipment) => {
                     "type": equipment.type,
                     "brandOrObject": equipment.brandOrObject,
                     "quantity": equipment.quantity,
                     "state": equipment.state,
-                    "comments": equipment.comments
+                    "comments": equipment.comments,
+                    "images": [],
+                    "newImages": equipment.newImages.map((imageFile) {
+                      var byteData = imageFile.readAsBytesSync();
+
+                      return MultipartFile.fromBytes(
+                        'photo',
+                        byteData,
+                        filename: '${uuid.v1()}.jpg',
+                        contentType: MediaType("image", "jpg"),
+                      );
+                    }).toList()
                   }).toList()
                 }).toList(),
                 "meters": _stateOfPlay.meters.map((meter) => {
                   "type": meter.type,
                   "location": meter.location,
-                  "index": meter.index,// TODO : complete data
+                  "index": meter.index,// TODO : complete data,
+                  "images": [],
+                  "newImages": meter.newImages.map((imageFile) {
+                    var byteData = imageFile.readAsBytesSync();
+
+                    return MultipartFile.fromBytes(
+                      'photo',
+                      byteData,
+                      filename: '${uuid.v1()}.jpg',
+                      contentType: MediaType("image", "jpg"),
+                    );
+                  }).toList()
                 }).toList(),
                 "keys": _stateOfPlay.keys.map((key) => {
                   "type": key.type,
                   "count": key.count,
-                  "comments": key.comments,// TODO : complete data
+                  "comments": key.comments,// TODO : complete data,
+                  "images": [],
+                  "newImages": key.newImages.map((imageFile) {
+                    var byteData = imageFile.readAsBytesSync();
+
+                    return MultipartFile.fromBytes(
+                      'photo',
+                      byteData,
+                      filename: '${uuid.v1()}.jpg',
+                      contentType: MediaType("image", "jpg"),
+                    );
+                  }).toList()
                 }).toList(),
                 "comments": _stateOfPlay.comments,
                 "reserve": _stateOfPlay.reserve,

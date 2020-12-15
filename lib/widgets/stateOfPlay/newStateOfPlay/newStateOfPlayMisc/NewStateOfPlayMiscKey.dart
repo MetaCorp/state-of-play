@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+
+class ImageType {
+  ImageType({ this.type, this.image });
+
+  String type;
+  dynamic image;
+}
 
 class NewStateOfPlayMiscKey extends StatefulWidget {
   NewStateOfPlayMiscKey({ Key key, this.sKey }) : super(key: key);
@@ -17,6 +26,18 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
 
     // print('sKey.state: ' + widget.sKey.state);
 
+    List<ImageType> imagesType = widget.sKey.images.map((image) => ImageType(
+      type: "network",
+      image: image
+    )).toList();
+
+    for (var i = 0; i < widget.sKey.newImages.length; i++) {
+      imagesType.add(ImageType(
+        type: "file",
+        image: widget.sKey.newImages[i]
+      ));
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Clés / ' + widget.sKey.type),
@@ -36,9 +57,18 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
             controller: TextEditingController(text: widget.sKey.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
             onChanged: (value) => widget.sKey.comments = value,
+          ),
+          MyImagePicker(
+            onSelect: (imageFile) {
+              widget.sKey.newImages.add(imageFile);
+              setState(() { });
+            },
+          ),
+          ImageList(
+            imagesType: imagesType,
           )
         ]
-      ),
+      )
     );
   }
 }

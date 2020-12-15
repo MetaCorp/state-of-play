@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+
+class ImageType {
+  ImageType({ this.type, this.image });
+
+  String type;
+  dynamic image;
+}
 
 class NewStateOfPlayDetailsRoomEquipment extends StatefulWidget {
   NewStateOfPlayDetailsRoomEquipment({ Key key, this.equipment, this.roomName }) : super(key: key);
@@ -19,6 +28,18 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
   Widget build(BuildContext context) {
 
     // print('equipment.state: ' + widget.equipment.state);
+
+    List<ImageType> imagesType = widget.equipment.images.map((image) => ImageType(
+      type: "network",
+      image: image
+    )).toList();
+
+    for (var i = 0; i < widget.equipment.newImages.length; i++) {
+      imagesType.add(ImageType(
+        type: "file",
+        image: widget.equipment.newImages[i]
+      ));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +78,15 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
             controller: TextEditingController(text: widget.equipment.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
             onChanged: (value) => widget.equipment.comments = value,
+          ),
+          MyImagePicker(
+            onSelect: (imageFile) {
+              widget.equipment.newImages.add(imageFile);
+              setState(() { });
+            },
+          ),
+          ImageList(
+            imagesType: imagesType,
           )
         ]
       ),

@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+
+class ImageType {
+  ImageType({ this.type, this.image });
+
+  String type;
+  dynamic image;
+}
 
 class NewStateOfPlayDetailsRoomElectricity extends StatefulWidget {
   NewStateOfPlayDetailsRoomElectricity({ Key key, this.electricity, this.roomName }) : super(key: key);
@@ -19,6 +28,19 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
   Widget build(BuildContext context) {
 
     // print('electricity.state: ' + widget.electricity.state);
+
+    List<ImageType> imagesType = widget.electricity.images.map((image) => ImageType(
+      type: "network",
+      image: image
+    )).toList();
+
+    for (var i = 0; i < widget.electricity.newImages.length; i++) {
+      imagesType.add(ImageType(
+        type: "file",
+        image: widget.electricity.newImages[i]
+      ));
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -52,6 +74,15 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
             controller: TextEditingController(text: widget.electricity.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),
             onChanged: (value) => widget.electricity.comments = value,
+          ),
+          MyImagePicker(
+            onSelect: (imageFile) {
+              widget.electricity.newImages.add(imageFile);
+              setState(() { });
+            },
+          ),
+          ImageList(
+            imagesType: imagesType,
           )
         ]
       ),
