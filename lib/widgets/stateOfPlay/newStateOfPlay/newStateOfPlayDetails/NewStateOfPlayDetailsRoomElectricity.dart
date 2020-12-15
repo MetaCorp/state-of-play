@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinbox/material.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
@@ -69,6 +71,12 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                 widget.electricity.state = value;
               });
             },
+          ),
+          SpinBox(
+            min: 1,
+            max: 100,
+            value: widget.electricity.quantity.toDouble(),
+            onChanged: (value) => widget.electricity.quantity = value.toInt(),
           ),
           TextField(
             controller: TextEditingController(text: widget.electricity.comments),

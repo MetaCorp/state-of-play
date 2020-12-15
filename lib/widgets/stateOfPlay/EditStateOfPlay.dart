@@ -229,7 +229,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       }).toList(),
                       "keys": _stateOfPlay.keys.map((key) => {
                         "type": key.type,
-                        "count": key.count,
+                        "quantity": key.quantity,
                         "comments": key.comments,// TODO : complete data,
                         "images": key.images,
                         "newImages": key.newImages.map((imageFile) {
@@ -264,7 +264,9 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       "insurance": {
                         "company": _stateOfPlay.insurance.company,
                         "number": _stateOfPlay.insurance.number
-                      }
+                      },
+                      "documentHeader": _stateOfPlay.documentHeader,
+                      "documentEnd": _stateOfPlay.documentEnd,
                     }
                   });
 

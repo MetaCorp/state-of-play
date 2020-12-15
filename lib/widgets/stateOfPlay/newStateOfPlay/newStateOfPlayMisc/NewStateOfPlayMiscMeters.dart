@@ -69,6 +69,8 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
                     type: meters[i],
                     index: 0,
                     location: "",// TODO : complete fields
+                    images: [],
+                    newImages: []
                   ));
                 }
                 setState(() { });

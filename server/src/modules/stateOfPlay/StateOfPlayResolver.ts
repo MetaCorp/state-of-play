@@ -240,7 +240,9 @@ export class StateOfPlayResolver {
 			keys: JSON.stringify(data.keys),
 			insurance: JSON.stringify(data.insurance),
 			comments: data.comments,
-			reserve: data.reserve
+			reserve: data.reserve,
+			documentHeader: data.documentHeader,
+			documentEnd: data.documentEnd,
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -380,6 +382,8 @@ export class StateOfPlayResolver {
 		stateOfPlay2.insurance = JSON.stringify(data.insurance)
 		stateOfPlay2.comments = data.comments
 		stateOfPlay2.reserve = data.reserve
+		stateOfPlay2.documentHeader = data.documentHeader
+		stateOfPlay2.documentEnd = data.documentEnd
 
 		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 

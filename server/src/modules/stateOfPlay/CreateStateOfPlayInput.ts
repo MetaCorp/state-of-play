@@ -101,7 +101,7 @@ class CreateStateOfPlayKeyInput {
   comments: String
 
   @Field()
-  count: Number
+  quantity: Number
 
   @Field(() => [String])
   images: [String]
@@ -169,4 +169,10 @@ export class CreateStateOfPlayInput {// TODO
   
   @Field()
   reserve: String
+
+  @Field()
+  documentHeader: String
+
+  @Field()
+  documentEnd: String
 }

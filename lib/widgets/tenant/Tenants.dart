@@ -60,7 +60,9 @@ class _OwnersState extends State<Tenants> {
             }
 
             if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
+              return Center(
+                child: CircularProgressIndicator()
+              );
             }
 
             List<sop.Tenant> tenants = (result.data["tenants"] as List).map((tenant) => sop.Tenant.fromJSON(tenant)).toList();

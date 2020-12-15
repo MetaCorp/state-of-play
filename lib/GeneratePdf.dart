@@ -156,7 +156,7 @@ pw.Widget _buildTableGeneralAspect({ List<String> tableHeaders, String roomName,
       1,
       (row) => List<String>.generate(
         tableHeaders.length,
-        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comment : generalAspect.photo.toString(),
+        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comments : generalAspect.photo.toString(),
       ),
     ),
   );
@@ -227,11 +227,11 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
     'Photo'
   ];
   
-  const tableGeneralAspectsHeaders = [
-    'Aspect Général',
-    'Commentaires',
-    'Photo'
-  ];
+  // const tableGeneralAspectsHeaders = [
+  //   'Aspect Général',
+  //   'Commentaires',
+  //   'Photo'
+  // ];
 
   return pw.Column(
     children: [
@@ -253,9 +253,9 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
         },
         primaryColor: primaryColor//PdfColors.pink400
       ) : Container(),
-      room.electricsAndHeatings != null ? _buildTable(
+      room.electricities != null ? _buildTable(
         tableHeaders: tableElectricAndHeatingHeaders,
-        array: room.electricsAndHeatings,
+        array: room.electricities,
         columnWidths: <int, pw.TableColumnWidth>{
           0: const pw.FixedColumnWidth(120),
           1: const pw.FixedColumnWidth(100),
@@ -277,17 +277,17 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
         },
         primaryColor: primaryColor
       ) : Container(),
-      room.generalAspect != null ? _buildTableGeneralAspect(
-        tableHeaders: tableGeneralAspectsHeaders,
-        roomName: room.name,
-        generalAspect: room.generalAspect,
-        columnWidths: <int, pw.TableColumnWidth>{
-          0: const pw.FixedColumnWidth(120),
-          1: const pw.FixedColumnWidth(300),
-          2: const pw.FixedColumnWidth(60),
-        },
-        primaryColor: primaryColor
-      ) : Container(),
+      // room.generalAspect != null ? _buildTableGeneralAspect(
+      //   tableHeaders: tableGeneralAspectsHeaders,
+      //   roomName: room.name,
+      //   generalAspect: room.generalAspect,
+      //   columnWidths: <int, pw.TableColumnWidth>{
+      //     0: const pw.FixedColumnWidth(120),
+      //     1: const pw.FixedColumnWidth(300),
+      //     2: const pw.FixedColumnWidth(60),
+      //   },
+      //   primaryColor: primaryColor
+      // ) : Container(),
     ]
   );
 }
@@ -822,7 +822,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 pw.Column(
                   children: [
                     _buildRoom(
-                      room: stateOfPlay.rooms[0],
+                      room: room,
                       primaryColor: stateOfPlay.rooms.indexOf(room) % 2 == 0 ? PdfColors.blue : PdfColors.pink,
                       logo: logoKitchen
                     ),
@@ -893,7 +893,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                           ),
                         ),
                         pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                        pw.Text(stateOfPlay.comment)
+                        pw.Text(stateOfPlay.comments)
                       ]
                   )
               ),
@@ -992,7 +992,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 ]
               ),
 
-              _buildPhotos(photos: stateOfPlay.photos, logo: logo)
+              // _buildPhotos(photos: stateOfPlay.photos, logo: logo) // TODO : ajouter les photos
     ]
   ));
 

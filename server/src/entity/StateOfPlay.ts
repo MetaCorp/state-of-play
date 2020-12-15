@@ -74,6 +74,14 @@ export class StateOfPlay extends BaseEntity {
   @Field(() => String)
   @Column()
   reserve: String
+  
+  @Field(() => String)
+  @Column()
+  documentHeader: String
+  
+  @Field(() => String)
+  @Column()
+  documentEnd: String
 
   @Field(() => Boolean)
   @Column()

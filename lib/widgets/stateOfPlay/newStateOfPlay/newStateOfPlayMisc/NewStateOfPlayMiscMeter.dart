@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/DateButton.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 
@@ -58,6 +59,19 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
             controller: TextEditingController(text: widget.meter.location),
             decoration: InputDecoration(labelText: 'Emplacement'),
             onChanged: (value) => widget.meter.location = value,
+          ),
+          TextField(
+            controller: TextEditingController(text: widget.meter.index.toString()),
+            decoration: InputDecoration(labelText: 'Index'),
+            onChanged: (value) => widget.meter.index = int.parse(value),
+            keyboardType: TextInputType.number
+          ),
+          DateButton(
+            value: widget.meter.dateOfSuccession,
+            onChange: (value) {
+              widget.meter.dateOfSuccession = value;
+              setState(() { });
+            },
           ),
           MyImagePicker(
             onSelect: (imageFile) {

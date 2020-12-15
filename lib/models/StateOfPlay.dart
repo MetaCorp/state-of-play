@@ -187,6 +187,8 @@ class StateOfPlay {
     this.reserve,
     this.city,
     this.date,
+    this.documentHeader,
+    this.documentEnd
   });
 
   String id;
@@ -214,6 +216,9 @@ class StateOfPlay {
   String city;
   DateTime date;
 
+  String documentHeader;
+  String documentEnd;
+
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
@@ -232,6 +237,8 @@ class StateOfPlay {
       reserve: json["reserve"],
       // city: json["city"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
+      documentHeader: json["documentHeader"],
+      documentEnd: json["documentEnd"],
     );
   }
 }
@@ -497,14 +504,14 @@ class Meter {
 class Key {
   Key({
     this.type,
-    this.count,
+    this.quantity,
     this.comments,
     this.newImages,
     this.images
   });
 
   String type;
-  int count;
+  int quantity;
   String comments;
   List<File> newImages;
   List<String> images;
@@ -514,7 +521,7 @@ class Key {
       case 0:
         return type;
       case 1:
-        return count.toString();
+        return quantity.toString();
       case 2:
         return comments;
       case 3:
@@ -527,7 +534,7 @@ class Key {
 
     return Key(
       type: json["type"],
-      count: json["count"],
+      quantity: json["quantity"],
       comments: json["comments"],
       newImages: [],
       images: json["images"] != null ? json["images"].cast<String>() : null

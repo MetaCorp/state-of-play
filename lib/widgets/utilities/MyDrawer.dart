@@ -12,33 +12,34 @@ class MyDrawer extends StatelessWidget {
       child: ListView(
              // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
-        children: <Widget>[
-          SizedBox(
-            height: 120.0,
-            child: UserAccountsDrawerHeader(
-              accountEmail: new Text(""),//to keep since needed
-              accountName:  Row(
-                children: <Widget>[
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(shape: BoxShape.circle),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.cyan,
-                      child: new Text("txt"),
-                    ),
+        children: [
+          UserAccountsDrawerHeader(
+            accountEmail: new Text(""),//to keep since needed
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.cyan,
+              child: new Text("txt"),
+            ),
+            accountName:  Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.cyan,
+                    child: new Text("txt"),
                   ),
-                  SizedBox(width: 12),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('user'),
-                      SizedBox(height: 4),
-                      Text('@User'),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(width: 12),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('user'),
+                    SizedBox(height: 4),
+                    Text('@User'),
+                  ],
+                ),
+              ],
             ),
           ),
           ListTile(

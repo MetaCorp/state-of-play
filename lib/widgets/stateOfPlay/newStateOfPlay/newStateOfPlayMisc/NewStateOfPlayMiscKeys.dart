@@ -70,7 +70,9 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
                   widget.keys.add(sop.Key(
                     type: keys[i],
                     comments: "",
-                    count: 1,// TODO : complete fields
+                    quantity: 1,
+                    images: [],
+                    newImages: []
                   ));
                 }
                 setState(() { });

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignatureSignature.dart';
-import 'package:flutter_tests/widgets/tenant/Tenant.dart';
-import 'package:flutter_tests/widgets/tenant/Tenants.dart';
 
 typedef SaveCallback = void Function();
 
 
 class NewStateOfPlaySignature extends StatefulWidget {
-  NewStateOfPlaySignature({ Key key, this.onSave, this.owner, this.representative, this.tenants}) : super(key: key);
+  NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay }) : super(key: key);
 
   //final only if signature not to set ? bad idea ?
   final SaveCallback onSave;
-  final sop.Owner owner;
-  final sop.Representative representative;
-  final List<sop.Tenant> tenants;
+  final sop.StateOfPlay stateOfPlay;
 
   @override
   _NewStateOfPlaySignatureState createState() => new _NewStateOfPlaySignatureState();
@@ -30,9 +27,9 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    signatureTenants = new List(widget.stateOfPlay.tenants.length);
+
     super.initState();
-    signatureTenants = new List(widget.tenants.length);
   }
 
   @override
@@ -46,29 +43,16 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         padding: const EdgeInsets.all(8.0),      
         child: Column(
           children: [
-            Text("Entête document"),
-            SizedBox(height: sizedBoxHeight),             
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ), 
-              child: Opacity(
-                opacity: 0.5,
-                child: Text(
-                  "text de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settingstext de l'entête du document à récupérer dans les settings"),
-              ),
+            TextField(
+              controller: TextEditingController(text: 'Entête'),// TODO: a récupérer dans les settings
+              decoration: InputDecoration(labelText: 'Entête du document'),
+              onChanged: (value) => widget.stateOfPlay.documentHeader = value,
             ),
-            SizedBox(height: sizedBoxHeight),             
-            Text("Mention en Fin de document"),
-            SizedBox(height: sizedBoxHeight),             
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ), 
-              child: Opacity(
-                opacity: 0.5,
-                child: Text("text de Mention en Fin de document à récupérer dans les settings"),
-              ),
+            SizedBox(height: sizedBoxHeight),
+            TextField(
+              controller: TextEditingController(text: 'Mention en fin'),// TODO: a récupérer dans les settings
+              decoration: InputDecoration(labelText: 'Mention en fin du document'),
+              onChanged: (value) => widget.stateOfPlay.documentEnd = value,
             ),
             SizedBox(height: sizedBoxHeight),             
             Text("Nouvelle adresse des locataires"),
@@ -112,7 +96,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                   buildSignatureRowsTenants(),
                   RaisedButton(
                     child: Text("Visualiser l'état des lieux"),
-                    onPressed: widget.onSave,
+                    onPressed: () {
+                      generatePdf(widget.stateOfPlay);
+                      widget.onSave();
+                    },
                   )
                 ],
               ),
@@ -132,8 +119,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
             MaterialButton(
               minWidth: 150,
               color: Colors.blue,
-              child: Text(widget.owner.lastName),
-              onPressed: () => goToSignatureSignature(widget.owner),
+              child: Text(widget.stateOfPlay.owner.lastName),
+              onPressed: () => goToSignatureSignature(widget.stateOfPlay.owner),
             ),
             GestureDetector(
               child: Container(
@@ -144,7 +131,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 width: 150,
                 child: signatureOwner ?? null,          
               ),
-              onTap: () => goToSignatureSignature(widget.owner),
+              onTap: () => goToSignatureSignature(widget.stateOfPlay.owner),
             ),
           ],
         ),
@@ -155,8 +142,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
             MaterialButton(
               minWidth: 150,
               color: Colors.blue,
-              child: Text(widget.representative.lastName),
-              onPressed: () => goToSignatureSignature(widget.representative),
+              child: Text(widget.stateOfPlay.representative.lastName),
+              onPressed: () => goToSignatureSignature(widget.stateOfPlay.representative),
             ),
             GestureDetector(
               child: Container(
@@ -167,7 +154,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 width: 150,
                 child: signatureRepresentative ?? null,          
               ),
-              onTap: () => goToSignatureSignature(widget.representative),
+              onTap: () => goToSignatureSignature(widget.stateOfPlay.representative),
             ),
           ],
         ),
@@ -179,7 +166,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: widget.tenants.asMap().map((index,tenant) => MapEntry(index, 
+      children: widget.stateOfPlay.tenants.asMap().map((index,tenant) => MapEntry(index, 
         Column(
           children: [
           MaterialButton(

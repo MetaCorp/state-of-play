@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinbox/material.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
@@ -53,6 +55,12 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
       body: Column(
         children: [
           Text("Clé: " + widget.sKey.type),
+          SpinBox(
+            min: 1,
+            max: 100,
+            value: widget.sKey.quantity.toDouble(),
+            onChanged: (value) => widget.sKey.quantity = value.toInt(),
+          ),
           TextField(
             controller: TextEditingController(text: widget.sKey.comments),
             decoration: InputDecoration(labelText: 'Commentaires'),

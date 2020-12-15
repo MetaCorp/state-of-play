@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinbox/material.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
@@ -73,6 +75,12 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
             controller: TextEditingController(text: widget.equipment.brandOrObject),
             decoration: InputDecoration(labelText: 'Marque/Objet'),
             onChanged: (value) => widget.equipment.brandOrObject = value,
+          ),
+          SpinBox(
+            min: 1,
+            max: 100,
+            value: widget.equipment.quantity.toDouble(),
+            onChanged: (value) => widget.equipment.quantity = value.toInt(),
           ),
           TextField(
             controller: TextEditingController(text: widget.equipment.comments),

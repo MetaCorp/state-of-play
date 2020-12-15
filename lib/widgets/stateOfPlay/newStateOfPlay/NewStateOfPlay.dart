@@ -215,7 +215,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     keys: [
       sop.Key(
         type: 'Clé ascenceur',
-        count: 1,
+        quantity: 1,
         comments: '',
         images: [],
         newImages: []
@@ -230,7 +230,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     comments: "L'appartement vient d'être repeint",
     reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
     city: 'Mulhouse',
-    date: DateTime.now()
+    date: DateTime.now(),
+    documentHeader: "",// TODO: récupérer depuis les settings
+    documentEnd: "",
   );
 
   void _showDialogLeave (context) async {
@@ -389,7 +391,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 }).toList(),
                 "keys": _stateOfPlay.keys.map((key) => {
                   "type": key.type,
-                  "count": key.count,
+                  "quantity": key.quantity,
                   "comments": key.comments,// TODO : complete data,
                   "images": [],
                   "newImages": key.newImages.map((imageFile) {
@@ -408,7 +410,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 "insurance": {
                   "company": _stateOfPlay.insurance.company,
                   "number": _stateOfPlay.insurance.number
-                }
+                },
+                "documentHeader": _stateOfPlay.documentHeader,
+                "documentEnd": _stateOfPlay.documentEnd,
               }
             });
 
@@ -465,6 +469,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   lastName
                 }
                 rooms
+                meters
+                keys
+                insurance
+                comments
+                reserve
               }
             }
           '''),

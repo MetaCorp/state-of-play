@@ -127,6 +127,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     state: "Neuf",
                     nature: "",
                     comments: "",
+                    images: [],
                     newImages: []
                   ));
                   
@@ -175,6 +176,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     state: "Neuf",
                     quantity: 1,
                     comments: "",
+                    images: [],
+                    newImages: []
                   ));
                   
                 }
