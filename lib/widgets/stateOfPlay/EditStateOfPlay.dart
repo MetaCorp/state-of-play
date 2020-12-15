@@ -6,6 +6,9 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayContent.dart';
 
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:uuid/uuid.dart';
 
 class EditStateOfPlay extends StatefulWidget {
   EditStateOfPlay({ Key key, this.stateOfPlayId }) : super(key: key);
@@ -17,6 +20,8 @@ class EditStateOfPlay extends StatefulWidget {
 }
 
 class _EditStateOfPlayState extends State<EditStateOfPlay> {
+  
+  var uuid = Uuid(); 
 
   sop.StateOfPlay _stateOfPlay;
   
@@ -172,7 +177,18 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "type": decoration.type,
                           "nature": decoration.nature,
                           "state": decoration.state,
-                          "comments": decoration.comments
+                          "comments": decoration.comments,
+                          "images": decoration.images,
+                          "newImages": decoration.newImages.map((imageFile) {
+                            var byteData = imageFile.readAsBytesSync();
+
+                            return MultipartFile.fromBytes(
+                              'photo',
+                              byteData,
+                              filename: '${uuid.v1()}.jpg',
+                              contentType: MediaType("image", "jpg"),
+                            );
+                          }).toList()
                         }).toList(),
                         "electricities": room.electricities.map((electricity) => {
                           "type": electricity.type,

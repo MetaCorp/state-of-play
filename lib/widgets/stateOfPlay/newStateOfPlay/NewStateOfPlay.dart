@@ -85,14 +85,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            imageFiles: []
+            images: [],
+            newImages: []
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            imageFiles: []
+            images: [],
+            newImages: []
           )
         ],
         electricities: [
@@ -142,14 +144,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            imageFiles: []
+            images: [],
+            newImages: []
           ),
           sop.Decoration(
             type: 'Porte',
             nature: 'Pas de porte',
             state: 'Bon',
             comments: 'Il manque la porte',
-            imageFiles: []
+            images: [],
+            newImages: []
           )
         ],
         electricities: [
@@ -279,6 +283,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           title: "Nouvel état des lieux",
           onSave: () async {
             print("onSave");
+
             MultiSourceResult result = runMutation({
               "data": {
                 "out": _stateOfPlay.out,
@@ -310,8 +315,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "nature": decoration.nature,
                     "state": decoration.state,
                     "comments": decoration.comments,
-                    "images": decoration.imageFiles.map((imageFile) {
-                      print('imageFile');
+                    "images": [],
+                    "newImages": decoration.newImages.map((imageFile) {
                       var byteData = imageFile.readAsBytesSync();
 
                       return MultipartFile.fromBytes(

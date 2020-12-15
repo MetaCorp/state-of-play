@@ -264,7 +264,7 @@ class Decoration {
     this.nature,
     this.state,
     this.comments,
-    this.imageFiles,
+    this.newImages,
     this.images
   });
 
@@ -272,7 +272,7 @@ class Decoration {
   String nature;
   String state;
   String comments;
-  List<File> imageFiles;
+  List<File> newImages;
   List<String> images;
 
   String getIndex(int index) {
@@ -299,6 +299,7 @@ class Decoration {
       nature: json["nature"],
       state: json["state"],// TODO parse dual type
       comments: json["comments"],
+      newImages: [],// need to init here bc not from server
       images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }

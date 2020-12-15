@@ -176,13 +176,13 @@ export class StateOfPlayResolver {
 		for (let i = 0; i < data.rooms.length; i++) {
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
-				data.rooms[i].decorations[j];
 				
-				for (let k = 0; k < data.rooms[i].decorations[j].images.length; k++) {
-					const image = data.rooms[i].decorations[j].images[k];
+				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
+					const image = data.rooms[i].decorations[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
-					data.rooms[i].decorations[j].images[k] = await uploadFile(filename, createReadStream())
+					// @ts-ignore
+					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
 				}
 			}
 		}
@@ -271,6 +271,23 @@ export class StateOfPlayResolver {
 
 		const stateOfPlay2 = await connection.getRepository(StateOfPlay).findOne(data.id);
 		if (!stateOfPlay2) return 0
+
+		
+		
+		for (let i = 0; i < data.rooms.length; i++) {
+			
+			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
+				
+				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
+					const image = data.rooms[i].decorations[j].newImages[k];
+					const { createReadStream, filename } = await image;
+
+					// @ts-ignore
+					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
+				}
+			}
+		}
+
 
 		stateOfPlay2.fullAddress = property.address + ', ' + property.postalCode + ' ' + property.city// needed for search (issue nested search doesnt work)
 		stateOfPlay2.ownerFullName = owner.firstName + ' ' + owner.lastName

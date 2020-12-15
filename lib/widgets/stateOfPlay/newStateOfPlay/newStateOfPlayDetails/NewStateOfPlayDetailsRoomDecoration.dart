@@ -3,6 +3,16 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 
+import 'dart:io';
+
+class ImageType {
+  ImageType({ this.type, this.image });
+
+  String type;
+  dynamic image;
+}
+
+
 class NewStateOfPlayDetailsRoomDecoration extends StatefulWidget {
   NewStateOfPlayDetailsRoomDecoration({ Key key, this.decoration, this.roomName }) : super(key: key);
 
@@ -21,7 +31,29 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   Widget build(BuildContext context) {
 
     print('decoration.images: ' + widget.decoration.images.toString());
-    print('decoration.imageFiles: ' + widget.decoration.imageFiles.toString());
+    print('decoration.newImages: ' + widget.decoration.newImages.length.toString());
+
+    List<ImageType> imagesType = widget.decoration.images.map((image) => ImageType(
+      type: "network",
+      image: image
+    )).toList();
+
+    for (var i = 0; i < widget.decoration.newImages.length; i++) {
+      imagesType.add(ImageType(
+        type: "file",
+        image: widget.decoration.newImages[i]
+      ));
+    }
+
+    // widget.decoration.newImages.map((newImage) {
+    //   imagesType.add({
+    //     "type": "file",
+    //     "image": newImage
+    //   });
+    // });
+
+    print('imagesType: ' + imagesType.toString());
+
 
     return Scaffold(
       appBar: AppBar(
@@ -63,13 +95,12 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
           ),
           MyImagePicker(
             onSelect: (imageFile) {
-              widget.decoration.imageFiles.add(imageFile);
+              widget.decoration.newImages.add(imageFile);
               setState(() { });
             },
           ),
           ImageList(
-            images: widget.decoration.images != null ? widget.decoration.images : widget.decoration.imageFiles,
-            type: widget.decoration.images != null ? "network" : "file",
+            imagesType: imagesType,
           )
         ]
       ),

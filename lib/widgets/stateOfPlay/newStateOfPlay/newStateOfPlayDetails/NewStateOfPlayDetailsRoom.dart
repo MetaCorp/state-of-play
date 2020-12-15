@@ -127,7 +127,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     state: "Neuf",
                     nature: "",
                     comments: "",
-                    imageFiles: []
+                    newImages: []
                   ));
                   
                 }

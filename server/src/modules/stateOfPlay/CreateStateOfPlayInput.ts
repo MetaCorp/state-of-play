@@ -7,7 +7,6 @@ import { CreatePropertyInput } from "../property/CreatePropertyInput";
 import { CreateRepresentativeInput } from "../representative/CreateRepresentativeInput";
 import { CreateTenantInput } from "../tenant/CreateTenantInput";
 
-
 @InputType()
 class CreateStateOfPlayDecorationInput {
   @Field()
@@ -22,9 +21,13 @@ class CreateStateOfPlayDecorationInput {
   @Field()
   comments: String
 
+  @Field(() => [String])
+  images: [String]
+
   @Field(() => [GraphQLUpload])
-  images: [FileUpload]
+  newImages: [FileUpload]
 }
+
 
 @InputType()
 class CreateStateOfPlayElectricityInput {

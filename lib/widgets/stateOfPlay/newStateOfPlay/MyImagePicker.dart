@@ -70,8 +70,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
   Widget build(BuildContext context) {
 
 
-    return IconButton(
-      icon: Icon(Icons.camera_alt),
+    return RaisedButton(
+      child: Row(
+        children: [
+          Icon(Icons.camera_alt),
+          Text('Ajouter une photo')
+        ]
+      ),
       onPressed: () => _showPicker(context),
     );
   }
