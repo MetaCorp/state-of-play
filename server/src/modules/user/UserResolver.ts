@@ -22,6 +22,7 @@ export class UserResolver {
 
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
+		// @ts-ignore
 		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId }, { relations: ["properties", "stateOfPlays", "stateOfPlays.property"] })
 		if (!user) return
 

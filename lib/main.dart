@@ -72,11 +72,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    //deleteToken();
+    
+    deleteToken();
+    
     final HttpLink httpLink = HttpLink(
       uri: 'http://$host:4000/graphql',
     );
-
+  
     final AuthLink authLink = AuthLink(
       getToken: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -95,6 +97,21 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  //todo move 
+  Map<int, Color> color = 
+  { 
+    50:Color.fromRGBO(39, 125, 161, .1), 
+    100:Color.fromRGBO(39, 125, 161, .2), 
+    200:Color.fromRGBO(39, 125, 161, .3), 
+    300:Color.fromRGBO(39, 125, 161, .4), 
+    400:Color.fromRGBO(39, 125, 161, .5), 
+    500:Color.fromRGBO(39, 125, 161, .6), 
+    600:Color.fromRGBO(39, 125, 161, .7), 
+    700:Color.fromRGBO(39, 125, 161, .8), 
+    800:Color.fromRGBO(39, 125, 161, .9), 
+    900:Color.fromRGBO(39, 125, 161, 1), 
+  }; 
+
   @override
   Widget build(BuildContext context) {
     //Force Device Orientation 
@@ -103,6 +120,9 @@ class _MyAppState extends State<MyApp> {
     //   DeviceOrientation.landscapeLeft,
     //   DeviceOrientation.landscapeRight,
     // ]);
+
+    MaterialColor colorCustom = MaterialColor(0xFF4AAAD3, color); 
+
     return
       GraphQLProvider(
         client: client,
@@ -110,8 +130,9 @@ class _MyAppState extends State<MyApp> {
           MaterialApp(
             title: 'États des lieux',
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: colorCustom, 
               visualDensity: VisualDensity.adaptivePlatformDensity,
+              buttonColor: Colors.grey, 
             ),
             initialRoute: '/login',
             // routes: {

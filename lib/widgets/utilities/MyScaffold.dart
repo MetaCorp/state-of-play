@@ -16,94 +16,161 @@ class MyScaffold extends StatefulWidget {
 
 class _MyScaffoldState extends State<MyScaffold> {
 
+  bool _bottomSheetOpen;
+  GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bottomSheetOpen = false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
 
-    bool _bottomSheetOpen = false;
-    
     return Scaffold(
       key: globalKey,
       appBar: widget.appBar,
       body: widget.body,
       drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(_bottomSheetOpen == false ? Icons.add : Icons.close),
+        // Put animation Icon rotation
+        // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
+        child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
         onPressed: () {
           if (_bottomSheetOpen == false) {
-            print('open BottomSheet');
-
-            globalKey.currentState.showBottomSheet((context) {
+            print('open BottomSheet');          
+            setState(() { 
+              _bottomSheetOpen = true;
+              print("VALUE:"+_bottomSheetOpen.toString()); 
+            });
+            globalKey.currentState.showBottomSheet((context) {            
               return Container(
-                height: 200,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          FlatButton(
-                            child: Text("Créer un nouvel état des lieux d'entrée"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
-                            },
-                          ),
-                          FlatButton(
-                            child: Text("À partir d'une sortie"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                out: true,
-                                sIn: false,
-                                onSelect: (stateOfPlayId) {
-                                  print("onSelect");
-                                  Navigator.pop(globalKey.currentContext);
-                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
-                                }))
-                              );
-                            },
-                          ),
-                          FlatButton(
-                            child: Text("Créer un nouvel état des lieux de sortie"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
-                            },
-                          ),
-                          FlatButton(
-                            child: Text("À partir d'une entrée"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                out: false,
-                                sIn: true,
-                                onSelect: (stateOfPlayId) {
-                                  print("onSelect");
-                                  Navigator.pop(globalKey.currentContext);
-                                  Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
-                                }))
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet'),
-                        onPressed: () => Navigator.pop(context),
-                      )
-                    ],
-                  ),
+                color: Colors.grey,
+                height: 130,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children :[
+                        Row(
+                          children: [
+                            Center(child:Text("Entrée",style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold), textAlign: TextAlign.center,),),
+                          ],
+                        ),
+                        Divider(thickness: 2, height: 2, color: Colors.black,),
+                        Row(
+                          children: [
+                            FlatButton(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.arrow_left_rounded),
+                                    //add space
+                                    Text("A partir \n d'une sortie",style: TextStyle( fontSize: 10), textAlign: TextAlign.center,),
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                  out: true,
+                                  sIn: false,
+                                  onSelect: (stateOfPlayId) {
+                                    print("onSelect");
+                                    Navigator.pop(globalKey.currentContext);
+                                    Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
+                                  }
+                                ),),);
+                              },
+                            ),
+                            FlatButton(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add),
+                                    //add space
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children :[
+                        Row(
+                          children: [
+                            Center(child:Text("Sortie",style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                          ],
+                        ),
+                        Divider(thickness: 2, height: 2, color: Colors.black,),
+                        Row(
+                          children: [
+                            FlatButton(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.arrow_right_rounded),
+                                    //add space
+                                    Text("A partir  \n d'une entrée",style: TextStyle( fontSize: 10), textAlign: TextAlign.center,),
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                  out: false,
+                                  sIn: true,
+                                  onSelect: (stateOfPlayId) {
+                                    print("onSelect");
+                                    Navigator.pop(globalKey.currentContext);
+                                    Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
+                                  }))
+                                );
+                              },
+                            ),
+                            FlatButton(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add),
+                                    //add space
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               );
+            }).closed.then((value)  {
+              print('THEN close BottomSheet');
+              setState(() { _bottomSheetOpen = false; });
             });
-
-            // setState(() { _bottomSheetOpen = true; }); // TODO : if setState() bottomSheet doesnt open
-          }
-          else {
-            print('close BottomSheet');
-            setState(() { _bottomSheetOpen = false; });
+          } else {
             Navigator.pop(context);
           }
         }

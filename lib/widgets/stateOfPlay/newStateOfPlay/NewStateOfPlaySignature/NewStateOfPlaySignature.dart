@@ -116,11 +116,9 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       children: [
         Column(
           children: [
-            MaterialButton(
-              minWidth: 150,
-              color: Colors.blue,
-              child: Text(widget.stateOfPlay.owner.lastName),
-              onPressed: () => goToSignatureSignature(widget.stateOfPlay.owner),
+            RaisedButton(
+              child: Text(widget.owner.lastName),
+              onPressed: () => goToSignatureSignature(widget.owner),
             ),
             GestureDetector(
               child: Container(
@@ -139,11 +137,9 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         Column(
           children: [
             // TODO foreach on list 
-            MaterialButton(
-              minWidth: 150,
-              color: Colors.blue,
-              child: Text(widget.stateOfPlay.representative.lastName),
-              onPressed: () => goToSignatureSignature(widget.stateOfPlay.representative),
+            RaisedButton(
+              child: Text(widget.representative.lastName),
+              onPressed: () => goToSignatureSignature(widget.representative),
             ),
             GestureDetector(
               child: Container(
@@ -169,9 +165,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       children: widget.stateOfPlay.tenants.asMap().map((index,tenant) => MapEntry(index, 
         Column(
           children: [
-          MaterialButton(
-              minWidth: 150,
-              color: Colors.blue,
+          RaisedButton(
               child: Text(tenant.lastName),
               onPressed: () => goToSignatureSignature(tenant,index: index),
             ),

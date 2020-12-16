@@ -64,6 +64,7 @@ export class RoomResolver {
 	@Mutation(() => Int)
 	async updateRoom(@Arg("data") data: UpdateRoomInput) {
 
+		// @ts-ignore
 		const room = await Room.update(data.id, {
             name: data.name,
 		})
