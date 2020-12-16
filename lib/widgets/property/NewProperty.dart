@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 
 class NewProperty extends StatefulWidget {
   NewProperty({Key key}) : super(key: key);
@@ -12,9 +13,6 @@ class NewProperty extends StatefulWidget {
 
 class _NewPropertyState extends State<NewProperty> {
 
-  TextEditingController _addressController = TextEditingController(text: "14 rue du test");
-  TextEditingController _postalCodeController = TextEditingController(text: "75001");
-  TextEditingController _cityController = TextEditingController(text: "Paris");
 
   @override
   Widget build(BuildContext context) {
@@ -44,55 +42,60 @@ class _NewPropertyState extends State<NewProperty> {
         QueryResult result,
       ) {
         
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Nouvelle propriété'),
+        return NewPropertyContent(
+          title: 'Nouvelle propriété',
+          property: sop.Property(
+            reference: "000",
+            address: "42 rue du Test",
+            postalCode: "75001",
+            city: "Paris",
+            lot: "000",
+            floor: 4,
+            roomCount: 4,
+            area: 60,
+            heatingType: "test",
+            hotWater: "test"
           ),
-          body: Column(
-            children: [
-              TextField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Adresse'),
-              ),
-              TextField(
-                controller: _postalCodeController,
-                decoration: InputDecoration(labelText: 'Code postal'),
-              ),
-              TextField(
-                controller: _cityController,
-                decoration: InputDecoration(labelText: 'Ville'),
-              ),
-              RaisedButton(
-                child: Text('Sauvegarder'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "address": _addressController.text,
-                      "postalCode": _postalCodeController.text,
-                      "city": _cityController.text,
-                    }
-                  });
-                  QueryResult networkResult = await result.networkResult;
+          onSave: (property) async {
+            print('runMutation');
 
-                  if (networkResult.hasException) {
-                  
-                  }
-                  else {
-                    print('queryResult data: ' + networkResult.data.toString());
-                    if (networkResult.data != null) {
-                      if (networkResult.data["createProperty"] == null) {
-                        // TODO: show error
-                      }
-                      else if (networkResult.data["createProperty"] != null) {
-                        Navigator.pop(context);
-                        Navigator.popAndPushNamed(context, '/properties');
-                      }
-                    }
-                  }
-                },
-              )
-            ],
-          )
+            MultiSourceResult mutationResult = runMutation({
+              "data": {
+                "id": property.id,
+                "reference": property.reference,
+                "address": property.address,
+                "postalCode": property.postalCode,
+                "city": property.city,
+                "lot": property.lot,
+                "floor": property.floor,
+                "roomCount": property.roomCount,
+                "area": property.area,
+                "heatingType": property.heatingType,
+                "hotWater": property.hotWater,
+              }
+            });
+            QueryResult networkResult = await mutationResult.networkResult;
+
+            if (networkResult.hasException) {
+              print('networkResult.hasException: ' + networkResult.hasException.toString());
+              if (networkResult.exception.clientException != null)
+                print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+              else
+                print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+            }
+            else {
+              print('queryResult data: ' + networkResult.data.toString());
+              if (networkResult.data != null) {
+                if (networkResult.data["createProperty"] == null) {
+                  // TODO: show error
+                }
+                else if (networkResult.data["createProperty"] != null) {
+                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/propertys');// To refresh
+                }
+              }
+            }
+          },
         );
       }
     );

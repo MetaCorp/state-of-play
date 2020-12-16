@@ -27,37 +27,37 @@ export class Property extends BaseEntity {
   // @Column()
   // type: String;
 
-  // @Field()
-  // @Column()
-  // reference: String;
+  @Field()
+  @Column()
+  reference: String;
 
-  // @Field()
-  // @Column()
-  // lot: String;
+  @Field()
+  @Column()
+  lot: String;
 
-  // @Field()
-  // @Column()
-  // floor: number;
+  @Field()
+  @Column()
+  floor: number;
 
-  // @Field()
-  // @Column()
-  // roomCount: number;
+  @Field()
+  @Column()
+  roomCount: number;
 
-  // @Field()
-  // @Column()
-  // area: number;
+  @Field()
+  @Column()
+  area: number;
 
   // // @Field()
   // // @Column()
   // // annexes: [String];
 
-  // @Field()
-  // @Column()
-  // heatingType: String;
+  @Field()
+  @Column()
+  heatingType: String;
 
-  // @Field()
-  // @Column()
-  // hotWater: String;
+  @Field()
+  @Column()
+  hotWater: String;
 
   @Field(() => User)
   @ManyToOne(() => User, user => user.properties)

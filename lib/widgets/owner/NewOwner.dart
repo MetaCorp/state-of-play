@@ -42,7 +42,7 @@ class _NewOwnerState extends State<NewOwner> {
       ) {
         
         return NewInterlocutorContent(
-          title: 'Nouveau mandataire',
+          title: 'Nouveau propriétaire',
           interlocutor: sop.Owner(),
           onSave: (owner) async {
             print('runMutation');

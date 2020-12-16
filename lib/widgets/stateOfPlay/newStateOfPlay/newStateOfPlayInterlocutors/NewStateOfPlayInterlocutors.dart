@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/owner/NewOwnerContent.dart';
-import 'package:flutter_tests/widgets/representative/NewRepresentativeContent.dart';
+import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/DoubleButton.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsProperty.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayI
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
-import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
 import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 
@@ -135,7 +133,8 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsProperty(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyContent(
+              title: 'Nouvelle propriété',
               property: sop.Property(),
               onSave : (property) {
                 widget.stateOfPlay.property = property;

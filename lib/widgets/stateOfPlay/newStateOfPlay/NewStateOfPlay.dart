@@ -323,9 +323,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 }).toList(),
                 "property": {
                   "id": _stateOfPlay.property.id,
+                  "reference": _stateOfPlay.property.reference,
                   "address": _stateOfPlay.property.address,
                   "postalCode": _stateOfPlay.property.postalCode,
                   "city": _stateOfPlay.property.city,
+                  "lot": _stateOfPlay.property.lot,
+                  "floor": _stateOfPlay.property.floor,
+                  "roomCount": _stateOfPlay.property.roomCount,
+                  "area": _stateOfPlay.property.area,
+                  "heatingType": _stateOfPlay.property.heatingType,
+                  "hotWater": _stateOfPlay.property.hotWater,
                 },
                 "rooms": _stateOfPlay.rooms.map((room) => {
                   "name": room.name,

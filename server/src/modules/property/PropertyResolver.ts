@@ -51,14 +51,22 @@ export class PropertyResolver {
 	@Mutation(() => Property, { nullable: true })
 	async createProperty(@Arg("data") data: CreatePropertyInput, @Ctx() ctx: MyContext) {
 
+		console.log("createProperty: ", data)
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
-		
+
 		const property = await Property.create({
+			reference: data.reference,
 			address: data.address,
 			postalCode: data.postalCode,
 			city: data.city,
+			lot: data.lot,
+			floor: data.floor,
+			roomCount: data.roomCount,
+			area: data.area,
+			heatingType: data.heatingType,
+			hotWater: data.hotWater,
 			user: user
 		}).save();
 
@@ -73,9 +81,16 @@ export class PropertyResolver {
 	async updateProperty(@Arg("data") data: UpdatePropertyInput) {
 
 		const property = await Property.update(data.id, {
+			reference: data.reference,
 			address: data.address,
 			postalCode: data.postalCode,
 			city: data.city,
+			lot: data.lot,
+			floor: data.floor,
+			roomCount: data.roomCount,
+			area: data.area,
+			heatingType: data.heatingType,
+			hotWater: data.hotWater
 		})
 		console.log('updateProperty: ', property)
 

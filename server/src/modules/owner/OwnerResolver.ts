@@ -44,7 +44,7 @@ export class OwnerResolver {
 	@Mutation(() => Owner, { nullable: true })
 	async createOwner(@Arg("data") data: CreateOwnerInput, @Ctx() ctx: MyContext) {
 
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
+		console.log("createOwner: ", data)
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })

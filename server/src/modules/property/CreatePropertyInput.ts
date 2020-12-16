@@ -17,4 +17,35 @@ export class CreatePropertyInput {
   @Field()
   @Length(1, 255)
   city: string;
+
+  @Field()
+  @Length(1, 255)
+  reference: String;
+
+  @Field({ nullable: true })
+  @Length(1, 255)
+  lot: String;
+
+  @Field({ nullable: true })
+  @Length(1, 255)
+  floor: number;
+
+  @Field()
+  @Length(1, 255)
+  roomCount: number;
+
+  @Field()
+  @Length(1, 255)
+  area: number;
+
+  // // @Field()
+  // // annexes: [String];
+
+  @Field()
+  @Length(1, 255)
+  heatingType: String;
+
+  @Field()
+  @Length(1, 255)
+  hotWater: String;
 }

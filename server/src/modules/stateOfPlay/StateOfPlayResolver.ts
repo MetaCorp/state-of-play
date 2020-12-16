@@ -174,9 +174,16 @@ export class StateOfPlayResolver {
 		var property = data.property.id && await Property.findOne({ id: data.property.id })
 		if (!property) {
 			property = await Property.create({
+				reference: data.property.reference,
 				address: data.property.address,
 				postalCode: data.property.postalCode,
 				city: data.property.city,
+				lot: data.property.lot,
+				floor: data.property.floor,
+				roomCount: data.property.roomCount,
+				area: data.property.area,
+				heatingType: data.property.heatingType,
+				hotWater: data.property.hotWater,
 				user: user
 			}).save();
 		}
@@ -318,9 +325,16 @@ export class StateOfPlayResolver {
 		var property = data.property.id && await Property.findOne({ id: data.property.id })
 		if (!property) {
 			property = await Property.create({
+				reference: data.property.reference,
 				address: data.property.address,
 				postalCode: data.property.postalCode,
 				city: data.property.city,
+				lot: data.property.lot,
+				floor: data.property.floor,
+				roomCount: data.property.roomCount,
+				area: data.property.area,
+				heatingType: data.property.heatingType,
+				hotWater: data.property.hotWater,
 				user: user
 			}).save();
 		}
