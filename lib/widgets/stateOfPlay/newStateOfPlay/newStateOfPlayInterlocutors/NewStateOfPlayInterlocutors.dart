@@ -135,9 +135,21 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyContent(
               title: 'Nouvelle propriété',
-              property: sop.Property(),
+              property: sop.Property(
+                reference: "000",
+                address: "42 rue du Test",
+                postalCode: "75001",
+                city: "Paris",
+                lot: "000",
+                floor: 4,
+                roomCount: 4,
+                area: 60,
+                heatingType: "test",
+                hotWater: "test"
+              ),
               onSave : (property) {
                 widget.stateOfPlay.property = property;
+                Navigator.pop(context);
                 setState(() { });
               }
             )));

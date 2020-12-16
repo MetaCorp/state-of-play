@@ -52,6 +52,8 @@ class _EditPropertyState extends State<EditProperty> {
         sop.Property property;
         if (result.data != null) {
           property = sop.Property.fromJSON(result.data["property"]);
+          print('EditProperty: ' + result.data["property"].toString());
+          print('EditProperty: ' + property.toString());
         }
 
         if (result.data == null || result.loading)

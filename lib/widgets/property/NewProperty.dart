@@ -91,7 +91,7 @@ class _NewPropertyState extends State<NewProperty> {
                 }
                 else if (networkResult.data["createProperty"] != null) {
                   Navigator.pop(context);
-                  Navigator.popAndPushNamed(context, '/propertys');// To refresh
+                  Navigator.popAndPushNamed(context, '/properties');// To refresh
                 }
               }
             }

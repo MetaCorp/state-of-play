@@ -27,15 +27,12 @@ export class CreatePropertyInput {
   lot: String;
 
   @Field({ nullable: true })
-  @Length(1, 255)
   floor: number;
 
   @Field()
-  @Length(1, 255)
   roomCount: number;
 
   @Field()
-  @Length(1, 255)
   area: number;
 
   // // @Field()

@@ -22,6 +22,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
   @override
   Widget build(BuildContext context) {
 
+    print('NewPropertyContent: ' + widget.property.roomCount.toString());
+
     Widget body = Container(
       margin: EdgeInsets.all(16),
       child: Form(
