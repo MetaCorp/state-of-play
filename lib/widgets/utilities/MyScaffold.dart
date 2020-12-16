@@ -18,7 +18,8 @@ class _MyScaffoldState extends State<MyScaffold> {
 
   bool _bottomSheetOpen;
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
-
+  TextStyle _smallTextStyle = new TextStyle( fontSize: 10);
+  TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold);
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _MyScaffoldState extends State<MyScaffold> {
       floatingActionButton: FloatingActionButton(
         // Put animation Icon rotation
         // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
+        backgroundColor: Theme.of(context).primaryColor,
         child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
         onPressed: () {
           if (_bottomSheetOpen == false) {
@@ -50,20 +52,19 @@ class _MyScaffoldState extends State<MyScaffold> {
             globalKey.currentState.showBottomSheet((context) {            
               return Container(
                 color: Colors.grey,
-                height: 130,
+                height: 150,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children :[
                         Row(
                           children: [
-                            Center(child:Text("Entrée",style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold), textAlign: TextAlign.center,),),
+                            Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
                           ],
                         ),
-                        Divider(thickness: 2, height: 2, color: Colors.black,),
                         Row(
                           children: [
                             FlatButton(
@@ -71,9 +72,25 @@ class _MyScaffoldState extends State<MyScaffold> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.arrow_left_rounded),
+                                    Icon(Icons.add),
                                     //add space
-                                    Text("A partir \n d'une sortie",style: TextStyle( fontSize: 10), textAlign: TextAlign.center,),
+                                    Text("Nouveau\n ",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
+                              },
+                            ),
+                            FlatButton(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.home),
+                                    //add space
+                                    Text("A partir \n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
                                   ],
                                 ),
                               ),
@@ -90,6 +107,20 @@ class _MyScaffoldState extends State<MyScaffold> {
                                 ),),);
                               },
                             ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children :[
+                        Row(
+                          children: [
+                            Center(child:Text("Sortie",style: _titleTextStyle, textAlign: TextAlign.center,)),
+                          ],
+                        ),
+                        Row(
+                          children: [
                             FlatButton(
                               child: Center(
                                 child: Column(
@@ -97,37 +128,23 @@ class _MyScaffoldState extends State<MyScaffold> {
                                   children: [
                                     Icon(Icons.add),
                                     //add space
+                                    Text("Nouveau\n ",style: _smallTextStyle, textAlign: TextAlign.center,),
                                   ],
                                 ),
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
-                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
+                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
                               },
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children :[
-                        Row(
-                          children: [
-                            Center(child:Text("Sortie",style: TextStyle( fontSize: 18,fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
-                          ],
-                        ),
-                        Divider(thickness: 2, height: 2, color: Colors.black,),
-                        Row(
-                          children: [
                             FlatButton(
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.arrow_right_rounded),
+                                    Icon(Icons.home),
                                     //add space
-                                    Text("A partir  \n d'une entrée",style: TextStyle( fontSize: 10), textAlign: TextAlign.center,),
+                                    Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
                                   ],
                                 ),
                               ),
@@ -144,21 +161,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                 );
                               },
                             ),
-                            FlatButton(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add),
-                                    //add space
-                                  ],
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
-                              },
-                            ),
                           ],
                         ),
                       ],
@@ -166,7 +168,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                   ],
                 ),
               );
-            }).closed.then((value)  {
+            }).closed.then((value) {
               print('THEN close BottomSheet');
               setState(() { _bottomSheetOpen = false; });
             });

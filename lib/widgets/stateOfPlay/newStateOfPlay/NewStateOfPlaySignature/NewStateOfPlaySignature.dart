@@ -117,8 +117,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         Column(
           children: [
             RaisedButton(
-              child: Text(widget.owner.lastName),
-              onPressed: () => goToSignatureSignature(widget.owner),
+              child: Text(widget.stateOfPlay.owner.lastName),
+              onPressed: () => goToSignatureSignature(widget.stateOfPlay.owner),
             ),
             GestureDetector(
               child: Container(
@@ -138,8 +138,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
           children: [
             // TODO foreach on list 
             RaisedButton(
-              child: Text(widget.representative.lastName),
-              onPressed: () => goToSignatureSignature(widget.representative),
+              child: Text(widget.stateOfPlay.representative.lastName),
+              onPressed: () => goToSignatureSignature(widget.stateOfPlay.representative),
             ),
             GestureDetector(
               child: Container(
