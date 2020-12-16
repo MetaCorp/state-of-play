@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
@@ -20,7 +21,58 @@ class _StateOfPlaysState extends State<StateOfPlays> {
   bool _in = false;
   bool _out = true;
 
-  void _showDialogFilter (context) async {
+  void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "stateOfPlayId": stateOfPlay.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteStateOfPlay"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteStateOfPlay"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
+
+  void _showDialogFilter(context) async {
     await showDialog(
       context: context,
       child: AlertDialog(
@@ -139,26 +191,61 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             }
 
 
-            return ListView.separated(
-              itemCount: stateOfPlays.length,
-              itemBuilder: (_, i)  {
-                String tenantsString = "";
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteStateOfPlay(\$data: DeleteStateOfPlayInput!) {
+                    deleteStateOfPlay(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
+              ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return ListView.separated(
+                  itemCount: stateOfPlays.length,
+                  itemBuilder: (_, i)  {
+                    String tenantsString = "";
 
-                for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
-                  tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
-                  if (j < stateOfPlays[i].tenants.length - 1)
-                    tenantsString += ', ';
-                }
+                    for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
+                      tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
+                      if (j < stateOfPlays[i].tenants.length - 1)
+                        tenantsString += ', ';
+                    }
 
-                return ListTile(
-                  title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
-                  subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                  onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                    return Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.125,
+                      child: ListTile(
+                        title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                        subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
+                        onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                      ),
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Supprimer',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () => _showDialogDelete(context, stateOfPlays[i], runDeleteMutation),
+                        ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
                 );
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              }
             );
           }
         )

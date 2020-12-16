@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-// import 'package:intl/intl.dart';// DateFormat
 
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 
@@ -10,12 +10,65 @@ class Tenants extends StatefulWidget {
   Tenants({Key key}) : super(key: key);
 
   @override
-  _OwnersState createState() => _OwnersState();
+  _TenantsState createState() => _TenantsState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _OwnersState extends State<Tenants> {
+class _TenantsState extends State<Tenants> {
+
+  
+  void _showDialogDelete(context, sop.Tenant tenant, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "tenantId": tenant.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteTenant"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteTenant"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
@@ -73,15 +126,53 @@ class _OwnersState extends State<Tenants> {
               return Text("no tenants");
             }
 
-            return ListView.separated(
-              itemCount: tenants.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
-                onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteTenant(\$data: DeleteTenantInput!) {
+                    deleteTenant(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return ListView.separated(
+                  itemCount: tenants.length,
+                  itemBuilder: (_, i) => Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.125,
+                    child: ListTile(
+                      title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
+                      onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
+                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
+                    ),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: 'Supprimer',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _showDialogDelete(context, tenants[i], runDeleteMutation),
+                      ),
+                    ],
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      height: 0.0,
+                    );
+                  },
+                );
+              }
             );
           }
         )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
@@ -16,6 +17,59 @@ class Owners extends StatefulWidget {
 // adb reverse tcp:9002 tcp:9002
 
 class _OwnersState extends State<Owners> {
+
+  
+  void _showDialogDelete(context, sop.Owner owner, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + owner.firstName + ' ' + owner.lastName + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "ownerId": owner.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteOwner"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteOwner"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/owners');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
@@ -71,15 +125,51 @@ class _OwnersState extends State<Owners> {
               return Text("no owners");
             }
 
-            return ListView.separated(
-              itemCount: owners.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(owners[i].firstName + ' ' + owners[i].lastName),
-                onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteOwner(\$data: DeleteOwnerInput!) {
+                    deleteOwner(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return ListView.separated(
+                  itemCount: owners.length,
+                  itemBuilder: (_, i) => Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.125,
+                    child: ListTile(
+                      title: Text(owners[i].firstName + ' ' + owners[i].lastName),
+                      onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
+                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
+                    ),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: 'Supprimer',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _showDialogDelete(context, owners[i], runDeleteMutation),
+                      ),
+                    ],
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                );
+              }
             );
           }
         )
