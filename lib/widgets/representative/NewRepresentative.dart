@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/representative/NewRepresentativeContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 
 class NewRepresentative extends StatefulWidget {
   NewRepresentative({Key key}) : super(key: key);
@@ -12,8 +13,6 @@ class NewRepresentative extends StatefulWidget {
 
 class _NewRepresentativeState extends State<NewRepresentative> {
 
-  TextEditingController _firstNameController = TextEditingController(text: "Jean");
-  TextEditingController _lastNameController = TextEditingController(text: "Mandataire");
 
   @override
   Widget build(BuildContext context) {
@@ -42,50 +41,44 @@ class _NewRepresentativeState extends State<NewRepresentative> {
         QueryResult result,
       ) {
         
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Nouveau mandataire'),
-          ),
-          body: Column(
-            children: [
-              TextField(
-                controller: _firstNameController,
-                decoration: InputDecoration(labelText: 'Prénom'),
-              ),
-              TextField(
-                controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Nom'),
-              ),
-              RaisedButton(
-                child: Text('Sauvegarder'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "firstName": _firstNameController.text,
-                      "lastName": _lastNameController.text,
-                    }
-                  });
-                  QueryResult networkResult = await result.networkResult;
+        return NewRepresentativeContent(
+          title: 'Nouveau mandataire',
+          representative: sop.Representative(),
+          onSave: (representative) async {
+            print('runMutation');
 
-                  if (networkResult.hasException) {
-                  
-                  }
-                  else {
-                    print('queryResult data: ' + networkResult.data.toString());
-                    if (networkResult.data != null) {
-                      if (networkResult.data["createRepresentative"] == null) {
-                        // TODO: show error
-                      }
-                      else if (networkResult.data["createRepresentative"] != null) {
-                        Navigator.pop(context);
-                        Navigator.popAndPushNamed(context, '/representatives');
-                      }
-                    }
-                  }
-                },
-              )
-            ],
-          )
+            MultiSourceResult mutationResult = runMutation({
+              "data": {
+                "id": representative.id,
+                "firstName": representative.firstName,
+                "lastName": representative.lastName,
+                "address": representative.address,
+                "postalCode": representative.postalCode,
+                "city": representative.city,
+              }
+            });
+            QueryResult networkResult = await mutationResult.networkResult;
+
+            if (networkResult.hasException) {
+              print('networkResult.hasException: ' + networkResult.hasException.toString());
+              if (networkResult.exception.clientException != null)
+                print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+              else
+                print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+            }
+            else {
+              print('queryResult data: ' + networkResult.data.toString());
+              if (networkResult.data != null) {
+                if (networkResult.data["createRepresentative"] == null) {
+                  // TODO: show error
+                }
+                else if (networkResult.data["createRepresentative"] != null) {
+                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/representatives');// To refresh
+                }
+              }
+            }
+          },
         );
       }
     );

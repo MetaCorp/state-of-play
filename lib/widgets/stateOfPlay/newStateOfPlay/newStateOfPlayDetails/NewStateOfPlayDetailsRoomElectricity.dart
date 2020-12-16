@@ -58,7 +58,6 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
       ),
       body: Column(
         children: [
-          Text("Décoration: " + widget.electricity.type),
           Text("État"),
           DropdownButton(
             value: widget.electricity.state,

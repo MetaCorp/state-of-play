@@ -60,7 +60,6 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
       ),
       body: Column(
         children: [
-          Text("Décoration: " + widget.decoration.type),
           Text("État"),
           DropdownButton(
             value: widget.decoration.state,

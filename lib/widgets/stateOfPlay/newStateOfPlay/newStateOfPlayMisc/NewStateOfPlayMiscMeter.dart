@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/stateOfPlay/DateButton.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 
@@ -54,7 +54,6 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
       ),
       body: Column(
         children: [
-          Text("Compteur: " + widget.meter.type),
           TextField(
             controller: TextEditingController(text: widget.meter.location),
             decoration: InputDecoration(labelText: 'Emplacement'),
@@ -67,6 +66,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
             keyboardType: TextInputType.number
           ),
           DateButton(
+            labelText: "Date de relevé",
             value: widget.meter.dateOfSuccession,
             onChange: (value) {
               widget.meter.dateOfSuccession = value;

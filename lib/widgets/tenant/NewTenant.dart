@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 
 class NewTenant extends StatefulWidget {
   NewTenant({Key key}) : super(key: key);
@@ -12,11 +13,6 @@ class NewTenant extends StatefulWidget {
 
 class _NewTenantState extends State<NewTenant> {
 
-  TextEditingController _firstNameController = TextEditingController(text: "Jean");
-  TextEditingController _lastNameController = TextEditingController(text: "Locataire");
-  TextEditingController _addressController = TextEditingController(text: "42 rue du Test");
-  TextEditingController _postalCodeController = TextEditingController(text: "75001");
-  TextEditingController _cityController = TextEditingController(text: "Paris");
 
   @override
   Widget build(BuildContext context) {
@@ -45,65 +41,44 @@ class _NewTenantState extends State<NewTenant> {
         QueryResult result,
       ) {
         
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Nouveau locataire'),
-          ),
-          body: Column(
-            children: [
-              TextField(
-                controller: _firstNameController,
-                decoration: InputDecoration(labelText: 'Prénom'),
-              ),
-              TextField(
-                controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Nom'),
-              ),
-              TextField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Adresse'),
-              ),
-              TextField(
-                controller: _postalCodeController,
-                decoration: InputDecoration(labelText: 'Code postal'),
-              ),
-              TextField(
-                controller: _cityController,
-                decoration: InputDecoration(labelText: 'Ville'),
-              ),
-              RaisedButton(
-                child: Text('Sauvegarder'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "firstName": _firstNameController.text,
-                      "lastName": _lastNameController.text,
-                      "address": _addressController.text,
-                      "postalCode": _postalCodeController.text,
-                      "city": _cityController.text,
-                    }
-                  });
-                  QueryResult networkResult = await result.networkResult;
+        return NewTenantContent(
+          title: 'Nouveau locataire',
+          tenant: sop.Tenant(),
+          onSave: (tenant) async {
+            print('runMutation');
 
-                  if (networkResult.hasException) {
-                  
-                  }
-                  else {
-                    print('queryResult data: ' + networkResult.data.toString());
-                    if (networkResult.data != null) {
-                      if (networkResult.data["createTenant"] == null) {
-                        // TODO: show error
-                      }
-                      else if (networkResult.data["createTenant"] != null) {
-                        Navigator.pop(context);
-                        Navigator.popAndPushNamed(context, '/tenants');
-                      }
-                    }
-                  }
-                },
-              )
-            ],
-          )
+            MultiSourceResult mutationResult = runMutation({
+              "data": {
+                "id": tenant.id,
+                "firstName": tenant.firstName,
+                "lastName": tenant.lastName,
+                "address": tenant.address,
+                "postalCode": tenant.postalCode,
+                "city": tenant.city,
+              }
+            });
+            QueryResult networkResult = await mutationResult.networkResult;
+
+            if (networkResult.hasException) {
+              print('networkResult.hasException: ' + networkResult.hasException.toString());
+              if (networkResult.exception.clientException != null)
+                print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+              else
+                print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+            }
+            else {
+              print('queryResult data: ' + networkResult.data.toString());
+              if (networkResult.data != null) {
+                if (networkResult.data["createTenant"] == null) {
+                  // TODO: show error
+                }
+                else if (networkResult.data["createTenant"] != null) {
+                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                }
+              }
+            }
+          },
         );
       }
     );

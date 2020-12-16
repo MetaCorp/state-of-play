@@ -54,7 +54,6 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
       ),
       body: Column(
         children: [
-          Text("Clé: " + widget.sKey.type),
           SpinBox(
             min: 1,
             max: 100,

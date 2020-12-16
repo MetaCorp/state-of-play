@@ -301,16 +301,25 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   "id": _stateOfPlay.owner.id,
                   "firstName": _stateOfPlay.owner.firstName,
                   "lastName": _stateOfPlay.owner.lastName,
+                  "address": _stateOfPlay.owner.address,
+                  "postalCode": _stateOfPlay.owner.postalCode,
+                  "city": _stateOfPlay.owner.city,
                 },
                 "representative": {
                   "id": _stateOfPlay.representative.id,
                   "firstName": _stateOfPlay.representative.firstName,
                   "lastName": _stateOfPlay.representative.lastName,
+                  "address": _stateOfPlay.representative.address,
+                  "postalCode": _stateOfPlay.representative.postalCode,
+                  "city": _stateOfPlay.representative.city,
                 },
                 "tenants": _stateOfPlay.tenants.map((tenant) => {
                   "id": tenant.id,
                   "firstName": tenant.firstName,
                   "lastName": tenant.lastName,
+                  "address": tenant.address,
+                  "postalCode": tenant.postalCode,
+                  "city": tenant.city,
                 }).toList(),
                 "property": {
                   "id": _stateOfPlay.property.id,
@@ -376,7 +385,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 "meters": _stateOfPlay.meters.map((meter) => {
                   "type": meter.type,
                   "location": meter.location,
-                  "index": meter.index,// TODO : complete data,
+                  "index": meter.index,
+                  "dateOfSuccession": meter.dateOfSuccession.toString(),
                   "images": [],
                   "newImages": meter.newImages.map((imageFile) {
                     var byteData = imageFile.readAsBytesSync();
@@ -409,7 +419,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 "reserve": _stateOfPlay.reserve,
                 "insurance": {
                   "company": _stateOfPlay.insurance.company,
-                  "number": _stateOfPlay.insurance.number
+                  "number": _stateOfPlay.insurance.number,
+                  "dateStart": _stateOfPlay.insurance.dateStart.toString(),
+                  "dateEnd": _stateOfPlay.insurance.dateEnd.toString(),
                 },
                 "documentHeader": _stateOfPlay.documentHeader,
                 "documentEnd": _stateOfPlay.documentEnd,
@@ -457,16 +469,25 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   id
                   firstName
                   lastName
+                  address
+                  postalCode
+                  city
                 }
                 representative {
                   id
                   firstName
                   lastName
+                  address
+                  postalCode
+                  city
                 }
                 tenants {
                   id
                   firstName
                   lastName
+                  address
+                  postalCode
+                  city
                 }
                 rooms
                 meters

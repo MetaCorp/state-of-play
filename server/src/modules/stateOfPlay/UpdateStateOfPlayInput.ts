@@ -84,6 +84,9 @@ class UpdateStateOfPlayMeterInput {
   @Field()
   index: Number
 
+  @Field()
+  dateOfSuccession: String
+
   @Field(() => [String])
   images: [String]
 
@@ -131,6 +134,12 @@ class UpdateStateOfPlayInsuranceInput {
 
   @Field()
   number: String
+
+  @Field()
+  dateStart: String
+
+  @Field()
+  dateEnd: String
 }
 
 @InputType()

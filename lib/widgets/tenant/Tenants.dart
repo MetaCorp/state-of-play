@@ -20,7 +20,7 @@ class _OwnersState extends State<Tenants> {
   Widget build(BuildContext context) {
     return MyScaffold(
       appBar: AppBar(
-        title: Text('Mandataires'),
+        title: Text('Locataires'),
         actions: [
           IconButton(
             icon: Icon(Icons.search),

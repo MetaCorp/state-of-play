@@ -4,10 +4,11 @@ import 'package:intl/intl.dart';
 typedef ChangeCallback = void Function(DateTime);
 
 class DateButton extends StatefulWidget {
-  DateButton({ Key key, this.onChange, this.value }) : super(key: key);
+  DateButton({ Key key, this.onChange, this.value, this.labelText }) : super(key: key);
 
   final ChangeCallback onChange;
   final DateTime value;
+  final String labelText;
 
   @override
   _DateButtonState createState() => _DateButtonState();
@@ -28,9 +29,14 @@ class _DateButtonState extends State<DateButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-       child: Text(widget.value != null ? DateFormat('dd/MM/yyyy').format(widget.value) : 'Selectionner une date'),
-       onPressed: () => _selectDate(context),
+    return Row(
+      children: [
+        Text(widget.labelText + ' :'),
+        FlatButton(
+          child: Text(widget.value != null ? DateFormat('dd/MM/yyyy').format(widget.value) : 'Selectionner une date'),
+          onPressed: () => _selectDate(context),
+        )
+      ]
     );
   }
 }
