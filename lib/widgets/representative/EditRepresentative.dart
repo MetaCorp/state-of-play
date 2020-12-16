@@ -69,48 +69,101 @@ class _EditRepresentativeState extends State<EditRepresentative> {
             },
           ),
           builder: (
-            RunMutation runMutation,
+            RunMutation runUpdateMutation,
             QueryResult mutationResult,
           ) {
             
-            return NewInterlocutorContent(
-              title: 'Éditer un mandataire',
-              interlocutor: representative,
-              onSave: (representative) async {
-                print('runMutation');
-
-                MultiSourceResult mutationResult = runMutation({
-                  "data": {
-                    "id": representative.id,
-                    "firstName": representative.firstName,
-                    "lastName": representative.lastName,
-                    "address": representative.address,
-                    "postalCode": representative.postalCode,
-                    "city": representative.city,
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteRepresentative(\$data: DeleteRepresentativeInput!) {
+                    deleteRepresentative(data: \$data)
                   }
-                });
-                QueryResult networkResult = await mutationResult.networkResult;
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
+              ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return NewInterlocutorContent(
+                  title: 'Éditer un mandataire',
+                  interlocutor: representative,
+                  onSave: (representative) async {
+                    print('runUpdateMutation');
 
-                if (networkResult.hasException) {
-                  print('networkResult.hasException: ' + networkResult.hasException.toString());
-                  if (networkResult.exception.clientException != null)
-                    print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                  else
-                    print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-                }
-                else {
-                  print('queryResult data: ' + networkResult.data.toString());
-                  if (networkResult.data != null) {
-                    if (networkResult.data["updateRepresentative"] == null) {
-                      // TODO: show error
+                    MultiSourceResult mutationResult = runUpdateMutation({
+                      "data": {
+                        "id": representative.id,
+                        "firstName": representative.firstName,
+                        "lastName": representative.lastName,
+                        "address": representative.address,
+                        "postalCode": representative.postalCode,
+                        "city": representative.city,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
-                    else if (networkResult.data["updateRepresentative"] != null) {
-                      Navigator.pop(context);
-                      Navigator.popAndPushNamed(context, '/representative', arguments: { "representativeId": widget.representativeId });// To refresh
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["updateRepresentative"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["updateRepresentative"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/representative', arguments: { "representativeId": widget.representativeId });// To refresh
+                        }
+                      }
                     }
-                  }
-                }
-              },
+                  },
+                  onDelete: () async {
+                    print('runDeleteMutation');
+
+                    MultiSourceResult mutationResult = runDeleteMutation({
+                      "data": {
+                        "representativeId": representative.id,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                    }
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["deleteRepresentative"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["deleteRepresentative"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/representatives');// To refresh
+                        }
+                      }
+                    }
+                  },
+                );
+              }
             );
           }
         );

@@ -69,48 +69,101 @@ class _EditOwnerState extends State<EditOwner> {
             },
           ),
           builder: (
-            RunMutation runMutation,
+            RunMutation runUpdateMutation,
             QueryResult mutationResult,
           ) {
             
-            return NewInterlocutorContent(
-              title: 'Éditer un mandataire',
-              interlocutor: owner,
-              onSave: (owner) async {
-                print('runMutation');
-
-                MultiSourceResult mutationResult = runMutation({
-                  "data": {
-                    "id": owner.id,
-                    "firstName": owner.firstName,
-                    "lastName": owner.lastName,
-                    "address": owner.address,
-                    "postalCode": owner.postalCode,
-                    "city": owner.city,
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteOwner(\$data: DeleteOwnerInput!) {
+                    deleteOwner(data: \$data)
                   }
-                });
-                QueryResult networkResult = await mutationResult.networkResult;
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
+              ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return NewInterlocutorContent(
+                  title: 'Éditer un mandataire',
+                  interlocutor: owner,
+                  onSave: (owner) async {
+                    print('runUpdateMutation');
 
-                if (networkResult.hasException) {
-                  print('networkResult.hasException: ' + networkResult.hasException.toString());
-                  if (networkResult.exception.clientException != null)
-                    print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                  else
-                    print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-                }
-                else {
-                  print('queryResult data: ' + networkResult.data.toString());
-                  if (networkResult.data != null) {
-                    if (networkResult.data["updateOwner"] == null) {
-                      // TODO: show error
+                    MultiSourceResult mutationResult = runUpdateMutation({
+                      "data": {
+                        "id": owner.id,
+                        "firstName": owner.firstName,
+                        "lastName": owner.lastName,
+                        "address": owner.address,
+                        "postalCode": owner.postalCode,
+                        "city": owner.city,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
-                    else if (networkResult.data["updateOwner"] != null) {
-                      Navigator.pop(context);
-                      Navigator.popAndPushNamed(context, '/owner', arguments: { "ownerId": widget.ownerId });// To refresh
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["updateOwner"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["updateOwner"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/owner', arguments: { "ownerId": widget.ownerId });// To refresh
+                        }
+                      }
                     }
-                  }
-                }
-              },
+                  },
+                  onDelete: () async {
+                    print('runDeleteMutation');
+
+                    MultiSourceResult mutationResult = runDeleteMutation({
+                      "data": {
+                        "ownerId": owner.id,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                    }
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["deleteOwner"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["deleteOwner"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/owners');// To refresh
+                        }
+                      }
+                    }
+                  },
+                );
+              }
             );
           }
         );

@@ -69,48 +69,101 @@ class _EditTenantState extends State<EditTenant> {
             },
           ),
           builder: (
-            RunMutation runMutation,
+            RunMutation runUpdateMutation,
             QueryResult mutationResult,
           ) {
             
-            return NewInterlocutorContent(
-              title: 'Éditer un propriétaire',
-              interlocutor: tenant,
-              onSave: (tenant) async {
-                print('runMutation');
-
-                MultiSourceResult mutationResult = runMutation({
-                  "data": {
-                    "id": tenant.id,
-                    "firstName": tenant.firstName,
-                    "lastName": tenant.lastName,
-                    "address": tenant.address,
-                    "postalCode": tenant.postalCode,
-                    "city": tenant.city,
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteTenant(\$data: DeleteTenantInput!) {
+                    deleteTenant(data: \$data)
                   }
-                });
-                QueryResult networkResult = await mutationResult.networkResult;
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
+              ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return NewInterlocutorContent(
+                  title: 'Éditer un propriétaire',
+                  interlocutor: tenant,
+                  onSave: (tenant) async {
+                    print('runUpdateMutation');
 
-                if (networkResult.hasException) {
-                  print('networkResult.hasException: ' + networkResult.hasException.toString());
-                  if (networkResult.exception.clientException != null)
-                    print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                  else
-                    print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-                }
-                else {
-                  print('queryResult data: ' + networkResult.data.toString());
-                  if (networkResult.data != null) {
-                    if (networkResult.data["updateTenant"] == null) {
-                      // TODO: show error
+                    MultiSourceResult mutationResult = runUpdateMutation({
+                      "data": {
+                        "id": tenant.id,
+                        "firstName": tenant.firstName,
+                        "lastName": tenant.lastName,
+                        "address": tenant.address,
+                        "postalCode": tenant.postalCode,
+                        "city": tenant.city,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
-                    else if (networkResult.data["updateTenant"] != null) {
-                      Navigator.pop(context);
-                      Navigator.popAndPushNamed(context, '/tenant', arguments: { "tenantId": widget.tenantId });// To refresh
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["updateTenant"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["updateTenant"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/tenant', arguments: { "tenantId": widget.tenantId });// To refresh
+                        }
+                      }
                     }
-                  }
-                }
-              },
+                  },
+                  onDelete: () async {
+                    print('runDeleteMutation');
+
+                    MultiSourceResult mutationResult = runDeleteMutation({
+                      "data": {
+                        "tenantId": tenant.id,
+                      }
+                    });
+                    QueryResult networkResult = await mutationResult.networkResult;
+
+                    if (networkResult.hasException) {
+                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      if (networkResult.exception.clientException != null)
+                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                      else
+                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                    }
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["deleteTenant"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["deleteTenant"] != null) {
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                        }
+                      }
+                    }
+                  },
+                );
+              }
             );
           }
         );

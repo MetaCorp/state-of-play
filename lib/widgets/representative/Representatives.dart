@@ -75,7 +75,7 @@ class _OwnersState extends State<Representatives> {
               itemCount: representatives.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+                onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();

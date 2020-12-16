@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 typedef SaveCallback = Function(dynamic);
+typedef DeleteCallback = Function();
 
 class NewInterlocutorContent extends StatefulWidget {
-  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave }) : super(key: key);
+  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave, this.onDelete }) : super(key: key);
 
   final String title;
   final dynamic interlocutor;
   final SaveCallback onSave;
+  final DeleteCallback onDelete;
 
   @override
   _NewInterlocutorContentState createState() => new _NewInterlocutorContentState();
@@ -16,6 +18,30 @@ class NewInterlocutorContent extends StatefulWidget {
 class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
 
   final _formKey = GlobalKey<FormState>();
+
+  
+  void _showDialogDelete(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () {
+              widget.onDelete();
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +144,21 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 widget.onSave(widget.interlocutor);
               }
             }
-          )
+          ),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text("Supprimer"),
+                value: "delete",
+              )
+            ],
+            onSelected: (result) {
+              print("onSelected: " + result);
+              if (result == "delete")
+                _showDialogDelete(context);
+            }
+          ),
         ],
       ),
       body: body

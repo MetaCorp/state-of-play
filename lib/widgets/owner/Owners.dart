@@ -75,7 +75,7 @@ class _OwnersState extends State<Owners> {
               itemCount: owners.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(owners[i].firstName + ' ' + owners[i].lastName),
-                onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
+                onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();

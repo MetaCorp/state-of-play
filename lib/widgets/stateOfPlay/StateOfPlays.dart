@@ -153,7 +153,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                 return ListTile(
                   title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
                   subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                  onTap: () => Navigator.pushNamed(context, "/state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                  onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
                 );
               },
               separatorBuilder: (context, index) {

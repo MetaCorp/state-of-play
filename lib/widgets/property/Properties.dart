@@ -76,7 +76,7 @@ class _PropertiesState extends State<Properties> {
               itemCount: properties.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
+                onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
               ),
               separatorBuilder: (context, index) {
                 return Divider();

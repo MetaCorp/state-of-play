@@ -63,15 +63,15 @@ export class StateOfPlay extends BaseEntity {
   out: Boolean
 
   @Field(() => Owner)
-  @ManyToOne(() => Owner, owner => owner.stateOfPlays)
+  @ManyToOne(() => Owner, owner => owner.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   owner: Owner
   
   @Field(() => Representative)
-  @ManyToOne(() => Representative, representative => representative.stateOfPlays)
+  @ManyToOne(() => Representative, representative => representative.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   representative: Representative;
 
   @Field(() => [Tenant])
-  @ManyToMany(() => Tenant, tenant => tenant.stateOfPlays)
+  @ManyToMany(() => Tenant, tenant => tenant.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   @JoinTable()
   tenants: [Tenant]
 
@@ -80,6 +80,6 @@ export class StateOfPlay extends BaseEntity {
   user: User
 
   @Field(() => Property)
-  @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true })
+  @ManyToOne(() => Property, property => property.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   property: Property
 }
