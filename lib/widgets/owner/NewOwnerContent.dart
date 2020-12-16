@@ -21,7 +21,78 @@ class _NewOwnerContentState extends State<NewOwnerContent> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    Widget body = Container(
+      margin: EdgeInsets.all(16),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              initialValue: widget.owner.firstName,
+              decoration: InputDecoration(labelText: 'Prénom'),
+              onSaved: (value) => widget.owner.firstName = value,
+              validator: (value) {
+                if (value == null || value == "")
+                  return "Ce champs est obligatoire.";
+                return null;
+              },
+            ),
+            TextFormField(
+              initialValue: widget.owner.lastName,
+              decoration: InputDecoration(labelText: 'Nom'),
+              onSaved: (value) => widget.owner.lastName = value,
+              validator: (value) {
+                if (value == null || value == "")
+                  return "Ce champs est obligatoire.";
+                return null;
+              },
+            ),
+            TextFormField(
+              initialValue: widget.owner.address,
+              decoration: InputDecoration(labelText: 'Adresse'),
+              onSaved: (value) => widget.owner.address = value,
+              validator: (value) {
+                if (value == null || value == "")
+                  return "Ce champs est obligatoire.";
+                return null;
+              },
+            ),
+            TextFormField(
+              initialValue: widget.owner.postalCode,
+              decoration: InputDecoration(labelText: 'Code postal'),
+              keyboardType: TextInputType.number,
+              onSaved: (value) => widget.owner.postalCode = value,
+              validator: (value) {
+                if (value == null || value == "")
+                  return "Ce champs est obligatoire.";
+                return null;
+              },
+            ),
+            TextFormField(
+              initialValue: widget.owner.city,
+              decoration: InputDecoration(labelText: 'Ville'),
+              onSaved: (value) => widget.owner.city = value,
+              validator: (value) {
+                if (value == null || value == "")
+                  return "Ce champs est obligatoire.";
+                return null;
+              },
+            ),
+            RaisedButton(
+              child: Text('Sauvegarder'),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  widget.onSave(widget.owner);
+                }
+              }
+            )
+          ],
+        ),
+      ),
+    );
+
+    return widget.title != null ? Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
@@ -36,76 +107,7 @@ class _NewOwnerContentState extends State<NewOwnerContent> {
           )
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                initialValue: widget.owner.firstName,
-                decoration: InputDecoration(labelText: 'Prénom'),
-                onSaved: (value) => widget.owner.firstName = value,
-                validator: (value) {
-                  if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
-                  return null;
-                },
-              ),
-              TextFormField(
-                initialValue: widget.owner.lastName,
-                decoration: InputDecoration(labelText: 'Nom'),
-                onSaved: (value) => widget.owner.lastName = value,
-                validator: (value) {
-                  if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
-                  return null;
-                },
-              ),
-              TextFormField(
-                initialValue: widget.owner.address,
-                decoration: InputDecoration(labelText: 'Adresse'),
-                onSaved: (value) => widget.owner.address = value,
-                validator: (value) {
-                  if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
-                  return null;
-                },
-              ),
-              TextFormField(
-                initialValue: widget.owner.postalCode,
-                decoration: InputDecoration(labelText: 'Code postal'),
-                keyboardType: TextInputType.number,
-                onSaved: (value) => widget.owner.postalCode = value,
-                validator: (value) {
-                  if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
-                  return null;
-                },
-              ),
-              TextFormField(
-                initialValue: widget.owner.city,
-                decoration: InputDecoration(labelText: 'Ville'),
-                onSaved: (value) => widget.owner.city = value,
-                validator: (value) {
-                  if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
-                  return null;
-                },
-              ),
-              RaisedButton(
-                child: Text('Sauvegarder'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    widget.onSave(widget.owner);
-                  }
-                }
-              )
-            ],
-          ),
-        ),
-      )
-    );
+      body: body
+    ) : body;
   }
 }

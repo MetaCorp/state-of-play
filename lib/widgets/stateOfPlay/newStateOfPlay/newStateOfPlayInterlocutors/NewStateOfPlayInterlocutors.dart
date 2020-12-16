@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/owner/NewOwnerContent.dart';
+import 'package:flutter_tests/widgets/representative/NewRepresentativeContent.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/DoubleButton.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsOwner.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsProperty.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsRepresentative.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayI
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsTenant.dart';
+import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -40,10 +42,12 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsOwner(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwnerContent(
+              title: 'Nouveau propriétaire',
               owner: sop.Owner(),
               onSave : (owner) {
                 widget.stateOfPlay.owner = owner;
+                Navigator.pop(context);
                 setState(() { });
               }
             )));
@@ -68,10 +72,12 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsRepresentative(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentativeContent(
+              title: 'Nouveau mandataire',
               representative: sop.Representative(),
               onSave : (representative) {
                 widget.stateOfPlay.representative = representative;
+                Navigator.pop(context);
                 setState(() { });
               }
             )));
@@ -95,10 +101,12 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsTenant(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenantContent(
+              title: 'Nouveau locataire',
               tenant: sop.Tenant(),
               onSave : (tenant) {
                 widget.stateOfPlay.tenants.add(tenant);
+                Navigator.pop(context);
                 setState(() { });
               }
             )));
