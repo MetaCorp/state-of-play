@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
-typedef SaveCallback = Function(sop.Representative);
+typedef SaveCallback = Function(dynamic);
 
-class NewRepresentativeContent extends StatefulWidget {
-  NewRepresentativeContent({ Key key, this.title, this.representative, this.onSave }) : super(key: key);
+class NewInterlocutorContent extends StatefulWidget {
+  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave }) : super(key: key);
 
   final String title;
-  final sop.Representative representative;
+  final dynamic interlocutor;
   final SaveCallback onSave;
 
   @override
-  _NewRepresentativeContentState createState() => new _NewRepresentativeContentState();
+  _NewInterlocutorContentState createState() => new _NewInterlocutorContentState();
 }
 
-class _NewRepresentativeContentState extends State<NewRepresentativeContent> {
+class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
 
   final _formKey = GlobalKey<FormState>();
 
@@ -28,62 +27,77 @@ class _NewRepresentativeContentState extends State<NewRepresentativeContent> {
         child: Column(
           children: [
             TextFormField(
-              initialValue: widget.representative.firstName,
+              initialValue: widget.interlocutor.firstName,
               decoration: InputDecoration(labelText: 'Prénom'),
-              onSaved: (value) => widget.representative.firstName = value,
+              onSaved: (value) => widget.interlocutor.firstName = value,
               validator: (value) {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
               },
             ),
+            SizedBox(
+              height: 8,
+            ),
             TextFormField(
-              initialValue: widget.representative.lastName,
+              initialValue: widget.interlocutor.lastName,
               decoration: InputDecoration(labelText: 'Nom'),
-              onSaved: (value) => widget.representative.lastName = value,
+              onSaved: (value) => widget.interlocutor.lastName = value,
               validator: (value) {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
               },
             ),
+            SizedBox(
+              height: 8,
+            ),
             TextFormField(
-              initialValue: widget.representative.address,
+              initialValue: widget.interlocutor.address,
               decoration: InputDecoration(labelText: 'Adresse'),
-              onSaved: (value) => widget.representative.address = value,
+              onSaved: (value) => widget.interlocutor.address = value,
               validator: (value) {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
               },
             ),
+            SizedBox(
+              height: 8,
+            ),
             TextFormField(
-              initialValue: widget.representative.postalCode,
+              initialValue: widget.interlocutor.postalCode,
               decoration: InputDecoration(labelText: 'Code postal'),
               keyboardType: TextInputType.number,
-              onSaved: (value) => widget.representative.postalCode = value,
+              onSaved: (value) => widget.interlocutor.postalCode = value,
               validator: (value) {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
               },
             ),
+            SizedBox(
+              height: 8,
+            ),
             TextFormField(
-              initialValue: widget.representative.city,
+              initialValue: widget.interlocutor.city,
               decoration: InputDecoration(labelText: 'Ville'),
-              onSaved: (value) => widget.representative.city = value,
+              onSaved: (value) => widget.interlocutor.city = value,
               validator: (value) {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
               },
+            ),
+            SizedBox(
+              height: 16,
             ),
             RaisedButton(
               child: Text('Sauvegarder'),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
-                  widget.onSave(widget.representative);
+                  widget.onSave(widget.interlocutor);
                 }
               }
             )
@@ -101,7 +115,7 @@ class _NewRepresentativeContentState extends State<NewRepresentativeContent> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                widget.onSave(widget.representative);
+                widget.onSave(widget.interlocutor);
               }
             }
           )

@@ -5,13 +5,12 @@ import 'package:flutter_tests/widgets/representative/NewRepresentativeContent.da
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/DoubleButton.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsProperty.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsRepresentative.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsTenant.dart';
 import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -42,9 +41,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwnerContent(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
               title: 'Nouveau propriétaire',
-              owner: sop.Owner(),
+              interlocutor: sop.Owner(),
               onSave : (owner) {
                 widget.stateOfPlay.owner = owner;
                 Navigator.pop(context);
@@ -72,9 +71,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentativeContent(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
               title: 'Nouveau mandataire',
-              representative: sop.Representative(),
+              interlocutor: sop.Representative(),
               onSave : (representative) {
                 widget.stateOfPlay.representative = representative;
                 Navigator.pop(context);
@@ -101,9 +100,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             )));
           },
           onPressAdd: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenantContent(
+            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
               title: 'Nouveau locataire',
-              tenant: sop.Tenant(),
+              interlocutor: sop.Tenant(),
               onSave : (tenant) {
                 widget.stateOfPlay.tenants.add(tenant);
                 Navigator.pop(context);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/owner/NewOwnerContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -41,9 +41,9 @@ class _NewOwnerState extends State<NewOwner> {
         QueryResult result,
       ) {
         
-        return NewOwnerContent(
+        return NewInterlocutorContent(
           title: 'Nouveau mandataire',
-          owner: sop.Owner(),
+          interlocutor: sop.Owner(),
           onSave: (owner) async {
             print('runMutation');
 

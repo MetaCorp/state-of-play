@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -73,9 +73,9 @@ class _EditTenantState extends State<EditTenant> {
             QueryResult mutationResult,
           ) {
             
-            return NewTenantContent(
+            return NewInterlocutorContent(
               title: 'Éditer un propriétaire',
-              tenant: tenant,
+              interlocutor: tenant,
               onSave: (tenant) async {
                 print('runMutation');
 

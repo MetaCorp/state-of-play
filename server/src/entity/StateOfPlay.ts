@@ -7,31 +7,6 @@ import { Owner } from "./Owner";
 import { Representative } from "./Representative";
 import { Tenant } from "./Tenant";
 
-// @ObjectType()
-// class Decoration extends BaseEntity {
-//   @Field()
-//   type: String
-  
-//   @Field()
-//   nature: String
-  
-//   @Field()
-//   state: String
-  
-//   @Field()
-//   comment: String
-// }
-
-
-// @ObjectType()
-// class Room extends BaseEntity {
-//   @Field()
-//   name: String
-
-//   @Field(() => [Decoration])
-//   decorations: [Decoration]
-// }
-
 @ObjectType()
 @Entity()
 export class StateOfPlay extends BaseEntity {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/representative/NewRepresentativeContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -73,9 +73,9 @@ class _EditRepresentativeState extends State<EditRepresentative> {
             QueryResult mutationResult,
           ) {
             
-            return NewRepresentativeContent(
+            return NewInterlocutorContent(
               title: 'Éditer un mandataire',
-              representative: representative,
+              interlocutor: representative,
               onSave: (representative) async {
                 print('runMutation');
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/owner/NewOwnerContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -73,9 +73,9 @@ class _EditOwnerState extends State<EditOwner> {
             QueryResult mutationResult,
           ) {
             
-            return NewOwnerContent(
+            return NewInterlocutorContent(
               title: 'Éditer un mandataire',
-              owner: owner,
+              interlocutor: owner,
               onSave: (owner) async {
                 print('runMutation');
 

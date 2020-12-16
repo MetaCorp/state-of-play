@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/tenant/NewTenantContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -41,9 +41,9 @@ class _NewTenantState extends State<NewTenant> {
         QueryResult result,
       ) {
         
-        return NewTenantContent(
+        return NewInterlocutorContent(
           title: 'Nouveau locataire',
-          tenant: sop.Tenant(),
+          interlocutor: sop.Tenant(),
           onSave: (tenant) async {
             print('runMutation');
 
