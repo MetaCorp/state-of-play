@@ -55,47 +55,76 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
           )
         ],
       ),
-      body: Column(
-        children: [
-          Text("État"),
-          DropdownButton(
-            value: widget.equipment.state,
-            items: stateValues.map((stateValue) => DropdownMenuItem(
-              value: stateValue,
-              child: Text(stateValue)
-            )).toList(),
-            onChanged: (value) {
-              setState(() {
-                widget.equipment.state = value;
-              });
-            },
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.equipment.brandOrObject),
-            decoration: InputDecoration(labelText: 'Marque/Objet'),
-            onChanged: (value) => widget.equipment.brandOrObject = value,
-          ),
-          SpinBox(
-            min: 1,
-            max: 100,
-            value: widget.equipment.quantity.toDouble(),
-            onChanged: (value) => widget.equipment.quantity = value.toInt(),
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.equipment.comments),
-            decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.equipment.comments = value,
-          ),
-          MyImagePicker(
-            onSelect: (imageFile) {
-              widget.equipment.newImages.add(imageFile);
-              setState(() { });
-            },
-          ),
-          ImageList(
-            imagesType: imagesType,
-          )
-        ]
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Text("État :")
+                ),
+                DropdownButton(
+                  value: widget.equipment.state,
+                  items: stateValues.map((stateValue) => DropdownMenuItem(
+                    value: stateValue,
+                    child: Text(stateValue)
+                  )).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      widget.equipment.state = value;
+                    });
+                  },
+                )
+              ]
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.equipment.brandOrObject),
+              decoration: InputDecoration(labelText: 'Marque/Objet'),
+              onChanged: (value) => widget.equipment.brandOrObject = value,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Text("Quantité :")
+                ),
+                Flexible(
+                  child: SpinBox(
+                    min: 1,
+                    max: 100,
+                    value: widget.equipment.quantity.toDouble(),
+                    onChanged: (value) => widget.equipment.quantity = value.toInt(),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.equipment.comments),
+              decoration: InputDecoration(labelText: 'Commentaires'),
+              onChanged: (value) => widget.equipment.comments = value,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            MyImagePicker(
+              onSelect: (imageFile) {
+                widget.equipment.newImages.add(imageFile);
+                setState(() { });
+              },
+            ),
+            ImageList(
+              imagesType: imagesType,
+            )
+          ]
+        ),
       ),
     );
   }

@@ -115,7 +115,7 @@ class _PropertiesState extends State<Properties> {
             }
 
             if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
 
             List<sop.Property> properties = (result.data["properties"] as List).map((property) => sop.Property.fromJSON(property)).toList();

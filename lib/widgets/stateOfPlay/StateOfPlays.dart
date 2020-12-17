@@ -180,7 +180,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             }
 
             if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
 
             List<sop.StateOfPlay> stateOfPlays = (result.data["stateOfPlays"] as List).map((stateOfPlay) => sop.StateOfPlay.fromJSON(stateOfPlay)).toList();

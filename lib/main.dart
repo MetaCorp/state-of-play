@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import 'package:flutter_tests/widgets/login_register/Login.dart';
 import 'package:flutter_tests/widgets/login_register/Register.dart';
@@ -135,13 +133,6 @@ class _MyAppState extends State<MyApp> {
               buttonColor: Colors.grey, 
             ),
             initialRoute: '/login',
-            // routes: {
-            //   '/state-of-plays': (context) => StateOfPlays(),
-            //   '/state-of-play': (context) => StateOfPlay(),
-            //   '/properties': (context) => Properties(),
-            //   '/property': (context) => Property(),
-            // //  '/new': (context) => NewStateOfPlayRouter(),
-            // },
             onGenerateRoute: (settings) {
               
               if (settings.name == "/login") 
@@ -231,7 +222,7 @@ class _MyAppState extends State<MyApp> {
               }
               else if (settings.name == '/search-tenants')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants());
-              
+
 
               else if (settings.name == '/settings')
                 return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());

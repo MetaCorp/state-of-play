@@ -114,7 +114,7 @@ class _OwnersState extends State<Owners> {
             }
 
             if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
 
             List<sop.Owner> owners = (result.data["owners"] as List).map((owner) => sop.Owner.fromJSON(owner)).toList();

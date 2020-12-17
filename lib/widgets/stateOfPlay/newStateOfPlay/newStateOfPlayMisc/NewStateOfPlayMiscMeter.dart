@@ -52,37 +52,49 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: TextEditingController(text: widget.meter.location),
-            decoration: InputDecoration(labelText: 'Emplacement'),
-            onChanged: (value) => widget.meter.location = value,
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.meter.index.toString()),
-            decoration: InputDecoration(labelText: 'Index'),
-            onChanged: (value) => widget.meter.index = int.parse(value),
-            keyboardType: TextInputType.number
-          ),
-          DateButton(
-            labelText: "Date de relevé",
-            value: widget.meter.dateOfSuccession,
-            onChange: (value) {
-              widget.meter.dateOfSuccession = value;
-              setState(() { });
-            },
-          ),
-          MyImagePicker(
-            onSelect: (imageFile) {
-              widget.meter.newImages.add(imageFile);
-              setState(() { });
-            },
-          ),
-          ImageList(
-            imagesType: imagesType,
-          )
-        ]
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: TextEditingController(text: widget.meter.location),
+              decoration: InputDecoration(labelText: 'Emplacement'),
+              onChanged: (value) => widget.meter.location = value,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.meter.index.toString()),
+              decoration: InputDecoration(labelText: 'Index'),
+              onChanged: (value) => widget.meter.index = int.parse(value),
+              keyboardType: TextInputType.number
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            DateButton(
+              labelText: "Date de relevé",
+              value: widget.meter.dateOfSuccession,
+              onChange: (value) {
+                widget.meter.dateOfSuccession = value;
+                setState(() { });
+              },
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            MyImagePicker(
+              onSelect: (imageFile) {
+                widget.meter.newImages.add(imageFile);
+                setState(() { });
+              },
+            ),
+            ImageList(
+              imagesType: imagesType,
+            )
+          ]
+        ),
       ),
     );
   }

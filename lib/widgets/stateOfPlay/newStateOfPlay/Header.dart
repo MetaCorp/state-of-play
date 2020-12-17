@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/DoubleButton.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutor.dart';
 
 typedef PressAddCallBack = void Function();
 
@@ -13,15 +13,25 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(title),
-        Spacer(),
-        RaisedButton(
-          child: Icon(Icons.add),
-          onPressed: onPressAdd
-        )
-      ],
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          Spacer(),
+          RaisedButton(
+            child: Icon(Icons.add),
+            onPressed: onPressAdd,
+            color: Colors.grey[200],
+          )
+        ],
+      ),
     );
   }
 }

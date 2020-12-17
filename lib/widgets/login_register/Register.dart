@@ -69,69 +69,84 @@ class _RegisterState extends State<Register> {
           appBar: AppBar(
             title: Text('Inscription'),
           ),
-          body: Column(
-            children: [
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email'
+          body: Container(
+            margin: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email'
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _firstNameController,
-                decoration: InputDecoration(
-                  labelText: 'Prénom'
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              TextField(
-                controller: _lastNameController,
-                decoration: InputDecoration(
-                  labelText: 'Nom'
+                TextField(
+                  controller: _firstNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Prénom'
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password'
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              RaisedButton(
-                child: Text('S\'inscrire'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "email": _emailController.text,
-                      "firstName": _firstNameController.text,
-                      "lastName": _lastNameController.text,
-                      "password": _passwordController.text
-                    }
-                  });
-
-                  QueryResult networkResult =  await result.networkResult;
-
-                  if (networkResult.hasException) {
-                    // TODO display snackbar (email already in use)
-                  } else {
-                    print('queryResult data: ' + networkResult.data.toString());
-                    if (networkResult.data != null) {
-                      if (networkResult.data["register"] == null) {
-                        // TODO: show error
+                TextField(
+                  controller: _lastNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nom'
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password'
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                RaisedButton(
+                  child: Text('S\'inscrire'),
+                  onPressed: () async {
+                    MultiSourceResult result = runMutation({
+                      "data": {
+                        "email": _emailController.text,
+                        "firstName": _firstNameController.text,
+                        "lastName": _lastNameController.text,
+                        "password": _passwordController.text
                       }
-                      else if (networkResult.data["register"] != null) {
-                        _prefs.setString("token", networkResult.data["register"]);
-                        Navigator.popAndPushNamed(context, '/state-of-plays');
+                    });
+
+                    QueryResult networkResult =  await result.networkResult;
+
+                    if (networkResult.hasException) {
+                      // TODO display snackbar (email already in use)
+                    } else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["register"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["register"] != null) {
+                          _prefs.setString("token", networkResult.data["register"]);
+                          Navigator.popAndPushNamed(context, '/state-of-plays');
+                        }
                       }
                     }
                   }
-                }
-              ),
-              RaisedButton(
-                child: Text('Se connecter'),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, '/login');
-                },
-              )
-            ],
+                ),
+                FlatButton(
+                  child: Text('Se connecter'),
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/login');
+                  },
+                )
+              ],
+            ),
           )
         );
       }

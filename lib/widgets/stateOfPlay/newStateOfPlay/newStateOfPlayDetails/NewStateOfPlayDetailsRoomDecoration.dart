@@ -58,41 +58,57 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
           )
         ],
       ),
-      body: Column(
-        children: [
-          Text("État"),
-          DropdownButton(
-            value: widget.decoration.state,
-            items: stateValues.map((stateValue) => DropdownMenuItem(
-              value: stateValue,
-              child: Text(stateValue)
-            )).toList(),
-            onChanged: (value) {
-              setState(() {
-                widget.decoration.state = value;
-              });
-            },
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.decoration.nature),
-            decoration: InputDecoration(labelText: 'Nature'),
-            onChanged: (value) => widget.decoration.nature = value,
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.decoration.comments),
-            decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.decoration.comments = value,
-          ),
-          MyImagePicker(
-            onSelect: (imageFile) {
-              widget.decoration.newImages.add(imageFile);
-              setState(() { });
-            },
-          ),
-          ImageList(
-            imagesType: imagesType,
-          )
-        ]
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Text("État :")
+                ),
+                DropdownButton(
+                  value: widget.decoration.state,
+                  items: stateValues.map((stateValue) => DropdownMenuItem(
+                    value: stateValue,
+                    child: Text(stateValue)
+                  )).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      widget.decoration.state = value;
+                    });
+                  },
+                )
+              ]
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.decoration.nature),
+              decoration: InputDecoration(labelText: 'Nature'),
+              onChanged: (value) => widget.decoration.nature = value,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.decoration.comments),
+              decoration: InputDecoration(labelText: 'Commentaires'),
+              onChanged: (value) => widget.decoration.comments = value,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            MyImagePicker(
+              onSelect: (imageFile) {
+                widget.decoration.newImages.add(imageFile);
+                setState(() { });
+              },
+            ),
+            ImageList(
+              imagesType: imagesType,
+            )
+          ]
+        ),
       ),
     );
   }

@@ -66,54 +66,63 @@ class _LoginState extends State<Login> {
           appBar: AppBar(
             title: Text('Connexion'),
           ),
-          body: Column(
-            children: [
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email'
+          body: Container(
+            margin: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email'
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password'
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              RaisedButton(
-                child: Text('Se connecter'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "email": _emailController.text,
-                    "password": _passwordController.text
-                  });
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password'
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                RaisedButton(
+                  child: Text('Se connecter'),
+                  onPressed: () async {
+                    MultiSourceResult result = runMutation({
+                      "email": _emailController.text,
+                      "password": _passwordController.text
+                    });
 
-                  QueryResult networkResult = await result.networkResult;
+                    QueryResult networkResult = await result.networkResult;
 
-                  if (networkResult.hasException) {
-                  
-                  }
-                  else {
-                    print('queryResult data: ' + networkResult.data.toString());
-                    if (networkResult.data != null) {
-                      if (networkResult.data["login"] == null) {
-                        // TODO: show error
-                      }
-                      else if (networkResult.data["login"] != null) {
-                        _prefs.setString("token", networkResult.data["login"]);
-                        Navigator.popAndPushNamed(context, '/state-of-plays');
+                    if (networkResult.hasException) {
+                    
+                    }
+                    else {
+                      print('queryResult data: ' + networkResult.data.toString());
+                      if (networkResult.data != null) {
+                        if (networkResult.data["login"] == null) {
+                          // TODO: show error
+                        }
+                        else if (networkResult.data["login"] != null) {
+                          _prefs.setString("token", networkResult.data["login"]);
+                          Navigator.popAndPushNamed(context, '/state-of-plays');
+                        }
                       }
                     }
                   }
-                }
-              ),
-              RaisedButton(
-                child: Text('S\'inscrire'),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, '/register');
-                },
-              )
-            ],
+                ),
+                FlatButton(
+                  child: Text('S\'inscrire'),
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/register');
+                  },
+                )
+              ],
+            ),
           )
         );
       }

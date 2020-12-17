@@ -26,39 +26,51 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
           )
         ],
       ),
-      body:  Column(
-        children: [
-          TextField(
-            controller: TextEditingController(text: widget.insurance.company),
-            decoration: InputDecoration(labelText: "Compagnie d'assurance"),
-            onChanged: (value) => widget.insurance.company = value,
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.insurance.number),
-            decoration: InputDecoration(labelText: "No de police d'assurance"),
-            onChanged: (value) => widget.insurance.number = value,
-          ),
-          Row(
-            children: [
-              DateButton(
-                labelText: "Date de début",
-                value: widget.insurance.dateStart,
-                onChange: (value) {
-                  widget.insurance.dateStart = value;
-                  setState(() { });
-                },
-              ),
-              DateButton(
-                labelText: "Date de fin",
-                value: widget.insurance.dateEnd,
-                onChange: (value) {
-                  widget.insurance.dateEnd = value;
-                  setState(() { });
-                },
-              )
-            ],
-          )
-        ],
+      body:  Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: TextEditingController(text: widget.insurance.company),
+              decoration: InputDecoration(labelText: "Compagnie d'assurance"),
+              onChanged: (value) => widget.insurance.company = value,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.insurance.number),
+              decoration: InputDecoration(labelText: "No de police d'assurance"),
+              onChanged: (value) => widget.insurance.number = value,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                DateButton(
+                  labelText: "Date de début",
+                  value: widget.insurance.dateStart,
+                  onChange: (value) {
+                    widget.insurance.dateStart = value;
+                    setState(() { });
+                  },
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                DateButton(
+                  labelText: "Date de fin",
+                  value: widget.insurance.dateEnd,
+                  onChange: (value) {
+                    widget.insurance.dateEnd = value;
+                    setState(() { });
+                  },
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

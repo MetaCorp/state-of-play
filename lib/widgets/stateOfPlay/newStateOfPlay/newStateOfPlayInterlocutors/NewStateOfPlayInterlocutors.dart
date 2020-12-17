@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/owner/EditOwner.dart';
 import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/HeaderInterlocutor.dart';
 
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/DoubleButton.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsProperty.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutor.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
@@ -26,17 +27,30 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
 
     return Column(
       children: [
-        Text("Propriétaire"),
-        DoubleButton(
+        HeaderInterlocutor(
+          text: "Propriétaire"
+        ),
+        ListTileInterlocutor(
           text: widget.stateOfPlay.owner.lastName != null ? widget.stateOfPlay.owner.firstName + ' ' + widget.stateOfPlay.owner.lastName : null,
           labelText: "Sélectionner un propriétaire",
           onPress: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchOwners(
-              onSelect : (owner) {
-                widget.stateOfPlay.owner = owner;
-                setState(() { }); // To rerender widget
-              }
-            )));
+            if (widget.stateOfPlay.owner.lastName != null)
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                title: 'Éditer un propriétaire',
+                interlocutor: widget.stateOfPlay.owner,
+                onSave : (owner) {
+                  widget.stateOfPlay.owner = owner;
+                  Navigator.pop(context);
+                  setState(() { });
+                }
+              )));
+            else
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchOwners(
+                onSelect : (owner) {
+                  widget.stateOfPlay.owner = owner;
+                  setState(() { }); // To rerender widget
+                }
+              )));
           },
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
@@ -56,17 +70,30 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         ),
 
         Divider(),
-        Text("Mandataire"),
-        DoubleButton(
+        HeaderInterlocutor(
+          text: "Mandataire"
+        ),
+        ListTileInterlocutor(
           text: widget.stateOfPlay.representative.lastName != null ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
           labelText: "Sélectionner un mandataire",
           onPress: () {
-            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
-              onSelect : (representative) {
-                widget.stateOfPlay.representative = representative;
-                setState(() { });
-              }
-            )));
+            if (widget.stateOfPlay.representative.lastName != null)
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                title: 'Éditer un mandataire',
+                interlocutor: widget.stateOfPlay.representative,
+                onSave : (representative) {
+                  widget.stateOfPlay.representative = representative;
+                  Navigator.pop(context);
+                  setState(() { });
+                }
+              )));
+            else
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
+                onSelect : (representative) {
+                  widget.stateOfPlay.representative = representative;
+                  setState(() { });
+                }
+              )));
           },
           onPressAdd: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
@@ -86,8 +113,10 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
         ),
 
         Divider(),
-        Text("Locataires"),
-        DoubleButton(
+        HeaderInterlocutor(
+          text: "Locataires"
+        ),
+        ListTileInterlocutor(
           labelText: "Selectionner un locataire",
           onPress: () {
             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchTenants(
@@ -110,18 +139,34 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
           }, 
         ),
         Column(
-          children: widget.stateOfPlay.tenants.map((tenant) => DoubleButton(
-            text: tenant.firstName + ' ' + tenant.lastName,
-            onPressRemove: () {
-              widget.stateOfPlay.tenants.remove(tenant);
-              setState(() { });
-            },
-          ),).toList()
+          children: widget.stateOfPlay.tenants.asMap().map((i, tenant) => MapEntry(
+            i,
+            ListTileInterlocutor(
+              text: tenant.firstName + ' ' + tenant.lastName,
+              onPress: () {
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                  title: 'Éditer un locataire',
+                  interlocutor: tenant,
+                  onSave : (tenant) {
+                    widget.stateOfPlay.tenants[i] = tenant;
+                    Navigator.pop(context);
+                    setState(() { });
+                  }
+                )));
+              },
+              onPressRemove: () {
+                widget.stateOfPlay.tenants.remove(tenant);
+                setState(() { });
+              },
+            ),
+          )).values.toList()
         ),
 
         Divider(),
-        Text("Propriété"),
-        DoubleButton(
+        HeaderInterlocutor(
+          text: "Propriété"
+        ),
+        ListTileInterlocutor(
           text: widget.stateOfPlay.property.address != null ? widget.stateOfPlay.property.address + ', ' + widget.stateOfPlay.property.postalCode + ' ' + widget.stateOfPlay.property.city : null,
           labelText: "Sélectionner une propriété",
           onPress: () {

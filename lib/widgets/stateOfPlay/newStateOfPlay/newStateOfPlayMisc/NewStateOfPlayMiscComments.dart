@@ -25,19 +25,25 @@ class _NewStateOfPlayMiscCommentsState extends State<NewStateOfPlayMiscComments>
           )
         ],
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: TextEditingController(text: widget.stateOfPlay.comments),
-            decoration: InputDecoration(labelText: 'Commentaires'),
-            onChanged: (value) => widget.stateOfPlay.comments = value,
-          ),
-          TextField(
-            controller: TextEditingController(text: widget.stateOfPlay.reserve),
-            decoration: InputDecoration(labelText: 'Réserve'),
-            onChanged: (value) => widget.stateOfPlay.reserve = value,
-          )
-        ],
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: TextEditingController(text: widget.stateOfPlay.comments),
+              decoration: InputDecoration(labelText: 'Commentaires'),
+              onChanged: (value) => widget.stateOfPlay.comments = value,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: TextEditingController(text: widget.stateOfPlay.reserve),
+              decoration: InputDecoration(labelText: 'Réserve'),
+              onChanged: (value) => widget.stateOfPlay.reserve = value,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -87,11 +87,25 @@ export class OwnerResolver {
 	@Mutation(() => Int)
 	async deleteOwner(@Arg("data") data: DeleteOwnerInput) {
 
-		const owner = await Owner.delete(data.ownerId)
+		// const owner = await Owner.findOne(data.ownerId, { relations: ["stateOfPlays", "stateOfPlays.owner"] });
+		// if (!owner)
+		// 	return 0
 
-		console.log('deleteOwner: ', owner)
+		// for (let i = 0; i < owner.stateOfPlays.length; i++) {
+		// 	let stateOfPlay = owner.stateOfPlays[i];
+			
+		// 	stateOfPlay.owner = undefined;
+			
+		// 	stateOfPlay = await stateOfPlay.save()
+			
+		// 	console.log('delete owner stateOfPlay: ', stateOfPlay.owner)
+		// }
 
-		if (owner.affected !== 1) return 0
+		const ret = await Owner.delete(data.ownerId)
+
+		console.log('deleteOwner: ', ret)
+
+		if (ret.affected !== 1) return 0
 
 		return 1
 	}

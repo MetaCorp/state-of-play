@@ -112,7 +112,7 @@ class _OwnersState extends State<Representatives> {
             }
 
             if (result.loading || result.data == null) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
 
             List<sop.Representative> representatives = (result.data["representatives"] as List).map((representative) => sop.Representative.fromJSON(representative)).toList();
