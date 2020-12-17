@@ -94,8 +94,8 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           }
           else {
             body = Container(
-              padding: EdgeInsets.only(top: 8),
               child: ListView.separated(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: stateOfPlays.length,
                 itemBuilder: (_, i) {
                   

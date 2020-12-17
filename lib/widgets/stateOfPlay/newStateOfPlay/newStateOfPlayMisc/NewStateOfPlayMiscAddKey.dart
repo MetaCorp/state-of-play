@@ -142,6 +142,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
           }
           else {
             body = ListView.separated(
+              padding: EdgeInsets.only(top: 8),
               itemCount: keys.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(keys[i]),

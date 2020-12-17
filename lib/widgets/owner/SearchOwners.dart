@@ -72,8 +72,8 @@ class _SearchOwnersState extends State<SearchOwners> {
           }
           else {
             body = Container(
-              padding: EdgeInsets.only(top: 8),
               child: ListView.separated(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: owners.length,
                 itemBuilder: (_, i) => ListTile(
                   title: Text(owners[i].firstName + ' ' + owners[i].lastName),

@@ -142,6 +142,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
           }
           else {
             body = ListView.separated(
+              padding: EdgeInsets.only(top: 8),
               itemCount: meters.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(meters[i]),

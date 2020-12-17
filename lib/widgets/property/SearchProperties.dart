@@ -73,8 +73,8 @@ class _SearchPropertiesState extends State<SearchProperties> {
           }
           else {
             body = Container(
-              padding: EdgeInsets.only(top: 8),
               child: ListView.separated(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: properties.length,
                 itemBuilder: (_, i) => ListTile(
                   title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),

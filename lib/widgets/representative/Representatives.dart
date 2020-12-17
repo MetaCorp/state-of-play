@@ -145,8 +145,8 @@ class _OwnersState extends State<Representatives> {
               ) {
                 
                 return Container(
-                  padding: EdgeInsets.only(top: 8),
                   child: ListView.separated(
+                    padding: EdgeInsets.only(top: 8),
                     itemCount: representatives.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),

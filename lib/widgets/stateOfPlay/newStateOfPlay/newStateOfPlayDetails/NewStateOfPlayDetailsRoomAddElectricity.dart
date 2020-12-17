@@ -142,6 +142,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
           }
           else {
             body = ListView.separated(
+              padding: EdgeInsets.only(top: 8),
               itemCount: electricities.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(electricities[i]),

@@ -72,8 +72,8 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
           }
           else {
             body = Container(
-              padding: EdgeInsets.only(top: 8),
               child: ListView.separated(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: representatives.length,
                 itemBuilder: (_, i) => ListTile(
                   title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),

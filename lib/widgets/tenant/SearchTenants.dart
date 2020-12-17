@@ -72,8 +72,8 @@ class _SearchTenantsState extends State<SearchTenants> {
           }
           else {
             body = Container(
-              padding: EdgeInsets.only(top: 8),
               child: ListView.separated(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: tenants.length,
                 itemBuilder: (_, i) => ListTile(
                   title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),

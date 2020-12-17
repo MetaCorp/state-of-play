@@ -148,8 +148,8 @@ class _TenantsState extends State<Tenants> {
               ) {
                 
                 return Container(
-                  padding: EdgeInsets.only(top: 8),
                   child: ListView.separated(
+                    padding: EdgeInsets.only(top: 8),
                     itemCount: tenants.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),

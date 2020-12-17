@@ -142,6 +142,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           }
           else {
             body = ListView.separated(
+              padding: EdgeInsets.only(top: 8),
               itemCount: equipments.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(equipments[i]),

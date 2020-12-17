@@ -142,6 +142,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
           }
           else {
             body = ListView.separated(
+              padding: EdgeInsets.only(top: 8),
               itemCount: decorations.length,
               itemBuilder: (_, i) => ListTile(
                 title: Text(decorations[i]),
