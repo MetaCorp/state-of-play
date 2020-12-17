@@ -152,7 +152,7 @@ class _OwnersState extends State<Owners> {
                     itemCount: owners.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.125,
+                      actionExtentRatio: 0.25,
                       child: ListTile(
                         title: Text(owners[i].firstName + ' ' + owners[i].lastName),
                         onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),

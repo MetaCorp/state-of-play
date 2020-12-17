@@ -150,7 +150,7 @@ class _OwnersState extends State<Representatives> {
                     itemCount: representatives.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.125,
+                      actionExtentRatio: 0.25,
                       child: ListTile(
                         title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
                         onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),

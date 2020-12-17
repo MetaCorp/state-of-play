@@ -227,7 +227,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
 
                       return Slidable(
                         actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.125,
+                        actionExtentRatio: 0.25,
                         child: ListTile(
                           title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
                           subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),

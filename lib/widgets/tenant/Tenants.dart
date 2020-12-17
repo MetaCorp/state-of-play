@@ -153,7 +153,7 @@ class _TenantsState extends State<Tenants> {
                     itemCount: tenants.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.125,
+                      actionExtentRatio: 0.25,
                       child: ListTile(
                         title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
                         onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),

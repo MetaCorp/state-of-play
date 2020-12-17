@@ -153,7 +153,7 @@ class _PropertiesState extends State<Properties> {
                     itemCount: properties.length,
                     itemBuilder: (_, i) => Slidable(
                       actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.125,
+                      actionExtentRatio: 0.25,
                       child: ListTile(
                         title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
                         onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),

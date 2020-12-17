@@ -46,28 +46,21 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
             SizedBox(
               height: 8,
             ),
-            Row(
-              children: [
-                DateButton(
-                  labelText: "Date de début",
-                  value: widget.insurance.dateStart,
-                  onChange: (value) {
-                    widget.insurance.dateStart = value;
-                    setState(() { });
-                  },
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                DateButton(
-                  labelText: "Date de fin",
-                  value: widget.insurance.dateEnd,
-                  onChange: (value) {
-                    widget.insurance.dateEnd = value;
-                    setState(() { });
-                  },
-                )
-              ],
+            DateButton(
+              labelText: "Date de début",
+              value: widget.insurance.dateStart,
+              onChange: (value) {
+                widget.insurance.dateStart = value;
+                setState(() { });
+              },
+            ),
+            DateButton(
+              labelText: "Date de fin",
+              value: widget.insurance.dateEnd,
+              onChange: (value) {
+                widget.insurance.dateEnd = value;
+                setState(() { });
+              },
             )
           ],
         ),
