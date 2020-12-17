@@ -18,7 +18,7 @@ class _MyScaffoldState extends State<MyScaffold> {
 
   bool _bottomSheetOpen;
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
-  TextStyle _smallTextStyle = new TextStyle( fontSize: 10);
+  TextStyle _smallTextStyle = new TextStyle( fontSize: 7 );
   TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold, color: Colors.grey[700]);
 
   @override
@@ -59,7 +59,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children :[
+                      children: [
                         Row(
                           children: [
                             Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
@@ -68,13 +68,17 @@ class _MyScaffoldState extends State<MyScaffold> {
                         Row(
                           children: [
                             FlatButton(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              minWidth: 0,
+                              height: 0,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.add,
-                                      size: 42,
+                                      size: 36,
                                       color: Colors.grey[700],
                                     ),
                                     //add space
@@ -88,17 +92,21 @@ class _MyScaffoldState extends State<MyScaffold> {
                               },
                             ),
                             FlatButton(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              minWidth: 0,
+                              height: 0,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.home,
-                                      size: 42,
+                                      size: 36,
                                       color: Colors.grey[700],
                                     ),
                                     //add space
-                                    Text("A partir \n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                    Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
                                   ],
                                 ),
                               ),
@@ -131,14 +139,17 @@ class _MyScaffoldState extends State<MyScaffold> {
                         Row(
                           children: [
                             FlatButton(
-                              padding: EdgeInsets.all(4),
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              minWidth: 0,
+                              height: 0,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.add,
-                                      size: 42,
+                                      size: 36,
                                       color: Colors.grey[700],
                                     ),
                                     //add space
@@ -152,13 +163,17 @@ class _MyScaffoldState extends State<MyScaffold> {
                               },
                             ),
                             FlatButton(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              minWidth: 0,
+                              height: 0,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.home,
-                                      size: 42,
+                                      size: 36,
                                       color: Colors.grey[700],
                                     ),
                                     //add space
