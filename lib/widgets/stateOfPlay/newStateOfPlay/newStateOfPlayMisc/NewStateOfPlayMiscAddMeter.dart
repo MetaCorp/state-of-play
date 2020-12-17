@@ -126,6 +126,8 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> meters;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
@@ -134,7 +136,10 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
         }
         else {
 
-          List<String> meters = (result.data["meters"] as List).map((meter) => meter["type"].toString()).toList();
+          meters = (result.data["meters"] as List).map((meter) => {
+            "id": meter["id"],
+            "type": meter["type"],
+          }).toList();
           print('meters length: ' + meters.length.toString());
 
           if (meters.length == 0) {
@@ -145,14 +150,14 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               padding: EdgeInsets.only(top: 8),
               itemCount: meters.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(meters[i]),
-                selected: _selectedMeters.contains(meters[i]),
+                title: Text(meters[i]["type"]),
+                selected: _selectedMeters.contains(meters[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedMeters.contains(meters[i]))
-                      _selectedMeters.add(meters[i]);
+                    if (!_selectedMeters.contains(meters[i]["id"]))
+                      _selectedMeters.add(meters[i]["id"]);
                     else
-                      _selectedMeters.remove(meters[i]);
+                      _selectedMeters.remove(meters[i]["id"]);
                   });
                 },
               ),
@@ -192,7 +197,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedMeters);
+                  widget.onSelect(_selectedMeters.map((id) => meters.firstWhere((meter) => meter["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),

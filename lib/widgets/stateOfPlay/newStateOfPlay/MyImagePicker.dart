@@ -74,6 +74,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
       children: [
         Spacer(),
         RaisedButton(
+          color: Colors.grey[200],
           child: Row(
             children: [
               Icon(Icons.camera_alt),

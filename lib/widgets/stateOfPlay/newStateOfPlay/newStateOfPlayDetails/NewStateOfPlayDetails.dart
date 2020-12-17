@@ -45,56 +45,54 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
     print('rooms: ' + widget.rooms.toString());
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Header(
-            title: "Liste des pièces",
-            onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
-              onSelect: (rooms) {
-                print('rooms: ' + rooms.toString());
-                for (var i = 0; i < rooms.length; i++) {
-                  widget.rooms.add(sop.Room(
-                    name: rooms[i],
-                    decorations: [],
-                    equipments: [],
-                    electricities: [],
-                    generalAspect: sop.GeneralAspect()
-                  ));
-                  
-                }
-                setState(() { });
-              },
-            ))),
-          ),
-          Flexible(
-            child: ListView.separated(
-              itemCount: widget.rooms.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Row(
-                  children: [
-                    Text(widget.rooms[i].name),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        _showDialogDeleteRoom(context, widget.rooms[i]);
-                      },
-                    )
-                  ]
-                ),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
-                onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
-                  room: widget.rooms[i],
-                )))
+    return Column(
+      children: [
+        Header(
+          title: "Liste des pièces",
+          onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
+            onSelect: (rooms) {
+              print('rooms: ' + rooms.toString());
+              for (var i = 0; i < rooms.length; i++) {
+                widget.rooms.add(sop.Room(
+                  name: rooms[i],
+                  decorations: [],
+                  equipments: [],
+                  electricities: [],
+                  generalAspect: sop.GeneralAspect()
+                ));
+                
+              }
+              setState(() { });
+            },
+          ))),
+        ),
+        Flexible(
+          child: ListView.separated(
+            itemCount: widget.rooms.length,
+            itemBuilder: (_, i) => ListTile(
+              title: Row(
+                children: [
+                  Text(widget.rooms[i].name),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      _showDialogDeleteRoom(context, widget.rooms[i]);
+                    },
+                  )
+                ]
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
+              onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
+                room: widget.rooms[i],
+              )))
             ),
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

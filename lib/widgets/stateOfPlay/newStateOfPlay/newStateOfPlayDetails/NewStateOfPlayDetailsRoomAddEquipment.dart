@@ -126,6 +126,8 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> equipments;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
@@ -134,7 +136,10 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
         }
         else {
 
-          List<String> equipments = (result.data["equipments"] as List).map((electricity) => electricity["type"].toString()).toList();
+          equipments = (result.data["equipments"] as List).map((equipment) => {
+            "id": equipment["id"],
+            "type": equipment["type"],
+          }).toList();
           print('equipments length: ' + equipments.length.toString());
 
           if (equipments.length == 0) {
@@ -145,14 +150,14 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               padding: EdgeInsets.only(top: 8),
               itemCount: equipments.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(equipments[i]),
-                selected: _selectedEquipments.contains(equipments[i]),
+                title: Text(equipments[i]["type"]),
+                selected: _selectedEquipments.contains(equipments[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedEquipments.contains(equipments[i]))
-                      _selectedEquipments.add(equipments[i]);
+                    if (!_selectedEquipments.contains(equipments[i]["id"]))
+                      _selectedEquipments.add(equipments[i]["id"]);
                     else
-                      _selectedEquipments.remove(equipments[i]);
+                      _selectedEquipments.remove(equipments[i]["id"]);
                   });
                 },
               ),
@@ -192,7 +197,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedEquipments);
+                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),

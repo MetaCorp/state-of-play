@@ -439,8 +439,10 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
 
             print("networkResult hasException: " + networkResult.hasException.toString());
             if (networkResult.hasException) {
-              if (networkResult.exception.graphqlErrors.length > 0)
+              if (networkResult.exception.graphqlErrors.length > 0) { 
                 print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                print("networkResult exception: " + networkResult.exception.graphqlErrors[0].extensions.toString());
+              }
               else
                 print("networkResult clientException: " + networkResult.exception.clientException.message);
               return;//TODO: show error

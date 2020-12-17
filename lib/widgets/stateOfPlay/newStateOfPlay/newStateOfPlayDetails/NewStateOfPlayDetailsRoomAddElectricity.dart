@@ -22,7 +22,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newElectricityController = TextEditingController(text: "");
 
-  List<String> _selectedElectricitys = []; 
+  List<String> _selectedElectricities = []; 
 
   @override
   void dispose() {
@@ -126,6 +126,8 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> electricities;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
@@ -134,7 +136,10 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
         }
         else {
 
-          List<String> electricities = (result.data["electricities"] as List).map((electricity) => electricity["type"].toString()).toList();
+          electricities = (result.data["electricities"] as List).map((electricity) => {
+            "id": electricity["id"],
+            "type": electricity["type"],
+          }).toList();
           print('electricities length: ' + electricities.length.toString());
 
           if (electricities.length == 0) {
@@ -145,14 +150,14 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               padding: EdgeInsets.only(top: 8),
               itemCount: electricities.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(electricities[i]),
-                selected: _selectedElectricitys.contains(electricities[i]),
+                title: Text(electricities[i]["type"]),
+                selected: _selectedElectricities.contains(electricities[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedElectricitys.contains(electricities[i]))
-                      _selectedElectricitys.add(electricities[i]);
+                    if (!_selectedElectricities.contains(electricities[i]["id"]))
+                      _selectedElectricities.add(electricities[i]["id"]);
                     else
-                      _selectedElectricitys.remove(electricities[i]);
+                      _selectedElectricities.remove(electricities[i]["id"]);
                   });
                 },
               ),
@@ -192,7 +197,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedElectricitys);
+                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),

@@ -126,6 +126,8 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> keys;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
@@ -134,7 +136,10 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
         }
         else {
 
-          List<String> keys = (result.data["keys"] as List).map((key) => key["type"].toString()).toList();
+          keys = (result.data["keys"] as List).map((key) => {
+            "id": key["id"],
+            "type": key["type"],
+          }).toList();
           print('keys length: ' + keys.length.toString());
 
           if (keys.length == 0) {
@@ -145,14 +150,14 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               padding: EdgeInsets.only(top: 8),
               itemCount: keys.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(keys[i]),
-                selected: _selectedKeys.contains(keys[i]),
+                title: Text(keys[i]["type"]),
+                selected: _selectedKeys.contains(keys[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedKeys.contains(keys[i]))
-                      _selectedKeys.add(keys[i]);
+                    if (!_selectedKeys.contains(keys[i]["id"]))
+                      _selectedKeys.add(keys[i]["id"]);
                     else
-                      _selectedKeys.remove(keys[i]);
+                      _selectedKeys.remove(keys[i]["id"]);
                   });
                 },
               ),
@@ -192,7 +197,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedKeys);
+                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),

@@ -126,6 +126,8 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> decorations;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
@@ -134,7 +136,10 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
         }
         else {
 
-          List<String> decorations = (result.data["decorations"] as List).map((decoration) => decoration["type"].toString()).toList();
+          decorations = (result.data["decorations"] as List).map((decoration) => {
+            "id": decoration["id"],
+            "type": decoration["type"],
+          }).toList();
           print('decorations length: ' + decorations.length.toString());
 
           if (decorations.length == 0) {
@@ -145,14 +150,14 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               padding: EdgeInsets.only(top: 8),
               itemCount: decorations.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(decorations[i]),
-                selected: _selectedDecorations.contains(decorations[i]),
+                title: Text(decorations[i]["type"]),
+                selected: _selectedDecorations.contains(decorations[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedDecorations.contains(decorations[i]))
-                      _selectedDecorations.add(decorations[i]);
+                    if (!_selectedDecorations.contains(decorations[i]["id"]))
+                      _selectedDecorations.add(decorations[i]["id"]);
                     else
-                      _selectedDecorations.remove(decorations[i]);
+                      _selectedDecorations.remove(decorations[i]["id"]);
                   });
                 },
               ),
@@ -192,7 +197,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedDecorations);
+                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),

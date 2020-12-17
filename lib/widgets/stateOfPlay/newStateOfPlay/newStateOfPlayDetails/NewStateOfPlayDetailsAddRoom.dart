@@ -126,15 +126,20 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
         print('data: ' + result.data.toString());
         print('');
 
+        List<Map> rooms;
+
         if (result.hasException) {
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());// TODO center
         }
         else {
 
-          List<String> rooms = (result.data["rooms"] as List).map((room) => room["name"].toString()).toList();
+          rooms = (result.data["rooms"] as List).map((room) => {
+            "id": room["id"],
+            "name": room["name"],
+          }).toList();
           print('rooms length: ' + rooms.length.toString());
 
           if (rooms.length == 0) {
@@ -144,14 +149,14 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
             body = ListView.separated(
               itemCount: rooms.length,
               itemBuilder: (_, i) => ListTile(
-                title: Text(rooms[i]),
-                selected: _selectedRooms.contains(rooms[i]),
+                title: Text(rooms[i]["name"]),
+                selected: _selectedRooms.contains(rooms[i]["id"]),
                 onTap: () {
                   setState(() {
-                    if (!_selectedRooms.contains(rooms[i]))
-                      _selectedRooms.add(rooms[i]);
+                    if (!_selectedRooms.contains(rooms[i]["id"]))
+                      _selectedRooms.add(rooms[i]["id"]);
                     else
-                      _selectedRooms.remove(rooms[i]);
+                      _selectedRooms.remove(rooms[i]["id"]);
                   });
                 },
               ),
@@ -191,7 +196,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedRooms);
+                  widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
                   Navigator.pop(context);
                 }
               ),
