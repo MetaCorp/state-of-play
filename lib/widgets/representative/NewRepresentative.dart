@@ -55,6 +55,7 @@ class _NewRepresentativeState extends State<NewRepresentative> {
                 "address": representative.address,
                 "postalCode": representative.postalCode,
                 "city": representative.city,
+                "company": representative.company
               }
             });
             QueryResult networkResult = await mutationResult.networkResult;

@@ -772,20 +772,20 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                     ])
                   ],
                   
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.annexe + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.annexes
-                        )
-                    ])
-                  ],
+                  // <pw.Widget>[ // TODO : Add annexes
+                  //   pw.Row(
+                  //     children: [
+                  //       pw.Text(
+                  //         stateOfPlayTexts.annexe + ':   ',
+                  //         style: pw.TextStyle(
+                  //           fontWeight: pw.FontWeight.bold,
+                  //         )
+                  //       ),
+                  //       pw.Text(
+                  //         stateOfPlay.property.annexes
+                  //       )
+                  //   ])
+                  // ],
 
                   
                   <pw.Widget>[

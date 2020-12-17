@@ -34,6 +34,7 @@ class _EditPropertyState extends State<EditProperty> {
             area
             heatingType
             hotWater
+            type
           }
         }
         '''),
@@ -120,6 +121,7 @@ class _EditPropertyState extends State<EditProperty> {
                         "area": property.area,
                         "heatingType": property.heatingType,
                         "hotWater": property.hotWater,
+                        "type": property.type,
                       }
                     });
                     QueryResult networkResult = await mutationResult.networkResult;

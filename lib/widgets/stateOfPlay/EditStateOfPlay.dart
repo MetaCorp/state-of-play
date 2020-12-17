@@ -82,14 +82,23 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     out
                     property {
                       id
+                      reference
                       address
                       postalCode
                       city
+                      lot
+                      floor
+                      roomCount
+                      area
+                      heatingType
+                      hotWater
+                      type
                     }
                     owner {
                       id
                       firstName
                       lastName
+                      company
                       address
                       postalCode
                       city
@@ -98,6 +107,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       id
                       firstName
                       lastName
+                      company
                       address
                       postalCode
                       city
@@ -118,6 +128,8 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     reserve
                     date
                     entryExitDate
+                    documentHeader
+                    documentEnd
                   }
                 }
               '''),
@@ -191,6 +203,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                             "address": _stateOfPlay.owner.address,
                             "postalCode": _stateOfPlay.owner.postalCode,
                             "city": _stateOfPlay.owner.city,
+                            "company": _stateOfPlay.owner.company
                           },
                           "representative": {
                             "id": _stateOfPlay.representative.id,
@@ -199,6 +212,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                             "address": _stateOfPlay.representative.address,
                             "postalCode": _stateOfPlay.representative.postalCode,
                             "city": _stateOfPlay.representative.city,
+                            "company": _stateOfPlay.representative.company
                           },
                           "tenants": _stateOfPlay.tenants.map((tenant) => {
                             "id": tenant.id,
@@ -220,6 +234,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                             "area": _stateOfPlay.property.area,
                             "heatingType": _stateOfPlay.property.heatingType,
                             "hotWater": _stateOfPlay.property.hotWater,
+                            "type": _stateOfPlay.property.type,
                           },
                           "rooms": _stateOfPlay.rooms.map((room) => {
                             "name": room.name,
@@ -319,6 +334,8 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           },
                           "documentHeader": _stateOfPlay.documentHeader,
                           "documentEnd": _stateOfPlay.documentEnd,
+                          "date": _stateOfPlay.date.toString(),
+                          "entryExitDate": _stateOfPlay.entryExitDate.toString(),
                         }
                       });
 
@@ -336,7 +353,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       print("");
                       
                       Navigator.pop(context);
-                      Navigator.popAndPushNamed(context, "/state-of-play", arguments: { "stateOfPlayId": widget.stateOfPlayId });
+                      Navigator.popAndPushNamed(context, "/state-of-plays");
 
                     },
                     onDelete: () async {

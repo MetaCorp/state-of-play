@@ -54,7 +54,8 @@ class _NewPropertyState extends State<NewProperty> {
             roomCount: 4,
             area: 60,
             heatingType: "test",
-            hotWater: "test"
+            hotWater: "test",
+            type: "Maison"
           ),
           onSave: (property) async {
             print('runMutation');
@@ -72,6 +73,7 @@ class _NewPropertyState extends State<NewProperty> {
                 "area": property.area,
                 "heatingType": property.heatingType,
                 "hotWater": property.hotWater,
+                "type": property.type,
               }
             });
             QueryResult networkResult = await mutationResult.networkResult;

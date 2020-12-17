@@ -66,7 +66,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
       address: '3 rue des Mésanges',
       postalCode: '75001',
       city: 'Paris',
-      type: 'appartement',
+      type: 'Appartement',
       reference: '3465',
       lot: '34',
       floor: 5,
@@ -304,6 +304,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   "address": _stateOfPlay.owner.address,
                   "postalCode": _stateOfPlay.owner.postalCode,
                   "city": _stateOfPlay.owner.city,
+                  "company": _stateOfPlay.owner.company
                 },
                 "representative": {
                   "id": _stateOfPlay.representative.id,
@@ -312,6 +313,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   "address": _stateOfPlay.representative.address,
                   "postalCode": _stateOfPlay.representative.postalCode,
                   "city": _stateOfPlay.representative.city,
+                  "company": _stateOfPlay.representative.company
                 },
                 "tenants": _stateOfPlay.tenants.map((tenant) => {
                   "id": tenant.id,
@@ -333,6 +335,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   "area": _stateOfPlay.property.area,
                   "heatingType": _stateOfPlay.property.heatingType,
                   "hotWater": _stateOfPlay.property.hotWater,
+                  "type": _stateOfPlay.property.type,
                 },
                 "rooms": _stateOfPlay.rooms.map((room) => {
                   "name": room.name,
@@ -472,14 +475,23 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 out
                 property {
                   id
+                  reference
                   address
                   postalCode
                   city
+                  lot
+                  floor
+                  roomCount
+                  area
+                  heatingType
+                  hotWater
+                  type
                 }
                 owner {
                   id
                   firstName
                   lastName
+                  company
                   address
                   postalCode
                   city
@@ -488,6 +500,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   id
                   firstName
                   lastName
+                  company
                   address
                   postalCode
                   city
@@ -508,6 +521,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 reserve
                 date
                 entryExitDate
+                documentHeader
+                documentEnd
               }
             }
           '''),

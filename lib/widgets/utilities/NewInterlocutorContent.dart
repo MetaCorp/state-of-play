@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 typedef SaveCallback = Function(dynamic);
 typedef DeleteCallback = Function();
@@ -76,6 +77,19 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
               ),
+              !(widget.interlocutor is sop.Tenant) ? SizedBox(
+                height: 8,
+              ) : Container(),
+              !(widget.interlocutor is sop.Tenant) ? TextFormField(
+                initialValue: widget.interlocutor.company,
+                decoration: InputDecoration(labelText: 'Entreprise'),
+                onSaved: (value) => widget.interlocutor.company = value,
+                validator: (value) {
+                  if (value == null || value == "")
+                    return "Ce champs est obligatoire.";
+                  return null;
+                },
+              ) : Container(),
               SizedBox(
                 height: 8,
               ),

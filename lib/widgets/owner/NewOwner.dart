@@ -55,6 +55,7 @@ class _NewOwnerState extends State<NewOwner> {
                 "address": owner.address,
                 "postalCode": owner.postalCode,
                 "city": owner.city,
+                "company": owner.company
               }
             });
             QueryResult networkResult = await mutationResult.networkResult;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/property/ListTilePropertyType.dart';
+import 'package:flutter_tests/widgets/property/NewPropertyAddType.dart';
 
 
 typedef SaveCallback = Function(sop.Property);
@@ -103,6 +105,26 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 if (value == null || value == "")
                   return "Ce champs est obligatoire.";
                 return null;
+              },
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            ListTilePropertyType(
+              labelText: "Selectionner un type de bien",
+              text: widget.property.type != null ? "Type de bien : " + widget.property.type : null,
+              onPress: () {
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyAddType(
+                  onSelect: (value) {
+                    widget.property.type = value;
+                    Navigator.pop(context);
+                    setState(() { });
+                  },
+                )));
+              },
+              onPressRemove: () {
+                widget.property.type = null;
+                setState(() { });
               },
             ),
             SizedBox(

@@ -26,6 +26,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
             id
             firstName
             lastName
+            company
             address
             postalCode
             city
@@ -108,6 +109,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
                         "address": representative.address,
                         "postalCode": representative.postalCode,
                         "city": representative.city,
+                        "company": representative.company
                       }
                     });
                     QueryResult networkResult = await mutationResult.networkResult;

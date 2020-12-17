@@ -26,6 +26,7 @@ class _EditOwnerState extends State<EditOwner> {
             id
             firstName
             lastName
+            company
             address
             postalCode
             city
@@ -108,6 +109,7 @@ class _EditOwnerState extends State<EditOwner> {
                         "address": owner.address,
                         "postalCode": owner.postalCode,
                         "city": owner.city,
+                        "company": owner.company
                       }
                     });
                     QueryResult networkResult = await mutationResult.networkResult;
