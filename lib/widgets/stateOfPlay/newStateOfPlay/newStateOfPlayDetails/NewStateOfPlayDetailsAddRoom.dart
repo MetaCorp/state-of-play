@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
-import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-// import 'package:intl/intl.dart';// DateFormat
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
@@ -23,6 +21,57 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
   TextEditingController _newRoomController = TextEditingController(text: "");
 
   List<String> _selectedRooms = []; 
+
+  void _showDialogDelete(context, room, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + room["name"] + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "roomId": room["id"],
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteRoom"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteRoom"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   void dispose() {
@@ -146,23 +195,58 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
             body = Text("no room");
           }
           else {
-            body = ListView.separated(
-              itemCount: rooms.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(rooms[i]["name"]),
-                selected: _selectedRooms.contains(rooms[i]["id"]),
-                onTap: () {
-                  setState(() {
-                    if (!_selectedRooms.contains(rooms[i]["id"]))
-                      _selectedRooms.add(rooms[i]["id"]);
-                    else
-                      _selectedRooms.remove(rooms[i]["id"]);
-                  });
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteRoom(\$data: DeleteRoomInput!) {
+                    deleteRoom(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return ListView.separated(
+                  itemCount: rooms.length,
+                  itemBuilder: (_, i) => Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      title: Text(rooms[i]["name"]),
+                      selected: _selectedRooms.contains(rooms[i]["id"]),
+                      onTap: () {
+                        setState(() {
+                          if (!_selectedRooms.contains(rooms[i]["id"]))
+                            _selectedRooms.add(rooms[i]["id"]);
+                          else
+                            _selectedRooms.remove(rooms[i]["id"]);
+                        });
+                      },
+                    ),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: 'Supprimer',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _showDialogDelete(context, rooms[i], runDeleteMutation),
+                      )
+                    ]
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                );
+              }
             );
           }
 

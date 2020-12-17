@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
-import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-// import 'package:intl/intl.dart';// DateFormat
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
@@ -23,6 +21,57 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
   TextEditingController _newEquipmentController = TextEditingController(text: "");
 
   List<String> _selectedEquipments = []; 
+
+  void _showDialogDelete(context, equipment, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + equipment["type"] + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "equipmentId": equipment["id"],
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteEquipment"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteEquipment"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   void dispose() {
@@ -146,24 +195,59 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
             body = Text("no equipment");
           }
           else {
-            body = ListView.separated(
-              padding: EdgeInsets.only(top: 8),
-              itemCount: equipments.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(equipments[i]["type"]),
-                selected: _selectedEquipments.contains(equipments[i]["id"]),
-                onTap: () {
-                  setState(() {
-                    if (!_selectedEquipments.contains(equipments[i]["id"]))
-                      _selectedEquipments.add(equipments[i]["id"]);
-                    else
-                      _selectedEquipments.remove(equipments[i]["id"]);
-                  });
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteEquipment(\$data: DeleteEquipmentInput!) {
+                    deleteEquipment(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return ListView.separated(
+                  padding: EdgeInsets.only(top: 8),
+                  itemCount: equipments.length,
+                  itemBuilder: (_, i) => Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      title: Text(equipments[i]["type"]),
+                      selected: _selectedEquipments.contains(equipments[i]["id"]),
+                      onTap: () {
+                        setState(() {
+                          if (!_selectedEquipments.contains(equipments[i]["id"]))
+                            _selectedEquipments.add(equipments[i]["id"]);
+                          else
+                            _selectedEquipments.remove(equipments[i]["id"]);
+                        });
+                      },
+                    ),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: 'Supprimer',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _showDialogDelete(context, equipments[i], runDeleteMutation),
+                      )
+                    ]
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                );
+              }
             );
           }
 
