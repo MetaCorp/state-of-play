@@ -130,7 +130,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 

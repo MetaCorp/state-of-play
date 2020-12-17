@@ -60,7 +60,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 
@@ -71,16 +71,19 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
             body = Text("no representatives");
           }
           else {
-            body = ListView.separated(
-              itemCount: representatives.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+            body = Container(
+              padding: EdgeInsets.only(top: 8),
+              child: ListView.separated(
+                itemCount: representatives.length,
+                itemBuilder: (_, i) => ListTile(
+                  title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
+                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
+                  onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+                ),
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
             );
           }
 

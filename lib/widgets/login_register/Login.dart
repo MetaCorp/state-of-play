@@ -90,6 +90,7 @@ class _LoginState extends State<Login> {
                 ),
                 RaisedButton(
                   child: Text('Se connecter'),
+                  color: Theme.of(context).primaryColor,
                   onPressed: () async {
                     MultiSourceResult result = runMutation({
                       "email": _emailController.text,

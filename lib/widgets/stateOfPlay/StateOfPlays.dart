@@ -212,38 +212,41 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: stateOfPlays.length,
-                  itemBuilder: (_, i)  {
-                    String tenantsString = "";
+                return Container(
+                  padding: EdgeInsets.only(top: 8),
+                  child: ListView.separated(
+                    itemCount: stateOfPlays.length,
+                    itemBuilder: (_, i)  {
+                      String tenantsString = "";
 
-                    for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
-                      tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
-                      if (j < stateOfPlays[i].tenants.length - 1)
-                        tenantsString += ', ';
-                    }
+                      for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
+                        tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
+                        if (j < stateOfPlays[i].tenants.length - 1)
+                          tenantsString += ', ';
+                      }
 
-                    return Slidable(
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.125,
-                      child: ListTile(
-                        title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
-                        subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                        onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
-                      ),
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Supprimer',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () => _showDialogDelete(context, stateOfPlays[i], runDeleteMutation),
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.125,
+                        child: ListTile(
+                          title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                          subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
+                          onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
                         ),
-                      ],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
+                        secondaryActions: [
+                          IconSlideAction(
+                            caption: 'Supprimer',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () => _showDialogDelete(context, stateOfPlays[i], runDeleteMutation),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                  ),
                 );
               }
             );

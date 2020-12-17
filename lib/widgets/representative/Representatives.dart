@@ -144,28 +144,31 @@ class _OwnersState extends State<Representatives> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: representatives.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.125,
-                    child: ListTile(
-                      title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                      onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
-                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, representatives[i], runDeleteMutation),
+                return Container(
+                  padding: EdgeInsets.only(top: 8),
+                  child: ListView.separated(
+                    itemCount: representatives.length,
+                    itemBuilder: (_, i) => Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.125,
+                      child: ListTile(
+                        title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
+                        onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
+                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
                       ),
-                    ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Supprimer',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () => _showDialogDelete(context, representatives[i], runDeleteMutation),
+                        ),
+                      ],
+                    ),
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
                   ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
                 );
               }
             );

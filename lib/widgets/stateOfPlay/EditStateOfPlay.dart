@@ -149,7 +149,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   appBar: AppBar(
                     title: Text("Modification d'un état des lieux"),
                   ),
-                  body: CircularProgressIndicator()
+                  body: Center(child: CircularProgressIndicator())
                 );
               }
               

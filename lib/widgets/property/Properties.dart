@@ -147,28 +147,31 @@ class _PropertiesState extends State<Properties> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: properties.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.125,
-                    child: ListTile(
-                      title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                      onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
-                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, properties[i], runDeleteMutation),
+                return Container(
+                  padding: EdgeInsets.only(top: 8),
+                  child: ListView.separated(
+                    itemCount: properties.length,
+                    itemBuilder: (_, i) => Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.125,
+                      child: ListTile(
+                        title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
+                        onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
+                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
                       ),
-                    ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Supprimer',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () => _showDialogDelete(context, properties[i], runDeleteMutation),
+                        ),
+                      ],
+                    ),
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
                   ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
                 );
               }
             );

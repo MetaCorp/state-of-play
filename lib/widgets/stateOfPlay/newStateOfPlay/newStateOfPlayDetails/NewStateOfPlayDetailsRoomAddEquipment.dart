@@ -130,7 +130,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 

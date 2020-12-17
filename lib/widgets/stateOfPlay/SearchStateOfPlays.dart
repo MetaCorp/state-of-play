@@ -60,8 +60,8 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
         variables: {
           "filter": {
             "search": _searchController.text,
-            "out": widget.out || widget.out == null,
-            "in": widget.sIn || widget.out == null,
+            "out": widget.out == null || widget.out,
+            "in": widget.out == null || widget.sIn,
           }
         }
       ),
@@ -82,7 +82,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 
@@ -93,27 +93,30 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             body = Text("no stateOfplays");
           }
           else {
-            body = ListView.separated(
-              itemCount: stateOfPlays.length,
-              itemBuilder: (_, i) {
-                
-                String tenantsString = "";
+            body = Container(
+              padding: EdgeInsets.only(top: 8),
+              child: ListView.separated(
+                itemCount: stateOfPlays.length,
+                itemBuilder: (_, i) {
+                  
+                  String tenantsString = "";
 
-                for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
-                  tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
-                  if (j < stateOfPlays[i].tenants.length - 1)
-                    tenantsString += ', ';
-                }  
+                  for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
+                    tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
+                    if (j < stateOfPlays[i].tenants.length - 1)
+                      tenantsString += ', ';
+                  }  
 
-                return ListTile(
-                  title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
-                  subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                  onTap: () => widget.onSelect != null ? widget.onSelect(stateOfPlays[i].id) : Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
+                  return ListTile(
+                    title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                    subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
+                    onTap: () => widget.onSelect != null ? widget.onSelect(stateOfPlays[i].id) : Navigator.pushNamed(context, '/stateOfPlay', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
+              ),
             );
           }
 

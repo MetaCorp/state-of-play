@@ -61,7 +61,7 @@ class _SearchPropertiesState extends State<SearchProperties> {
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 
@@ -72,16 +72,19 @@ class _SearchPropertiesState extends State<SearchProperties> {
             body = Text("no stateOfplays");
           }
           else {
-            body = ListView.separated(
-              itemCount: properties.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(properties[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
+            body = Container(
+              padding: EdgeInsets.only(top: 8),
+              child: ListView.separated(
+                itemCount: properties.length,
+                itemBuilder: (_, i) => ListTile(
+                  title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
+                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(properties[i].date)) ,
+                  onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
+                ),
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
             );
           }
 

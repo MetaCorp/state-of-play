@@ -111,6 +111,7 @@ class _RegisterState extends State<Register> {
                 ),
                 RaisedButton(
                   child: Text('S\'inscrire'),
+                  color: Theme.of(context).primaryColor,
                   onPressed: () async {
                     MultiSourceResult result = runMutation({
                       "data": {

@@ -147,30 +147,33 @@ class _TenantsState extends State<Tenants> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: tenants.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.125,
-                    child: ListTile(
-                      title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
-                      onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
-                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, tenants[i], runDeleteMutation),
+                return Container(
+                  padding: EdgeInsets.only(top: 8),
+                  child: ListView.separated(
+                    itemCount: tenants.length,
+                    itemBuilder: (_, i) => Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.125,
+                      child: ListTile(
+                        title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
+                        onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
+                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
                       ),
-                    ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Supprimer',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () => _showDialogDelete(context, tenants[i], runDeleteMutation),
+                        ),
+                      ],
+                    ),
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 0.0,
+                      );
+                    },
                   ),
-                  separatorBuilder: (context, index) {
-                    return Divider(
-                      height: 0.0,
-                    );
-                  },
                 );
               }
             );

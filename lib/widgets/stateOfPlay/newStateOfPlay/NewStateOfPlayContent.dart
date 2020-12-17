@@ -110,7 +110,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            label: 'Interlocuteurs & Propriété',
+            label: 'Interlocuteurs',
           ),
           // BottomNavigationBarItem(
           //   icon: Icon(Icons.house),
@@ -118,7 +118,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
           // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.apps),
-            label: 'Détail des pièces',
+            label: 'Pièces',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz),

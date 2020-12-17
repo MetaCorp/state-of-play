@@ -146,28 +146,31 @@ class _OwnersState extends State<Owners> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: owners.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.125,
-                    child: ListTile(
-                      title: Text(owners[i].firstName + ' ' + owners[i].lastName),
-                      onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
-                      contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, owners[i], runDeleteMutation),
+                return Container(
+                  padding: EdgeInsets.only(top: 8),
+                  child: ListView.separated(
+                    itemCount: owners.length,
+                    itemBuilder: (_, i) => Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.125,
+                      child: ListTile(
+                        title: Text(owners[i].firstName + ' ' + owners[i].lastName),
+                        onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
+                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
                       ),
-                    ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Supprimer',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () => _showDialogDelete(context, owners[i], runDeleteMutation),
+                        ),
+                      ],
+                    ),
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
                   ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
                 );
               }
             );

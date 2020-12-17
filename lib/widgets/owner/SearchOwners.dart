@@ -60,7 +60,7 @@ class _SearchOwnersState extends State<SearchOwners> {
           body = Text(result.exception.toString());
         }
         else if (result.loading || result.data == null) {
-          body = CircularProgressIndicator();// TODO center
+          body = Center(child: CircularProgressIndicator());
         }
         else {
 
@@ -71,16 +71,19 @@ class _SearchOwnersState extends State<SearchOwners> {
             body = Text("no owners");
           }
           else {
-            body = ListView.separated(
-              itemCount: owners.length,
-              itemBuilder: (_, i) => ListTile(
-                title: Text(owners[i].firstName + ' ' + owners[i].lastName),
-                // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
-                onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
+            body = Container(
+              padding: EdgeInsets.only(top: 8),
+              child: ListView.separated(
+                itemCount: owners.length,
+                itemBuilder: (_, i) => ListTile(
+                  title: Text(owners[i].firstName + ' ' + owners[i].lastName),
+                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
+                  onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
+                ),
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
               ),
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
             );
           }
 
