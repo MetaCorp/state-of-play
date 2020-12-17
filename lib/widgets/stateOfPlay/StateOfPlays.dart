@@ -131,10 +131,10 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             icon: Icon(Icons.filter_list),
             onPressed: () => _showDialogFilter(context),
           ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.pushNamed(context, '/new-state-of-play'),
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.add),
+          //   onPressed: () => Navigator.pushNamed(context, '/new-state-of-play'),
+          // ),
         ],
       ),
       body: 

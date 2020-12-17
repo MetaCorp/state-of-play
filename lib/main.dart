@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
     600:Color.fromRGBO(39, 125, 161, .7), 
     700:Color.fromRGBO(39, 125, 161, .8), 
     800:Color.fromRGBO(39, 125, 161, .9), 
-    900:Color.fromRGBO(39, 125, 161, 1), 
+    900:Color.fromRGBO(39, 125, 161, 1),
   }; 
 
   @override

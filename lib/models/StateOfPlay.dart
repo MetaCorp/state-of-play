@@ -177,7 +177,7 @@ class StateOfPlay {
     this.owner,
     this.representative,
     this.tenants,
-    this.entryDate,
+    this.entryExitDate,
     this.property,
     this.rooms,
     this.meters,
@@ -199,7 +199,7 @@ class StateOfPlay {
   Representative representative;
   List<Tenant> tenants;
 
-  DateTime entryDate;// To be changed
+  DateTime entryExitDate;// To be changed
 
   Property property;
 
@@ -227,7 +227,7 @@ class StateOfPlay {
       owner: json["owner"] != null ? Owner.fromJSON(json["owner"]) : null,
       representative: json["representative"] != null ? Representative.fromJSON(json["representative"]) : null,
       tenants: json["tenants"] != null ? (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList() : null,
-      // entryDate: DateTime.parse(json["entryDate"]),
+      entryExitDate: json["entryExitDate"] != null ? DateTime.parse(json["entryExitDate"]) : null,
       property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
       rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
       meters: json["meters"] != null ? (jsonDecode(json["meters"]) as List).map((meter) => Meter.fromJSON(meter)).toList() : null,

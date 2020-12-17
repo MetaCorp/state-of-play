@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignatureSignature.dart';
 
@@ -43,6 +44,14 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         padding: const EdgeInsets.all(8.0),      
         child: Column(
           children: [
+            DateButton(
+              labelText: widget.stateOfPlay.out ? "Date de sortie" : "Date d'entrée",
+              value: widget.stateOfPlay.entryExitDate,
+              onChange: (value) {
+                widget.stateOfPlay.entryExitDate = value;
+                setState(() { });
+              }
+            ),
             TextField(
               controller: TextEditingController(text: 'Entête'),// TODO: a récupérer dans les settings
               decoration: InputDecoration(labelText: 'Entête du document'),
@@ -54,29 +63,38 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               decoration: InputDecoration(labelText: 'Mention en fin du document'),
               onChanged: (value) => widget.stateOfPlay.documentEnd = value,
             ),
+            // SizedBox(height: 24),             
+            // Text("Nouvelle adresse des locataires"),
+            // SizedBox(height: sizedBoxHeight),             
+            // TextField(
+            //   decoration: InputDecoration(
+            //     labelText: "Nr° et Nom de voie",
+            //   ),
+            // ),   
+            // SizedBox(height: sizedBoxHeight),             
+            // Container(
+            //   child: TextField(
+            //     decoration: InputDecoration(
+            //       labelText: "Code Postal",
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: sizedBoxHeight),             
+            // Container(
+            //   child: TextField(
+            //     decoration: InputDecoration(
+            //       labelText: "Ville",
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: sizedBoxHeight),             
-            Text("Nouvelle adresse des locataires"),
-            SizedBox(height: sizedBoxHeight),             
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Nr° et Nom voie",
-              ),
-            ),   
-            SizedBox(height: sizedBoxHeight),             
-            Container(
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: "Code Postal",
-                ),
-              ),
-            ),
-            SizedBox(height: sizedBoxHeight),             
-            Container(
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: "Ville",
-                ),
-              ),
+            DateButton(
+              labelText: "Fait le",
+              value: widget.stateOfPlay.date,
+              onChange: (value) {
+                widget.stateOfPlay.entryExitDate = value;
+                setState(() { });
+              }
             ),
             SizedBox(height: sizedBoxHeight),             
             Container(
@@ -91,9 +109,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       "Cliquez sur les cadres pour procéder au signatures:", maxLines: 1,
                     ),
                   ),
-                  SizedBox(height: sizedBoxHeight),             
+                  SizedBox(height: 16),             
                   buildSignatures(),
                   buildSignatureRowsTenants(),
+                  SizedBox(height: 24),             
                   RaisedButton(
                     child: Text("Visualiser l'état des lieux"),
                     onPressed: () {

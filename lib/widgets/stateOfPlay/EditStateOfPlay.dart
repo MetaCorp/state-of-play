@@ -79,6 +79,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                 query stateOfPlay(\$data: StateOfPlayInput!) {
                   stateOfPlay(data: \$data) {
                     id
+                    out
                     property {
                       id
                       address
@@ -115,6 +116,8 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     insurance
                     comments
                     reserve
+                    date
+                    entryExitDate
                   }
                 }
               '''),

@@ -28,6 +28,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
   sop.StateOfPlay _stateOfPlay;
   
   sop.StateOfPlay _stateOfPlay2 = sop.StateOfPlay(
+    date: DateTime.now(),
     owner: sop.Owner(
       firstName: 'Robert',
       lastName: 'Dupont',
@@ -60,7 +61,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         city: 'Paris'
       )
     ],
-    entryDate: DateTime.now(),// To be changed
+    entryExitDate: DateTime.now(),// To be changed
     property: sop.Property(
       address: '3 rue des Mésanges',
       postalCode: '75001',
@@ -230,7 +231,6 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     comments: "L'appartement vient d'être repeint",
     reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
     city: 'Mulhouse',
-    date: DateTime.now(),
     documentHeader: "",// TODO: récupérer depuis les settings
     documentEnd: "",
   );
@@ -432,6 +432,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 },
                 "documentHeader": _stateOfPlay.documentHeader,
                 "documentEnd": _stateOfPlay.documentEnd,
+                "date": _stateOfPlay.date.toString(),
+                "entryExitDate": _stateOfPlay.entryExitDate.toString(),
               }
             });
 
@@ -504,6 +506,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 insurance
                 comments
                 reserve
+                date
+                entryExitDate
               }
             }
           '''),
