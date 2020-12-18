@@ -156,7 +156,7 @@ pw.Widget _buildTableGeneralAspect({ List<String> tableHeaders, String roomName,
       1,
       (row) => List<String>.generate(
         tableHeaders.length,
-        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comments : generalAspect.photo.toString(),
+        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comments : generalAspect.image.toString(),
       ),
     ),
   );
@@ -358,14 +358,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   );
 }
 
-pw.Widget _buildPhotos({ List<String> photos, PdfImage logo }) {
-  
-  const tableMeterHeaders = [
-    'Type de clé',
-    'Nnombre',
-    'Commentaires',
-    'Photo'
-  ];
+pw.Widget _buildPhotos({ List<dynamic> photos, PdfImage logo }) {
 
   return pw.Column(
     children: [
@@ -375,6 +368,29 @@ pw.Widget _buildPhotos({ List<String> photos, PdfImage logo }) {
       ),
       pw.Padding(
         padding: pw.EdgeInsets.only(bottom: 25)
+      ),
+      pw.Wrap(
+        alignment: pw.WrapAlignment.start,
+        // crossAxisAlignment: pw.WrapCrossAlignment.start,
+        spacing: 20,
+        children: photos.map((photo) => pw.Column(
+          children: [
+            pw.Container(
+              alignment: pw.Alignment.bottomLeft,
+              height: 200,
+              child: pw.Image(
+                PdfImage.file(
+                  pdf.document,
+                  bytes: photo.readAsBytesSync()
+                )
+              )
+            ),
+            pw.Text(
+              "Photo n°" + (photos.indexOf(photo) + 1).toString(),
+              textAlign: pw.TextAlign.left
+            )
+          ]
+        )).toList()
       )
     ]
   );
@@ -1045,7 +1061,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 ]
               ),
 
-              // _buildPhotos(photos: stateOfPlay.photos, logo: logo) // TODO : ajouter les photos
+              _buildPhotos(photos: stateOfPlay.images, logo: logo)
     ]
   ));
 

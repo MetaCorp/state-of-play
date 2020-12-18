@@ -119,8 +119,44 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                   RaisedButton(
                     child: Text("Visualiser l'état des lieux"),
                     onPressed: () {
+
+                      for (var i = 0; i < widget.stateOfPlay.rooms.length; i++) {
+                        
+                        for (var j = 0; j < widget.stateOfPlay.rooms[i].decorations.length; j++) {
+                          
+                          for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
+                            
+                            widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                            widget.stateOfPlay.images.add(widget.stateOfPlay.rooms[i].decorations[j].newImages[k]);
+
+                          }
+                        }
+                      }
+
+                      for (var i = 0; i < widget.stateOfPlay.meters.length; i++) {
+                        
+                        for (var j = 0; j < widget.stateOfPlay.meters[i].newImages.length; j++) {
+                          
+                          widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                          widget.stateOfPlay.images.add(widget.stateOfPlay.meters[i].newImages[j]);
+                        }
+                      }
+
+                      for (var i = 0; i < widget.stateOfPlay.keys.length; i++) {
+                        
+                        for (var j = 0; j < widget.stateOfPlay.keys[i].newImages.length; j++) {
+                          
+                          widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                          widget.stateOfPlay.images.add(widget.stateOfPlay.keys[i].newImages[j]);
+                        }
+                      }
+
+
                       generatePdf(widget.stateOfPlay);
-                      widget.onSave();
+                      // widget.onSave();// TODO: save
                     },
                   )
                 ],

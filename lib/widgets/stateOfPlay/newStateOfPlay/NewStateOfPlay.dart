@@ -86,7 +86,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: 'Il manque la porte',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Decoration(
             type: 'Porte',
@@ -94,7 +95,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: 'Il manque la porte',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           )
         ],
         electricities: [
@@ -104,7 +106,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Neuf',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Electricity(
             type: 'Prise électrique',
@@ -112,7 +115,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Neuf',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
         ],
         equipments: [
@@ -123,7 +127,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Equipment(
             type: 'Interrupteur',
@@ -132,7 +137,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
         ],
         generalAspect: sop.GeneralAspect(
@@ -148,7 +154,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: 'Il manque la porte',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Decoration(
             type: 'Porte',
@@ -156,7 +163,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: 'Il manque la porte',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           )
         ],
         electricities: [
@@ -166,7 +174,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Neuf',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Electricity(
             type: 'Prise électrique',
@@ -174,7 +183,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Neuf',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
         ],
         equipments: [
@@ -185,7 +195,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
           sop.Equipment(
             type: 'Interrupteur',
@@ -194,12 +205,13 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             state: 'Bon',
             comments: '',
             images: [],
-            newImages: []
+            newImages: [],
+            imageIndexes: []
           ),
         ],
         generalAspect: sop.GeneralAspect(
           comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-          photo: 0
+          image: 0
         ),
       )
     ],
@@ -210,7 +222,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         dateOfSuccession: DateTime.now(),
         index: 4567,
         images: [],
-        newImages: []
+        newImages: [],
+        imageIndexes: []
       )
     ],
     keys: [
@@ -219,7 +232,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         quantity: 1,
         comments: '',
         images: [],
-        newImages: []
+        newImages: [],
+        imageIndexes: []
       )
     ],
     insurance: sop.Insurance(
@@ -233,6 +247,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     city: 'Mulhouse',
     documentHeader: "",// TODO: récupérer depuis les settings
     documentEnd: "",
+    images: []
   );
 
   void _showDialogLeave (context) async {

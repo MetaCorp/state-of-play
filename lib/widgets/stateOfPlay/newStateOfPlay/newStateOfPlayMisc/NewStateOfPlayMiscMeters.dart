@@ -70,7 +70,8 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
                     index: 0,
                     location: "",// TODO : complete fields
                     images: [],
-                    newImages: []
+                    newImages: [],
+                    imageIndexes: [],
                   ));
                 }
                 setState(() { });

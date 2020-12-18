@@ -72,7 +72,8 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
                     comments: "",
                     quantity: 1,
                     images: [],
-                    newImages: []
+                    newImages: [],
+                    imageIndexes: [],
                   ));
                 }
                 setState(() { });

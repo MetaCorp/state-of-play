@@ -193,6 +193,7 @@ class StateOfPlay {
     this.signatureOwner,
     this.signatureRepresentative,
     this.signatureTenants,
+    this.images
   });
 
   String id;
@@ -226,6 +227,8 @@ class StateOfPlay {
   Uint8List signatureOwner;
   Uint8List signatureRepresentative;
   List<Uint8List> signatureTenants;
+
+  List<dynamic> images;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
@@ -269,6 +272,20 @@ class StateOfPlay {
 //   mauvaisFonctionnement
 // }
 
+// TODO: define return type
+final imageIndexesToString = (List<int> imageIndexes) {
+  String str = "";
+
+  for (var i = 0; i < imageIndexes.length; i++) {
+    str += 'Photo n°' + (imageIndexes[i] + 1).toString();
+
+    if (i != imageIndexes.length - 1)
+      str += "\n";
+  }
+
+  return str;
+};
+
 class Decoration {
   Decoration({
     this.type,
@@ -276,7 +293,8 @@ class Decoration {
     this.state,
     this.comments,
     this.newImages,
-    this.images
+    this.images,
+    this.imageIndexes
   });
 
   String type;
@@ -285,6 +303,7 @@ class Decoration {
   String comments;
   List<File> newImages;
   List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -297,7 +316,7 @@ class Decoration {
       case 3:
         return comments;
       case 4:
-        return "0";// TODO image indexes
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -330,7 +349,8 @@ class Electricity {
     this.state,
     this.comments,
     this.newImages,
-    this.images
+    this.images,
+    this.imageIndexes
   });
 
   String type;
@@ -339,6 +359,8 @@ class Electricity {
   String comments;
   List<File> newImages;
   List<String> images;
+  List<int> imageIndexes;
+
 
   String getIndex(int index) {
     switch (index) {
@@ -351,7 +373,7 @@ class Electricity {
       case 3:
         return comments;
       case 4:
-        return "0";
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -377,7 +399,8 @@ class Equipment {
     this.comments,
     this.quantity,
     this.newImages,
-    this.images
+    this.images,
+    this.imageIndexes
   });
 
   String type;
@@ -387,6 +410,7 @@ class Equipment {
   int quantity;
   List<File> newImages;
   List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -399,7 +423,7 @@ class Equipment {
       case 3:
         return comments;
       case 4:
-        return "0";
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -421,17 +445,17 @@ class Equipment {
 class GeneralAspect {
   GeneralAspect({
     this.comments,
-    this.photo// TODO
+    this.image// TODO
   });
 
   String comments;
-  int photo;
+  int image;
   
   factory GeneralAspect.fromJSON(Map<String, dynamic> json) {
 
     return GeneralAspect(
       comments: json["comments"],
-      photo: json["photo"]
+      image: json["image"]
     );
   }
 }
@@ -470,7 +494,8 @@ class Meter {
     this.dateOfSuccession,
     this.index,
     this.newImages,
-    this.images
+    this.images,
+    this.imageIndexes
   });
 
   String type;
@@ -479,6 +504,7 @@ class Meter {
   int index;
   List<File> newImages;
   List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -491,7 +517,7 @@ class Meter {
       case 3:
         return index.toString();
       case 4:
-        return "0";// TODO
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -515,7 +541,8 @@ class Key {
     this.quantity,
     this.comments,
     this.newImages,
-    this.images
+    this.images,
+    this.imageIndexes
   });
 
   String type;
@@ -523,6 +550,7 @@ class Key {
   String comments;
   List<File> newImages;
   List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -533,7 +561,7 @@ class Key {
       case 2:
         return comments;
       case 3:
-        return "0";
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }

@@ -132,7 +132,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                             nature: "",
                             comments: "",
                             images: [],
-                            newImages: []
+                            newImages: [],
+                            imageIndexes: [],
                           ));                         
                         }
                         setState(() { });
@@ -188,7 +189,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                                 quantity: 1,
                                 comments: "",
                                 images: [],
-                                newImages: []
+                                newImages: [],
+                                imageIndexes: [],
                               ));
                             }
                             setState(() { });
@@ -246,6 +248,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                                 state: "Neuf",
                                 quantity: 1,
                                 comments: "",
+                                imageIndexes: [],
                               ));
                             }
                             setState(() { });
