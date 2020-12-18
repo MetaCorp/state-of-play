@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
@@ -22,13 +24,9 @@ class NewStateOfPlaySignature extends StatefulWidget {
 // TODO Get liste interlocuteurs pour les signatures et locataires pour misa à jour adresse
 class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
-  var signatureOwner;
-  var signatureRepresentative;
-  var signatureTenants; 
-
   @override
   void initState() {
-    signatureTenants = new List(widget.stateOfPlay.tenants.length);
+    widget.stateOfPlay.signatureTenants = new List(widget.stateOfPlay.tenants.length);
 
     super.initState();
   }
@@ -87,9 +85,14 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
             //     ),
             //   ),
             // ),
-            SizedBox(height: sizedBoxHeight),             
+            SizedBox(height: sizedBoxHeight),
+            TextField(
+              controller: TextEditingController(text: widget.stateOfPlay.city),// TODO: a récupérer dans les settings
+              decoration: InputDecoration(labelText: 'Fait à'),
+              onChanged: (value) => widget.stateOfPlay.city = value,
+            ),
             DateButton(
-              labelText: "Fait le",
+              labelText: "le",
               value: widget.stateOfPlay.date,
               onChange: (value) {
                 widget.stateOfPlay.entryExitDate = value;
@@ -146,7 +149,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: signatureOwner ?? null,          
+                child: widget.stateOfPlay.signatureOwner != null ? Image.memory(widget.stateOfPlay.signatureOwner) : null,          
               ),
               onTap: () => goToSignatureSignature(widget.stateOfPlay.owner),
             ),
@@ -167,7 +170,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: signatureRepresentative ?? null,          
+                child: widget.stateOfPlay.signatureRepresentative != null ? Image.memory(widget.stateOfPlay.signatureRepresentative) : null,          
               ),
               onTap: () => goToSignatureSignature(widget.stateOfPlay.representative),
             ),
@@ -195,7 +198,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: signatureTenants[index] ??  null,          
+                child: widget.stateOfPlay.signatureTenants[index] != null ? Image.memory(widget.stateOfPlay.signatureTenants[index]) : null,          
               ),
               onTap: () => goToSignatureSignature(tenant,index: index),
             ),
@@ -207,22 +210,22 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
   goToSignatureSignature(person, {int index}) async {
     
-    final data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
+    Uint8List data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
     //TODO catch null
     if (person is sop.Owner) { 
       setState(() {
-        signatureOwner = Image.memory(data);
-        print(signatureOwner.toString());
+        widget.stateOfPlay.signatureOwner = data;
+        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     } else if (person is sop.Representative){
       setState(() {
-        signatureRepresentative = Image.memory(data);
-        print(signatureOwner.toString());
+        widget.stateOfPlay.signatureRepresentative = data;
+        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     } else if (person is sop.Tenant){
       setState(() {
-        signatureTenants[index] = Image.memory(data);
-        print(signatureOwner.toString());
+        widget.stateOfPlay.signatureTenants[index] = data;
+        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     }
   }

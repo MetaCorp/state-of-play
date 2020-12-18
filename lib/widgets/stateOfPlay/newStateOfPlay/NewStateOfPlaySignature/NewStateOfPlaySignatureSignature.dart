@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
@@ -43,8 +45,8 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () async {
-              var data = await _controller.toPngBytes();
-              Navigator.pop(context,data);
+              Uint8List data = await _controller.toPngBytes();
+              Navigator.pop(context, data);
             },
           ),
         ],

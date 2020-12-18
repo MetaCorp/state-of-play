@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_tests/utils.dart';
 import 'package:intl/intl.dart';// DateFormat
@@ -188,7 +189,10 @@ class StateOfPlay {
     this.city,
     this.date,
     this.documentHeader,
-    this.documentEnd
+    this.documentEnd,
+    this.signatureOwner,
+    this.signatureRepresentative,
+    this.signatureTenants,
   });
 
   String id;
@@ -219,6 +223,10 @@ class StateOfPlay {
   String documentHeader;
   String documentEnd;
 
+  Uint8List signatureOwner;
+  Uint8List signatureRepresentative;
+  List<Uint8List> signatureTenants;
+
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
@@ -235,7 +243,7 @@ class StateOfPlay {
       insurance: json["insurance"] != null ? Insurance.fromJSON(jsonDecode(json["insurance"])) : null,
       comments: json["comments"],
       reserve: json["reserve"],
-      // city: json["city"],
+      city: json["city"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       documentHeader: json["documentHeader"],
       documentEnd: json["documentEnd"],

@@ -436,6 +436,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 "documentHeader": _stateOfPlay.documentHeader,
                 "documentEnd": _stateOfPlay.documentEnd,
                 "date": _stateOfPlay.date.toString(),
+                "city": _stateOfPlay.city.toString(),
                 "entryExitDate": _stateOfPlay.entryExitDate.toString(),
               }
             });
@@ -520,6 +521,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 comments
                 reserve
                 date
+                city
                 entryExitDate
                 documentHeader
                 documentEnd
