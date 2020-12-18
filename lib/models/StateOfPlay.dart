@@ -606,20 +606,38 @@ class User {
   User({
     this.firstName,
     this.lastName,
+    this.documentHeader,
+    this.documentEnd,
+    this.address,
+    this.postalCode,
+    this.city,
+    this.company,
     this.stateOfPlays,
-    this.properties
+    this.properties,
   });
 
-  final String firstName;
-  final String lastName;
-  final List<StateOfPlay> stateOfPlays;
-  final List<Property> properties;
+  String firstName;
+  String lastName;
+  String documentHeader;
+  String documentEnd;
+  String address;
+  String postalCode;
+  String city;
+  String company;
+  List<StateOfPlay> stateOfPlays;
+  List<Property> properties;
 
   factory User.fromJSON(Map<String, dynamic> json) {
 
     return User(
       firstName: json["firstName"],
-      lastName: json["lastName"],// TODO : pb ici avec la sérialisation
+      lastName: json["lastName"],
+      documentHeader: json["documentHeader"],
+      documentEnd: json["documentEnd"],
+      address: json["address"],
+      postalCode: json["postalCode"],
+      city: json["city"],
+      company: json["company"],
       stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
     );

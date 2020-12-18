@@ -1,23 +1,210 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({ Key key }) : super(key: key);
+class Settings extends StatefulWidget {
+  Settings({ Key key }) : super(key: key);
+
+  @override
+  _SettingsState createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
+
+    return  Query(
+      options: QueryOptions(
+        documentNode: gql('''
+          query user {
+            user {
+              id
+              firstName
+              lastName
+              documentHeader
+              documentEnd
+              address
+              postalCode
+              city
+            }
+          }
+        ''')
       ),
-      body: RaisedButton(
-        child: Text('Déconnection'),
-        onPressed: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setStringList("token", null);
-          Navigator.popAndPushNamed(context, '/login');
-        },
-      )
+      builder: (
+        QueryResult result, {
+        Refetch refetch,
+        FetchMore fetchMore,
+      }) {
+
+        print('userResult: ' + result.loading.toString());
+        print('userResult: ' + result.hasException.toString());
+        print('');
+
+        sop.User user;
+        if (result.data != null && !result.loading)
+          user = sop.User.fromJSON(result.data["user"]);
+        
+        return Mutation(
+          options: MutationOptions(
+            documentNode: gql('''
+              mutation updateUser(\$data: UpdateUserInput!) {
+                updateUser(data: \$data)
+              }
+            '''), // this is the mutation string you just created
+            // you can update the cache based on results
+            update: (Cache cache, QueryResult result) {
+              return cache;
+            },
+            // or do something with the result.data on completion
+            onCompleted: (dynamic resultData) {
+              // print('onCompleted: ' + resultData.hasException);
+            },
+          ),
+          builder: (
+            RunMutation runMutation,
+            QueryResult mutationResult,
+          ) {
+            
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Settings'),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.check),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        MultiSourceResult result = runMutation({
+                          "data": {
+                            "firstName": user.firstName,
+                            "lastName": user.lastName,
+                            "address": user.address,
+                            "postalCode": user.postalCode,
+                            "city": user.city,
+                            "company": user.company,
+                            "documentHeader": user.documentHeader,
+                            "documentEnd": user.documentEnd,
+                          }
+                        });
+
+                        await result.networkResult;
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
+                ],
+              ),
+              body: user == null ? Center(child: CircularProgressIndicator()) : Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            initialValue: user.firstName,
+                            decoration: InputDecoration(labelText: 'Prénom'),
+                            onSaved: (value) => user.firstName = value,
+                            validator: (value) {
+                              if (value == null || value == "")
+                                return "Ce champs est obligatoire.";
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.lastName,
+                            decoration: InputDecoration(labelText: 'Nom'),
+                            onSaved: (value) => user.lastName = value,
+                            validator: (value) {
+                              if (value == null || value == "")
+                                return "Ce champs est obligatoire.";
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.company,
+                            decoration: InputDecoration(labelText: 'Société'),
+                            onSaved: (value) => user.company = value,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.address,
+                            decoration: InputDecoration(labelText: 'Adresse'),
+                            onSaved: (value) => user.address = value,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.postalCode,
+                            decoration: InputDecoration(labelText: 'Code postal'),
+                            keyboardType: TextInputType.number,
+                            onSaved: (value) => user.postalCode = value,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.city,
+                            decoration: InputDecoration(labelText: 'Ville'),
+                            onSaved: (value) => user.city = value,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          RaisedButton(
+                            child: Text('Sauvegarder'),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                MultiSourceResult result = runMutation({
+                                  "data": {
+                                    "firstName": user.firstName,
+                                    "lastName": user.lastName,
+                                    "address": user.address,
+                                    "postalCode": user.postalCode,
+                                    "city": user.city,
+                                    "company": user.company,
+                                    "documentHeader": user.documentHeader,
+                                    "documentEnd": user.documentEnd,
+                                  }
+                                });
+
+                                await result.networkResult;
+                                Navigator.pop(context);
+                              }
+                            }
+                          )
+                        ],
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text('Déconnexion'),
+                      onPressed: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setStringList("token", null);
+                        Navigator.popAndPushNamed(context, '/login');
+                      },
+                    ),
+                  ]
+                )
+              )
+            );
+          }
+        );
+      }
     );
   }
 }

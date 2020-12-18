@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -125,8 +126,7 @@ class _MyAppState extends State<MyApp> {
     return
       GraphQLProvider(
         client: client,
-        child:
-          MaterialApp(
+        child: MaterialApp(
             title: 'États des lieux',
             theme: ThemeData(
               primarySwatch: colorCustom, 
