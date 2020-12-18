@@ -16,7 +16,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
 
-    return  Query(
+    return Query(
       options: QueryOptions(
         documentNode: gql('''
           query user {
@@ -24,6 +24,7 @@ class _SettingsState extends State<Settings> {
               id
               firstName
               lastName
+              company
               documentHeader
               documentEnd
               address
@@ -40,12 +41,15 @@ class _SettingsState extends State<Settings> {
       }) {
 
         print('userResult: ' + result.loading.toString());
-        print('userResult: ' + result.hasException.toString());
+        print('userResult hasException: ' + result.hasException.toString());
+        print('userResult data: ' + result.data.toString());
         print('');
 
         sop.User user;
-        if (result.data != null && !result.loading)
+        if (result.data != null && !result.loading) {
           user = sop.User.fromJSON(result.data["user"]);
+          print('user: ' + user.firstName.toString());
+        }
         
         return Mutation(
           options: MutationOptions(
@@ -91,6 +95,7 @@ class _SettingsState extends State<Settings> {
                         });
 
                         await result.networkResult;
+                        setState(() { });
                         Navigator.pop(context);
                       }
                     },
@@ -182,7 +187,21 @@ class _SettingsState extends State<Settings> {
                                   }
                                 });
 
-                                await result.networkResult;
+                                QueryResult queryResult = await result.networkResult;
+                                setState(() { });
+
+                                print("networkResult hasException: " + queryResult.hasException.toString());
+                                if (queryResult.hasException) {
+                                  if (queryResult.exception.graphqlErrors.length > 0) { 
+                                    print("queryResult exception: " + queryResult.exception.graphqlErrors[0].toString());
+                                    print("queryResult exception: " + queryResult.exception.graphqlErrors[0].extensions.toString());
+                                  }
+                                  else
+                                    print("queryResult clientException: " + queryResult.exception.clientException.message);
+                                  return;//TODO: show error
+                                }
+                                print("");
+
                                 Navigator.pop(context);
                               }
                             }
@@ -190,7 +209,11 @@ class _SettingsState extends State<Settings> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 16,
+                    ),
                     RaisedButton(
+                      color: Colors.red[700],
                       child: Text('Déconnexion'),
                       onPressed: () async {
                         SharedPreferences prefs = await SharedPreferences.getInstance();
