@@ -67,6 +67,7 @@ class _RegisterState extends State<Register> {
 
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: Text('Inscription'),
           ),
           body: Container(

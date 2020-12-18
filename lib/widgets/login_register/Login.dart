@@ -65,10 +65,13 @@ class _LoginState extends State<Login> {
         return Scaffold(
           appBar: AppBar(
             title: Text('Connexion'),
+            centerTitle: true,
+            automaticallyImplyLeading: false,
           ),
           body: Container(
             margin: EdgeInsets.all(16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextField(
                   controller: _emailController,
@@ -76,9 +79,7 @@ class _LoginState extends State<Login> {
                     labelText: 'Email'
                   ),
                 ),
-                SizedBox(
-                  height: 8,
-                ),
+                SizedBox( height: 32,),
                 TextField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -86,7 +87,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 SizedBox(
-                  height: 16,
+                  height: 80,
                 ),
                 RaisedButton(
                   child: Text('Se connecter'),
@@ -116,6 +117,7 @@ class _LoginState extends State<Login> {
                     }
                   }
                 ),
+                SizedBox( height: 32,),
                 FlatButton(
                   child: Text('S\'inscrire'),
                   onPressed: () {

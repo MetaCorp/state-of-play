@@ -15,10 +15,6 @@ class MyDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountEmail: new Text(""),//to keep since needed
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.cyan,
-              child: new Text("txt"),
-            ),
             accountName:  Row(
               children: [
                 Container(
@@ -26,7 +22,7 @@ class MyDrawer extends StatelessWidget {
                   height: 50,
                   decoration: BoxDecoration(shape: BoxShape.circle),
                   child: CircleAvatar(
-                    backgroundColor: Colors.cyan,
+                    backgroundColor: Colors.grey,
                     child: new Text("txt"),
                   ),
                 ),
