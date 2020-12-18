@@ -51,13 +51,13 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               }
             ),
             TextField(
-              controller: TextEditingController(text: 'Entête'),// TODO: a récupérer dans les settings
+              controller: TextEditingController(text: widget.stateOfPlay.documentHeader),// TODO: a récupérer dans les settings
               decoration: InputDecoration(labelText: 'Entête du document'),
               onChanged: (value) => widget.stateOfPlay.documentHeader = value,
             ),
             SizedBox(height: sizedBoxHeight),
             TextField(
-              controller: TextEditingController(text: 'Mention en fin'),// TODO: a récupérer dans les settings
+              controller: TextEditingController(text: widget.stateOfPlay.documentEnd),// TODO: a récupérer dans les settings
               decoration: InputDecoration(labelText: 'Mention en fin du document'),
               onChanged: (value) => widget.stateOfPlay.documentEnd = value,
             ),

@@ -127,15 +127,15 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             title: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: 'Recherchez parmis les propriétaires, locataires et adresses...'
+                hintText: 'Recherchez parmis les propriétaires, locataires et adresses...'
               ),
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: {
                     "filter": {
                       "search": value,
-                      "out": widget.out || widget.out == null,
-                      "in": !widget.out || widget.out == null,
+                      "out":  widget.out == null || widget.out,
+                      "in": widget.out == null || !widget.out,
                     }
                   },
                   updateQuery: (existing, newStateOfPlays) => ({

@@ -167,6 +167,22 @@ class _SettingsState extends State<Settings> {
                             onSaved: (value) => user.city = value,
                           ),
                           SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.documentHeader,
+                            decoration: InputDecoration(labelText: "En tête de l'EDL"),
+                            onSaved: (value) => user.documentHeader = value,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            initialValue: user.documentEnd,
+                            decoration: InputDecoration(labelText: "Mention en fin de l'EDL"),
+                            onSaved: (value) => user.documentEnd = value,
+                          ),
+                          SizedBox(
                             height: 16,
                           ),
                           RaisedButton(
