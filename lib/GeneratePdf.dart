@@ -51,6 +51,7 @@ const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
 
 const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
   "État des lieux d'entrée",
+  "État des lieux de sortie",
   'Dressé en commun et contradicatoire entre les soussignés',
   'assets/images/logo.png'
 );
@@ -464,7 +465,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                             height: 30,
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayOptions.title.toUpperCase(),
+                              stateOfPlay.out ? stateOfPlayOptions.titleExit.toUpperCase() : stateOfPlayOptions.titleEntry.toUpperCase(),
                               style: pw.TextStyle(
                                 color: PdfColors.black,
                                 fontWeight: pw.FontWeight.bold,

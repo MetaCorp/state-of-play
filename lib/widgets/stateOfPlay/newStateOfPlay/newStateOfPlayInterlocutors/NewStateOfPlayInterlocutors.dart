@@ -171,12 +171,23 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             text: widget.stateOfPlay.property.address != null ? widget.stateOfPlay.property.address + ', ' + widget.stateOfPlay.property.postalCode + ' ' + widget.stateOfPlay.property.city : null,
             labelText: "Sélectionner une propriété",
             onPress: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
-                onSelect : (property) {
-                  widget.stateOfPlay.property = property;
-                  setState(() { });
-                }
-              )));
+              if (widget.stateOfPlay.property.address != null)
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyContent(
+                  title: 'Éditer une propriété',
+                  property: widget.stateOfPlay.property,
+                  onSave : (property) {
+                    widget.stateOfPlay.property = property;
+                    Navigator.pop(context);
+                    setState(() { });
+                  }
+                )));
+              else
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
+                  onSelect : (property) {
+                    widget.stateOfPlay.property = property;
+                    setState(() { });
+                  }
+                )));
             },
             onPressAdd: () {
               Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyContent(
@@ -199,6 +210,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                   setState(() { });
                 }
               )));
+              
             },
             onPressRemove: () {
               widget.stateOfPlay.property = sop.Property();

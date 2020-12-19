@@ -8,10 +8,10 @@ typedef SaveCallback = void Function();
 
 class NewStateOfPlaySignatureSignature extends StatefulWidget {
 
-  NewStateOfPlaySignatureSignature({ Key key, this.onSave}) : super(key: key);
+  NewStateOfPlaySignatureSignature({ Key key, this.onSave, this.interlocutor}) : super(key: key);
 
   final SaveCallback onSave;
-
+  final dynamic interlocutor;
 
   @override
   _NewStateOfPlaySignatureSignatureState createState() => new _NewStateOfPlaySignatureSignatureState();
@@ -42,7 +42,7 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
       appBar: AppBar(
         // TODO center title not working
         centerTitle: true,
-        title: Text("@interlo1"),
+        title: Text(widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName),
         actions : [
           IconButton(
             icon: Icon(Icons.save),

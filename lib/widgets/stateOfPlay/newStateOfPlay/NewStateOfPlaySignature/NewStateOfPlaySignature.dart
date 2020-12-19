@@ -297,7 +297,9 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
   goToSignatureSignature(person, {int index}) async {
    
-    Uint8List data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
+    Uint8List data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature(
+      interlocutor: person,
+    )));
     // TODO catch null
     if (person is sop.Owner) { 
       setState(() {
