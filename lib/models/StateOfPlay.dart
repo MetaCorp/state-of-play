@@ -1,18 +1,24 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_tests/utils.dart';
 import 'package:intl/intl.dart';// DateFormat
+import 'dart:convert';
 
 class Owner {
   Owner({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.company,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String company;
   String address;
   String postalCode;
@@ -21,8 +27,9 @@ class Owner {
   factory Owner.fromJSON(Map<String, dynamic> json) {
 
     return Owner(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       company: json["company"],
       address: json["address"],
       postalCode: json["postalCode"],
@@ -33,16 +40,18 @@ class Owner {
 
 class Representative {
   Representative({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.company,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String company;
   String address;
   String postalCode;
@@ -51,8 +60,9 @@ class Representative {
   factory Representative.fromJSON(Map<String, dynamic> json) {
 
     return Representative(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       company: json["company"],
       address: json["address"],
       postalCode: json["postalCode"],
@@ -63,15 +73,17 @@ class Representative {
 
 class Tenant {
   Tenant({
-    this.firstname,
-    this.lastname,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.address,
     this.postalCode,
     this.city
   });
 
-  String firstname;
-  String lastname;
+  String id;
+  String firstName;
+  String lastName;
   String address;
   String postalCode;
   String city;
@@ -79,8 +91,9 @@ class Tenant {
   factory Tenant.fromJSON(Map<String, dynamic> json) {
 
     return Tenant(
-      firstname: json["firstname"],
-      lastname: json["lastname"],
+      id: json["id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
@@ -90,6 +103,7 @@ class Tenant {
 
 class Property {
   Property({
+    this.id,
     this.address,
     this.postalCode,
     this.city,
@@ -106,6 +120,8 @@ class Property {
     this.door,
     this.building
   });
+
+  String id;
 
   String address;
   String postalCode;
@@ -125,15 +141,16 @@ class Property {
   factory Property.fromJSON(Map<String, dynamic> json) {
 
     return Property(
+      id: json["id"],
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
       type: json["type"],
       reference: json["reference"],
       lot: json["lot"],
-      // floor: int.parse(json["floor"]),
-      // roomCount: int.parse(json["roomCount"]),
-      // area: int.parse(json["area"]),
+      floor: json["floor"],
+      roomCount: json["roomCount"],
+      area: json["area"],
       annexes: json["annexes"],
       heatingType: json["heatingType"],
       hotWater: json["hotWater"],
@@ -155,63 +172,84 @@ class Property {
 }
 
 class StateOfPlay {
-  const StateOfPlay({
+  StateOfPlay({
+    this.id,
+    this.out,
     this.owner,
     this.representative,
     this.tenants,
-    this.entryDate,
+    this.entryExitDate,
     this.property,
     this.rooms,
     this.meters,
     this.keys,
     this.insurance,
-    this.comment,
+    this.comments,
     this.reserve,
     this.city,
     this.date,
-    this.photos
+    this.documentHeader,
+    this.documentEnd,
+    this.signatureOwner,
+    this.signatureRepresentative,
+    this.signatureTenants,
+    this.images
   });
 
-  final Owner owner;
-  final Representative representative;
-  final List<Tenant> tenants;
+  String id;
 
-  final DateTime entryDate;// To be changed
+  bool out;
 
-  final Property property;
+  Owner owner;
+  Representative representative;
+  List<Tenant> tenants;
 
-  final List<Room> rooms;
+  DateTime entryExitDate;// To be changed
 
-  final List<Meter> meters;
+  Property property;
 
-  final List<Key> keys;
+  List<Room> rooms;
 
-  final Insurance insurance;
-  final String comment;
-  final String reserve;
+  List<Meter> meters;
 
-  final String city;
-  final DateTime date;
+  List<Key> keys;
 
-  final List<String> photos;
+  Insurance insurance;
+  String comments;
+  String reserve;
+
+  String city;
+  DateTime date;
+
+  String documentHeader;
+  String documentEnd;
+
+  Uint8List signatureOwner;
+  Uint8List signatureRepresentative;
+  List<Uint8List> signatureTenants;
+
+  List<dynamic> images;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
-      // owner: Owner.fromJSON(json["owner"]),
-      // representative: Representative.fromJSON(json["representative"]),
-      // tenants: (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList(),
-      // entryDate: DateTime.parse(json["entryDate"]),
-      property: Property.fromJSON(json["property"]),
-      // rooms: (json["rooms"] as List).map((room) => Room.fromJSON(room)).toList(),
-      // meters: (json["meters"] as List).map((meter) => Meter.fromJSON(meter)).toList(),
-      // keys: (json["keys"] as List).map((key) => Key.fromJSON(key)).toList(),
-      // insurance: Insurance.fromJSON(json["insurance"]),
-      // comment: json["comment"],
-      // reserve: json["reserve"],
-      // city: json["city"],
+      id: json["id"],
+      out: json["out"],
+      owner: json["owner"] != null ? Owner.fromJSON(json["owner"]) : null,
+      representative: json["representative"] != null ? Representative.fromJSON(json["representative"]) : null,
+      tenants: json["tenants"] != null ? (json["tenants"] as List).map((tenant) => Tenant.fromJSON(tenant)).toList() : null,
+      entryExitDate: json["entryExitDate"] != null ? DateTime.parse(json["entryExitDate"]) : null,
+      property: json["property"] != null ? Property.fromJSON(json["property"]) : null,
+      rooms: json["rooms"] != null ? (jsonDecode(json["rooms"]) as List).map((room) => Room.fromJSON(room)).toList() : null,
+      meters: json["meters"] != null ? (jsonDecode(json["meters"]) as List).map((meter) => Meter.fromJSON(meter)).toList() : null,
+      keys: json["keys"] != null ? (jsonDecode(json["keys"]) as List).map((key) => Key.fromJSON(key)).toList() : null,
+      insurance: json["insurance"] != null ? Insurance.fromJSON(jsonDecode(json["insurance"])) : null,
+      comments: json["comments"],
+      reserve: json["reserve"],
+      city: json["city"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
-      // photos: ??? TODO
+      documentHeader: json["documentHeader"],
+      documentEnd: json["documentEnd"],
     );
   }
 }
@@ -225,29 +263,47 @@ class StateOfPlay {
 //   window
 // }
 
-enum States {
-  neww,
-  good,
-  used,
-  defaillant,// TODO traduction
-  bonFonctionnement,
-  mauvaisFonctionnement
-}
+// enum String {
+//   neww,
+//   good,
+//   used,
+//   defaillant,// TODO traduction
+//   bonFonctionnement,
+//   mauvaisFonctionnement
+// }
+
+// TODO: define return type
+final imageIndexesToString = (List<int> imageIndexes) {
+  String str = "";
+
+  for (var i = 0; i < imageIndexes.length; i++) {
+    str += 'Photo n°' + (imageIndexes[i] + 1).toString();
+
+    if (i != imageIndexes.length - 1)
+      str += "\n";
+  }
+
+  return str;
+};
 
 class Decoration {
-  const Decoration({
+  Decoration({
     this.type,
     this.nature,
     this.state,
-    this.comment,
-    this.photo// TODO
+    this.comments,
+    this.newImages,
+    this.images,
+    this.imageIndexes
   });
 
-  final String type;
-  final String nature;
-  final States state;
-  final String comment;
-  final int photo;
+  String type;
+  String nature;
+  String state;
+  String comments;
+  List<File> newImages;
+  List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -256,23 +312,25 @@ class Decoration {
       case 1:
         return nature;
       case 2:
-        return enumToString(state);
+        return state;
       case 3:
-        return comment;
+        return comments;
       case 4:
-        return photo.toString();
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
   
   factory Decoration.fromJSON(Map<String, dynamic> json) {
+    print('fromJSON images: ' + json["images"].toString());
 
     return Decoration(
       type: json["type"],
-      nature: json["brandOrObject"],
-      state: enumFromString(json["state"], States.values),// TODO parse dual type
-      comment: json["comment"],
-      photo: int.parse(json["photo"])
+      nature: json["nature"],
+      state: json["state"],// TODO parse dual type
+      comments: json["comments"],
+      newImages: [],// need to init here bc not from server
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
@@ -284,20 +342,25 @@ class Decoration {
   
 // }
 
-class ElectricAndHeating {
-  const ElectricAndHeating({
+class Electricity {
+  Electricity({
     this.type,
     this.quantity,
     this.state,
-    this.comment,
-    this.photo// TODO
+    this.comments,
+    this.newImages,
+    this.images,
+    this.imageIndexes
   });
 
-  final String type;
-  final int quantity;
-  final States state;
-  final String comment;
-  final int photo;
+  String type;
+  int quantity;
+  String state;
+  String comments;
+  List<File> newImages;
+  List<String> images;
+  List<int> imageIndexes;
+
 
   String getIndex(int index) {
     switch (index) {
@@ -306,41 +369,48 @@ class ElectricAndHeating {
       case 1:
         return quantity.toString();
       case 2:
-        return enumToString(state);
+        return state;
       case 3:
-        return comment;
+        return comments;
       case 4:
-        return photo.toString();
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
 
-  factory ElectricAndHeating.fromJSON(Map<String, dynamic> json) {
+  factory Electricity.fromJSON(Map<String, dynamic> json) {
 
-    return ElectricAndHeating(
+    return Electricity(
       type: json["type"],
-      quantity: int.parse(json["brandOrObject"]),
-      state: enumFromString(json["state"], States.values),// TODO parse dual type
-      comment: json["comment"],
-      photo: int.parse(json["photo"])
+      quantity: json["quantity"],
+      state: json["state"],// TODO parse dual type
+      comments: json["comments"],
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
 
 class Equipment {
-  const Equipment({
+  Equipment({
     this.type,
     this.brandOrObject,
-    this.stateOrQuantity,
-    this.comment,
-    this.photo// TODO
+    this.state,
+    this.comments,
+    this.quantity,
+    this.newImages,
+    this.images,
+    this.imageIndexes
   });
 
-  final String type;
-  final String brandOrObject;
-  final dynamic stateOrQuantity;
-  final String comment;
-  final int photo;
+  String type;
+  String brandOrObject;
+  dynamic state;
+  String comments;
+  int quantity;
+  List<File> newImages;
+  List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -349,11 +419,11 @@ class Equipment {
       case 1:
         return brandOrObject;
       case 2:
-        return stateOrQuantity is int ? stateOrQuantity.toString() : enumToString(stateOrQuantity);
+        return state + ' / ' + quantity.toString();
       case 3:
-        return comment;
+        return comments;
       case 4:
-        return photo.toString();
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -363,27 +433,29 @@ class Equipment {
     return Equipment(
       type: json["type"],
       brandOrObject: json["brandOrObject"],
-      stateOrQuantity: json["stateOrQuantity"],// TODO parse dual type
-      comment: json["comment"],
-      photo: int.parse(json["photo"])
+      state: json["state"],
+      quantity: json["quantity"],
+      comments: json["comments"],
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
 
 class GeneralAspect {
-  const GeneralAspect({
-    this.comment,
-    this.photo// TODO
+  GeneralAspect({
+    this.comments,
+    this.image// TODO
   });
 
-  final String comment;
-  final int photo;
+  String comments;
+  int image;
   
   factory GeneralAspect.fromJSON(Map<String, dynamic> json) {
 
     return GeneralAspect(
-      comment: json["comment"],
-      photo: int.parse(json["photo"])
+      comments: json["comments"],
+      image: json["image"]
     );
   }
 }
@@ -392,14 +464,14 @@ class Room {
   Room({
     this.name,
     this.decorations,
-    this.electricsAndHeatings,
+    this.electricities,
     this.equipments,
     this.generalAspect
   });
 
   final String name;
   final List<Decoration> decorations;
-  final List<ElectricAndHeating> electricsAndHeatings;
+  final List<Electricity> electricities;
   final List<Equipment> equipments;
   final GeneralAspect generalAspect;
   
@@ -407,28 +479,32 @@ class Room {
 
     return Room(
       name: json["name"],
-      decorations: (json["decorations"] as List).map((decoration) => Decoration.fromJSON(decoration)).toList(),
-      electricsAndHeatings: (json["electricsAndHeatings"] as List).map((electricsAndHeating) => ElectricAndHeating.fromJSON(electricsAndHeating)).toList(),
-      equipments: (json["equipments"] as List).map((equipment) => Equipment.fromJSON(equipment)).toList(),
-      generalAspect: GeneralAspect.fromJSON(json["generalAspect"]),
+      decorations: json["decorations"] != null ? (json["decorations"] as List).map((decoration) => Decoration.fromJSON(decoration)).toList() : null,
+      electricities: json["electricities"] != null ? (json["electricities"] as List).map((electricsAndHeating) => Electricity.fromJSON(electricsAndHeating)).toList() : null,
+      equipments: json["equipments"] != null ? (json["equipments"] as List).map((equipment) => Equipment.fromJSON(equipment)).toList() : null,
+      generalAspect: json["generalAspect"] != null ? GeneralAspect.fromJSON(json["generalAspect"]) : null,
     );
   }
 }
 
 class Meter {
-  const Meter({
+  Meter({
     this.type,
     this.location,
     this.dateOfSuccession,
     this.index,
-    this.photo// TODO
+    this.newImages,
+    this.images,
+    this.imageIndexes
   });
 
-  final String type;
-  final String location;
-  final DateTime dateOfSuccession;
-  final int index;
-  final int photo;
+  String type;
+  String location;
+  DateTime dateOfSuccession;
+  int index;
+  List<File> newImages;
+  List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
@@ -441,7 +517,7 @@ class Meter {
       case 3:
         return index.toString();
       case 4:
-        return photo.toString();
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -451,36 +527,41 @@ class Meter {
     return Meter(
       type: json["type"],
       location: json["location"],
-      dateOfSuccession: DateTime.parse(json["dateOfSuccession"]),
-      index: int.parse(json["index"]),
-      photo: int.parse(json["photo"])
+      dateOfSuccession: json["dateOfSuccession"] != null ? DateTime.parse(json["dateOfSuccession"]) : null,
+      index: json["index"],
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
 
 class Key {
-  const Key({
+  Key({
     this.type,
-    this.count,
+    this.quantity,
     this.comments,
-    this.photo// TODO
+    this.newImages,
+    this.images,
+    this.imageIndexes
   });
 
-  final String type;
-  final int count;
-  final String comments;
-  final int photo;
+  String type;
+  int quantity;
+  String comments;
+  List<File> newImages;
+  List<String> images;
+  List<int> imageIndexes;
 
   String getIndex(int index) {
     switch (index) {
       case 0:
         return type;
       case 1:
-        return count.toString();
+        return quantity.toString();
       case 2:
         return comments;
       case 3:
-        return photo.toString();
+        return imageIndexesToString(imageIndexes);
     }
     return '';
   }
@@ -489,55 +570,74 @@ class Key {
 
     return Key(
       type: json["type"],
-      count: int.parse(json["count"]),
+      quantity: json["quantity"],
       comments: json["comments"],
-      photo: int.parse(json["photo"])
+      newImages: [],
+      images: json["images"] != null ? json["images"].cast<String>() : null
     );
   }
 }
 
 class Insurance {
-  const Insurance({
+  Insurance({
     this.company,
     this.number,
     this.dateStart,
     this.dateEnd
   });
 
-  final String company;
-  final String number;
-  final DateTime dateStart;
-  final DateTime dateEnd;
+  String company;
+  String number;
+  DateTime dateStart;
+  DateTime dateEnd;
 
   factory Insurance.fromJSON(Map<String, dynamic> json) {
 
     return Insurance(
       company: json["company"],
       number: json["number"],
-      dateStart: DateTime.parse(json["dateStart"]),
-      dateEnd: DateTime.parse(json["dateEnd"])
+      dateStart: json["dateStart"] != null ? DateTime.parse(json["dateStart"]) : null,
+      dateEnd: json["dateEnd"] != null ? DateTime.parse(json["dateEnd"]) : null
     );
   }
 }
 
 class User {
   User({
-    this.firstname,
-    this.lastname,
+    this.firstName,
+    this.lastName,
+    this.documentHeader,
+    this.documentEnd,
+    this.address,
+    this.postalCode,
+    this.city,
+    this.company,
     this.stateOfPlays,
-    this.properties
+    this.properties,
   });
 
-  final String firstname;
-  final String lastname;
-  final List<StateOfPlay> stateOfPlays;
-  final List<Property> properties;
+  String firstName;
+  String lastName;
+  String documentHeader;
+  String documentEnd;
+  String address;
+  String postalCode;
+  String city;
+  String company;
+  List<StateOfPlay> stateOfPlays;
+  List<Property> properties;
 
   factory User.fromJSON(Map<String, dynamic> json) {
 
     return User(
-      firstname: json["firstname"],
-      lastname: json["lastname"],// TODO : pb ici avec la sérialisation
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      documentHeader: json["documentHeader"],
+      documentEnd: json["documentEnd"],
+      address: json["address"],
+      postalCode: json["postalCode"],
+      city: json["city"],
+      company: json["company"],
       stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
     );

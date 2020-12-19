@@ -206,7 +206,3 @@ class _NewStateOfPlayRouterState extends State<NewStateOfPlayRouter> {
     );   
   }
 }
-    
-   
-
-

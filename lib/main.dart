@@ -1,26 +1,46 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'dart:async';
-
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-
-import 'package:flutter_tests/widgets/PropertyForm.dart' as v;
-
-import 'package:flutter_tests/GeneratePdf.dart';
-
-import 'package:flutter_tests/widgets/Properties.dart';
-import 'package:flutter_tests/widgets/StateOfPlays.dart';
-
-import 'package:flutter_tests/widgets/NewStateOfPlay.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'package:http/http.dart' as http;
+import 'package:flutter_tests/widgets/login_register/Login.dart';
+import 'package:flutter_tests/widgets/login_register/Register.dart';
+
+import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlay.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlays.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/EditStateOfPlay.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/SearchStateOfPlays.dart';
+
+import 'package:flutter_tests/widgets/property/Property.dart';
+import 'package:flutter_tests/widgets/property/Properties.dart';
+import 'package:flutter_tests/widgets/property/NewProperty.dart';
+import 'package:flutter_tests/widgets/property/EditProperty.dart';
+import 'package:flutter_tests/widgets/property/SearchProperties.dart';
+
+import 'package:flutter_tests/widgets/owner/Owner.dart';
+import 'package:flutter_tests/widgets/owner/Owners.dart';
+import 'package:flutter_tests/widgets/owner/NewOwner.dart';
+import 'package:flutter_tests/widgets/owner/EditOwner.dart';
+import 'package:flutter_tests/widgets/owner/SearchOwners.dart';
+
+import 'package:flutter_tests/widgets/representative/Representative.dart';
+import 'package:flutter_tests/widgets/representative/Representatives.dart';
+import 'package:flutter_tests/widgets/representative/NewRepresentative.dart';
+import 'package:flutter_tests/widgets/representative/EditRepresentative.dart';
+import 'package:flutter_tests/widgets/representative/SearchRepresentatives.dart';
+
+import 'package:flutter_tests/widgets/tenant/Tenant.dart';
+import 'package:flutter_tests/widgets/tenant/Tenants.dart';
+import 'package:flutter_tests/widgets/tenant/NewTenant.dart';
+import 'package:flutter_tests/widgets/tenant/EditTenant.dart';
+import 'package:flutter_tests/widgets/tenant/SearchTenants.dart';
+
+import 'package:flutter_tests/widgets/settings/Settings.dart';
+
 
 String get host {
   if (Platform.isAndroid) {
@@ -34,342 +54,182 @@ void main() {
   runApp(MyApp());
 }
 
-final HttpLink httpLink = HttpLink(
-  uri: 'http://$host:4000/graphql',
-);
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+  _MyAppState createState() => _MyAppState();
+}
 
-// final AuthLink authLink = AuthLink(
-//   getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-//   // OR
-//   // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-// );
-
-// final Link link = authLink.concat(httpLink);
-
-ValueNotifier<GraphQLClient> client = ValueNotifier(
-  GraphQLClient(
-    cache: InMemoryCache(),
-    link: httpLink,
-  ),
-);
-
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+  ValueNotifier<GraphQLClient> client;
+
+  deleteToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("token",null);
+  }
+
+  @override
+  void initState() {
+    
+    deleteToken();
+    
+    final HttpLink httpLink = HttpLink(
+      uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
+      // uri: 'http://$host:4000/graphql',
+    );
+  
+    final AuthLink authLink = AuthLink(
+      getToken: () async {
+        final prefs = await SharedPreferences.getInstance();
+        return prefs.getString("token") != null ? "Bearer " + prefs.getString("token") : "";
+      },
+    );
+
+    final Link link = authLink.concat(httpLink);
+
+    client = ValueNotifier(
+      GraphQLClient(
+        cache: InMemoryCache(),
+        link: link,
+      ),
+    );
+    super.initState();
+  }
+
+  //todo move 
+  Map<int, Color> color = 
+  { 
+    50:Color.fromRGBO(39, 125, 161, .1), 
+    100:Color.fromRGBO(39, 125, 161, .2), 
+    200:Color.fromRGBO(39, 125, 161, .3), 
+    300:Color.fromRGBO(39, 125, 161, .4), 
+    400:Color.fromRGBO(39, 125, 161, .5), 
+    500:Color.fromRGBO(39, 125, 161, .6), 
+    600:Color.fromRGBO(39, 125, 161, .7), 
+    700:Color.fromRGBO(39, 125, 161, .8), 
+    800:Color.fromRGBO(39, 125, 161, .9), 
+    900:Color.fromRGBO(39, 125, 161, 1),
+  }; 
 
   @override
   Widget build(BuildContext context) {
     //Force Device Orientation 
     //https://stackoverflow.com/questions/49418332/flutter-how-to-prevent-device-orientation-changes-and-force-portrait
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    return
-      GraphQLProvider(
-        client: client,
-        child:
-          MaterialApp(
-            title: 'State Of Play',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => MyHomePage(title: 'Home Page'),
-              '/state-of-plays': (context) => StateOfPlays(),
-              '/properties': (context) => Properties(),
-             '/new': (context) => NewStateOfPlayRouter(),
-            },
-          )
-      );
-  }
-}
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+    MaterialColor colorCustom = MaterialColor(0xFF4AAAD3, color); 
 
-  final String title;
+    return GraphQLProvider(
+      client: client,
+      child: MaterialApp(
+        title: 'États des lieux',
+        theme: ThemeData(
+          primarySwatch: colorCustom, 
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          buttonColor: Colors.grey, 
+        ),
+        initialRoute: '/login',
+        onGenerateRoute: (settings) {
+          
+          if (settings.name == "/login") 
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Login());
+          else if (settings.name == "/register") 
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Register());
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-// STATE_OF_PLAY MODEL
 
-sop.StateOfPlay stateOfPlay = sop.StateOfPlay(
-  owner: sop.Owner(
-    firstname: 'Robert',
-    lastname: 'Dupont',
-    company: "SCI d'Investisseurs",
-    address: '3 rue des Mésanges',
-    postalCode: '75001',
-    city: 'Paris'
-  ),
-  representative: sop.Representative(
-    firstname: 'Elise',
-    lastname: 'Lenotre',
-    company: 'Marketin Immobilier',
-    address: '3 rue des Mésanges',
-    postalCode: '75001',
-    city: 'Paris'
-  ),
-  tenants: [
-    sop.Tenant(
-      firstname: 'Emilie',
-      lastname: 'Dupond',
-      address: '3 rue des Mésanges',
-      postalCode: '75001',
-      city: 'Paris'
-    ),
-    sop.Tenant(
-      firstname: 'Schmitt',
-      lastname: 'Albert',
-      address: '3 rue des Mésanges',
-      postalCode: '75001',
-      city: 'Paris'
-    )
-  ],
-  entryDate: DateTime.now(),// To be changed
-  property: sop.Property(
-    address: '3 rue des Mésanges',
-    postalCode: '75001',
-    city: 'Paris',
-    type: 'appartement',
-    reference: '3465',
-    lot: '34',
-    floor: 5,
-    roomCount: 5,
-    area: 108,
-    annexes: 'balcon / cave / terasse',
-    heatingType: 'chauffage collectif',
-    hotWater: 'eau chaude collective'
-  ),
-  rooms: [
-    sop.Room(
-      name: 'Cuisine',
-      decorations: [
-        sop.Decoration(
-          type: 'Porte',
-          nature: 'Pas de porte',
-          state: sop.States.good,
-          comment: 'Il manque la porte',
-          photo: 0
-        ),
-        sop.Decoration(
-          type: 'Porte',
-          nature: 'Pas de porte',
-          state: sop.States.good,
-          comment: 'Il manque la porte',
-          photo: 0
-        )
-      ],
-      electricsAndHeatings: [
-        sop.ElectricAndHeating(
-          type: 'Interrupteur',
-          quantity: 1,
-          state: sop.States.neww,
-          comment: '',
-          photo: 0
-        ),
-        sop.ElectricAndHeating(
-          type: 'Prise électrique',
-          quantity: 3,
-          state: sop.States.neww,
-          comment: '',
-          photo: 0
-        ),
-      ],
-      equipments: [
-        sop.Equipment(
-          type: 'Interrupteur',
-          brandOrObject: 'Brandt',
-          stateOrQuantity: sop.States.good,
-          comment: '',
-          photo: 0
-        ),
-        sop.Equipment(
-          type: 'Interrupteur',
-          brandOrObject: 'Brandt',
-          stateOrQuantity: sop.States.good,
-          comment: '',
-          photo: 0
-        ),
-      ],
-      generalAspect: sop.GeneralAspect(
-        comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-        photo: 0
+          else if (settings.name == "/state-of-plays") 
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlays());
+          else if (settings.name == '/state-of-play') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
+          }
+          else if (settings.name == '/new-state-of-play') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: args != null ? args["stateOfPlayId"] : null));
+          }
+          else if (settings.name == '/edit-state-of-play') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => EditStateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
+          }
+          else if (settings.name == '/search-state-of-plays') {
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays());
+          }
+
+
+          else if (settings.name == '/properties')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Properties());
+          else if (settings.name == '/property') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Property(propertyId: args["propertyId"]));
+          }
+          else if (settings.name == '/new-property')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => NewProperty());
+          else if (settings.name == '/edit-property') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => EditProperty(propertyId: args["propertyId"]));
+          }
+          else if (settings.name == '/search-properties')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
+            
+
+          else if (settings.name == '/owners')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Owners());
+          else if (settings.name == '/owner') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Owner(ownerId: args["ownerId"],));
+          }
+          else if (settings.name == '/new-owner')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwner());
+          else if (settings.name == '/edit-owner') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => EditOwner(ownerId: args["ownerId"]));
+          }
+          else if (settings.name == '/search-owners')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchOwners());
+            
+
+          else if (settings.name == '/representatives')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Representatives());
+          else if (settings.name == '/representative') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Representative(representativeId: args["representativeId"]));
+          }
+          else if (settings.name == '/new-representative')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentative());
+          else if (settings.name == '/edit-representative') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => EditRepresentative(representativeId: args["representativeId"]));
+          }
+          else if (settings.name == '/search-representatives')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchRepresentatives());
+            
+
+          else if (settings.name == '/tenants')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenants());
+          else if (settings.name == '/tenant') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenant(tenantId: args["tenantId"]));
+          }
+          else if (settings.name == '/new-tenant')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenant());
+          else if (settings.name == '/edit-tenant') {
+            final Map args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => EditTenant(tenantId: args["tenantId"]));
+          }
+          else if (settings.name == '/search-tenants')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants());
+
+
+          else if (settings.name == '/settings')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());
+
+          return null;
+        }
       )
-    ),
-    sop.Room(
-      name: 'Séjour / Salon',
-      decorations: [
-        sop.Decoration(
-          type: 'Porte',
-          nature: 'Pas de porte',
-          state: sop.States.good,
-          comment: 'Il manque la porte',
-          photo: 0
-        ),
-        sop.Decoration(
-          type: 'Porte',
-          nature: 'Pas de porte',
-          state: sop.States.good,
-          comment: 'Il manque la porte',
-          photo: 0
-        )
-      ],
-      electricsAndHeatings: [
-        sop.ElectricAndHeating(
-          type: 'Interrupteur',
-          quantity: 1,
-          state: sop.States.neww,
-          comment: '',
-          photo: 0
-        ),
-        sop.ElectricAndHeating(
-          type: 'Prise électrique',
-          quantity: 3,
-          state: sop.States.neww,
-          comment: '',
-          photo: 0
-        ),
-      ],
-      equipments: [
-        sop.Equipment(
-          type: 'Interrupteur',
-          brandOrObject: 'Brandt',
-          stateOrQuantity: sop.States.good,
-          comment: '',
-          photo: 0
-        ),
-        sop.Equipment(
-          type: 'Interrupteur',
-          brandOrObject: 'Brandt',
-          stateOrQuantity: sop.States.good,
-          comment: '',
-          photo: 0
-        ),
-      ],
-      generalAspect: sop.GeneralAspect(
-        comment: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-        photo: 0
-      ),
-    )
-  ],
-  meters: [
-    sop.Meter(
-      type: 'Eau froide',
-      location: 'Cuisine',
-      dateOfSuccession: DateTime.now(),
-      index: 4567,
-      photo: 0
-    )
-  ],
-  keys: [
-    sop.Key(
-      type: 'Clé ascenceur',
-      count: 1,
-      comments: '',
-      photo: 0
-    )
-  ],
-  insurance: sop.Insurance(
-    company: 'Homestar',
-    number: '123465468',
-    dateStart: DateTime.now(),
-    dateEnd: DateTime.now(),
-  ),
-  comment: "L'appartement vient d'être repeint",
-  reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
-  city: 'Mulhouse',
-  date: DateTime.now()
-);
-
-// Comment convertir en data une enum ?
-// la stocker sous forme d'entier ou de string ?
-// pb si stocker sous forme de string, comment recréer l'enum cote client ?
-
-// solution 1. stocker en int :
-// sop.Decorations deco = sop.Decorations.values[0];
-// int enumInt = sop.Decorations.values.indexOf(sop.Decorations.ceiling)
-
-// MAIS pb si on ajoute un champs à l'enum, cela demandera de maj la bdd
-
-// solution 2 : https://medium.com/@amir.n3t/advanced-enums-in-flutter-a8f2e2702ffd
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _pdfPath;
-  
-  Future<void> _sendPdf() async {
-    final Email email = Email(
-      body: 'Email body',
-      subject: 'Email subject',
-      recipients: ['l.szabatura@gmail.com'],
-      cc: ['cc@example.com'],
-      bcc: ['bcc@example.com'],
-      // attachmentPaths: [_pdfPath],
-      isHTML: false,
-    );
-
-    await FlutterEmailSender.send(email);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-                  child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              v.PropertyForm(
-                property: stateOfPlay.property
-              ),
-              Image(image: AssetImage('assets/images/logo.png')),
-              RaisedButton(
-                onPressed: () => generatePdf(stateOfPlay),
-                child: Text(
-                  'Generate PDF'
-                )
-              ),
-              RaisedButton(
-                onPressed: () => Navigator.pushNamed(context, '/state-of-plays'),
-                child: Text(
-                  'State of play list'
-                )
-              ),
-              RaisedButton(
-                onPressed: () => Navigator.pushNamed(context, '/properties'),
-                child: Text(
-                  'Property list'
-                )
-              ),
-              RaisedButton(
-                onPressed: () => Navigator.pushNamed(context, '/new'),
-                child: Text(
-                  'New state of play'
-                )
-              ),
-              _pdfPath != null ? RaisedButton(
-                onPressed: _sendPdf,
-                child: Text(
-                  'Send PDF'
-                )
-              ) : Container(),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Generate PDF',
-        child: Icon(Icons.add),
-      ), 
     );
   }
 }

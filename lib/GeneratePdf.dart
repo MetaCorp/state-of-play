@@ -51,6 +51,7 @@ const StateOfPlayTexts stateOfPlayTexts = StateOfPlayTexts(
 
 const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
   "État des lieux d'entrée",
+  "État des lieux de sortie",
   'Dressé en commun et contradicatoire entre les soussignés',
   'assets/images/logo.png'
 );
@@ -156,7 +157,7 @@ pw.Widget _buildTableGeneralAspect({ List<String> tableHeaders, String roomName,
       1,
       (row) => List<String>.generate(
         tableHeaders.length,
-        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comment : generalAspect.photo.toString(),
+        (col) => col == 0 ? roomName : col == 1 ? generalAspect.comments : generalAspect.image.toString(),
       ),
     ),
   );
@@ -227,11 +228,11 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
     'Photo'
   ];
   
-  const tableGeneralAspectsHeaders = [
-    'Aspect Général',
-    'Commentaires',
-    'Photo'
-  ];
+  // const tableGeneralAspectsHeaders = [
+  //   'Aspect Général',
+  //   'Commentaires',
+  //   'Photo'
+  // ];
 
   return pw.Column(
     children: [
@@ -253,9 +254,9 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
         },
         primaryColor: primaryColor//PdfColors.pink400
       ) : Container(),
-      room.electricsAndHeatings != null ? _buildTable(
+      room.electricities != null ? _buildTable(
         tableHeaders: tableElectricAndHeatingHeaders,
-        array: room.electricsAndHeatings,
+        array: room.electricities,
         columnWidths: <int, pw.TableColumnWidth>{
           0: const pw.FixedColumnWidth(120),
           1: const pw.FixedColumnWidth(100),
@@ -277,17 +278,17 @@ pw.Widget _buildRoom({ sop.Room room, PdfColor primaryColor, PdfImage logo }) {
         },
         primaryColor: primaryColor
       ) : Container(),
-      room.generalAspect != null ? _buildTableGeneralAspect(
-        tableHeaders: tableGeneralAspectsHeaders,
-        roomName: room.name,
-        generalAspect: room.generalAspect,
-        columnWidths: <int, pw.TableColumnWidth>{
-          0: const pw.FixedColumnWidth(120),
-          1: const pw.FixedColumnWidth(300),
-          2: const pw.FixedColumnWidth(60),
-        },
-        primaryColor: primaryColor
-      ) : Container(),
+      // room.generalAspect != null ? _buildTableGeneralAspect(
+      //   tableHeaders: tableGeneralAspectsHeaders,
+      //   roomName: room.name,
+      //   generalAspect: room.generalAspect,
+      //   columnWidths: <int, pw.TableColumnWidth>{
+      //     0: const pw.FixedColumnWidth(120),
+      //     1: const pw.FixedColumnWidth(300),
+      //     2: const pw.FixedColumnWidth(60),
+      //   },
+      //   primaryColor: primaryColor
+      // ) : Container(),
     ]
   );
 }
@@ -358,14 +359,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   );
 }
 
-pw.Widget _buildPhotos({ List<String> photos, PdfImage logo }) {
-  
-  const tableMeterHeaders = [
-    'Type de clé',
-    'Nnombre',
-    'Commentaires',
-    'Photo'
-  ];
+pw.Widget _buildPhotos({ List<dynamic> photos, PdfImage logo }) {
 
   return pw.Column(
     children: [
@@ -375,6 +369,29 @@ pw.Widget _buildPhotos({ List<String> photos, PdfImage logo }) {
       ),
       pw.Padding(
         padding: pw.EdgeInsets.only(bottom: 25)
+      ),
+      pw.Wrap(
+        alignment: pw.WrapAlignment.start,
+        // crossAxisAlignment: pw.WrapCrossAlignment.start,
+        spacing: 20,
+        children: photos.map((photo) => pw.Column(
+          children: [
+            pw.Container(
+              alignment: pw.Alignment.bottomLeft,
+              height: 200,
+              child: pw.Image(
+                PdfImage.file(
+                  pdf.document,
+                  bytes: photo.readAsBytesSync()
+                )
+              )
+            ),
+            pw.Text(
+              "Photo n°" + (photos.indexOf(photo) + 1).toString(),
+              textAlign: pw.TextAlign.left
+            )
+          ]
+        )).toList()
       )
     ]
   );
@@ -402,7 +419,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(
-        stateOfPlay.representative.lastname.toUpperCase() + ' ' + tenant.firstname,
+        stateOfPlay.representative.lastName.toUpperCase() + ' ' + tenant.firstName,
         style: pw.TextStyle(
           color: PdfColors.black,
           fontWeight: pw.FontWeight.bold,
@@ -448,7 +465,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                             height: 30,
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayOptions.title.toUpperCase(),
+                              stateOfPlay.out ? stateOfPlayOptions.titleExit.toUpperCase() : stateOfPlayOptions.titleEntry.toUpperCase(),
                               style: pw.TextStyle(
                                 color: PdfColors.black,
                                 fontWeight: pw.FontWeight.bold,
@@ -510,7 +527,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                                   ),
                                 ),
                                 pw.Text(
-                                  stateOfPlay.owner.lastname.toUpperCase() + ' ' + stateOfPlay.owner.firstname,
+                                  stateOfPlay.owner.lastName.toUpperCase() + ' ' + stateOfPlay.owner.firstName,
                                   style: pw.TextStyle(
                                     color: PdfColors.black,
                                     fontSize: 9,
@@ -575,7 +592,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                                   ),
                                 ),
                                 pw.Text(
-                                  stateOfPlay.representative.lastname.toUpperCase() + ' ' + stateOfPlay.representative.firstname,
+                                  stateOfPlay.representative.lastName.toUpperCase() + ' ' + stateOfPlay.representative.firstName,
                                   style: pw.TextStyle(
                                     color: PdfColors.black,
                                     fontSize: 9,
@@ -662,7 +679,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                             padding: const pw.EdgeInsets.only(left: 20, top: 5, right: 20, bottom: 15),
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayTexts.entryDate + ' : ' + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryDate),
+                              stateOfPlayTexts.entryDate + ' : ' + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryExitDate),
                               style: pw.TextStyle(
                                 color: PdfColors.white,
                                 fontSize: 9
@@ -772,20 +789,20 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                     ])
                   ],
                   
-                  <pw.Widget>[
-                    pw.Row(
-                      children: [
-                        pw.Text(
-                          stateOfPlayTexts.annexe + ':   ',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                          )
-                        ),
-                        pw.Text(
-                          stateOfPlay.property.annexes
-                        )
-                    ])
-                  ],
+                  // <pw.Widget>[ // TODO : Add annexes
+                  //   pw.Row(
+                  //     children: [
+                  //       pw.Text(
+                  //         stateOfPlayTexts.annexe + ':   ',
+                  //         style: pw.TextStyle(
+                  //           fontWeight: pw.FontWeight.bold,
+                  //         )
+                  //       ),
+                  //       pw.Text(
+                  //         stateOfPlay.property.annexes
+                  //       )
+                  //   ])
+                  // ],
 
                   
                   <pw.Widget>[
@@ -822,7 +839,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 pw.Column(
                   children: [
                     _buildRoom(
-                      room: stateOfPlay.rooms[0],
+                      room: room,
                       primaryColor: stateOfPlay.rooms.indexOf(room) % 2 == 0 ? PdfColors.blue : PdfColors.pink,
                       logo: logoKitchen
                     ),
@@ -857,16 +874,23 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
               pw.RichText(
                 text:
                   pw.TextSpan(
-                    text: 'Le Locataire a assuré le bien immobilier auprès de la compagnie assurance ',
+                    text: "Le Locataire a assuré le bien immobilier auprès de la compagnie d'assurance ",
+                    style: pw.TextStyle(
+                      fontSize: 11
+                    ),
                     children: [
                       pw.TextSpan(
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 11
                         ),
                         text: stateOfPlay.insurance.company
                       ),
                       pw.TextSpan(
-                        text: "sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd)
+                        text: "sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd),
+                        style: pw.TextStyle(
+                          fontSize: 11
+                        ),
                       )
                     ]
                   )
@@ -878,7 +902,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
                 ),
-                height: 120,
+                height: 100,
                 padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
                 alignment: pw.Alignment.centerLeft,
                 child:
@@ -893,7 +917,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                           ),
                         ),
                         pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                        pw.Text(stateOfPlay.comment)
+                        pw.Text(stateOfPlay.comments)
                       ]
                   )
               ),
@@ -904,7 +928,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
                 ),
-                height: 120,
+                height: 100,
                 padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
                 alignment: pw.Alignment.centerLeft,
                 child:
@@ -928,9 +952,26 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
               // TEXTE
               pw.Column(
                 children: [
-                  pw.Text("Les soussignés reconnaissent exactes les constatations sur l'état du logement, sous réserve du bon fonctionnement des canalisations, appareils et installations sanitaires, électriques et du chauffage qui n'a pu être vérifié ce jour, toute défectuosité dans le fonctionnement de ceux-ci devant être signalée dans le délai maximum de huit jours, et pendant le premier mois de la période de chauffe en ce qui concerne les éléments de chauffage."),
-                  pw.Text("Les cosignataires aux présentes ont convenu du caractère probant et indiscutable des signatures y figurant pour être recueillies selon procédé informatique sécurisé au contradictoire des partie, ils s'accordent pour y faire référence lors du départ du locataire."),
-                  pw.Text("Le présent état des lieux établi contradictoirement entre les parties qui le reconnaissent exact, fait partie intégrante du contrat de location dont il ne peut être dissocié.")
+                  pw.Text(
+                    "Les soussignés reconnaissent exactes les constatations sur l'état du logement, sous réserve du bon fonctionnement des canalisations, appareils et installations sanitaires, électriques et du chauffage qui n'a pu être vérifié ce jour, toute défectuosité dans le fonctionnement de ceux-ci devant être signalée dans le délai maximum de huit jours, et pendant le premier mois de la période de chauffe en ce qui concerne les éléments de chauffage.",
+                    style: pw.TextStyle(
+                      fontSize: 11
+                    )
+                  ),
+                  pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
+                  pw.Text(
+                    "Les cosignataires aux présentes ont convenu du caractère probant et indiscutable des signatures y figurant pour être recueillies selon procédé informatique sécurisé au contradictoire des partie, ils s'accordent pour y faire référence lors du départ du locataire.",
+                    style: pw.TextStyle(
+                      fontSize: 11
+                    )
+                  ),
+                  pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
+                  pw.Text(
+                    "Le présent état des lieux établi contradictoirement entre les parties qui le reconnaissent exact, fait partie intégrante du contrat de location dont il ne peut être dissocié.",
+                    style: pw.TextStyle(
+                      fontSize: 11
+                    )
+                  )
                 ]
               ),
               pw.Padding(padding: pw.EdgeInsets.only(bottom: 25)),
@@ -942,9 +983,13 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                   pw.RichText(
                     text: pw.TextSpan(
                       text: 'Fait à ' + stateOfPlay.city + ' ',
+                        style: pw.TextStyle(
+                        fontSize: 11
+                      ),
                       children: [pw.TextSpan(
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 11
                         ),
                         text: 'le ' + DateFormat('dd/MM/yyy').format(stateOfPlay.date),
                       )]
@@ -963,13 +1008,25 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                     height: 120,
                     width: 230,
                     padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                    alignment: pw.Alignment.bottomCenter,
-                    child: pw.Text(
-                      stateOfPlayTexts.signatureOwnerOrRepresentative,
-                      style: pw.TextStyle(
-                        fontSize: 9,
-                        fontStyle: pw.FontStyle.italic 
-                      )  
+                    child: pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.end,
+                      children: [
+                        pw.Container(
+                          height: 40,
+                          child: pw.Image(PdfImage.file(
+                            pdf.document,
+                            bytes: stateOfPlay.signatureOwner,
+                          ))
+                        ),
+                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
+                        pw.Text(
+                          stateOfPlayTexts.signatureOwnerOrRepresentative,
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            fontStyle: pw.FontStyle.italic 
+                          )  
+                        )
+                      ]
                     )
                   ),
                   ...stateOfPlay.tenants.map((tenant) => pw.Container(
@@ -981,18 +1038,31 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                     padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
                     margin: const pw.EdgeInsets.only(bottom: 15),
                     alignment: pw.Alignment.bottomCenter,
-                    child: pw.Text(
-                      stateOfPlayTexts.signatureTenant + (stateOfPlay.tenants.indexOf(tenant) + 1).toString(),
-                      style: pw.TextStyle(
-                        fontSize: 9,
-                        fontStyle: pw.FontStyle.italic 
-                      )    
+                    child: pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.end,
+                      children: [
+                        pw.Container(
+                          height: 40,
+                          child: pw.Image(PdfImage.file(
+                            pdf.document,
+                            bytes: stateOfPlay.signatureTenants[stateOfPlay.tenants.indexOf(tenant)],
+                          ))
+                        ),
+                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
+                        pw.Text(
+                          stateOfPlayTexts.signatureTenant + (stateOfPlay.tenants.indexOf(tenant) + 1).toString(),
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            fontStyle: pw.FontStyle.italic 
+                          )    
+                        )
+                      ]
                     )
                   ))
                 ]
               ),
 
-              _buildPhotos(photos: stateOfPlay.photos, logo: logo)
+              _buildPhotos(photos: stateOfPlay.images, logo: logo)
     ]
   ));
 

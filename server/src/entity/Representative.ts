@@ -18,6 +18,18 @@ export class Representative extends BaseEntity {
   @Field()
   @Column()
   lastName: string;
+  
+  @Field()
+  @Column()
+  address: String;
+  
+  @Field()
+  @Column()
+  postalCode: String;
+
+  @Field()
+  @Column()
+  city: String;
 
   @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.representative)

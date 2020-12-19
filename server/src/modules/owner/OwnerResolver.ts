@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
 import { ILike } from "typeorm";
 
 import { Owner } from "../../entity/Owner";
@@ -7,6 +7,7 @@ import { CreateOwnerInput } from "./CreateOwnerInput";
 import { OwnersFilterInput } from "./OwnersFilterInput";
 import { DeleteOwnerInput } from "./DeleteOwnerInput";
 import { UpdateOwnerInput } from "./UpdateOwnerInput";
+import { OwnerInput } from "./OwnerInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -15,6 +16,7 @@ import { User } from "../../entity/User";
 
 @Resolver()
 export class OwnerResolver {
+	@Authorized()
 	@Query(() => [Owner])
 	owners(@Arg("filter", { nullable: true }) filter?: OwnersFilterInput) {
 		return Owner.find({
@@ -22,33 +24,38 @@ export class OwnerResolver {
                 { lastName: ILike("%" + filter.search + "%") },
                 { firstName: ILike("%" + filter.search + "%") },
             ] : [],
-            order: { lastName: 'ASC', firstName: 'ASC' }
+			order: { lastName: 'ASC', firstName: 'ASC' },
+			relations: ["user"]
         })
 	}
 
-	// @Query(() => Owner, { nullable: true })
-	// async owner(@Arg("data") data: OwnerInput) {
+	@Query(() => Owner, { nullable: true })
+	async owner(@Arg("data") data: OwnerInput) {
 
-	// 	// @ts-ignore
-	// 	const owner = await Owner.findOne({ id: data.ownerId }, { relations: ["user"] })
-	// 	if (!owner) return
+		// @ts-ignore
+		const owner = await Owner.findOne({ id: data.ownerId }, { relations: ["user"] })
+		if (!owner) return
 
 
-	// 	return owner;
-	// }
+		return owner;
+	}
 
-	// @Arg("data") data: CreateOwnerInput, 
+	@Authorized()
 	@Mutation(() => Owner, { nullable: true })
 	async createOwner(@Arg("data") data: CreateOwnerInput, @Ctx() ctx: MyContext) {
 
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
+		console.log("createOwner: ", data)
 
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
 
 		const owner = await Owner.create({
             firstName: data.firstName,
             lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 			user: user,
 		}).save();
 
@@ -58,12 +65,16 @@ export class OwnerResolver {
 		return owner;
 	}
 	
+	@Authorized()
 	@Mutation(() => Int)
 	async updateOwner(@Arg("data") data: UpdateOwnerInput) {
 
-		const owner = await Owner.update(data.ownerId, {
-            firstName: data.owner.firstName,
-            lastName: data.owner.lastName,
+		const owner = await Owner.update(data.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 		})
 		console.log('updateOwner: ', owner)
 
@@ -72,14 +83,29 @@ export class OwnerResolver {
 		return 1
 	}
 	
+	@Authorized()
 	@Mutation(() => Int)
 	async deleteOwner(@Arg("data") data: DeleteOwnerInput) {
 
-		const owner = await Owner.delete(data.ownerId)
+		// const owner = await Owner.findOne(data.ownerId, { relations: ["stateOfPlays", "stateOfPlays.owner"] });
+		// if (!owner)
+		// 	return 0
 
-		console.log('deleteOwner: ', owner)
+		// for (let i = 0; i < owner.stateOfPlays.length; i++) {
+		// 	let stateOfPlay = owner.stateOfPlays[i];
+			
+		// 	stateOfPlay.owner = undefined;
+			
+		// 	stateOfPlay = await stateOfPlay.save()
+			
+		// 	console.log('delete owner stateOfPlay: ', stateOfPlay.owner)
+		// }
 
-		if (owner.affected !== 1) return 0
+		const ret = await Owner.delete(data.ownerId)
+
+		console.log('deleteOwner: ', ret)
+
+		if (ret.affected !== 1) return 0
 
 		return 1
 	}

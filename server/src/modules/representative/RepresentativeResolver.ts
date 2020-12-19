@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Ctx, Arg, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Ctx, Arg, Int, Authorized } from "type-graphql";
 import { ILike } from 'typeorm';
 
 import { Representative } from "../../entity/Representative";
@@ -7,6 +7,7 @@ import { CreateRepresentativeInput } from "./CreateRepresentativeInput";
 import { RepresentativesFilterInput } from "./RepresentativesFilterInput";
 import { DeleteRepresentativeInput } from "./DeleteRepresentativeInput";
 import { UpdateRepresentativeInput } from "./UpdateRepresentativeInput";
+import { RepresentativeInput } from "./RepresentativeInput";
 
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entity/User";
@@ -15,6 +16,7 @@ import { User } from "../../entity/User";
 
 @Resolver()
 export class RepresentativeResolver {
+	@Authorized()
 	@Query(() => [Representative])
 	representatives(@Arg("filter", { nullable: true }) filter?: RepresentativesFilterInput) {
 		return Representative.find({
@@ -22,33 +24,38 @@ export class RepresentativeResolver {
                 { lastName: ILike("%" + filter.search + "%") },
                 { firstName: ILike("%" + filter.search + "%") },
             ] : [],
-            order: { lastName: 'ASC', firstName: 'ASC' }
+			order: { lastName: 'ASC', firstName: 'ASC' },
+			relations: ["user"]
         })
 	}
 
-	// @Query(() => Representative, { nullable: true })
-	// async representative(@Arg("data") data: RepresentativeInput) {
+	@Authorized()
+	@Query(() => Representative, { nullable: true })
+	async representative(@Arg("data") data: RepresentativeInput) {
 
-	// 	// @ts-ignore
-	// 	const representative = await Representative.findOne({ id: data.representativeId }, { relations: ["user"] })
-	// 	if (!representative) return
+		// @ts-ignore
+		const representative = await Representative.findOne({ id: data.representativeId }, { relations: ["user"] })
+		if (!representative) return
 
+		return representative;
+	}
 
-	// 	return representative;
-	// }
-
-	// @Arg("data") data: CreateRepresentativeInput, 
+	@Authorized()
 	@Mutation(() => Representative, { nullable: true })
 	async createRepresentative(@Arg("data") data: CreateRepresentativeInput, @Ctx() ctx: MyContext) {
 
 		console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId })
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
 
 		const representative = await Representative.create({
             firstName: data.firstName,
             lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 			user: user,
 		}).save();
 
@@ -58,12 +65,16 @@ export class RepresentativeResolver {
 		return representative;
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async updateRepresentative(@Arg("data") data: UpdateRepresentativeInput) {
 
-		const representative = await Representative.update(data.representativeId, {
-            firstName: data.representative.firstName,
-            lastName: data.representative.lastName,
+		const representative = await Representative.update(data.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
+			address: data.address,
+			postalCode: data.postalCode,
+			city: data.city,
 		})
 		console.log('updateRepresentative: ', representative)
 
@@ -72,6 +83,7 @@ export class RepresentativeResolver {
 		return 1
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async deleteRepresentative(@Arg("data") data: DeleteRepresentativeInput) {
 

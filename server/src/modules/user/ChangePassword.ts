@@ -33,6 +33,7 @@ export class ChangePasswordResolver {
 
     await user.save();
 
+    // @ts-ignore
     ctx.req.session!.userId = user.id;
 
     return user;

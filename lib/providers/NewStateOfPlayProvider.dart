@@ -5,16 +5,16 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 class NewStateOfPlayProvider with ChangeNotifier {
   sop.StateOfPlay value = sop.StateOfPlay(
     owner: sop.Owner(
-      firstname: 'Robert',
-      lastname: 'Dupont',
+      firstName: 'Robert',
+      lastName: 'Dupont',
       company: "SCI d'Investisseurs",
       address: '3 rue des Mésanges',
       postalCode: '75001',
       city: 'Paris'
     ),
     representative: sop.Representative(
-      firstname: 'Elise',
-      lastname: 'Lenotre',
+      firstName: 'Elise',
+      lastName: 'Lenotre',
       company: 'Marketin Immobilier',
       address: '3 rue des Mésanges',
       postalCode: '75001',
@@ -22,15 +22,15 @@ class NewStateOfPlayProvider with ChangeNotifier {
     ),
     tenants: [
       sop.Tenant(
-        firstname: 'Emilie',
-        lastname: 'Dupond',
+        firstName: 'Emilie',
+        lastName: 'Dupond',
         address: '3 rue des Mésanges',
         postalCode: '75001',
         city: 'Paris'
       ),
       sop.Tenant(
-        firstname: 'Schmitt',
-        lastname: 'Albert',
+        firstName: 'Schmitt',
+        lastName: 'Albert',
         address: '3 rue des Mésanges',
         postalCode: '75001',
         city: 'Paris'

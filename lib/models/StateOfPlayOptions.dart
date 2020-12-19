@@ -1,12 +1,14 @@
 
 class StateOfPlayOptions {
   const StateOfPlayOptions(
-    this.title,
+    this.titleEntry,
+    this.titleExit,
     this.description,
     this.logo
   );
 
-  final String title;
+  final String titleEntry;
+  final String titleExit;
   final String description;
   final String logo;
 }

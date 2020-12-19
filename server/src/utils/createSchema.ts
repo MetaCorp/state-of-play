@@ -18,6 +18,14 @@ import { PropertyResolver } from "../modules/property/PropertyResolver";
 import { StateOfPlayResolver } from "../modules/stateOfPlay/StateOfPlayResolver";
 import { OwnerResolver } from "../modules/owner/OwnerResolver";
 import { RepresentativeResolver } from "../modules/representative/RepresentativeResolver";
+import { TenantResolver } from "../modules/tenant/TenantResolver";
+
+import { RoomResolver } from "../modules/room/RoomResolver";
+import { DecorationResolver } from "../modules/decoration/DecorationResolver";
+import { ElectricityResolver } from "../modules/electricity/ElectricityResolver";
+import { EquipmentResolver } from "../modules/equipment/EquipmentResolver";
+import { MeterResolver } from "../modules/meter/MeterResolver";
+import { KeyResolver } from "../modules/key/KeyResolver";
 
 export const createSchema = () =>
   buildSchema({
@@ -38,9 +46,19 @@ export const createSchema = () =>
       PropertyResolver,
       StateOfPlayResolver,
       OwnerResolver,
-      RepresentativeResolver
+      RepresentativeResolver,
+      TenantResolver,
+
+      RoomResolver,
+      DecorationResolver,
+      ElectricityResolver,
+      EquipmentResolver,
+      MeterResolver,
+      KeyResolver
     ],
-    // authChecker: ({ context: { req: any } }) => {
-    //   return !!req.session.userId;
-    // }
+    // @ts-ignore
+    authChecker: ({ context }) => {
+      console.log('authChecker: ', context.userId);
+      return context.userId;
+    }
   });

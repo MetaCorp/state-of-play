@@ -1,4 +1,4 @@
-import { Query, Resolver, Ctx, Arg, Mutation, Int  } from "type-graphql";
+import { Query, Resolver, Ctx, Arg, Mutation, Int, Authorized  } from "type-graphql";
 import { MyContext } from "../../types/MyContext";
 
 import { UserInput } from "./UserInput";
@@ -9,16 +9,20 @@ import { User } from "../../entity/User";
 
 @Resolver()
 export class UserResolver {
-  @Query(() => [User])
-  async users() {
-    return User.find({ relations: ["properties", "stateOfPlays", "stateOfPlays.property"] });
-  }
 
-  @Query(() => User, { nullable: true })
+	@Authorized()
+	@Query(() => [User])
+	async users() {
+		return User.find({ relations: ["properties", "stateOfPlays", "stateOfPlays.property"] });
+	}
+
+	@Authorized()
+	@Query(() => User, { nullable: true })
 	async user(@Arg("data") data: UserInput, @Ctx() ctx: MyContext,) {
 
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
+		// @ts-ignore
 		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId }, { relations: ["properties", "stateOfPlays", "stateOfPlays.property"] })
 		if (!user) return
 
@@ -27,7 +31,7 @@ export class UserResolver {
 		return user;
 	}
 
-	
+	@Authorized()
 	@Mutation(() => Int)
 	async updateUser(@Arg("data") data: UpdateUserInput) {
 
@@ -42,6 +46,7 @@ export class UserResolver {
 		return 1
 	}
 
+	@Authorized()
 	@Mutation(() => Int)
 	async deleteUser(@Arg("data") data: DeleteUserInput) {
 

@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class PropertyFilterInput {
+export class MeterInput {
   @Field()
-  search: string;
+  meterId: string;
 }
