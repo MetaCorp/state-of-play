@@ -237,7 +237,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     children: [
                       Divider(thickness: 2, height: 2,),
                       Header(
-                        title: "Équipement",
+                        title: "Équipements",
                         onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddEquipment(
                           onSelect: (equipments) {
                             print('equipments: ' + equipments.toString());

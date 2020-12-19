@@ -174,9 +174,19 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       children: [
         Column(
           children: [
-            RaisedButton(
-              child: Text(widget.stateOfPlay.owner.lastName),
-              onPressed: () => goToSignatureSignature(widget.stateOfPlay.owner),
+            SizedBox(
+              width: 150,
+              child: RaisedButton(
+                color: widget.stateOfPlay.signatureOwner != null ? Theme.of(context).primaryColor : Theme.of(context).buttonColor,
+                child: widget.stateOfPlay.signatureOwner != null ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.stateOfPlay.owner.lastName),
+                      Icon(Icons.check),
+                    ],
+                  ) : Text(widget.stateOfPlay.owner.lastName),    
+                onPressed: () => {widget.stateOfPlay.signatureOwner != null ? showDeleteSignature(widget.stateOfPlay.owner) : goToSignatureSignature(widget.stateOfPlay.owner)},
+              ),
             ),
             GestureDetector(
               child: Container(
@@ -185,9 +195,30 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: widget.stateOfPlay.signatureOwner != null ? Image.memory(widget.stateOfPlay.signatureOwner) : null,          
+                child: widget.stateOfPlay.signatureOwner != null ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //here
+                    Image.memory(widget.stateOfPlay.signatureOwner,width: 100,),
+                    ButtonTheme(    
+                      minWidth: 26.0,
+                      height: 60,
+                      child: FlatButton(   
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),   
+                        shape: CircleBorder(),
+                        child: Icon(Icons.close,size: 22,),
+                        onPressed: () { 
+                          setState(() {
+                            widget.stateOfPlay.signatureOwner = null;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ): null,        
               ),
-              onTap: () => goToSignatureSignature(widget.stateOfPlay.owner),
+              onTap: () => {widget.stateOfPlay.signatureOwner != null ? showDeleteSignature(widget.stateOfPlay.owner) : goToSignatureSignature(widget.stateOfPlay.owner)},
             ),
           ],
         ),
@@ -195,9 +226,19 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         Column(
           children: [
             // TODO foreach on list 
-            RaisedButton(
-              child: Text(widget.stateOfPlay.representative.lastName),
-              onPressed: () => goToSignatureSignature(widget.stateOfPlay.representative),
+            SizedBox(
+              width: 150,
+              child: RaisedButton(
+                color: widget.stateOfPlay.signatureRepresentative != null ? Theme.of(context).primaryColor : Theme.of(context).buttonColor,
+                child: widget.stateOfPlay.signatureRepresentative != null ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.stateOfPlay.representative.lastName),
+                      Icon(Icons.check),
+                    ],
+                  ) : Text(widget.stateOfPlay.representative.lastName),              
+                onPressed: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
+              ),
             ),
             GestureDetector(
               child: Container(
@@ -208,7 +249,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 width: 150,
                 child: widget.stateOfPlay.signatureRepresentative != null ? Image.memory(widget.stateOfPlay.signatureRepresentative) : null,          
               ),
-              onTap: () => goToSignatureSignature(widget.stateOfPlay.representative),
+              onTap: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
             ),
           ],
         ),
@@ -223,9 +264,19 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       children: widget.stateOfPlay.tenants.asMap().map((index,tenant) => MapEntry(index, 
         Column(
           children: [
-          RaisedButton(
-              child: Text(tenant.lastName),
-              onPressed: () => goToSignatureSignature(tenant,index: index),
+            SizedBox(
+              width: 150,
+                  child: RaisedButton(
+                  color: widget.stateOfPlay.signatureTenants[index] != null ? Theme.of(context).primaryColor : Theme.of(context).buttonColor,
+                  child: widget.stateOfPlay.signatureTenants[index] != null ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(tenant.lastName),
+                      Icon(Icons.check),
+                    ],
+                  ) : Text(tenant.lastName),
+                  onPressed: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(tenant,index: index) : goToSignatureSignature(tenant,index: index)},
+                ),
             ),
             GestureDetector(
               child: Container(
@@ -236,7 +287,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 width: 150,
                 child: widget.stateOfPlay.signatureTenants[index] != null ? Image.memory(widget.stateOfPlay.signatureTenants[index]) : null,          
               ),
-              onTap: () => goToSignatureSignature(tenant,index: index),
+              onTap: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(tenant,index: index) : goToSignatureSignature(tenant,index: index)},
             ),
           ],
         ),
@@ -245,24 +296,57 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
   }
 
   goToSignatureSignature(person, {int index}) async {
-    
+   
     Uint8List data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature()));
-    //TODO catch null
+    // TODO catch null
     if (person is sop.Owner) { 
       setState(() {
         widget.stateOfPlay.signatureOwner = data;
-        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     } else if (person is sop.Representative){
       setState(() {
         widget.stateOfPlay.signatureRepresentative = data;
-        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     } else if (person is sop.Tenant){
       setState(() {
         widget.stateOfPlay.signatureTenants[index] = data;
-        // print(widget.stateOfPlay.signatureOwner.toString());
       }); 
     }
   }
+
+  showDeleteSignature(person, {int index}) async  {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer la signature de '" + person.firstName + ' ' + person.lastName + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              if (person is sop.Owner) { 
+                setState(() {
+                  widget.stateOfPlay.signatureOwner = null;
+                }); 
+              } else if (person is sop.Representative){
+                setState(() {
+                  widget.stateOfPlay.signatureRepresentative = null;
+                }); 
+              } else if (person is sop.Tenant){
+                setState(() {
+                  widget.stateOfPlay.signatureTenants[index] = null;
+                }); 
+              }
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }  
 }

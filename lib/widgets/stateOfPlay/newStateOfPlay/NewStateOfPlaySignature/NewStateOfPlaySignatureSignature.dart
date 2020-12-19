@@ -7,9 +7,11 @@ typedef SaveCallback = void Function();
 
 
 class NewStateOfPlaySignatureSignature extends StatefulWidget {
+
   NewStateOfPlaySignatureSignature({ Key key, this.onSave}) : super(key: key);
 
   final SaveCallback onSave;
+
 
   @override
   _NewStateOfPlaySignatureSignatureState createState() => new _NewStateOfPlaySignatureSignatureState();
@@ -21,7 +23,7 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 5,
     penColor: Colors.black,
-    exportBackgroundColor: Colors.white,
+    exportBackgroundColor: Colors.transparent,
   );
 
   @override
@@ -69,6 +71,15 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
                 height: 300,
                 width: MediaQuery.of(context).size.width -(margin*2+2*2),
               ),
+            ),
+            SizedBox(height: sizedBoxHeight),             
+            RaisedButton(
+              shape: CircleBorder(),
+              color:  Colors.red,
+              child: Icon(Icons.close),
+              onPressed: () { 
+                _controller.clear();
+              },
             ),
           ],
         ),
