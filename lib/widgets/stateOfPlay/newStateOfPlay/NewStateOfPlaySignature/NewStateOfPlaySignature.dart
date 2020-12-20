@@ -211,7 +211,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       child: FlatButton(   
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),   
                         shape: CircleBorder(),
-                        child: Icon(Icons.close,size: 22,),
+                        child: Icon(Icons.close, size: 22),
                         onPressed: () { 
                           setState(() {
                             widget.stateOfPlay.signatureOwner = null;

@@ -106,6 +106,13 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
             ),
             ImageList(
               imagesType: imagesType,
+              onDelete: (imageType) {
+                if (imageType["type"] == "file")
+                  widget.decoration.newImages.remove(imageType["image"]);
+                else
+                  widget.decoration.images.remove(imageType["image"]);
+
+              }
             )
           ]
         ),

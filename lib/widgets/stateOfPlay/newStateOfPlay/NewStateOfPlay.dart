@@ -303,7 +303,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         if (result.loading || result.data == null) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("Création d'un état des lieux"),
+              title: Text("Nouvel état des lieux"),
             ),
             body: CircularProgressIndicator()
           );

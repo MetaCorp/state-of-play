@@ -1,11 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/EditImage.dart';
 
+
+typedef DeleteCallback = Function(dynamic)
 
 class ImageList extends StatefulWidget {
-  ImageList({ Key key, this.imagesType }) : super(key: key);
+  ImageList({ Key key, this.imagesType, this.onDelete }) : super(key: key);
 
   List<dynamic> imagesType;
+  DeleteCallback onDelete;
 
   @override
   _ImageListState createState() => _ImageListState();
@@ -19,22 +23,26 @@ class _ImageListState extends State<ImageList> {
       child: Column(
         children: [
           Wrap(
-            runSpacing: 0.1,
-            spacing: 0.1,
+            runSpacing: 4,
+            spacing: 8,
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.start,
             children: widget.imagesType.map((imageType) {
+              Widget image;
+
               if (imageType.type == "file")
-                return Image.file(
+                image = Image.file(
                   imageType.image,
                   width: 150,
                   height: 150,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                 );
               else
-                return Image.network(
+                image = Image.network(
                   imageType.image,
                   width: 150,
                   height: 150,
-                  fit: BoxFit.fitHeight,
+                  // fit: BoxFit.fitHeight,
                   loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -52,6 +60,16 @@ class _ImageListState extends State<ImageList> {
                     );
                   },
                 );
+
+              return GestureDetector(
+                child: image,
+                onTap: () {
+                  Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
+                    image: imageType.image,
+                    type: imageType.type,
+                  )));
+                }
+              );
             }).toList(),
           )
         ]
