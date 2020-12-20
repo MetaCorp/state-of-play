@@ -54,12 +54,16 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               controller: TextEditingController(text: widget.stateOfPlay.documentHeader),// TODO: a récupérer dans les settings
               decoration: InputDecoration(labelText: 'Entête du document'),
               onChanged: (value) => widget.stateOfPlay.documentHeader = value,
+              keyboardType: TextInputType.multiline,
+              maxLines: 3,
             ),
             SizedBox(height: sizedBoxHeight),
             TextField(
               controller: TextEditingController(text: widget.stateOfPlay.documentEnd),// TODO: a récupérer dans les settings
               decoration: InputDecoration(labelText: 'Mention en fin du document'),
               onChanged: (value) => widget.stateOfPlay.documentEnd = value,
+              keyboardType: TextInputType.multiline,
+              maxLines: 3,
             ),
             // SizedBox(height: 24),             
             // Text("Nouvelle adresse des locataires"),

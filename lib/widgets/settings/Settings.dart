@@ -173,6 +173,8 @@ class _SettingsState extends State<Settings> {
                             initialValue: user.documentHeader,
                             decoration: InputDecoration(labelText: "En tête de l'EDL"),
                             onSaved: (value) => user.documentHeader = value,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 3,
                           ),
                           SizedBox(
                             height: 8,
@@ -181,6 +183,8 @@ class _SettingsState extends State<Settings> {
                             initialValue: user.documentEnd,
                             decoration: InputDecoration(labelText: "Mention en fin de l'EDL"),
                             onSaved: (value) => user.documentEnd = value,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 3,
                           ),
                           SizedBox(
                             height: 16,

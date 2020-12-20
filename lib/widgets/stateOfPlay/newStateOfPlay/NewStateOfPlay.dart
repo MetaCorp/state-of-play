@@ -300,6 +300,15 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         FetchMore fetchMore,
       }) {
 
+        if (result.loading || result.data == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Création d'un état des lieux"),
+            ),
+            body: CircularProgressIndicator()
+          );
+        }
+
         sop.User user;
         if (result.data != null && !result.loading) {
           user = sop.User.fromJSON(result.data["user"]);
