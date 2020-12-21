@@ -115,6 +115,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                 widget.electricity.newImages.add(imageFile);
                 setState(() { });
               },
+              imagesCount: widget.electricity.images.length + widget.electricity.newImages.length
             ),
             ImageList(
               imagesType: imagesType,

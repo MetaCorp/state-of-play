@@ -119,6 +119,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                 widget.equipment.newImages.add(imageFile);
                 setState(() { });
               },
+              imagesCount: widget.equipment.images.length + widget.equipment.newImages.length
             ),
             ImageList(
               imagesType: imagesType,

@@ -6,9 +6,10 @@ import 'package:image_picker/image_picker.dart';
 typedef SelectCallback = void Function(File);
 
 class MyImagePicker extends StatefulWidget {
-  MyImagePicker({ Key key, this.onSelect }) : super(key: key);
+  MyImagePicker({ Key key, this.onSelect, this.imagesCount }) : super(key: key);
 
   SelectCallback onSelect;
+  int imagesCount;
 
   @override
   _MyImagePickerState createState() => _MyImagePickerState();
@@ -73,6 +74,10 @@ class _MyImagePickerState extends State<MyImagePicker> {
     return Row(
       children: [
         Spacer(),
+        Text(widget.imagesCount.toString() + '/5'),
+        SizedBox(
+          width: 16
+        ),
         RaisedButton(
           color: Colors.grey[200],
           child: Row(
@@ -81,7 +86,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               Text('Ajouter une photo')
             ]
           ),
-          onPressed: () => _showPicker(context),
+          onPressed: widget.imagesCount < 5 ? () => _showPicker(context) : null,
         ),
       ],
     );

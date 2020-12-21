@@ -89,6 +89,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
                 widget.meter.newImages.add(imageFile);
                 setState(() { });
               },
+              imagesCount: widget.meter.images.length + widget.meter.newImages.length
             ),
             ImageList(
               imagesType: imagesType,

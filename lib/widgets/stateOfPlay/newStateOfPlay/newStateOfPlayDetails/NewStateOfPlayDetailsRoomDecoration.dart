@@ -103,6 +103,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                 widget.decoration.newImages.add(imageFile);
                 setState(() { });
               },
+              imagesCount: widget.decoration.images.length + widget.decoration.newImages.length
             ),
             ImageList(
               imagesType: imagesType,
