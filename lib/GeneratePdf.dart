@@ -359,7 +359,8 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   );
 }
 
-pw.Widget _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) {
+Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
+
 
   return pw.Column(
     children: [
@@ -376,32 +377,37 @@ pw.Widget _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) {
         crossAxisAlignment: pw.WrapCrossAlignment.start,
         spacing: 20,
         runSpacing: 20,
-        children: imagesType.map((imageType) => pw.Container(
-          // TODO: width: ???
-          alignment: pw.Alignment.bottomLeft,
-          child: pw.Column(
-            // mainAxisAlignment: pw.MainAxisAlignment.start,
-            children: [
-              pw.Container(
-                padding: pw.EdgeInsets.only(bottom: 4),
-                height: 200,
-                child: pw.Image(
-                  imageType["type"] == "file" ? PdfImage.file(
-                    pdf.document,
-                    bytes: imageType["image"].readAsBytesSync()
-                  ) : pw.Text(imageType["image"])
+        children: imagesType.map((imageType) {
+          
+          PdfImage _pdfImage = imageType["type"] == "file" ? PdfImage.file(
+            pdf.document,
+            bytes: imageType["image"].readAsBytesSync()
+          ) : pw.Text(imageType["image"]);
+
+          return pw.Container(
+            // TODO: width: ???
+            alignment: pw.Alignment.bottomLeft,
+            child: pw.Column(
+              // mainAxisAlignment: pw.MainAxisAlignment.start,
+              children: [
+                pw.Container(
+                  padding: pw.EdgeInsets.only(bottom: 4),
+                  height: 200,
+                  child: pw.Image(
+                    _pdfImage
+                  )
+                ),
+                pw.Container(
+                  alignment: pw.Alignment.bottomLeft,
+                  child: pw.Text(
+                    "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
+                    textAlign: pw.TextAlign.left
+                  )
                 )
-              ),
-              pw.Container(
-                alignment: pw.Alignment.bottomLeft,
-                child: pw.Text(
-                  "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
-                  textAlign: pw.TextAlign.left
-                )
-              )
-            ]
-          )
-        )).toList()
+              ]
+            )
+          );
+        }).toList()
       )
     ]
   );
@@ -453,6 +459,8 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
       pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
     ]
   )).toList();
+
+  pw.Widget _photos = await _buildPhotos(imagesType: stateOfPlay.images, logo: logo);
 
   pdf.addPage(
     pw.MultiPage(
@@ -1072,7 +1080,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 ]
               ),
 
-              _buildPhotos(imagesType: stateOfPlay.images, logo: logo)
+              _photos
     ]
   ));
 
