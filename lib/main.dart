@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/shop/Shop.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -226,6 +227,9 @@ class _MyAppState extends State<MyApp> {
 
           else if (settings.name == '/settings')
             return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());
+
+          else if (settings.name == '/shop')
+            return PageRouteBuilder(pageBuilder: (_, __, ___) => Shop());
 
           return null;
         }

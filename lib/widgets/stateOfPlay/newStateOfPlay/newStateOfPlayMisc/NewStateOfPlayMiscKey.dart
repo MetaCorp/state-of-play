@@ -88,6 +88,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
                 widget.sKey.newImages.add(imageFile);
                 setState(() { });
               },
+              imagesCount: widget.sKey.images.length + widget.sKey.newImages.length
             ),
             ImageList(
               imagesType: imagesType,

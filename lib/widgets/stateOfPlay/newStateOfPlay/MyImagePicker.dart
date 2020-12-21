@@ -87,6 +87,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
           child: Row(
             children: [
               Icon(Icons.camera_alt),
+              SizedBox(width: 8),
               Text('Ajouter une photo')
             ]
           ),
