@@ -43,6 +43,14 @@ class _SettingsState extends State<Settings> {
         print('userResult: ' + result.loading.toString());
         print('userResult hasException: ' + result.hasException.toString());
         print('userResult data: ' + result.data.toString());
+        if (result.hasException) {
+          if (result.exception.graphqlErrors.length > 0) { 
+            print("userResult exception: " + result.exception.graphqlErrors[0].toString());
+            print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+          }
+          else
+            print("userResult clientException: " + result.exception.clientException.message);
+        }
         print('');
 
         sop.User user;

@@ -132,7 +132,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                             
                             widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
 
-                            widget.stateOfPlay.images.add(widget.stateOfPlay.rooms[i].decorations[j].newImages[k]);
+                            widget.stateOfPlay.images.add({
+                              "type": "file",
+                              "image": widget.stateOfPlay.rooms[i].decorations[j].newImages[k]
+                            });
 
                           }
                         }
@@ -144,7 +147,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                           
                           widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
 
-                          widget.stateOfPlay.images.add(widget.stateOfPlay.meters[i].newImages[j]);
+                          widget.stateOfPlay.images.add({
+                            "type": "file",
+                            "image": widget.stateOfPlay.meters[i].newImages[j]
+                          });
                         }
                       }
 
@@ -154,7 +160,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                           
                           widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
 
-                          widget.stateOfPlay.images.add(widget.stateOfPlay.keys[i].newImages[j]);
+                          widget.stateOfPlay.images.add({
+                            "type": "file",
+                            "image": widget.stateOfPlay.keys[i].newImages[j]
+                          });
                         }
                       }
 

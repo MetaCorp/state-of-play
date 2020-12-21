@@ -228,7 +228,7 @@ class StateOfPlay {
   Uint8List signatureRepresentative;
   List<Uint8List> signatureTenants;
 
-  List<dynamic> images;
+  List<Map> images;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
