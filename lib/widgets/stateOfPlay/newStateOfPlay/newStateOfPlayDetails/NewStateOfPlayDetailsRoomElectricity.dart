@@ -56,7 +56,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -118,6 +118,13 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
             ),
             ImageList(
               imagesType: imagesType,
+              onDelete: (imageType) {
+                if (imageType["type"] == "file")
+                  widget.electricity.newImages.remove(imageType["image"]);
+                else
+                  widget.electricity.images.remove(imageType["image"]);
+                setState(() {});  
+              }
             )
           ]
         ),

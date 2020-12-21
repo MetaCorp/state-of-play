@@ -58,7 +58,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -111,7 +111,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                   widget.decoration.newImages.remove(imageType["image"]);
                 else
                   widget.decoration.images.remove(imageType["image"]);
-
+                setState(() {});  
               }
             )
           ]

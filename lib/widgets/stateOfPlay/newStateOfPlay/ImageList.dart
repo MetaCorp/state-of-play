@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/EditImage.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 
 
 typedef DeleteCallback = Function(dynamic);
@@ -16,6 +17,10 @@ class ImageList extends StatefulWidget {
 }
 
 class _ImageListState extends State<ImageList> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,7 +67,32 @@ class _ImageListState extends State<ImageList> {
                 );
 
               return GestureDetector(
-                child: image,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  child: Stack(
+                    children: [
+                      image,
+                      Align(
+                        alignment: Alignment.topRight,
+                          child: ButtonTheme(    
+                          minWidth: 26.0,
+                          height: 60,
+                          child: FlatButton(   
+                            padding: EdgeInsets.fromLTRB(0, 0, 7.5, 0),   
+                            shape: CircleBorder(),
+                            child: Icon(Icons.close, size: 22),
+                            onPressed: () { 
+                              setState(() {
+                                showDeleteImage(imageType);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 onTap: () {
                   Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
                     image: imageType.image,
@@ -76,4 +106,32 @@ class _ImageListState extends State<ImageList> {
       ),
     );
   }
+
+  showDeleteImage(imageType) async  {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer l'image ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async { 
+              widget.onDelete({
+                "type": imageType.type,
+                "image": imageType.image
+              });
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }  
+
 }

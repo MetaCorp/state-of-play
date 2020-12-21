@@ -22,6 +22,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
     );
 
     // Uint8List bytes = await image.readAsBytes();
+    if(image == null)
+      return;
 
     widget.onSelect(image);
   }
@@ -31,7 +33,9 @@ class _MyImagePickerState extends State<MyImagePicker> {
       source: ImageSource.gallery,
       imageQuality: 50
     );
-
+    if(image == null)
+      return;
+      
     widget.onSelect(image);
   }
 

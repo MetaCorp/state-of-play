@@ -52,7 +52,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -92,6 +92,13 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
             ),
             ImageList(
               imagesType: imagesType,
+              onDelete: (imageType) {
+                if (imageType["type"] == "file")
+                  widget.meter.newImages.remove(imageType["image"]);
+                else
+                  widget.meter.images.remove(imageType["image"]);
+                setState(() {});  
+              }
             )
           ]
         ),
