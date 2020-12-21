@@ -51,7 +51,6 @@ class _SettingsState extends State<Settings> {
           else
             print("userResult clientException: " + result.exception.clientException.message);
         }
-
         print('');
 
         sop.User user;

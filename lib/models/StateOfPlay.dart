@@ -228,7 +228,7 @@ class StateOfPlay {
   Uint8List signatureRepresentative;
   List<Uint8List> signatureTenants;
 
-  List<dynamic> images;
+  List<Map> images;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
@@ -250,6 +250,7 @@ class StateOfPlay {
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       documentHeader: json["documentHeader"],
       documentEnd: json["documentEnd"],
+      images: []
     );
   }
 }
@@ -330,7 +331,8 @@ class Decoration {
       state: json["state"],// TODO parse dual type
       comments: json["comments"],
       newImages: [],// need to init here bc not from server
-      images: json["images"] != null ? json["images"].cast<String>() : null
+      images: json["images"] != null ? json["images"].cast<String>() : null,
+      imageIndexes: []
     );
   }
 }
@@ -386,7 +388,8 @@ class Electricity {
       state: json["state"],// TODO parse dual type
       comments: json["comments"],
       newImages: [],
-      images: json["images"] != null ? json["images"].cast<String>() : null
+      images: json["images"] != null ? json["images"].cast<String>() : null,
+      imageIndexes: []
     );
   }
 }
@@ -437,7 +440,8 @@ class Equipment {
       quantity: json["quantity"],
       comments: json["comments"],
       newImages: [],
-      images: json["images"] != null ? json["images"].cast<String>() : null
+      images: json["images"] != null ? json["images"].cast<String>() : null,
+      imageIndexes: []
     );
   }
 }
@@ -530,7 +534,8 @@ class Meter {
       dateOfSuccession: json["dateOfSuccession"] != null ? DateTime.parse(json["dateOfSuccession"]) : null,
       index: json["index"],
       newImages: [],
-      images: json["images"] != null ? json["images"].cast<String>() : null
+      images: json["images"] != null ? json["images"].cast<String>() : null,
+      imageIndexes: []
     );
   }
 }
@@ -573,7 +578,8 @@ class Key {
       quantity: json["quantity"],
       comments: json["comments"],
       newImages: [],
-      images: json["images"] != null ? json["images"].cast<String>() : null
+      images: json["images"] != null ? json["images"].cast<String>() : null,
+      imageIndexes: []
     );
   }
 }

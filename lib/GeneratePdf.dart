@@ -359,7 +359,9 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   );
 }
 
-pw.Widget _buildPhotos({ List<dynamic> photos, PdfImage logo }) {
+Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
+
+  print('imagesType: ' + imagesType.toString());
 
   return pw.Column(
     children: [
@@ -371,27 +373,47 @@ pw.Widget _buildPhotos({ List<dynamic> photos, PdfImage logo }) {
         padding: pw.EdgeInsets.only(bottom: 25)
       ),
       pw.Wrap(
-        // alignment: pw.WrapAlignment.start,
-        // crossAxisAlignment: pw.WrapCrossAlignment.start,
+        alignment: pw.WrapAlignment.start,
+        runAlignment: pw.WrapAlignment.start,
+        crossAxisAlignment: pw.WrapCrossAlignment.start,
         spacing: 20,
-        children: photos.map((photo) => pw.Column(
-          children: [
-            pw.Container(
-              // alignment: pw.Alignment.bottomLeft,
-              height: 200,
-              child: pw.Image(
-                PdfImage.file(
-                  pdf.document,
-                  bytes: photo.readAsBytesSync()
-                )
+        runSpacing: 20,
+        children: await Future.wait(
+          imagesType.map((imageType) async {
+            
+            PdfImage _pdfImage = imageType["type"] == "file" ? PdfImage.file(
+              pdf.document,
+              bytes: imageType["image"].readAsBytesSync()
+            ) : PdfImage.file(
+              pdf.document,
+              bytes: (await NetworkAssetBundle(Uri.parse(imageType["image"])).load(imageType["image"])).buffer.asUint8List()
+            );
+
+            return pw.Container(
+              // TODO: width: ???
+              alignment: pw.Alignment.bottomLeft,
+              child: pw.Column(
+                // mainAxisAlignment: pw.MainAxisAlignment.start,
+                children: [
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(bottom: 4),
+                    height: 200,
+                    child: pw.Image(
+                      _pdfImage
+                    )
+                  ),
+                  pw.Container(
+                    alignment: pw.Alignment.bottomLeft,
+                    child: pw.Text(
+                      "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
+                      textAlign: pw.TextAlign.left
+                    )
+                  )
+                ]
               )
-            ),
-            pw.Text(
-              "Photo n°" + (photos.indexOf(photo) + 1).toString(),
-              textAlign: pw.TextAlign.left
-            )
-          ]
-        )).toList()
+            );
+          })
+        )
       )
     ]
   );
@@ -443,6 +465,8 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
       pw.Padding(padding: const pw.EdgeInsets.only(bottom: 10)),
     ]
   )).toList();
+
+  pw.Widget _photos = await _buildPhotos(imagesType: stateOfPlay.images, logo: logo);
 
   pdf.addPage(
     pw.MultiPage(
@@ -1013,10 +1037,10 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                       children: [
                         pw.Container(
                           height: 40,
-                          child: pw.Image(PdfImage.file(
+                          child: stateOfPlay.signatureOwner != null ? pw.Image(PdfImage.file(
                             pdf.document,
                             bytes: stateOfPlay.signatureOwner,
-                          ))
+                          )) : pw.Container()
                         ),
                         pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
                         pw.Text(
@@ -1029,7 +1053,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                       ]
                     )
                   ),
-                  ...stateOfPlay.tenants.map((tenant) => pw.Container(
+                  ...stateOfPlay.signatureTenants.map((signatureTenant) => pw.Container(
                     decoration: pw.BoxDecoration(
                       color: PdfColors.grey100,
                     ),
@@ -1043,14 +1067,14 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                       children: [
                         pw.Container(
                           height: 40,
-                          child: pw.Image(PdfImage.file(
+                          child: signatureTenant != null ? pw.Image(PdfImage.file(
                             pdf.document,
-                            bytes: stateOfPlay.signatureTenants[stateOfPlay.tenants.indexOf(tenant)],
-                          ))
+                            bytes: signatureTenant,
+                          )) : pw.Container()
                         ),
                         pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
                         pw.Text(
-                          stateOfPlayTexts.signatureTenant + (stateOfPlay.tenants.indexOf(tenant) + 1).toString(),
+                          stateOfPlayTexts.signatureTenant + (stateOfPlay.signatureTenants.indexOf(signatureTenant) + 1).toString(),
                           style: pw.TextStyle(
                             fontSize: 9,
                             fontStyle: pw.FontStyle.italic 
@@ -1062,7 +1086,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                 ]
               ),
 
-              _buildPhotos(photos: stateOfPlay.images, logo: logo)
+              _photos
     ]
   ));
 

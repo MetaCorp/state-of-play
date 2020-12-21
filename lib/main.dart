@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
 
   deleteToken() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString("token",null);
+    prefs.setString("token", null);
   }
 
   @override

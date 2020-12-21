@@ -47,7 +47,7 @@ class _ImageListState extends State<ImageList> {
                   imageType.image,
                   width: 150,
                   height: 150,
-                  // fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                   loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
