@@ -55,7 +55,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -123,6 +123,13 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
             ),
             ImageList(
               imagesType: imagesType,
+              onDelete: (imageType) {
+                if (imageType["type"] == "file")
+                  widget.equipment.newImages.remove(imageType["image"]);
+                else
+                  widget.equipment.images.remove(imageType["image"]);
+                setState(() {});  
+              }
             )
           ]
         ),

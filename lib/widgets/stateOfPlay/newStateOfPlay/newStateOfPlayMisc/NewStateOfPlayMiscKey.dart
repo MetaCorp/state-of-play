@@ -52,7 +52,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -91,6 +91,13 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
             ),
             ImageList(
               imagesType: imagesType,
+              onDelete: (imageType) {
+                if (imageType["type"] == "file")
+                  widget.sKey.newImages.remove(imageType["image"]);
+                else
+                  widget.sKey.images.remove(imageType["image"]);
+                setState(() {});  
+              }
             )
           ]
         ),
