@@ -186,7 +186,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(widget.stateOfPlay.owner.lastName),
-                      Icon(Icons.check),
+                      Icon(Icons.check,),
                     ],
                   ) : Text(widget.stateOfPlay.owner.lastName),    
                 onPressed: () => {widget.stateOfPlay.signatureOwner != null ? showDeleteSignature(widget.stateOfPlay.owner) : goToSignatureSignature(widget.stateOfPlay.owner)},
@@ -199,24 +199,24 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: widget.stateOfPlay.signatureOwner != null ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: widget.stateOfPlay.signatureOwner != null ? Stack(
                   children: [
-                    //here
-                    Image.memory(widget.stateOfPlay.signatureOwner,width: 100,),
-                    ButtonTheme(    
-                      minWidth: 26.0,
-                      height: 60,
-                      child: FlatButton(   
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),   
-                        shape: CircleBorder(),
-                        child: Icon(Icons.close, size: 22),
-                        onPressed: () { 
-                          setState(() {
-                            widget.stateOfPlay.signatureOwner = null;
-                          });
-                        },
+                    Image.memory(widget.stateOfPlay.signatureOwner,width: 150,),
+                    Align(
+                      alignment: Alignment.topRight,
+                        child: ButtonTheme(    
+                        minWidth: 26.0,
+                        height: 60,
+                        child: FlatButton(   
+                          padding: EdgeInsets.fromLTRB(0, 0, 7.5, 0),   
+                          shape: CircleBorder(),
+                          child: Icon(Icons.close, size: 22),
+                          onPressed: () { 
+                            setState(() {
+                              showDeleteSignature(widget.stateOfPlay.owner);
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -251,7 +251,28 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: widget.stateOfPlay.signatureRepresentative != null ? Image.memory(widget.stateOfPlay.signatureRepresentative) : null,          
+                child: widget.stateOfPlay.signatureRepresentative != null ? Stack(
+                  children: [
+                    Image.memory(widget.stateOfPlay.signatureRepresentative,width: 150,),
+                    Align(
+                      alignment: Alignment.topRight,
+                        child: ButtonTheme(    
+                        minWidth: 26.0,
+                        height: 60,
+                        child: FlatButton(   
+                          padding: EdgeInsets.fromLTRB(0, 0, 7.5, 0),   
+                          shape: CircleBorder(),
+                          child: Icon(Icons.close, size: 22),
+                          onPressed: () { 
+                            setState(() {
+                              showDeleteSignature(widget.stateOfPlay.representative);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ): null,                 
               ),
               onTap: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
             ),
@@ -279,7 +300,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       Icon(Icons.check),
                     ],
                   ) : Text(tenant.lastName),
-                  onPressed: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(tenant,index: index) : goToSignatureSignature(tenant,index: index)},
+                  onPressed: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(widget.stateOfPlay.tenants[index],index: index) : goToSignatureSignature(widget.stateOfPlay.tenants[index],index: index)},
                 ),
             ),
             GestureDetector(
@@ -289,9 +310,30 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 ), 
                 height: 60,
                 width: 150,
-                child: widget.stateOfPlay.signatureTenants[index] != null ? Image.memory(widget.stateOfPlay.signatureTenants[index]) : null,          
+                child: widget.stateOfPlay.signatureTenants[index] != null ? Stack(
+                  children: [
+                    Image.memory(widget.stateOfPlay.signatureTenants[index],width: 150,),
+                    Align(
+                      alignment: Alignment.topRight,
+                        child: ButtonTheme(    
+                        minWidth: 26.0,
+                        height: 60,
+                        child: FlatButton(   
+                          padding: EdgeInsets.fromLTRB(0, 0, 7.5, 0),   
+                          shape: CircleBorder(),
+                          child: Icon(Icons.close, size: 22),
+                          onPressed: () { 
+                            setState(() {
+                              showDeleteSignature(widget.stateOfPlay.signatureTenants[index]);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ): null,                           
               ),
-              onTap: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(tenant,index: index) : goToSignatureSignature(tenant,index: index)},
+              onTap: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(widget.stateOfPlay.tenants[index],index: index) : goToSignatureSignature(widget.stateOfPlay.tenants[index],index: index)},
             ),
           ],
         ),
