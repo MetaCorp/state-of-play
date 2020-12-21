@@ -128,6 +128,17 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                         
                         for (var j = 0; j < widget.stateOfPlay.rooms[i].decorations.length; j++) {
                           
+                          for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].images.length; k++) {
+                            
+                            widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                            widget.stateOfPlay.images.add({
+                              "type": "network",
+                              "image": widget.stateOfPlay.rooms[i].decorations[j].images[k]
+                            });
+
+                          }
+
                           for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
                             
                             widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
@@ -143,6 +154,16 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
                       for (var i = 0; i < widget.stateOfPlay.meters.length; i++) {
                         
+                        for (var j = 0; j < widget.stateOfPlay.meters[i].images.length; j++) {
+                          
+                          widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                          widget.stateOfPlay.images.add({
+                            "type": "network",
+                            "image": widget.stateOfPlay.meters[i].images[j]
+                          });
+                        }
+
                         for (var j = 0; j < widget.stateOfPlay.meters[i].newImages.length; j++) {
                           
                           widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
@@ -156,6 +177,16 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
                       for (var i = 0; i < widget.stateOfPlay.keys.length; i++) {
                         
+                        for (var j = 0; j < widget.stateOfPlay.keys[i].images.length; j++) {
+                          
+                          widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                          widget.stateOfPlay.images.add({
+                            "type": "network",
+                            "image": widget.stateOfPlay.keys[i].images[j]
+                          });
+                        }
+
                         for (var j = 0; j < widget.stateOfPlay.keys[i].newImages.length; j++) {
                           
                           widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);

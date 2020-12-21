@@ -361,6 +361,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
 
 Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
 
+  print('imagesType: ' + imagesType.toString());
 
   return pw.Column(
     children: [
@@ -377,37 +378,42 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
         crossAxisAlignment: pw.WrapCrossAlignment.start,
         spacing: 20,
         runSpacing: 20,
-        children: imagesType.map((imageType) {
-          
-          PdfImage _pdfImage = imageType["type"] == "file" ? PdfImage.file(
-            pdf.document,
-            bytes: imageType["image"].readAsBytesSync()
-          ) : pw.Text(imageType["image"]);
+        children: await Future.wait(
+          imagesType.map((imageType) async {
+            
+            PdfImage _pdfImage = imageType["type"] == "file" ? PdfImage.file(
+              pdf.document,
+              bytes: imageType["image"].readAsBytesSync()
+            ) : PdfImage.file(
+              pdf.document,
+              bytes: (await NetworkAssetBundle(Uri.parse(imageType["image"])).load(imageType["image"])).buffer.asUint8List()
+            );
 
-          return pw.Container(
-            // TODO: width: ???
-            alignment: pw.Alignment.bottomLeft,
-            child: pw.Column(
-              // mainAxisAlignment: pw.MainAxisAlignment.start,
-              children: [
-                pw.Container(
-                  padding: pw.EdgeInsets.only(bottom: 4),
-                  height: 200,
-                  child: pw.Image(
-                    _pdfImage
+            return pw.Container(
+              // TODO: width: ???
+              alignment: pw.Alignment.bottomLeft,
+              child: pw.Column(
+                // mainAxisAlignment: pw.MainAxisAlignment.start,
+                children: [
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(bottom: 4),
+                    height: 200,
+                    child: pw.Image(
+                      _pdfImage
+                    )
+                  ),
+                  pw.Container(
+                    alignment: pw.Alignment.bottomLeft,
+                    child: pw.Text(
+                      "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
+                      textAlign: pw.TextAlign.left
+                    )
                   )
-                ),
-                pw.Container(
-                  alignment: pw.Alignment.bottomLeft,
-                  child: pw.Text(
-                    "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
-                    textAlign: pw.TextAlign.left
-                  )
-                )
-              ]
-            )
-          );
-        }).toList()
+                ]
+              )
+            );
+          })
+        )
       )
     ]
   );
