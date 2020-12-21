@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/EditImage.dart';
 
 
-typedef DeleteCallback = Function(dynamic)
+typedef DeleteCallback = Function(dynamic);
 
 class ImageList extends StatefulWidget {
   ImageList({ Key key, this.imagesType, this.onDelete }) : super(key: key);

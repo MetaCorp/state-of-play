@@ -371,13 +371,13 @@ pw.Widget _buildPhotos({ List<dynamic> photos, PdfImage logo }) {
         padding: pw.EdgeInsets.only(bottom: 25)
       ),
       pw.Wrap(
-        alignment: pw.WrapAlignment.start,
+        // alignment: pw.WrapAlignment.start,
         // crossAxisAlignment: pw.WrapCrossAlignment.start,
         spacing: 20,
         children: photos.map((photo) => pw.Column(
           children: [
             pw.Container(
-              alignment: pw.Alignment.bottomLeft,
+              // alignment: pw.Alignment.bottomLeft,
               height: 200,
               child: pw.Image(
                 PdfImage.file(

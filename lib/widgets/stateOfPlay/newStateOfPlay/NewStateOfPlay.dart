@@ -305,7 +305,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             appBar: AppBar(
               title: Text("Nouvel état des lieux"),
             ),
-            body: CircularProgressIndicator()
+            body: Center(child: CircularProgressIndicator())
           );
         }
 

@@ -85,6 +85,7 @@ class _LoginState extends State<Login> {
                   decoration: InputDecoration(
                     labelText: 'Password'
                   ),
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 80,

@@ -106,6 +106,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     labelText: 'Password'
                   ),
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 16,
