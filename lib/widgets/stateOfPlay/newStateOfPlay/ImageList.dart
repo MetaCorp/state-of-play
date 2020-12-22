@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/EditImage.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
@@ -23,6 +25,7 @@ class _ImageListState extends State<ImageList> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       margin: EdgeInsets.only(top: 8),
       child: Column(
@@ -37,6 +40,14 @@ class _ImageListState extends State<ImageList> {
 
               if (imageType.type == "file")
                 image = Image.file(
+                  imageType.image,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                );
+              
+              else if (imageType.type == "memory")
+                image = Image.memory(
                   imageType.image,
                   width: 150,
                   height: 150,
@@ -93,11 +104,14 @@ class _ImageListState extends State<ImageList> {
                     ],
                   ),
                 ),
-                onTap: () {
-                  Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
+                onTap: () async {
+                  Uint8List editedImage = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
                     image: imageType.image,
                     type: imageType.type,
                   )));
+                  setState(() {
+                    widget.imagesType[widget.imagesType.indexOf(imageType)] = new ImageType(image: editedImage, type: 'memory');
+                  });
                 }
               );
             }).toList(),

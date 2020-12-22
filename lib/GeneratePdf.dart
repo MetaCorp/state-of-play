@@ -373,9 +373,11 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
         padding: pw.EdgeInsets.only(bottom: 25)
       ),
       pw.Wrap(
+        direction: pw.Axis.horizontal,
+        //
         alignment: pw.WrapAlignment.start,
         runAlignment: pw.WrapAlignment.start,
-        crossAxisAlignment: pw.WrapCrossAlignment.start,
+        // crossAxisAlignment: pw.WrapCrossAlignment.end,
         spacing: 20,
         runSpacing: 20,
         children: await Future.wait(
@@ -390,23 +392,26 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
             );
 
             return pw.Container(
+              width: 100,
               // TODO: width: ???
-              alignment: pw.Alignment.bottomLeft,
+              alignment: pw.Alignment.center,
               child: pw.Column(
-                // mainAxisAlignment: pw.MainAxisAlignment.start,
+                mainAxisAlignment: pw.MainAxisAlignment.start,
+                crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
                   pw.Container(
                     padding: pw.EdgeInsets.only(bottom: 4),
                     height: 200,
+                    width: 100,
                     child: pw.Image(
                       _pdfImage
                     )
                   ),
                   pw.Container(
-                    alignment: pw.Alignment.bottomLeft,
+                    alignment: pw.Alignment.centerLeft,
                     child: pw.Text(
                       "Photo n°" + (imagesType.indexOf(imageType) + 1).toString(),
-                      textAlign: pw.TextAlign.left
+                      // textAlign: pw.TextAlign.left
                     )
                   )
                 ]
