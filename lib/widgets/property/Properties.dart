@@ -22,7 +22,13 @@ class _PropertiesState extends State<Properties> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Supprimer '" + property.address + ', ' + property.postalCode + ' ' + property.city + "' ?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" +property.address + ', ' + property.postalCode + ' ' + property.city + "' ?"),
+            property.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + property.stateOfPlays.length.toString() + "' état" + (property.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),

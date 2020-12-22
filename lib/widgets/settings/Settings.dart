@@ -82,7 +82,7 @@ class _SettingsState extends State<Settings> {
             
             return Scaffold(
               appBar: AppBar(
-                title: Text('Settings'),
+                title: Text('Paramètres'),
                 actions: [
                   IconButton(
                     icon: Icon(Icons.check),

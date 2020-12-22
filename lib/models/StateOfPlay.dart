@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter_tests/utils.dart';
+// import 'package:flutter_tests/utils.dart';
 import 'package:intl/intl.dart';// DateFormat
 import 'dart:convert';
 
@@ -13,7 +13,8 @@ class Owner {
     this.company,
     this.address,
     this.postalCode,
-    this.city
+    this.city,
+    this.stateOfPlays,
   });
 
   String id;
@@ -23,6 +24,7 @@ class Owner {
   String address;
   String postalCode;
   String city;
+  List<StateOfPlay> stateOfPlays;
 
   factory Owner.fromJSON(Map<String, dynamic> json) {
 
@@ -34,6 +36,7 @@ class Owner {
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
+      stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
     );
   }
 }
@@ -46,7 +49,8 @@ class Representative {
     this.company,
     this.address,
     this.postalCode,
-    this.city
+    this.city,
+    this.stateOfPlays
   });
 
   String id;
@@ -56,6 +60,7 @@ class Representative {
   String address;
   String postalCode;
   String city;
+  List<StateOfPlay> stateOfPlays;
 
   factory Representative.fromJSON(Map<String, dynamic> json) {
 
@@ -67,6 +72,7 @@ class Representative {
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
+      stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
     );
   }
 }
@@ -78,7 +84,8 @@ class Tenant {
     this.lastName,
     this.address,
     this.postalCode,
-    this.city
+    this.city,
+    this.stateOfPlays
   });
 
   String id;
@@ -87,6 +94,7 @@ class Tenant {
   String address;
   String postalCode;
   String city;
+  List<StateOfPlay> stateOfPlays;
 
   factory Tenant.fromJSON(Map<String, dynamic> json) {
 
@@ -97,6 +105,7 @@ class Tenant {
       address: json["address"],
       postalCode: json["postalCode"],
       city: json["city"],
+      stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
     );
   }
 }
@@ -118,7 +127,9 @@ class Property {
     this.hotWater,
 
     this.door,
-    this.building
+    this.building,
+
+    this.stateOfPlays,
   });
 
   String id;
@@ -137,6 +148,7 @@ class Property {
   String hotWater;// To be replaced
   String door;
   String building;
+  List<StateOfPlay> stateOfPlays;
 
   factory Property.fromJSON(Map<String, dynamic> json) {
 
@@ -156,6 +168,7 @@ class Property {
       hotWater: json["hotWater"],
       door: json["door"],
       building: json["building"],
+      stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
     );
   }
 

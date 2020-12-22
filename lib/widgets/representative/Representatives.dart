@@ -22,7 +22,13 @@ class _OwnersState extends State<Representatives> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Supprimer '" + representative.firstName + ' ' + representative.lastName + "' ?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + representative.firstName + ' ' + representative.lastName + "' ?"),
+            representative.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + representative.stateOfPlays.length.toString() + "' état" + (representative.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),

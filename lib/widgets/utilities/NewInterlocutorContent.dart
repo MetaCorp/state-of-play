@@ -25,7 +25,13 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Supprimer '" + widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName + "' ?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName + "' ?"),
+            widget.interlocutor.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + widget.interlocutor.stateOfPlays.length.toString() + "' état" + (widget.interlocutor.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),
@@ -161,7 +167,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               }
             }
           ),
-          PopupMenuButton(
+          widget.onDelete != null ? PopupMenuButton(
             icon: Icon(Icons.more_vert),
             itemBuilder: (context) => [
               PopupMenuItem(
@@ -174,7 +180,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               if (result == "delete")
                 _showDialogDelete(context);
             }
-          ),
+          ) : Container(),
         ],
       ),
       body: body

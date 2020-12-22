@@ -50,7 +50,7 @@ class _MyScaffoldState extends State<MyScaffold> {
             child: Text('BOUTIQUE'),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/shop');
+              Navigator.popAndPushNamed(context, '/shop');
             }
           )
         ],
@@ -115,7 +115,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                 Navigator.pop(context);
                 return;
               }
-              
+
               if (user == null)
                 return;
 

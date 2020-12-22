@@ -22,7 +22,13 @@ class _TenantsState extends State<Tenants> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
+            tenant.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + tenant.stateOfPlays.length.toString() + "' état" + (tenant.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),
@@ -94,6 +100,9 @@ class _TenantsState extends State<Tenants> {
                 id
                 firstName
                 lastName
+                stateOfPlays {
+                  id
+                }
               }
             }
             ''')
