@@ -56,6 +56,30 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       )
     );
   }
+  
+  void _showDialogCompleteInterlocutors (context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Pour accéder à la page 'Signatures', veuillez compléter les champs Propriétaire, Mandataire, Locataires et Propriété de la page 'Interlocuteurs'."),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('COMPLÉTER'),
+            onPressed: () async {
+              Navigator.pop(context);
+              setState(() { _selectedIndex = 0; });
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +150,21 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
-            label: 'Signature',
+            label: 'SignatureS',
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
         backgroundColor: Colors.grey,
         onTap: (index) {
+          if (index == 3 && ((widget.stateOfPlay.owner == null || widget.stateOfPlay.owner.lastName == null)
+            || (widget.stateOfPlay.representative == null || widget.stateOfPlay.representative.lastName == null)
+            || (widget.stateOfPlay.property == null || widget.stateOfPlay.property.address == null)
+            || (widget.stateOfPlay.tenants.length == 0))) {
+            _showDialogCompleteInterlocutors(context);
+            return;
+          }
+
           setState(() { _selectedIndex = index; });
         },
       )

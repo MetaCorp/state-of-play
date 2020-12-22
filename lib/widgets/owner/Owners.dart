@@ -23,7 +23,13 @@ class _OwnersState extends State<Owners> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Supprimer '" + owner.firstName + ' ' + owner.lastName + "' ?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + owner.firstName + ' ' + owner.lastName + "' ?"),
+            owner.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + owner.stateOfPlays.length.toString() + "' état" + (owner.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),

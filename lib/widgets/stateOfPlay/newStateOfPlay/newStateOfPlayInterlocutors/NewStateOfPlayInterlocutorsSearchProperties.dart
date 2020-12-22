@@ -36,9 +36,17 @@ class _NewStateOfPlayInterlocutorsSearchPropertiesState extends State<NewStateOf
           query properties(\$filter: PropertiesFilterInput!) {
             properties (filter: \$filter) {
               id
+              reference
               address
               postalCode
               city
+              lot
+              floor
+              roomCount
+              area
+              heatingType
+              hotWater
+              type
             }
           }
         '''),

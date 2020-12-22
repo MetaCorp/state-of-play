@@ -38,6 +38,9 @@ class _NewStateOfPlayInterlocutorsSearchTenantsState extends State<NewStateOfPla
               id
               firstName
               lastName
+              address
+              postalCode
+              city
             }
           }
         '''),

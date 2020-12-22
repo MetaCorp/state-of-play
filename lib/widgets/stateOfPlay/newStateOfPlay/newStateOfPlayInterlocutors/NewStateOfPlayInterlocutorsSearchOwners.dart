@@ -38,6 +38,10 @@ class _NewStateOfPlayInterlocutorsSearchOwnersState extends State<NewStateOfPlay
               id
               firstName
               lastName
+              address
+              postalCode
+              city
+              company
             }
           }
         '''),
