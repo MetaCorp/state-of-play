@@ -281,8 +281,8 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

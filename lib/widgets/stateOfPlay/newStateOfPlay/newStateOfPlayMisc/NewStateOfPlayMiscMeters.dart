@@ -15,6 +15,8 @@ class NewStateOfPlayMiscMeters extends StatefulWidget {
 
 class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
 
+  final int maxMeters = 15;
+
   void _showDialogDeleteMeter (context, sop.Meter meter) async {
     await showDialog(
       context: context,
@@ -35,6 +37,23 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
               Navigator.pop(context);
             }
           )
+        ],
+      )
+    );
+  }
+
+  void _showDialogLimitMeters(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Nombre de compteurs maximal atteint (" + maxMeters.toString() + ")."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
         ],
       )
     );
@@ -61,22 +80,30 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
         children: [
           Header(
             title: "Liste des compteurs",
-            onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddMeter(
-              onSelect: (meters) {
-                print('meters: ' + meters.toString());
-                for (var i = 0; i < meters.length; i++) {
-                  widget.meters.add(sop.Meter(
-                    type: meters[i],
-                    index: 0,
-                    location: "",// TODO : complete fields
-                    images: [],
-                    newImages: [],
-                    imageIndexes: [],
-                  ));
-                }
-                setState(() { });
-              },
-            ))),
+            onPressAdd: () {
+              if (widget.meters.length < maxMeters)
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddMeter(
+                  onSelect: (meters) {
+                    print('meters: ' + meters.toString());
+                    if (widget.meters.length + meters.length > maxMeters)
+                      _showDialogLimitMeters(context);
+
+                    for (var i = 0; i < meters.length && widget.meters.length < maxMeters; i++) {
+                      widget.meters.add(sop.Meter(
+                        type: meters[i],
+                        index: 0,
+                        location: "",// TODO : complete fields
+                        images: [],
+                        newImages: [],
+                        imageIndexes: [],
+                      ));
+                    }
+                    setState(() { });
+                  },
+                )));
+              else
+                _showDialogLimitMeters(context);
+            }
           ),
           Flexible(
             child: ListView.separated(

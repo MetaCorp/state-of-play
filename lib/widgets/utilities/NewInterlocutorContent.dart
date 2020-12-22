@@ -140,6 +140,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 height: 16,
               ),
               RaisedButton(
+                color: Colors.grey[100],
                 child: Text('Sauvegarder'),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {

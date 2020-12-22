@@ -281,8 +281,8 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

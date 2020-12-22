@@ -150,7 +150,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
-            label: 'SignatureS',
+            label: 'Signatures',
           ),
         ],
         currentIndex: _selectedIndex,

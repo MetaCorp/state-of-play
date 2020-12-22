@@ -281,8 +281,8 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

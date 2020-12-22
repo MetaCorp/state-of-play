@@ -203,6 +203,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 height: 16,
               ),
               RaisedButton(
+                color: Colors.grey[100],
                 child: Text('Sauvegarder'),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {

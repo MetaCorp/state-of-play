@@ -19,6 +19,8 @@ class NewStateOfPlayDetailsRoom extends StatefulWidget {
 
 class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
 
+  final int maxEntities = 15;
+
   void _showDialogDeleteDecoration(context, sop.Decoration decoration) async {
     await showDialog(
       context: context,
@@ -93,6 +95,24 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
       )
     );
   }
+  
+  void _showDialogLimit(context, String title) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Nombre de " + title + " maximal atteint ( + " + maxEntities.toString() + ")."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+        ],
+      )
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,23 +142,31 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                 if(index == 0){
                   return  Header(
                     title: "Décorations",
-                    onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
-                      onSelect: (decorations) {
-                        print('decorations: ' + decorations.toString());
-                        for (var i = 0; i < decorations.length; i++) {
-                          widget.room.decorations.add(sop.Decoration(
-                            type: decorations[i],
-                            state: "Neuf",
-                            nature: "",
-                            comments: "",
-                            images: [],
-                            newImages: [],
-                            imageIndexes: [],
-                          ));                         
-                        }
-                        setState(() { });
-                      },
-                    ))),
+                    onPressAdd: () {
+                      if (widget.room.decorations.length < maxEntities)
+                        Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
+                          onSelect: (decorations) {
+                            print('decorations: ' + decorations.toString());
+                            if (widget.room.decorations.length + decorations.length > maxEntities)
+                              _showDialogLimit(context, 'décorations');
+
+                            for (var i = 0; i < decorations.length && widget.room.decorations.length < maxEntities; i++) {
+                              widget.room.decorations.add(sop.Decoration(
+                                type: decorations[i],
+                                state: "Neuf",
+                                nature: "",
+                                comments: "",
+                                images: [],
+                                newImages: [],
+                                imageIndexes: [],
+                              ));                         
+                            }
+                            setState(() { });
+                          },
+                        )));
+                      else
+                        _showDialogLimit(context, "décorations");
+                    }
                   );
                 }
                 index -=1;
@@ -179,23 +207,31 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                       Divider(thickness: 2, height: 2,),
                       Header(
                         title: "Électricité / Chauffage",
-                        onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddElectricity(
-                          onSelect: (electricities) {
-                            print('electricities: ' + electricities.toString());
-                            for (var i = 0; i < electricities.length; i++) {
-                              widget.room.electricities.add(sop.Electricity(
-                                type: electricities[i],
-                                state: "Neuf",
-                                quantity: 1,
-                                comments: "",
-                                images: [],
-                                newImages: [],
-                                imageIndexes: [],
-                              ));
-                            }
-                            setState(() { });
-                          },
-                        ))),
+                        onPressAdd: () {
+                          if (widget.room.electricities.length < maxEntities)
+                            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddElectricity(
+                              onSelect: (electricities) {
+                                print('electricities: ' + electricities.toString());
+                                if (widget.room.electricities.length + electricities.length > maxEntities)
+                                  _showDialogLimit(context, 'électricités / chauffages');
+
+                                for (var i = 0; i < electricities.length && widget.room.electricities.length < maxEntities; i++) {
+                                  widget.room.electricities.add(sop.Electricity(
+                                    type: electricities[i],
+                                    state: "Neuf",
+                                    quantity: 1,
+                                    comments: "",
+                                    images: [],
+                                    newImages: [],
+                                    imageIndexes: [],
+                                  ));
+                                }
+                                setState(() { });
+                              },
+                            )));
+                          else
+                            _showDialogLimit(context, 'électricités / chauffages');
+                        }
                       ),
                     ],
                   );
@@ -238,22 +274,30 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                       Divider(thickness: 2, height: 2,),
                       Header(
                         title: "Équipements",
-                        onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddEquipment(
-                          onSelect: (equipments) {
-                            print('equipments: ' + equipments.toString());
-                            for (var i = 0; i < equipments.length; i++) {
-                              widget.room.equipments.add(sop.Equipment(
-                                type: equipments[i],
-                                brandOrObject: "",
-                                state: "Neuf",
-                                quantity: 1,
-                                comments: "",
-                                imageIndexes: [],
-                              ));
-                            }
-                            setState(() { });
-                          },
-                        ))),
+                        onPressAdd: () {
+                          if (widget.room.equipments.length < maxEntities)
+                            Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddEquipment(
+                              onSelect: (equipments) {
+                                print('equipments: ' + equipments.toString());
+                                if (widget.room.equipments.length + equipments.length > maxEntities)
+                                  _showDialogLimit(context, 'équipements');
+
+                                for (var i = 0; i < equipments.length && widget.room.equipments.length < maxEntities; i++) {
+                                  widget.room.equipments.add(sop.Equipment(
+                                    type: equipments[i],
+                                    brandOrObject: "",
+                                    state: "Neuf",
+                                    quantity: 1,
+                                    comments: "",
+                                    imageIndexes: [],
+                                  ));
+                                }
+                                setState(() { });
+                              },
+                            )));
+                          else
+                            _showDialogLimit(context, 'équipements');
+                        }
                       ),
                     ],
                   );

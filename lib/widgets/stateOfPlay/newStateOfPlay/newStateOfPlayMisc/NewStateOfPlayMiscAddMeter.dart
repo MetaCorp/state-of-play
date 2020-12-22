@@ -281,8 +281,8 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedMeters.map((id) => meters.firstWhere((meter) => meter["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedMeters.map((id) => meters.firstWhere((meter) => meter["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

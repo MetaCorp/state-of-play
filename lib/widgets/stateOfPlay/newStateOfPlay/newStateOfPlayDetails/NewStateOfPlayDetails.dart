@@ -15,6 +15,8 @@ class NewStateOfPlayDetails extends StatefulWidget {
 
 class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
+  final int maxRooms = 10;
+
   void _showDialogDeleteRoom (context, sop.Room room) async {
     await showDialog(
       context: context,
@@ -40,6 +42,23 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
     );
   }
 
+  void _showDialogLimitRoom(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Nombre de pièces maximal atteint (" + maxRooms.toString() + ")."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -49,22 +68,31 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
       children: [
         Header(
           title: "Liste des pièces",
-          onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
-            onSelect: (rooms) {
-              print('rooms: ' + rooms.toString());
-              for (var i = 0; i < rooms.length; i++) {
-                widget.rooms.add(sop.Room(
-                  name: rooms[i],
-                  decorations: [],
-                  equipments: [],
-                  electricities: [],
-                  generalAspect: sop.GeneralAspect()
-                ));
-                
-              }
-              setState(() { });
-            },
-          ))),
+          onPressAdd: () {
+            if (widget.rooms.length < maxRooms) {
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
+                onSelect: (rooms) {
+                  print('rooms: ' + rooms.toString());
+                  if (widget.rooms.length + rooms.length > maxRooms)
+                    _showDialogLimitRoom(context);
+
+                  for (var i = 0; i < rooms.length && widget.rooms.length < maxRooms; i++) {
+                    widget.rooms.add(sop.Room(
+                      name: rooms[i],
+                      decorations: [],
+                      equipments: [],
+                      electricities: [],
+                      generalAspect: sop.GeneralAspect()
+                    ));
+                  }
+                  setState(() { });
+                }
+              )));
+            }
+            else {
+              _showDialogLimitRoom(context);
+            }
+          }
         ),
         Flexible(
           child: ListView.separated(

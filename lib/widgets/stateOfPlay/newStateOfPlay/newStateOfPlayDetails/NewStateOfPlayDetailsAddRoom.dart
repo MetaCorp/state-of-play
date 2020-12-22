@@ -280,8 +280,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
                 }
               ),
             ],

@@ -17,6 +17,8 @@ class NewStateOfPlayMiscKeys extends StatefulWidget {
 
 class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
 
+  final int maxKeys = 15;
+
   void _showDialogDeleteKey (context, sop.Key key) async {
     await showDialog(
       context: context,
@@ -37,6 +39,23 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
               Navigator.pop(context);
             }
           )
+        ],
+      )
+    );
+  }
+
+  void _showDialogLimitKeys(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Nombre de clés maximal atteint (" + maxKeys.toString() + ")."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
         ],
       )
     );
@@ -63,22 +82,30 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
         children: [
           Header(
             title: "Liste des clés",
-            onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddKey(
-              onSelect: (keys) {
-                print('keys: ' + keys.toString());
-                for (var i = 0; i < keys.length; i++) {
-                  widget.keys.add(sop.Key(
-                    type: keys[i],
-                    comments: "",
-                    quantity: 1,
-                    images: [],
-                    newImages: [],
-                    imageIndexes: [],
-                  ));
-                }
-                setState(() { });
-              },
-            ))),
+            onPressAdd: () {
+              if (widget.keys.length < maxKeys)
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddKey(
+                  onSelect: (keys) {
+                    print('keys: ' + keys.toString());
+                    if (widget.keys.length + keys.length > maxKeys)
+                      _showDialogLimitKeys(context);
+
+                    for (var i = 0; i < keys.length && widget.keys.length < maxKeys; i++) {
+                      widget.keys.add(sop.Key(
+                        type: keys[i],
+                        comments: "",
+                        quantity: 1,
+                        images: [],
+                        newImages: [],
+                        imageIndexes: [],
+                      ));
+                    }
+                    setState(() { });
+                  },
+                )));
+              else
+                _showDialogLimitKeys(context);
+            }
           ),
           Flexible(
             child: ListView.separated(

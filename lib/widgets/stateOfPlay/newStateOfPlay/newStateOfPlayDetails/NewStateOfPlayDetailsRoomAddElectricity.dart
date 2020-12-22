@@ -281,8 +281,8 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
-                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
                   Navigator.pop(context);
+                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

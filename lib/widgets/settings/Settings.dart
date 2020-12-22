@@ -198,6 +198,7 @@ class _SettingsState extends State<Settings> {
                             height: 16,
                           ),
                           RaisedButton(
+                            color: Colors.grey[100],
                             child: Text('Sauvegarder'),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
