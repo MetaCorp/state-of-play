@@ -19,6 +19,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
 
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
+      preferredCameraDevice: CameraDevice.rear,
       source: ImageSource.camera, imageQuality: 50
     );
 

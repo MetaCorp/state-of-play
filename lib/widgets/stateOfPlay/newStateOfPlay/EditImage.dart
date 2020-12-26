@@ -17,40 +17,22 @@ class EditImage extends StatefulWidget {
 
 class _EditImageState extends State<EditImage> {
 
-  bool _finished;
   PainterController _controller;
 
   @override
   void initState() {
     super.initState();
-    _finished = false;
-    _controller = newController();
-  }
-
-  PainterController newController() {
-    PainterController controller = PainterController();
-    controller.thickness = 5.0;
-    controller.drawColor = Colors.black;
-    controller.backgroundColor = Colors.black;
-    controller.backgroundImage = widget.type == 'file'? Image.file(widget.image,) : Image.network(widget.image.toString());
-    return controller;
+    print("Init Controller !!!");
+    _controller = PainterController();
+    _controller.thickness = 5.0;
+    _controller.drawColor = Colors.red;
+    _controller.backgroundColor = Colors.black;
+    _controller.backgroundImage = widget.type == 'file'? Image.file(widget.image,fit: BoxFit.fill,) : Image.network(widget.image.toString(),fit: BoxFit.fill);    
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> actions;
-    if (_finished) {
-      actions = <Widget>[
-        IconButton(
-          icon: Icon(Icons.content_copy),
-          tooltip: 'New Painting',
-          onPressed: () => setState(() {
-                _finished = false;
-                _controller = newController();
-              }),
-        ),
-      ];
-    } else {
       actions = <Widget>[
         IconButton(
           icon: Icon(Icons.undo),
@@ -67,32 +49,25 @@ class _EditImageState extends State<EditImage> {
           },
         ),
         IconButton(
-          icon: Icon(Icons.delete),
-          tooltip: 'Clear',
-          onPressed: () => _controller.clear(),
-        ),
-        IconButton(
             icon: Icon(Icons.check),
             onPressed: () async {
-              setState(() {
-                _finished = true;
-              });
               Uint8List bytes = await _controller.exportAsPNGBytes();
               Navigator.pop(context, bytes);
             }),
       ];
-    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Éditer une image'),
+        title: Text('Édition'),
         actions: actions,
         bottom: PreferredSize(
           child: DrawBar(_controller),
-          preferredSize: Size(MediaQuery.of(context).size.width, 30.0),
+          preferredSize: Size(MediaQuery.of(context).size.width, 20.0),
         ),    
       ),
-      body: Center(child: AspectRatio(aspectRatio: 1.0, child: Painter(_controller))),
+      body: Container(
+        color: Colors.black87,
+        child: Painter(_controller)),
     );
   }
 }
@@ -108,20 +83,20 @@ class DrawBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Flexible(child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return Container(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
               child: Slider(
-            value: _controller.thickness,
-            onChanged: (value) => setState(() {
-                  _controller.thickness = value;
-                }),
-            min: 1.0,
-            max: 20.0,
-            activeColor: Colors.white,
-          ));
+                value: _controller.thickness,
+                onChanged: (value) => setState(() {
+                      _controller.thickness = value;
+                    }),
+                min: 1.0,
+                max: 20.0,
+                activeColor: Colors.white,
+              ),
+            );
         })),
-        ColorPickerButton(_controller, false),
-        ColorPickerButton(_controller, true),
+        ColorPickerButton(_controller),
       ],
     );
   }
@@ -129,9 +104,8 @@ class DrawBar extends StatelessWidget {
 
 class ColorPickerButton extends StatefulWidget {
   final PainterController _controller;
-  final bool _background;
 
-  ColorPickerButton(this._controller, this._background);
+  ColorPickerButton(this._controller);
 
   @override
   _ColorPickerButtonState createState() => new _ColorPickerButtonState();
@@ -141,15 +115,14 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(_iconData, color: _color),
-      tooltip:
-          widget._background ? 'Change background color' : 'Change draw color',
+      icon: Icon(Icons.brush, color: widget._controller.drawColor),
+      tooltip: 'Change draw color',
       onPressed: () => _pickColor(),
     );
   }
 
   void _pickColor() {
-    Color pickerColor = _color;
+    Color pickerColor = widget._controller.drawColor;
     Navigator.of(context)
         .push(MaterialPageRoute(
             fullscreenDialog: true,
@@ -167,23 +140,8 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
             }))
         .then((_) {
       setState(() {
-        _color = pickerColor;
+        widget._controller.drawColor = pickerColor;
       });
     });
-  }
-
-  Color get _color => widget._background
-      ? widget._controller.backgroundColor
-      : widget._controller.drawColor;
-
-  IconData get _iconData =>
-      widget._background ? Icons.format_color_fill : Icons.brush;
-
-  set _color(Color color) {
-    if (widget._background) {
-      widget._controller.backgroundColor = color;
-    } else {
-      widget._controller.drawColor = color;
-    }
   }
 }
