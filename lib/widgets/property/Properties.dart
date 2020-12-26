@@ -102,6 +102,9 @@ class _PropertiesState extends State<Properties> {
                 address
                 postalCode
                 city
+                stateOfPlays {
+                  id
+                }
               }
             }
             ''')

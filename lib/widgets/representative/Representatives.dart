@@ -99,6 +99,9 @@ class _OwnersState extends State<Representatives> {
                 id
                 firstName
                 lastName
+                stateOfPlays {
+                  id
+                }
               }
             }
             ''')

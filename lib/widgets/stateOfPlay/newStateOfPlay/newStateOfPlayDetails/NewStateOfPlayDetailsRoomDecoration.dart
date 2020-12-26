@@ -113,7 +113,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                 else
                   widget.decoration.images.remove(imageType["image"]);
                 setState(() {});  
-              }
+              },
             )
           ]
         ),
