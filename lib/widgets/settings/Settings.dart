@@ -20,6 +20,7 @@ class _SettingsState extends State<Settings> {
       ),
       body: SingleChildScrollView(
         child: Container(
+          margin: EdgeInsets.only(top: 8),
           child: Column(
             children: [
               ListTile(

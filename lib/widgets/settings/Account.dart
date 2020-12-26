@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/settings/LogoPicker.dart';
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -12,6 +17,9 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final _formKey = GlobalKey<FormState>();
+  var uuid = Uuid(); 
+
+  sop.User user;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +38,7 @@ class _AccountState extends State<Account> {
               address
               postalCode
               city
+              logo
             }
           }
         ''')
@@ -53,11 +62,12 @@ class _AccountState extends State<Account> {
         }
         print('');
 
-        sop.User user;
-        if (result.data != null && !result.loading) {
+        if (result.data != null && !result.loading && user == null) {
           user = sop.User.fromJSON(result.data["user"]);
           print('user: ' + user.firstName.toString());
         }
+
+        // print('Account user.newLogo: ' + user.newLogo.toString());
         
         return Mutation(
           options: MutationOptions(
@@ -89,6 +99,17 @@ class _AccountState extends State<Account> {
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
+
+                        MultipartFile newLogo;
+                        if (user.newLogo != null) {
+                          newLogo = MultipartFile.fromBytes(
+                            'photo',
+                            user.newLogo.readAsBytesSync(),
+                            filename: '${uuid.v1()}.jpg',
+                            contentType: MediaType("image", "jpg"),
+                          );
+                        }
+
                         MultiSourceResult result = runMutation({
                           "data": {
                             "firstName": user.firstName,
@@ -99,6 +120,7 @@ class _AccountState extends State<Account> {
                             "company": user.company,
                             "documentHeader": user.documentHeader,
                             "documentEnd": user.documentEnd,
+                            "newLogo": newLogo
                           }
                         });
 
@@ -148,6 +170,17 @@ class _AccountState extends State<Account> {
                             initialValue: user.company,
                             decoration: InputDecoration(labelText: 'Société'),
                             onSaved: (value) => user.company = value,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          LogoPicker(
+                            logo: user.logo,
+                            newLogo: user.newLogo,
+                            onSelect: (newLogo) {
+                              user.newLogo = newLogo;
+                              setState(() { });
+                            },
                           ),
                           SizedBox(
                             height: 8,
@@ -203,6 +236,17 @@ class _AccountState extends State<Account> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
+                                
+                                MultipartFile newLogo;
+                                if (user.newLogo != null) {
+                                  newLogo = MultipartFile.fromBytes(
+                                    'photo',
+                                    user.newLogo.readAsBytesSync(),
+                                    filename: '${uuid.v1()}.jpg',
+                                    contentType: MediaType("image", "jpg"),
+                                  );
+                                }
+
                                 MultiSourceResult result = runMutation({
                                   "data": {
                                     "firstName": user.firstName,
@@ -213,6 +257,7 @@ class _AccountState extends State<Account> {
                                     "company": user.company,
                                     "documentHeader": user.documentHeader,
                                     "documentEnd": user.documentEnd,
+                                    "newLogo": newLogo
                                   }
                                 });
 

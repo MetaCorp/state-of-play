@@ -634,6 +634,8 @@ class User {
     this.stateOfPlays,
     this.properties,
     this.paidOnce,
+    this.logo,
+    this.newLogo,
   });
 
   String firstName;
@@ -647,6 +649,9 @@ class User {
   List<StateOfPlay> stateOfPlays;
   List<Property> properties;
   bool paidOnce;
+  String logo;
+
+  File newLogo;
 
   factory User.fromJSON(Map<String, dynamic> json) {
 
@@ -662,6 +667,8 @@ class User {
       paidOnce: json["paidOnce"],
       stateOfPlays: json["stateOfPlays"] != null ? (json["stateOfPlays"] as List).map((stateOfPlay) => StateOfPlay.fromJSON(stateOfPlay)).toList() : null,
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
+      logo: json["logo"],
+      newLogo: null,
     );
   }
 }
