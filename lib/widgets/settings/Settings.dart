@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/main.dart';
 import 'package:flutter_tests/widgets/settings/Account.dart';
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,6 +53,7 @@ class _SettingsState extends State<Settings> {
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   prefs.setString("token", null);
+                  client.value.cache.reset();
                   Navigator.popAndPushNamed(context, '/login');
                 },
               ),

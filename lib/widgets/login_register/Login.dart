@@ -14,7 +14,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  TextEditingController _emailController = TextEditingController(text: 'bob1@bob.com');
+  TextEditingController _emailController = TextEditingController(text: 'bob49@bob.com');
   TextEditingController _passwordController = TextEditingController(text: 'test123');
 
   SharedPreferences _prefs;

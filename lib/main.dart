@@ -60,10 +60,11 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+ValueNotifier<GraphQLClient> client;
+
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
-  ValueNotifier<GraphQLClient> client;
 
   deleteToken() async {
     final prefs = await SharedPreferences.getInstance();
