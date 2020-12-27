@@ -78,7 +78,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
           ),
           builder: (
             RunMutation runUpdateMutation,
-            QueryResult mutationResult,
+            QueryResult mutationUpdateResult,
           ) {
             
             return Mutation(
@@ -104,6 +104,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
                 
                 return NewInterlocutorContent(
                   title: 'Éditer un mandataire',
+                  saveLoading: mutationUpdateResult.loading,
                   interlocutor: representative,
                   onSave: (representative) async {
                     print('runUpdateMutation');
@@ -136,7 +137,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
                         }
                         else if (networkResult.data["updateRepresentative"] != null) {
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, '/representative', arguments: { "representativeId": widget.representativeId });// To refresh
+                          Navigator.popAndPushNamed(context, '/representatives');// To refresh
                         }
                       }
                     }

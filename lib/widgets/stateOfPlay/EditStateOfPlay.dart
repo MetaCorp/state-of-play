@@ -70,7 +70,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
         ),
         builder: (
           RunMutation runMutation,
-          QueryResult mutationResult,
+          QueryResult mutationUpdateResult,
         ) {
           
           return Query(
@@ -192,6 +192,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   
                   return NewStateOfPlayContent(
                     title: "Modification d'un état des lieux",
+                    saveLoading: mutationUpdateResult.loading,
                     onSave: () async {
                       print("onSave");
                       MultiSourceResult result = runMutation({

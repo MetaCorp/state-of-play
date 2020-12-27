@@ -78,7 +78,7 @@ class _EditOwnerState extends State<EditOwner> {
           ),
           builder: (
             RunMutation runUpdateMutation,
-            QueryResult mutationResult,
+            QueryResult mutationUpdateResult,
           ) {
             
             return Mutation(
@@ -104,6 +104,7 @@ class _EditOwnerState extends State<EditOwner> {
                 
                 return NewInterlocutorContent(
                   title: 'Éditer un propriétaire',
+                  saveLoading: mutationUpdateResult.loading,
                   interlocutor: owner,
                   onSave: (owner) async {
                     print('runUpdateMutation');
@@ -136,7 +137,7 @@ class _EditOwnerState extends State<EditOwner> {
                         }
                         else if (networkResult.data["updateOwner"] != null) {
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, '/owner', arguments: { "ownerId": widget.ownerId });// To refresh
+                          Navigator.popAndPushNamed(context, '/owners');// To refresh
                         }
                       }
                     }

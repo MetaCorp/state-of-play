@@ -5,19 +5,19 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetails.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMisc.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
-// import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayProperty.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignature.dart';
 
 typedef SaveCallback = void Function();
 typedef DeleteCallback = void Function();
 
 class NewStateOfPlayContent extends StatefulWidget {
-  NewStateOfPlayContent({ Key key, this.stateOfPlay, this.onSave, this.title, this.onDelete }) : super(key: key);
+  NewStateOfPlayContent({ Key key, this.stateOfPlay, this.onSave, this.title, this.onDelete, this.saveLoading }) : super(key: key);
   
   final String title;
   final sop.StateOfPlay stateOfPlay;
   final SaveCallback onSave;
   final DeleteCallback onDelete;
+  final bool saveLoading;
 
   @override
   _NewStateOfPlayContentState createState() => new _NewStateOfPlayContentState();
@@ -110,7 +110,10 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          _selectedIndex == _tabsContent.length - 1 ? IconButton(
+          _selectedIndex == _tabsContent.length - 1 ? widget.saveLoading ? IconButton(
+            icon: CircularProgressIndicator(),
+            onPressed: null,
+          ) : IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState.validate()) {

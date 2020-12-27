@@ -85,7 +85,7 @@ class _EditPropertyState extends State<EditProperty> {
           ),
           builder: (
             RunMutation runUpdateMutation,
-            QueryResult mutationResult,
+            QueryResult mutationUpdateResult,
           ) {
             
             return Mutation(
@@ -111,6 +111,7 @@ class _EditPropertyState extends State<EditProperty> {
                 
                 return NewPropertyContent(
                   title: 'Éditer une propriété',
+                  saveLoading: mutationUpdateResult.loading,
                   property: property,
                   onSave: (property) async {
                     print('runUpdateMutation');

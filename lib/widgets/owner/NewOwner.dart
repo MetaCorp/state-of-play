@@ -43,6 +43,7 @@ class _NewOwnerState extends State<NewOwner> {
         
         return NewInterlocutorContent(
           title: 'Nouveau propriétaire',
+          saveLoading: result.loading,
           interlocutor: sop.Owner(),
           onSave: (owner) async {
             print('runMutation');

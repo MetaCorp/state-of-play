@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 typedef SaveCallback = Function(dynamic);
 typedef DeleteCallback = Function();
 
 class NewInterlocutorContent extends StatefulWidget {
-  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave, this.onDelete }) : super(key: key);
+  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave, this.onDelete, this.saveLoading }) : super(key: key);
 
   final String title;
   final dynamic interlocutor;
   final SaveCallback onSave;
   final DeleteCallback onDelete;
+  final bool saveLoading;
 
   @override
   _NewInterlocutorContentState createState() => new _NewInterlocutorContentState();
@@ -146,8 +148,9 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               SizedBox(
                 height: 16,
               ),
-              RaisedButton(
+              RaisedButtonLoading(
                 color: Colors.grey[100],
+                loading: widget.saveLoading,
                 child: Text('Sauvegarder'),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
@@ -166,7 +169,10 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
+          widget.saveLoading ? IconButton(
+            icon: CircularProgressIndicator(),
+            onPressed: null,
+          ) : IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState.validate()) {

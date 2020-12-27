@@ -349,6 +349,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             
             return NewStateOfPlayContent(
               title: "Nouvel état des lieux",
+              saveLoading: result.loading,
               onSave: () async {
                 print("onSave");
 

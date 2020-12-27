@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -111,9 +112,10 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 16,
                 ),
-                RaisedButton(
+                RaisedButtonLoading(
                   child: Text('S\'inscrire'),
                   color: Theme.of(context).primaryColor,
+                  loading: result.loading,
                   onPressed: () async {
                     MultiSourceResult result = runMutation({
                       "data": {

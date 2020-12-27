@@ -43,6 +43,7 @@ class _NewTenantState extends State<NewTenant> {
         
         return NewInterlocutorContent(
           title: 'Nouveau locataire',
+          saveLoading: result.loading,
           interlocutor: sop.Tenant(),
           onSave: (tenant) async {
             print('runMutation');

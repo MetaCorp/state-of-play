@@ -141,8 +141,8 @@ class _StateOfPlaysState extends State<StateOfPlays> {
         Query(
           options: QueryOptions(
             documentNode: gql('''
-            query stateOfPlays {
-              stateOfPlays {
+            query stateOfPlays(\$filter: StateOfPlaysFilterInput!) {
+              stateOfPlays(filter: \$filter) {
                 id
                 property {
                   id
@@ -162,7 +162,14 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                 }
               }
             }
-            ''')
+            '''),
+            variables: {
+              "filter": {
+                "search": "",
+                "out": true,
+                "in": true
+              }
+            } 
           ),
           builder: (
             QueryResult result, {

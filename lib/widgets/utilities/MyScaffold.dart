@@ -97,7 +97,7 @@ class _MyScaffoldState extends State<MyScaffold> {
         print('');
 
         sop.User user;
-        if (result.data != null && !result.loading) {
+        if (result.data != null && result.data["user"] != null && !result.loading) {
           user = sop.User.fromJSON(result.data["user"]);
           print('user: ' + user.firstName.toString());
         }

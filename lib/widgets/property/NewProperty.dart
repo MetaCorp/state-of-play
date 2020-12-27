@@ -44,6 +44,7 @@ class _NewPropertyState extends State<NewProperty> {
         
         return NewPropertyContent(
           title: 'Nouvelle propriété',
+          saveLoading: result.loading,
           property: sop.Property(
             reference: "000",
             address: "42 rue du Test",

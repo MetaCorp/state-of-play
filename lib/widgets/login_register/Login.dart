@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -90,9 +91,10 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   height: 80,
                 ),
-                RaisedButton(
+                RaisedButtonLoading(
                   child: Text('Se connecter'),
                   color: Theme.of(context).primaryColor,
+                  loading: result.loading,
                   onPressed: () async {
                     MultiSourceResult result = runMutation({
                       "email": _emailController.text,

@@ -3,18 +3,20 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/property/ListTilePropertyType.dart';
 import 'package:flutter_tests/widgets/property/NewPropertyAddType.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 
 typedef SaveCallback = Function(sop.Property);
 typedef DeleteCallback = Function();
 
 class NewPropertyContent extends StatefulWidget {
-  NewPropertyContent({ Key key, this.title, this.property, this.onSave, this.onDelete }) : super(key: key);
+  NewPropertyContent({ Key key, this.title, this.property, this.onSave, this.onDelete, this.saveLoading }) : super(key: key);
 
   final String title;
   final sop.Property property;
   final SaveCallback onSave;
   final DeleteCallback onDelete;
+  final bool saveLoading;
 
   @override
   _NewPropertyContentState createState() => new _NewPropertyContentState();
@@ -213,8 +215,9 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
               SizedBox(
                 height: 16,
               ),
-              RaisedButton(
+              RaisedButtonLoading(
                 color: Colors.grey[100],
+                loading: widget.saveLoading,
                 child: Text('Sauvegarder'),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
@@ -233,7 +236,10 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
+          widget.saveLoading ? IconButton(
+            icon: CircularProgressIndicator(),
+            onPressed: null
+          ) : IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState.validate()) {
@@ -242,7 +248,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
               }
             }
           ),
-          PopupMenuButton(
+          widget.onDelete != null ? PopupMenuButton(
             icon: Icon(Icons.more_vert),
             itemBuilder: (context) => [
               PopupMenuItem(
@@ -255,7 +261,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
               if (result == "delete")
                 _showDialogDelete(context);
             }
-          ),
+          ) : Container(),
         ],
       ),
       body: body

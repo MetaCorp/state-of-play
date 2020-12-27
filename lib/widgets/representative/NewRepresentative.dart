@@ -43,6 +43,7 @@ class _NewRepresentativeState extends State<NewRepresentative> {
         
         return NewInterlocutorContent(
           title: 'Nouveau mandataire',
+          saveLoading: result.loading,
           interlocutor: sop.Representative(),
           onSave: (representative) async {
             print('runMutation');
