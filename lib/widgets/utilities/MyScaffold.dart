@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/widgets/shop/Shop.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -61,51 +60,54 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      key: globalKey,
-      appBar: widget.appBar,
-      body: widget.body,
-      drawer: MyDrawer(),
-      floatingActionButton: Query(
-        options: QueryOptions(
-          documentNode: gql('''
-            query user {
-              user {
+    return Query(
+      options: QueryOptions(
+        documentNode: gql('''
+          query user {
+            user {
+              id
+              firstName
+              lastName
+              email
+              paidOnce
+              stateOfPlays {
                 id
-                paidOnce
-                stateOfPlays {
-                  id
-                }
               }
             }
-          ''')
-        ),
-        builder: (
-          QueryResult result, {
-          Refetch refetch,
-          FetchMore fetchMore,
-        }) {
-
-          print('userResult: ' + result.loading.toString());
-          print('userResult hasException: ' + result.hasException.toString());
-          print('userResult data: ' + result.data.toString());
-          if (result.hasException) {
-            if (result.exception.graphqlErrors.length > 0) { 
-              print("userResult exception: " + result.exception.graphqlErrors[0].toString());
-              print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
-            }
-            else
-              print("userResult clientException: " + result.exception.clientException.message);
           }
-          print('');
+        ''')
+      ),
+      builder: (
+        QueryResult result, {
+        Refetch refetch,
+        FetchMore fetchMore,
+      }) {
 
-          sop.User user;
-          if (result.data != null && !result.loading) {
-            user = sop.User.fromJSON(result.data["user"]);
-            print('user: ' + user.firstName.toString());
+        print('userResult: ' + result.loading.toString());
+        print('userResult hasException: ' + result.hasException.toString());
+        print('userResult data: ' + result.data.toString());
+        if (result.hasException) {
+          if (result.exception.graphqlErrors.length > 0) { 
+            print("userResult exception: " + result.exception.graphqlErrors[0].toString());
+            print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
           }
-          
-          return FloatingActionButton(
+          else
+            print("userResult clientException: " + result.exception.clientException.message);
+        }
+        print('');
+
+        sop.User user;
+        if (result.data != null && !result.loading) {
+          user = sop.User.fromJSON(result.data["user"]);
+          print('user: ' + user.firstName.toString());
+        }
+        
+        return Scaffold(
+          key: globalKey,
+          appBar: widget.appBar,
+          body: widget.body,
+          drawer: MyDrawer(user: user),
+          floatingActionButton: FloatingActionButton(
             // Put animation Icon rotation
             // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
             backgroundColor: Theme.of(context).primaryColor,
@@ -290,9 +292,9 @@ class _MyScaffoldState extends State<MyScaffold> {
                 Navigator.pop(context);
               }
             }
-          );
-        }
-      )
+          )
+        );
+      }
     );
   }
 }

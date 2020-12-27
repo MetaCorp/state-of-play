@@ -640,6 +640,7 @@ class User {
     this.paidOnce,
     this.logo,
     this.newLogo,
+    this.email,
   });
 
   String firstName;
@@ -650,6 +651,7 @@ class User {
   String postalCode;
   String city;
   String company;
+  String email;
   List<StateOfPlay> stateOfPlays;
   List<Property> properties;
   bool paidOnce;
@@ -673,6 +675,7 @@ class User {
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
       logo: json["logo"],
       newLogo: null,
+      email: json["email"]
     );
   }
 }

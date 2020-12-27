@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({ Key key }) : super(key: key);
+  const MyDrawer({ Key key, this.user }) : super(key: key);
+
+  final sop.User user;
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +24,19 @@ class MyDrawer extends StatelessWidget {
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(shape: BoxShape.circle),
-                  child: CircleAvatar(
+                  child: user != null ? CircleAvatar(
                     backgroundColor: Colors.grey,
-                    child: new Text("txt"),
-                  ),
+                    child: new Text(user.firstName[0] + user.lastName[0]),
+                  ) : CircularProgressIndicator(),
                 ),
                 SizedBox(width: 12),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('user'),
+                  children: user != null ? [
+                    Text(user.firstName + ' ' + user.lastName),
                     SizedBox(height: 4),
-                    Text('@User'),
-                  ],
+                    Text(user.email),
+                  ] : [],
                 ),
               ],
             ),
