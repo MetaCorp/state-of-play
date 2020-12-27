@@ -30,7 +30,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
-  
+
   int count = 1;
   Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
@@ -39,6 +39,14 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
     count++; // 3
 
     return filePath;
+  }
+
+  _onSave() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Navigator.pop(context);
+    }
+    return false;
   }
 
 
@@ -64,100 +72,98 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
     // print('imagesType: ' + imagesType.toString());
 
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.roomName + ' / ' + widget.decoration.type),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                Navigator.pop(context);
-              }
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Text("État :")
-                  ),
-                  DropdownButton(
-                    value: widget.decoration.state,
-                    items: stateValues.map((stateValue) => DropdownMenuItem(
-                      value: stateValue,
-                      child: Text(stateValue)
-                    )).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        widget.decoration.state = value;
-                      });
-                    },
-                  )
-                ]
-              ),
-              MyTextFormField(
-                initialValue: widget.decoration.nature,
-                decoration: InputDecoration(labelText: 'Nature'),
-                onSaved: (value) => widget.decoration.nature = value,
-                maxLength: 24,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              MyTextFormField(
-                initialValue: widget.decoration.comments,
-                decoration: InputDecoration(labelText: 'Commentaires'),
-                onSaved: (value) => widget.decoration.comments = value,
-                maxLength: 256,
-                maxLines: 2,
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              MyImagePicker(
-                onSelect: (imageFile) {
-                  widget.decoration.newImages.add(imageFile);
-                  setState(() { });
-                },
-                imagesCount: widget.decoration.images.length + widget.decoration.newImages.length
-              ),
-              ImageList(
-                imagesType: imagesType,
-                onDelete: (imageType) {
-                  if (imageType["type"] == "file")
-                    widget.decoration.newImages.remove(imageType["image"]);
-                  else
-                    widget.decoration.images.remove(imageType["image"]);
-                  setState(() {});  
-                },
-                onUpdate: (image, index) async {
+    return WillPopScope(
+      onWillPop: () => _onSave(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.roomName + ' / ' + widget.decoration.type),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: _onSave,
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(right: 16),
+                      child: Text("État :")
+                    ),
+                    DropdownButton(
+                      value: widget.decoration.state,
+                      items: stateValues.map((stateValue) => DropdownMenuItem(
+                        value: stateValue,
+                        child: Text(stateValue)
+                      )).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          widget.decoration.state = value;
+                        });
+                      },
+                    )
+                  ]
+                ),
+                MyTextFormField(
+                  initialValue: widget.decoration.nature,
+                  decoration: InputDecoration(labelText: 'Nature'),
+                  onSaved: (value) => widget.decoration.nature = value,
+                  maxLength: 24,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                MyTextFormField(
+                  initialValue: widget.decoration.comments,
+                  decoration: InputDecoration(labelText: 'Commentaires'),
+                  onSaved: (value) => widget.decoration.comments = value,
+                  maxLength: 256,
+                  maxLines: 2,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                MyImagePicker(
+                  onSelect: (imageFile) {
+                    widget.decoration.newImages.add(imageFile);
+                    setState(() { });
+                  },
+                  imagesCount: widget.decoration.images.length + widget.decoration.newImages.length
+                ),
+                ImageList(
+                  imagesType: imagesType,
+                  onDelete: (imageType) {
+                    if (imageType["type"] == "file")
+                      widget.decoration.newImages.remove(imageType["image"]);
+                    else
+                      widget.decoration.images.remove(imageType["image"]);
+                    setState(() {});  
+                  },
+                  onUpdate: (image, index) async {
 
-                  File file = await File(await getFilePath()).writeAsBytes(image);
-                  //TODO FINISH
-                  if(index < widget.decoration.images.length){   
-                    print("index"+index.toString());
-                    widget.decoration.images.removeAt(index);
-                    widget.decoration.newImages.add(file);
-                  } 
-                  else {
-                    print("Else index" + index.toString());
-                    index -= widget.decoration.images.length;
-                    widget.decoration.newImages[index] = file;
-                  }  
-                  setState(() {});  
-                },
-              )
-            ]
+                    File file = await File(await getFilePath()).writeAsBytes(image);
+                    //TODO FINISH
+                    if(index < widget.decoration.images.length){   
+                      print("index"+index.toString());
+                      widget.decoration.images.removeAt(index);
+                      widget.decoration.newImages.add(file);
+                    } 
+                    else {
+                      print("Else index" + index.toString());
+                      index -= widget.decoration.images.length;
+                      widget.decoration.newImages[index] = file;
+                    }  
+                    setState(() {});  
+                  },
+                )
+              ]
+            ),
           ),
         ),
       ),

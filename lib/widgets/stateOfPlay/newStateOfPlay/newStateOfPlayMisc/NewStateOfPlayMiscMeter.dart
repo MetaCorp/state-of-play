@@ -25,6 +25,14 @@ class NewStateOfPlayMiscMeter extends StatefulWidget {
 class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
   final _formKey = GlobalKey<FormState>();
 
+  _onSave() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Navigator.pop(context);
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,75 +50,73 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
       ));
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Compteurs / ' + widget.meter.type),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                Navigator.pop(context);
-              }
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              MyTextFormField(
-                initialValue: widget.meter.location,
-                decoration: InputDecoration(labelText: 'Emplacement'),
-                onSaved: (value) => widget.meter.location = value,
-                maxLength: 24,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              MyTextFormField(
-                initialValue: widget.meter.index.toString(),
-                decoration: InputDecoration(labelText: 'Index'),
-                onSaved: (value) => widget.meter.index = int.parse(value),
-                keyboardType: TextInputType.number,
-                maxLength: 12,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              DateButton(
-                labelText: "Date de relevé",
-                value: widget.meter.dateOfSuccession,
-                onChange: (value) {
-                  widget.meter.dateOfSuccession = value;
-                  setState(() { });
-                },
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              MyImagePicker(
-                onSelect: (imageFile) {
-                  widget.meter.newImages.add(imageFile);
-                  setState(() { });
-                },
-                imagesCount: widget.meter.images.length + widget.meter.newImages.length
-              ),
-              ImageList(
-                imagesType: imagesType,
-                onDelete: (imageType) {
-                  if (imageType["type"] == "file")
-                    widget.meter.newImages.remove(imageType["image"]);
-                  else
-                    widget.meter.images.remove(imageType["image"]);
-                  setState(() {});  
-                }
-              )
-            ]
+    return WillPopScope(
+      onWillPop: () => _onSave(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Compteurs / ' + widget.meter.type),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: _onSave,
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                MyTextFormField(
+                  initialValue: widget.meter.location,
+                  decoration: InputDecoration(labelText: 'Emplacement'),
+                  onSaved: (value) => widget.meter.location = value,
+                  maxLength: 24,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                MyTextFormField(
+                  initialValue: widget.meter.index.toString(),
+                  decoration: InputDecoration(labelText: 'Index'),
+                  onSaved: (value) => widget.meter.index = int.parse(value),
+                  keyboardType: TextInputType.number,
+                  maxLength: 12,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                DateButton(
+                  labelText: "Date de relevé",
+                  value: widget.meter.dateOfSuccession,
+                  onChange: (value) {
+                    widget.meter.dateOfSuccession = value;
+                    setState(() { });
+                  },
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                MyImagePicker(
+                  onSelect: (imageFile) {
+                    widget.meter.newImages.add(imageFile);
+                    setState(() { });
+                  },
+                  imagesCount: widget.meter.images.length + widget.meter.newImages.length
+                ),
+                ImageList(
+                  imagesType: imagesType,
+                  onDelete: (imageType) {
+                    if (imageType["type"] == "file")
+                      widget.meter.newImages.remove(imageType["image"]);
+                    else
+                      widget.meter.images.remove(imageType["image"]);
+                    setState(() {});  
+                  }
+                )
+              ]
+            ),
           ),
         ),
       ),

@@ -289,6 +289,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                                     state: "Neuf",
                                     quantity: 1,
                                     comments: "",
+                                    images: [],
+                                    newImages: [],
                                     imageIndexes: [],
                                   ));
                                 }

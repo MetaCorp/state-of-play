@@ -80,6 +80,21 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
     super.dispose();
   }
 
+  _onAdd(runMutation) async {
+    MultiSourceResult result = runMutation({
+      "data": {
+        "type": _newKeyController.text
+      }
+    });
+
+    await result.networkResult;
+
+    setState(() { });
+    Navigator.pop(context);
+
+    _newKeyController.text = "";
+  }
+
   void _showDialogNewKey (context) async {
     await showDialog(
       context: context,
@@ -111,6 +126,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               decoration: InputDecoration(
                 labelText: "Entrez un nom de clé"
               ),
+              onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [
               new FlatButton(
@@ -122,20 +138,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               ),
               new FlatButton(
                 child: Text('AJOUTER'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "type": _newKeyController.text
-                    }
-                  });
-
-                  await result.networkResult;
-
-                  setState(() { });
-                  Navigator.pop(context);
-
-                  _newKeyController.text = "";
-                }
+                onPressed: () => _onAdd(runMutation)
               )
             ],
           );
