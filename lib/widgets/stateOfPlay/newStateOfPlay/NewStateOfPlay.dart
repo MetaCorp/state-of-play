@@ -243,9 +243,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
       dateEnd: DateTime.now(),
     ),
     comments: "L'appartement vient d'être repeint",
-    reserve: 'Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes',
+    reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
     city: 'Mulhouse',
-    documentHeader: "",// TODO: récupérer depuis les settings
+    documentHeader: "",
     documentEnd: "",
     images: []
   );
@@ -312,6 +312,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
 
         sop.User user;
         if (result.data != null && !result.loading) {
+          print('NewStateOfPlay user: ' + result.data["user"].toString());
           user = sop.User.fromJSON(result.data["user"]);
         }
 
@@ -338,7 +339,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             // print('NewStateOfPlay: ' + widget.stateOfPlayId);
 
             if (_stateOfPlay == null) {
-              print('new stateOfPlay');
+              print('new stateOfPlay: ' + user.logo.toString());
               _stateOfPlay = _stateOfPlay2;
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;

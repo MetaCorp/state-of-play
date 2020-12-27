@@ -508,7 +508,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                             height: 30,
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayOptions.description,
+                              stateOfPlay.documentHeader,
                               style: pw.TextStyle(
                                 color: PdfColors.black,
                                 fontSize: 13,
@@ -981,29 +981,11 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
               pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
 
               // TEXTE
-              pw.Column(
-                children: [
-                  pw.Text(
-                    "Les soussignés reconnaissent exactes les constatations sur l'état du logement, sous réserve du bon fonctionnement des canalisations, appareils et installations sanitaires, électriques et du chauffage qui n'a pu être vérifié ce jour, toute défectuosité dans le fonctionnement de ceux-ci devant être signalée dans le délai maximum de huit jours, et pendant le premier mois de la période de chauffe en ce qui concerne les éléments de chauffage.",
-                    style: pw.TextStyle(
-                      fontSize: 11
-                    )
-                  ),
-                  pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                  pw.Text(
-                    "Les cosignataires aux présentes ont convenu du caractère probant et indiscutable des signatures y figurant pour être recueillies selon procédé informatique sécurisé au contradictoire des partie, ils s'accordent pour y faire référence lors du départ du locataire.",
-                    style: pw.TextStyle(
-                      fontSize: 11
-                    )
-                  ),
-                  pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                  pw.Text(
-                    "Le présent état des lieux établi contradictoirement entre les parties qui le reconnaissent exact, fait partie intégrante du contrat de location dont il ne peut être dissocié.",
-                    style: pw.TextStyle(
-                      fontSize: 11
-                    )
-                  )
-                ]
+              pw.Text(
+                stateOfPlay.documentEnd,
+                style: pw.TextStyle(
+                  fontSize: 11
+                )
               ),
               pw.Padding(padding: pw.EdgeInsets.only(bottom: 25)),
 
