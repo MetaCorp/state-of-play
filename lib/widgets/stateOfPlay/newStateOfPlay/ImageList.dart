@@ -1,16 +1,20 @@
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/EditImage.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 
 
 typedef DeleteCallback = Function(dynamic);
+typedef UpdateCallback = Function(Uint8List,int);
 
 class ImageList extends StatefulWidget {
-  ImageList({ Key key, this.imagesType, this.onDelete }) : super(key: key);
+  ImageList({ Key key, this.imagesType, this.onDelete,this.onUpdate }) : super(key: key);
 
   List<dynamic> imagesType;
   DeleteCallback onDelete;
+  UpdateCallback onUpdate;
 
   @override
   _ImageListState createState() => _ImageListState();
@@ -23,12 +27,13 @@ class _ImageListState extends State<ImageList> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       margin: EdgeInsets.only(top: 8),
       child: Column(
         children: [
           Wrap(
-            runSpacing: 4,
+            runSpacing: 8,
             spacing: 8,
             alignment: WrapAlignment.start,
             runAlignment: WrapAlignment.start,
@@ -40,14 +45,22 @@ class _ImageListState extends State<ImageList> {
                   imageType.image,
                   width: 150,
                   height: 150,
-                  fit: BoxFit.cover,
-                );
+                  fit: BoxFit.fill,
+              );
+              
+              else if (imageType.type == "memory")
+                image = Image.memory(
+                  imageType.image,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.fill,
+              );
               else
                 image = Image.network(
                   imageType.image,
                   width: 150,
                   height: 150,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -93,11 +106,16 @@ class _ImageListState extends State<ImageList> {
                     ],
                   ),
                 ),
-                onTap: () {
-                  Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
+                onTap: () async {
+                  Uint8List editedImage = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
                     image: imageType.image,
                     type: imageType.type,
                   )));
+                  widget.onUpdate(editedImage,widget.imagesType.indexOf(imageType));
+                  //setState(() { });
+                  // setState(() {
+                  //   widget.imagesType[widget.imagesType.indexOf(imageType)] = new ImageType(image: editedImage, type: 'memory');
+                  // });
                 }
               );
             }).toList(),

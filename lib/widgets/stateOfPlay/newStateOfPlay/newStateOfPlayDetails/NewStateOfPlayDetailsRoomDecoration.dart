@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -28,6 +31,15 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
 
+  Future<String> getFilePath() async {
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path; // 2
+    String filePath = '$appDocumentsPath/img.png'; // 3
+
+    return filePath;
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -38,6 +50,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
       type: "network",
       image: image
     )).toList();
+
 
     for (var i = 0; i < widget.decoration.newImages.length; i++) {
       imagesType.add(ImageType(
@@ -123,6 +136,22 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                     widget.decoration.newImages.remove(imageType["image"]);
                   else
                     widget.decoration.images.remove(imageType["image"]);
+                  setState(() {});  
+                },
+                onUpdate: (image,index) async {
+
+                  File file = await File(await getFilePath()).writeAsBytes(image);
+                  //TODO FINISH
+                  if(index < widget.decoration.images.length){   
+                    print("index"+index.toString());
+                    widget.decoration.images.removeAt(index);
+                    widget.decoration.newImages[index] = file;
+                  } 
+                  else {
+                    print("Else index"+index.toString());
+                    index -=widget.decoration.images.length;
+                    widget.decoration.newImages[index] = file;
+                  }  
                   setState(() {});  
                 },
               )
