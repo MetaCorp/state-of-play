@@ -243,7 +243,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
       dateEnd: DateTime.now(),
     ),
     comments: "L'appartement vient d'être repeint",
-    reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
+    reserve: 'Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes, Le propritaire doit remettre une cuvette dans les toilettes',
     city: 'Mulhouse',
     documentHeader: "",// TODO: récupérer depuis les settings
     documentEnd: "",
@@ -290,6 +290,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               address
               postalCode
               city
+              logo
             }
           }
         ''')
@@ -342,6 +343,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
               _stateOfPlay.documentEnd = user.documentEnd != null ? user.documentEnd : _stateOfPlay.documentEnd;
+              _stateOfPlay.logo = user.logo;
             }
             
             return NewStateOfPlayContent(

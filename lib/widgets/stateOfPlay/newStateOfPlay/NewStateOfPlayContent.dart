@@ -24,6 +24,7 @@ class NewStateOfPlayContent extends StatefulWidget {
 }
 
 class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
+  final _formKey = GlobalKey<FormState>();
   
   int _selectedIndex = 0;
 
@@ -100,7 +101,8 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       ),
       NewStateOfPlaySignature(
         stateOfPlay: widget.stateOfPlay,
-        onSave: widget.onSave
+        onSave: widget.onSave,
+        formKey: _formKey,
       )
     ];
 
@@ -110,7 +112,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         actions: [
           _selectedIndex == _tabsContent.length - 1 ? IconButton(
             icon: Icon(Icons.check),
-            onPressed: () => widget.onSave(),
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                widget.onSave();
+              }
+            },
           ) : Container(),
           widget.onDelete != null ? PopupMenuButton(
             icon: Icon(Icons.more_vert),

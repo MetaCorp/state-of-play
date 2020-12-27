@@ -4,6 +4,7 @@ import 'package:flutter_spinbox/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -23,6 +24,7 @@ class NewStateOfPlayDetailsRoomEquipment extends StatefulWidget {
 }
 
 class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetailsRoomEquipment> {
+  final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
 
@@ -50,88 +52,97 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              Navigator.pop(context);
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.pop(context);
+              }
             },
           )
         ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Text("État :")
-                ),
-                DropdownButton(
-                  value: widget.equipment.state,
-                  items: stateValues.map((stateValue) => DropdownMenuItem(
-                    value: stateValue,
-                    child: Text(stateValue)
-                  )).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      widget.equipment.state = value;
-                    });
-                  },
-                )
-              ]
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.equipment.brandOrObject),
-              decoration: InputDecoration(labelText: 'Marque/Objet'),
-              onChanged: (value) => widget.equipment.brandOrObject = value,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Text("Quantité :")
-                ),
-                Flexible(
-                  child: SpinBox(
-                    min: 1,
-                    max: 100,
-                    value: widget.equipment.quantity.toDouble(),
-                    onChanged: (value) => widget.equipment.quantity = value.toInt(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text("État :")
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.equipment.comments),
-              decoration: InputDecoration(labelText: 'Commentaires'),
-              onChanged: (value) => widget.equipment.comments = value,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            MyImagePicker(
-              onSelect: (imageFile) {
-                widget.equipment.newImages.add(imageFile);
-                setState(() { });
-              },
-              imagesCount: widget.equipment.images.length + widget.equipment.newImages.length
-            ),
-            ImageList(
-              imagesType: imagesType,
-              onDelete: (imageType) {
-                if (imageType["type"] == "file")
-                  widget.equipment.newImages.remove(imageType["image"]);
-                else
-                  widget.equipment.images.remove(imageType["image"]);
-                setState(() {});  
-              }
-            )
-          ]
+                  DropdownButton(
+                    value: widget.equipment.state,
+                    items: stateValues.map((stateValue) => DropdownMenuItem(
+                      value: stateValue,
+                      child: Text(stateValue)
+                    )).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.equipment.state = value;
+                      });
+                    },
+                  )
+                ]
+              ),
+              MyTextFormField(
+                initialValue: widget.equipment.brandOrObject,
+                decoration: InputDecoration(labelText: 'Marque/Objet'),
+                onSaved: (value) => widget.equipment.brandOrObject = value,
+                maxLength: 24,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text("Quantité :")
+                  ),
+                  Flexible(
+                    child: SpinBox(
+                      min: 1,
+                      max: 100,
+                      value: widget.equipment.quantity.toDouble(),
+                      onChanged: (value) => widget.equipment.quantity = value.toInt(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              MyTextFormField(
+                initialValue: widget.equipment.comments,
+                decoration: InputDecoration(labelText: 'Commentaires'),
+                onSaved: (value) => widget.equipment.comments = value,
+                maxLength: 256,
+                maxLines: 2,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              MyImagePicker(
+                onSelect: (imageFile) {
+                  widget.equipment.newImages.add(imageFile);
+                  setState(() { });
+                },
+                imagesCount: widget.equipment.images.length + widget.equipment.newImages.length
+              ),
+              ImageList(
+                imagesType: imagesType,
+                onDelete: (imageType) {
+                  if (imageType["type"] == "file")
+                    widget.equipment.newImages.remove(imageType["image"]);
+                  else
+                    widget.equipment.images.remove(imageType["image"]);
+                  setState(() {});  
+                }
+              )
+            ]
+          ),
         ),
       ),
     );

@@ -173,10 +173,10 @@ pw.Widget _buildRoomHeader({ String title, PdfImage logo }) {
           crossAxisAlignment: pw.CrossAxisAlignment.end,
           // verticalDirection: pw.VerticalDirection.down,
           children: [
-            pw.Container(
-              height: 40,
-              child: pw.Image(logo)
-            ),
+            // pw.Container(
+            //   height: 40,
+            //   child: pw.Image(logo)
+            // ),
             pw.Expanded(
               child:
                 pw.Container(
@@ -331,7 +331,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   
   const tableMeterHeaders = [
     'Type de clé',
-    'Nnombre',
+    'Nombre',
     'Commentaires',
     'Photo'
   ];
@@ -362,6 +362,9 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
 Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
 
   print('imagesType: ' + imagesType.toString());
+
+  if (imagesType.length == 0)
+    return pw.Container();
 
   return pw.Column(
     children: [
@@ -429,8 +432,12 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
 
   PdfImage logo = PdfImage.file(
     pdf.document,
-    bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+    bytes: (await NetworkAssetBundle(Uri.parse(stateOfPlay.logo)).load(stateOfPlay.logo)).buffer.asUint8List()
   );
+  // PdfImage.file(
+  //   pdf.document,
+  //   bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+  // );
 
   PdfImage logoKitchen = PdfImage.file(
     pdf.document,
@@ -911,7 +918,7 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                         text: stateOfPlay.insurance.company
                       ),
                       pw.TextSpan(
-                        text: "sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd),
+                        text: " sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd),
                         style: pw.TextStyle(
                           fontSize: 11
                         ),

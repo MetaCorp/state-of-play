@@ -4,6 +4,7 @@ import 'package:flutter_spinbox/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -23,6 +24,8 @@ class NewStateOfPlayDetailsRoomElectricity extends StatefulWidget {
 }
 
 class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDetailsRoomElectricity> {
+  
+  final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
 
@@ -51,83 +54,91 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              Navigator.pop(context);
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.pop(context);
+              }
             },
           )
         ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Text("État :")
-                ),
-                DropdownButton(
-                  value: widget.electricity.state,
-                  items: stateValues.map((stateValue) => DropdownMenuItem(
-                    value: stateValue,
-                    child: Text(stateValue)
-                  )).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      widget.electricity.state = value;
-                    });
-                  },
-                ),
-              ]
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Text("Quantité :")
-                ),
-                Flexible(
-                  child: SpinBox(
-                    min: 1,
-                    max: 100,
-                    value: widget.electricity.quantity.toDouble(),
-                    onChanged: (value) => widget.electricity.quantity = value.toInt(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text("État :")
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.electricity.comments),
-              decoration: InputDecoration(labelText: 'Commentaires'),
-              onChanged: (value) => widget.electricity.comments = value,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            MyImagePicker(
-              onSelect: (imageFile) {
-                widget.electricity.newImages.add(imageFile);
-                setState(() { });
-              },
-              imagesCount: widget.electricity.images.length + widget.electricity.newImages.length
-            ),
-            ImageList(
-              imagesType: imagesType,
-              onDelete: (imageType) {
-                if (imageType["type"] == "file")
-                  widget.electricity.newImages.remove(imageType["image"]);
-                else
-                  widget.electricity.images.remove(imageType["image"]);
-                setState(() {});  
-              }
-            )
-          ]
+                  DropdownButton(
+                    value: widget.electricity.state,
+                    items: stateValues.map((stateValue) => DropdownMenuItem(
+                      value: stateValue,
+                      child: Text(stateValue)
+                    )).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.electricity.state = value;
+                      });
+                    },
+                  ),
+                ]
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text("Quantité :")
+                  ),
+                  Flexible(
+                    child: SpinBox(
+                      min: 1,
+                      max: 100,
+                      value: widget.electricity.quantity.toDouble(),
+                      onChanged: (value) => widget.electricity.quantity = value.toInt(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              MyTextFormField(
+                initialValue: widget.electricity.comments,
+                decoration: InputDecoration(labelText: 'Commentaires'),
+                onSaved: (value) => widget.electricity.comments = value,
+                maxLength: 256,
+                maxLines: 2,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              MyImagePicker(
+                onSelect: (imageFile) {
+                  widget.electricity.newImages.add(imageFile);
+                  setState(() { });
+                },
+                imagesCount: widget.electricity.images.length + widget.electricity.newImages.length
+              ),
+              ImageList(
+                imagesType: imagesType,
+                onDelete: (imageType) {
+                  if (imageType["type"] == "file")
+                    widget.electricity.newImages.remove(imageType["image"]);
+                  else
+                    widget.electricity.images.remove(imageType["image"]);
+                  setState(() {});  
+                }
+              )
+            ]
+          ),
         ),
       ),
     );

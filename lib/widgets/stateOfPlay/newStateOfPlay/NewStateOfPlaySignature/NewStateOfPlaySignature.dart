@@ -6,16 +6,18 @@ import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignatureSignature.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 typedef SaveCallback = void Function();
 
 
 class NewStateOfPlaySignature extends StatefulWidget {
-  NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay }) : super(key: key);
+  NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay, this.formKey }) : super(key: key);
 
   //final only if signature not to set ? bad idea ?
   final SaveCallback onSave;
   final sop.StateOfPlay stateOfPlay;
+  final GlobalKey<FormState> formKey;
 
   @override
   _NewStateOfPlaySignatureState createState() => new _NewStateOfPlaySignatureState();
@@ -40,173 +42,182 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       child: Container(
         margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(8.0),      
-        child: Column(
-          children: [
-            DateButton(
-              labelText: widget.stateOfPlay.out ? "Date de sortie" : "Date d'entrée",
-              value: widget.stateOfPlay.entryExitDate,
-              onChange: (value) {
-                widget.stateOfPlay.entryExitDate = value;
-                setState(() { });
-              }
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.stateOfPlay.documentHeader),// TODO: a récupérer dans les settings
-              decoration: InputDecoration(labelText: 'Entête du document'),
-              onChanged: (value) => widget.stateOfPlay.documentHeader = value,
-              keyboardType: TextInputType.multiline,
-              maxLines: 3,
-            ),
-            SizedBox(height: sizedBoxHeight),
-            TextField(
-              controller: TextEditingController(text: widget.stateOfPlay.documentEnd),// TODO: a récupérer dans les settings
-              decoration: InputDecoration(labelText: 'Mention en fin du document'),
-              onChanged: (value) => widget.stateOfPlay.documentEnd = value,
-              keyboardType: TextInputType.multiline,
-              maxLines: 3,
-            ),
-            // SizedBox(height: 24),             
-            // Text("Nouvelle adresse des locataires"),
-            // SizedBox(height: sizedBoxHeight),             
-            // TextField(
-            //   decoration: InputDecoration(
-            //     labelText: "Nr° et Nom de voie",
-            //   ),
-            // ),   
-            // SizedBox(height: sizedBoxHeight),             
-            // Container(
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       labelText: "Code Postal",
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(height: sizedBoxHeight),             
-            // Container(
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       labelText: "Ville",
-            //     ),
-            //   ),
-            // ),
-            SizedBox(height: sizedBoxHeight),
-            TextField(
-              controller: TextEditingController(text: widget.stateOfPlay.city),// TODO: a récupérer dans les settings
-              decoration: InputDecoration(labelText: 'Fait à'),
-              onChanged: (value) => widget.stateOfPlay.city = value,
-            ),
-            DateButton(
-              labelText: "le",
-              value: widget.stateOfPlay.date,
-              onChange: (value) {
-                widget.stateOfPlay.entryExitDate = value;
-                setState(() { });
-              }
-            ),
-            SizedBox(height: sizedBoxHeight),             
-            Container(
-              child: Column( 
-                children: [
-                  SizedBox(height: sizedBoxHeight),             
-                  Text("Signatures"),
-                  SizedBox(height: sizedBoxHeight),             
-                  Opacity(
-                    opacity: 0.5,
-                    child: Text(
-                      "Cliquez sur les cadres pour procéder au signatures:", maxLines: 1,
-                    ),
-                  ),
-                  SizedBox(height: 16),             
-                  buildSignatures(),
-                  buildSignatureRowsTenants(),
-                  SizedBox(height: 24),             
-                  RaisedButton(
-                    child: Text("Visualiser l'état des lieux"),
-                    onPressed: () {
-
-                      for (var i = 0; i < widget.stateOfPlay.rooms.length; i++) {
-                        
-                        for (var j = 0; j < widget.stateOfPlay.rooms[i].decorations.length; j++) {
-                          
-                          for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].images.length; k++) {
-                            
-                            widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                            widget.stateOfPlay.images.add({
-                              "type": "network",
-                              "image": widget.stateOfPlay.rooms[i].decorations[j].images[k]
-                            });
-
-                          }
-
-                          for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
-                            
-                            widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                            widget.stateOfPlay.images.add({
-                              "type": "file",
-                              "image": widget.stateOfPlay.rooms[i].decorations[j].newImages[k]
-                            });
-
-                          }
-                        }
-                      }
-
-                      for (var i = 0; i < widget.stateOfPlay.meters.length; i++) {
-                        
-                        for (var j = 0; j < widget.stateOfPlay.meters[i].images.length; j++) {
-                          
-                          widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                          widget.stateOfPlay.images.add({
-                            "type": "network",
-                            "image": widget.stateOfPlay.meters[i].images[j]
-                          });
-                        }
-
-                        for (var j = 0; j < widget.stateOfPlay.meters[i].newImages.length; j++) {
-                          
-                          widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                          widget.stateOfPlay.images.add({
-                            "type": "file",
-                            "image": widget.stateOfPlay.meters[i].newImages[j]
-                          });
-                        }
-                      }
-
-                      for (var i = 0; i < widget.stateOfPlay.keys.length; i++) {
-                        
-                        for (var j = 0; j < widget.stateOfPlay.keys[i].images.length; j++) {
-                          
-                          widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                          widget.stateOfPlay.images.add({
-                            "type": "network",
-                            "image": widget.stateOfPlay.keys[i].images[j]
-                          });
-                        }
-
-                        for (var j = 0; j < widget.stateOfPlay.keys[i].newImages.length; j++) {
-                          
-                          widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                          widget.stateOfPlay.images.add({
-                            "type": "file",
-                            "image": widget.stateOfPlay.keys[i].newImages[j]
-                          });
-                        }
-                      }
-
-
-                      generatePdf(widget.stateOfPlay);
-                      // widget.onSave();// TODO: save
-                    },
-                  )
-                ],
+        child: Form(
+          key: widget.formKey,
+          child: Column(
+            children: [
+              DateButton(
+                labelText: widget.stateOfPlay.out ? "Date de sortie" : "Date d'entrée",
+                value: widget.stateOfPlay.entryExitDate,
+                onChange: (value) {
+                  widget.stateOfPlay.entryExitDate = value;
+                  setState(() { });
+                }
               ),
-            ),
-          ],
+              MyTextFormField(
+                initialValue: widget.stateOfPlay.documentHeader,
+                decoration: InputDecoration(labelText: 'Entête du document'),
+                onSaved: (value) => widget.stateOfPlay.documentHeader = value,
+                keyboardType: TextInputType.multiline,
+                maxLength: 256,
+                maxLines: 2,
+              ),
+              SizedBox(height: sizedBoxHeight),
+              MyTextFormField(
+                initialValue: widget.stateOfPlay.documentEnd,
+                decoration: InputDecoration(labelText: 'Mention en fin du document'),
+                onSaved: (value) => widget.stateOfPlay.documentEnd = value,
+                keyboardType: TextInputType.multiline,
+                maxLength: 256,
+                maxLines: 2,
+              ),
+              // SizedBox(height: 24),             
+              // Text("Nouvelle adresse des locataires"),
+              // SizedBox(height: sizedBoxHeight),             
+              // TextField(
+              //   decoration: InputDecoration(
+              //     labelText: "Nr° et Nom de voie",
+              //   ),
+              // ),   
+              // SizedBox(height: sizedBoxHeight),             
+              // Container(
+              //   child: TextField(
+              //     decoration: InputDecoration(
+              //       labelText: "Code Postal",
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: sizedBoxHeight),             
+              // Container(
+              //   child: TextField(
+              //     decoration: InputDecoration(
+              //       labelText: "Ville",
+              //     ),
+              //   ),
+              // ),
+              SizedBox(height: sizedBoxHeight),
+              MyTextFormField(
+                initialValue: widget.stateOfPlay.city,
+                decoration: InputDecoration(labelText: 'Fait à'),
+                onSaved: (value) => widget.stateOfPlay.city = value,
+                maxLength: 24,
+              ),
+              DateButton(
+                labelText: "le",
+                value: widget.stateOfPlay.date,
+                onChange: (value) {
+                  widget.stateOfPlay.entryExitDate = value;
+                  setState(() { });
+                }
+              ),
+              SizedBox(height: sizedBoxHeight),             
+              Container(
+                child: Column( 
+                  children: [
+                    SizedBox(height: sizedBoxHeight),             
+                    Text("Signatures"),
+                    SizedBox(height: sizedBoxHeight),             
+                    Opacity(
+                      opacity: 0.5,
+                      child: Text(
+                        "Cliquez sur les cadres pour procéder au signatures:", maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 16),             
+                    buildSignatures(),
+                    buildSignatureRowsTenants(),
+                    SizedBox(height: 24),             
+                    RaisedButton(
+                      child: Text("Visualiser l'état des lieux"),
+                      onPressed: () {
+
+                        if (widget.formKey.currentState.validate()) {
+                          widget.formKey.currentState.save();
+                          for (var i = 0; i < widget.stateOfPlay.rooms.length; i++) {
+                            
+                            for (var j = 0; j < widget.stateOfPlay.rooms[i].decorations.length; j++) {
+                              
+                              for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].images.length; k++) {
+                                
+                                widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                                widget.stateOfPlay.images.add({
+                                  "type": "network",
+                                  "image": widget.stateOfPlay.rooms[i].decorations[j].images[k]
+                                });
+
+                              }
+
+                              for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
+                                
+                                widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                                widget.stateOfPlay.images.add({
+                                  "type": "file",
+                                  "image": widget.stateOfPlay.rooms[i].decorations[j].newImages[k]
+                                });
+
+                              }
+                            }
+                          }
+
+                          for (var i = 0; i < widget.stateOfPlay.meters.length; i++) {
+                            
+                            for (var j = 0; j < widget.stateOfPlay.meters[i].images.length; j++) {
+                              
+                              widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                              widget.stateOfPlay.images.add({
+                                "type": "network",
+                                "image": widget.stateOfPlay.meters[i].images[j]
+                              });
+                            }
+
+                            for (var j = 0; j < widget.stateOfPlay.meters[i].newImages.length; j++) {
+                              
+                              widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                              widget.stateOfPlay.images.add({
+                                "type": "file",
+                                "image": widget.stateOfPlay.meters[i].newImages[j]
+                              });
+                            }
+                          }
+
+                          for (var i = 0; i < widget.stateOfPlay.keys.length; i++) {
+                            
+                            for (var j = 0; j < widget.stateOfPlay.keys[i].images.length; j++) {
+                              
+                              widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                              widget.stateOfPlay.images.add({
+                                "type": "network",
+                                "image": widget.stateOfPlay.keys[i].images[j]
+                              });
+                            }
+
+                            for (var j = 0; j < widget.stateOfPlay.keys[i].newImages.length; j++) {
+                              
+                              widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
+
+                              widget.stateOfPlay.images.add({
+                                "type": "file",
+                                "image": widget.stateOfPlay.keys[i].newImages[j]
+                              });
+                            }
+                          }
+
+
+                          generatePdf(widget.stateOfPlay);
+                        }
+                        // widget.onSave();// TODO: save
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

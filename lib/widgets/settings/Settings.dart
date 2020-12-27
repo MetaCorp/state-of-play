@@ -43,7 +43,12 @@ class _SettingsState extends State<Settings> {
               ),
               RaisedButton(
                 color: Colors.red[700],
-                child: Text('Déconnexion'),
+                child: Text(
+                  'Déconnexion',
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
+                ),
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   prefs.setString("token", null);

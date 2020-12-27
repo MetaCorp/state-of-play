@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextField.dart';
 
 class NewStateOfPlayMiscInsurance extends StatefulWidget {
   NewStateOfPlayMiscInsurance({ Key key, this.insurance }) : super(key: key);
@@ -12,6 +14,7 @@ class NewStateOfPlayMiscInsurance extends StatefulWidget {
 }
 
 class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsurance> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,18 +33,20 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(
-              controller: TextEditingController(text: widget.insurance.company),
-              decoration: InputDecoration(labelText: "Compagnie d'assurance"),
+            MyTextField(
+              labelText: "Compagnie d'assurance",
+              text: widget.insurance.company,
               onChanged: (value) => widget.insurance.company = value,
+              maxLength: 24,
             ),
             SizedBox(
               height: 8,
             ),
-            TextField(
-              controller: TextEditingController(text: widget.insurance.number),
-              decoration: InputDecoration(labelText: "No de police d'assurance"),
+            MyTextField(
+              text: widget.insurance.number,
+              labelText: "No de police d'assurance",
               onChanged: (value) => widget.insurance.number = value,
+              maxLength: 24,
             ),
             SizedBox(
               height: 8,

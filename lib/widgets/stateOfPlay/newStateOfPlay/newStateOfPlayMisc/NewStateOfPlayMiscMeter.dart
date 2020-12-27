@@ -3,6 +3,7 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -22,6 +23,7 @@ class NewStateOfPlayMiscMeter extends StatefulWidget {
 }
 
 class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,61 +49,69 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              Navigator.pop(context);
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.pop(context);
+              }
             },
           )
         ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: TextEditingController(text: widget.meter.location),
-              decoration: InputDecoration(labelText: 'Emplacement'),
-              onChanged: (value) => widget.meter.location = value,
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.meter.index.toString()),
-              decoration: InputDecoration(labelText: 'Index'),
-              onChanged: (value) => widget.meter.index = int.parse(value),
-              keyboardType: TextInputType.number
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            DateButton(
-              labelText: "Date de relevé",
-              value: widget.meter.dateOfSuccession,
-              onChange: (value) {
-                widget.meter.dateOfSuccession = value;
-                setState(() { });
-              },
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            MyImagePicker(
-              onSelect: (imageFile) {
-                widget.meter.newImages.add(imageFile);
-                setState(() { });
-              },
-              imagesCount: widget.meter.images.length + widget.meter.newImages.length
-            ),
-            ImageList(
-              imagesType: imagesType,
-              onDelete: (imageType) {
-                if (imageType["type"] == "file")
-                  widget.meter.newImages.remove(imageType["image"]);
-                else
-                  widget.meter.images.remove(imageType["image"]);
-                setState(() {});  
-              }
-            )
-          ]
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              MyTextFormField(
+                initialValue: widget.meter.location,
+                decoration: InputDecoration(labelText: 'Emplacement'),
+                onSaved: (value) => widget.meter.location = value,
+                maxLength: 24,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              MyTextFormField(
+                initialValue: widget.meter.index.toString(),
+                decoration: InputDecoration(labelText: 'Index'),
+                onSaved: (value) => widget.meter.index = int.parse(value),
+                keyboardType: TextInputType.number,
+                maxLength: 12,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              DateButton(
+                labelText: "Date de relevé",
+                value: widget.meter.dateOfSuccession,
+                onChange: (value) {
+                  widget.meter.dateOfSuccession = value;
+                  setState(() { });
+                },
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              MyImagePicker(
+                onSelect: (imageFile) {
+                  widget.meter.newImages.add(imageFile);
+                  setState(() { });
+                },
+                imagesCount: widget.meter.images.length + widget.meter.newImages.length
+              ),
+              ImageList(
+                imagesType: imagesType,
+                onDelete: (imageType) {
+                  if (imageType["type"] == "file")
+                    widget.meter.newImages.remove(imageType["image"]);
+                  else
+                    widget.meter.images.remove(imageType["image"]);
+                  setState(() {});  
+                }
+              )
+            ]
+          ),
         ),
       ),
     );

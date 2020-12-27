@@ -206,7 +206,9 @@ class StateOfPlay {
     this.signatureOwner,
     this.signatureRepresentative,
     this.signatureTenants,
-    this.images
+    this.images,
+
+    this.logo,
   });
 
   String id;
@@ -242,6 +244,8 @@ class StateOfPlay {
   List<Uint8List> signatureTenants;
 
   List<Map> images;
+
+  String logo;
 
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 

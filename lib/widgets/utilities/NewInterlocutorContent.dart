@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 typedef SaveCallback = Function(dynamic);
 typedef DeleteCallback = Function();
@@ -60,7 +61,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.interlocutor.firstName,
                 decoration: InputDecoration(labelText: 'Prénom'),
                 onSaved: (value) => widget.interlocutor.firstName = value,
@@ -69,11 +70,12 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 24,
               ),
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.interlocutor.lastName,
                 decoration: InputDecoration(labelText: 'Nom'),
                 onSaved: (value) => widget.interlocutor.lastName = value,
@@ -82,11 +84,12 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 24,
               ),
               !(widget.interlocutor is sop.Tenant) ? SizedBox(
                 height: 8,
               ) : Container(),
-              !(widget.interlocutor is sop.Tenant) ? TextFormField(
+              !(widget.interlocutor is sop.Tenant) ? MyTextFormField(
                 initialValue: widget.interlocutor.company,
                 decoration: InputDecoration(labelText: 'Entreprise'),
                 onSaved: (value) => widget.interlocutor.company = value,
@@ -95,11 +98,12 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 24,
               ) : Container(),
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.interlocutor.address,
                 decoration: InputDecoration(labelText: 'Adresse'),
                 onSaved: (value) => widget.interlocutor.address = value,
@@ -108,11 +112,12 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 48,
               ),
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.interlocutor.postalCode,
                 decoration: InputDecoration(labelText: 'Code postal'),
                 keyboardType: TextInputType.number,
@@ -122,11 +127,12 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 12,
               ),
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.interlocutor.city,
                 decoration: InputDecoration(labelText: 'Ville'),
                 onSaved: (value) => widget.interlocutor.city = value,
@@ -135,6 +141,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                     return "Ce champs est obligatoire.";
                   return null;
                 },
+                maxLength: 24,
               ),
               SizedBox(
                 height: 16,

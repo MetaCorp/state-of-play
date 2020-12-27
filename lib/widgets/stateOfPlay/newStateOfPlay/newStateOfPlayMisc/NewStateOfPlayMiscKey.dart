@@ -4,6 +4,7 @@ import 'package:flutter_spinbox/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
+import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -22,6 +23,7 @@ class NewStateOfPlayMiscKey extends StatefulWidget {
 }
 
 class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,60 +49,68 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              Navigator.pop(context);
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.pop(context);
+              }
             },
           )
         ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Text("Quantité :")
-                ),
-                Flexible(
-                  child: SpinBox(
-                    min: 1,
-                    max: 100,
-                    value: widget.sKey.quantity.toDouble(),
-                    onChanged: (value) => widget.sKey.quantity = value.toInt(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text("Quantité :")
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.sKey.comments),
-              decoration: InputDecoration(labelText: 'Commentaires'),
-              onChanged: (value) => widget.sKey.comments = value,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            MyImagePicker(
-              onSelect: (imageFile) {
-                widget.sKey.newImages.add(imageFile);
-                setState(() { });
-              },
-              imagesCount: widget.sKey.images.length + widget.sKey.newImages.length
-            ),
-            ImageList(
-              imagesType: imagesType,
-              onDelete: (imageType) {
-                if (imageType["type"] == "file")
-                  widget.sKey.newImages.remove(imageType["image"]);
-                else
-                  widget.sKey.images.remove(imageType["image"]);
-                setState(() {});  
-              }
-            )
-          ]
+                  Flexible(
+                    child: SpinBox(
+                      min: 1,
+                      max: 100,
+                      value: widget.sKey.quantity.toDouble(),
+                      onChanged: (value) => widget.sKey.quantity = value.toInt(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              MyTextFormField(
+                initialValue: widget.sKey.comments,
+                decoration: InputDecoration(labelText: 'Commentaires'),
+                onSaved: (value) => widget.sKey.comments = value,
+                maxLength: 256,
+                maxLines: 2,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              MyImagePicker(
+                onSelect: (imageFile) {
+                  widget.sKey.newImages.add(imageFile);
+                  setState(() { });
+                },
+                imagesCount: widget.sKey.images.length + widget.sKey.newImages.length
+              ),
+              ImageList(
+                imagesType: imagesType,
+                onDelete: (imageType) {
+                  if (imageType["type"] == "file")
+                    widget.sKey.newImages.remove(imageType["image"]);
+                  else
+                    widget.sKey.images.remove(imageType["image"]);
+                  setState(() {});  
+                }
+              )
+            ]
+          ),
         ),
       )
     );
