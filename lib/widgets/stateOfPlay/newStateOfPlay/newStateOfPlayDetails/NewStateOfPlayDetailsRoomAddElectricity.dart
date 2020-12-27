@@ -80,6 +80,21 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
     super.dispose();
   }
 
+  _onAdd(runMutation) async {
+    MultiSourceResult result = runMutation({
+      "data": {
+        "type": _newElectricityController.text
+      }
+    });
+
+    await result.networkResult;
+
+    setState(() { });
+    Navigator.pop(context);
+
+    _newElectricityController.text = "";
+  }
+
   void _showDialogNewElectricity (context) async {
     await showDialog(
       context: context,
@@ -111,6 +126,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               decoration: InputDecoration(
                 labelText: "Entrez un nom d'électricité/chauffage"
               ),
+              onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [
               new FlatButton(
@@ -122,20 +138,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               ),
               new FlatButton(
                 child: Text('AJOUTER'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "type": _newElectricityController.text
-                    }
-                  });
-
-                  await result.networkResult;
-
-                  setState(() { });
-                  Navigator.pop(context);
-
-                  _newElectricityController.text = "";
-                }
+                onPressed: () => _onAdd(runMutation)
               )
             ],
           );

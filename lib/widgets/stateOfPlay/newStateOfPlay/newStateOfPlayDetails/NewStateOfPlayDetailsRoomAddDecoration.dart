@@ -80,6 +80,21 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
     super.dispose();
   }
 
+  _onAdd(runMutation) async {
+    MultiSourceResult result = runMutation({
+      "data": {
+        "type": _newDecorationController.text
+      }
+    });
+
+    await result.networkResult;
+
+    setState(() { });
+    Navigator.pop(context);
+
+    _newDecorationController.text = "";
+  }
+
   void _showDialogNewDecoration (context) async {
     await showDialog(
       context: context,
@@ -111,6 +126,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               decoration: InputDecoration(
                 labelText: "Entrez un nom de décoration"
               ),
+              onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [
               new FlatButton(
@@ -122,20 +138,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               ),
               new FlatButton(
                 child: Text('AJOUTER'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "type": _newDecorationController.text
-                    }
-                  });
-
-                  await result.networkResult;
-
-                  setState(() { });
-                  Navigator.pop(context);
-
-                  _newDecorationController.text = "";
-                }
+                onPressed: () => _onAdd(runMutation)
               )
             ],
           );

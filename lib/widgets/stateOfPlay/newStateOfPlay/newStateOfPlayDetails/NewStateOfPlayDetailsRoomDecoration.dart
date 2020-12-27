@@ -30,11 +30,13 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
-
+  
+  int count = 1;
   Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
     String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/img.png'; // 3
+    String filePath = '$appDocumentsPath/img$count.png';
+    count++; // 3
 
     return filePath;
   }
@@ -138,18 +140,18 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                     widget.decoration.images.remove(imageType["image"]);
                   setState(() {});  
                 },
-                onUpdate: (image,index) async {
+                onUpdate: (image, index) async {
 
                   File file = await File(await getFilePath()).writeAsBytes(image);
                   //TODO FINISH
                   if(index < widget.decoration.images.length){   
                     print("index"+index.toString());
                     widget.decoration.images.removeAt(index);
-                    widget.decoration.newImages[index] = file;
+                    widget.decoration.newImages.add(file);
                   } 
                   else {
-                    print("Else index"+index.toString());
-                    index -=widget.decoration.images.length;
+                    print("Else index" + index.toString());
+                    index -= widget.decoration.images.length;
                     widget.decoration.newImages[index] = file;
                   }  
                   setState(() {});  

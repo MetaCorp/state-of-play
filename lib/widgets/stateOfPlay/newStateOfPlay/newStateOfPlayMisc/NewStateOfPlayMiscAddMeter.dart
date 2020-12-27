@@ -80,6 +80,21 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
     super.dispose();
   }
 
+  _onAdd(runMutation) async {
+    MultiSourceResult result = runMutation({
+      "data": {
+        "type": _newMeterController.text
+      }
+    });
+
+    await result.networkResult;
+
+    setState(() { });
+    Navigator.pop(context);
+
+    _newMeterController.text = "";
+  }
+
   void _showDialogNewMeter (context) async {
     await showDialog(
       context: context,
@@ -111,6 +126,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               decoration: InputDecoration(
                 labelText: "Entrez un nom de compteur"
               ),
+              onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [
               new FlatButton(
@@ -122,20 +138,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               ),
               new FlatButton(
                 child: Text('AJOUTER'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "type": _newMeterController.text
-                    }
-                  });
-
-                  await result.networkResult;
-
-                  setState(() { });
-                  Navigator.pop(context);
-
-                  _newMeterController.text = "";
-                }
+                onPressed: () => _onAdd(runMutation)
               )
             ],
           );

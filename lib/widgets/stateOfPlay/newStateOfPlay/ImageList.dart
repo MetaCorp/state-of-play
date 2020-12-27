@@ -7,7 +7,7 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayD
 
 
 typedef DeleteCallback = Function(dynamic);
-typedef UpdateCallback = Function(Uint8List,int);
+typedef UpdateCallback = Function(Uint8List, int);
 
 class ImageList extends StatefulWidget {
   ImageList({ Key key, this.imagesType, this.onDelete,this.onUpdate }) : super(key: key);
@@ -111,7 +111,7 @@ class _ImageListState extends State<ImageList> {
                     image: imageType.image,
                     type: imageType.type,
                   )));
-                  widget.onUpdate(editedImage,widget.imagesType.indexOf(imageType));
+                  widget.onUpdate(editedImage, widget.imagesType.indexOf(imageType));
                   //setState(() { });
                   // setState(() {
                   //   widget.imagesType[widget.imagesType.indexOf(imageType)] = new ImageType(image: editedImage, type: 'memory');
