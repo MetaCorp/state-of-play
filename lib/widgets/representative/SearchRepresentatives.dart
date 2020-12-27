@@ -78,7 +78,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
                 itemBuilder: (_, i) => ListTile(
                   title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
                   // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/representative', arguments: { "representativeId": representatives[i].id }),
+                  onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
                 ),
                 separatorBuilder: (context, index) {
                   return Divider();

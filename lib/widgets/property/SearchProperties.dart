@@ -79,7 +79,7 @@ class _SearchPropertiesState extends State<SearchProperties> {
                 itemBuilder: (_, i) => ListTile(
                   title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
                   // subtitle: Text(DateFormat('dd/MM/yyyy').format(properties[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/property', arguments: { "propertyId": properties[i].id }),
+                  onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
                 ),
                 separatorBuilder: (context, index) {
                   return Divider();

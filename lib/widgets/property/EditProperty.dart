@@ -58,7 +58,14 @@ class _EditPropertyState extends State<EditProperty> {
         }
 
         if (result.data == null || result.loading)
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Éditer une propriété'),
+            ),
+            body: Center(
+              child: CircularProgressIndicator()
+            )
+          );
         
         return Mutation(
           options: MutationOptions(

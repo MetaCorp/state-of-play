@@ -78,7 +78,7 @@ class _SearchTenantsState extends State<SearchTenants> {
                 itemBuilder: (_, i) => ListTile(
                   title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
                   // subtitle: Text(DateFormat('dd/MM/yyyy').format(tenants[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/tenant', arguments: { "tenantId": tenants[i].id }),
+                  onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
                 ),
                 separatorBuilder: (context, index) {
                   return Divider();

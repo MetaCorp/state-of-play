@@ -78,7 +78,7 @@ class _SearchOwnersState extends State<SearchOwners> {
                 itemBuilder: (_, i) => ListTile(
                   title: Text(owners[i].firstName + ' ' + owners[i].lastName),
                   // subtitle: Text(DateFormat('dd/MM/yyyy').format(owners[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/owner', arguments: { "ownerId": owners[i].id }),
+                  onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
                 ),
                 separatorBuilder: (context, index) {
                   return Divider();

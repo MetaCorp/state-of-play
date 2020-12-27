@@ -50,7 +50,14 @@ class _EditTenantState extends State<EditTenant> {
         }
 
         if (result.data == null || result.loading)
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Éditer un locataire'),
+            ),
+            body: Center(
+              child: CircularProgressIndicator()
+            )
+          );
         
         return Mutation(
           options: MutationOptions(

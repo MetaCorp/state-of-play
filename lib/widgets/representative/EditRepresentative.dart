@@ -51,7 +51,14 @@ class _EditRepresentativeState extends State<EditRepresentative> {
         }
 
         if (result.data == null || result.loading)
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Éditer un mandataire'),
+            ),
+            body: Center(
+              child: CircularProgressIndicator()
+            )
+          );
         
         return Mutation(
           options: MutationOptions(

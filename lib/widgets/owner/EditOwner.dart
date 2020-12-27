@@ -51,7 +51,14 @@ class _EditOwnerState extends State<EditOwner> {
         }
 
         if (result.data == null || result.loading)
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Éditer un propriétaire'),
+            ),
+            body: Center(
+              child: CircularProgressIndicator()
+            )
+          );
         
         return Mutation(
           options: MutationOptions(
@@ -96,7 +103,7 @@ class _EditOwnerState extends State<EditOwner> {
               ) {
                 
                 return NewInterlocutorContent(
-                  title: 'Éditer un mandataire',
+                  title: 'Éditer un propriétaire',
                   interlocutor: owner,
                   onSave: (owner) async {
                     print('runUpdateMutation');

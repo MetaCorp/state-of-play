@@ -19,9 +19,15 @@ class ListTileInterlocutor extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(text != null ? text : labelText),
-          Spacer(),
+          Flexible(
+            child: Text(
+              text != null ? text : labelText,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          // Spacer(),
           IconButton(
             icon: text != null ? Icon(Icons.close) : Icon(Icons.add),
             onPressed: text != null ? onPressRemove : onPressAdd,
