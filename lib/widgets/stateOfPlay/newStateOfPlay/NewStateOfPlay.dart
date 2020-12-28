@@ -23,7 +23,7 @@ class NewStateOfPlay extends StatefulWidget {
 
 class _NewStateOfPlayState extends State<NewStateOfPlay> {
 
-  var uuid = Uuid(); 
+  var uuid = Uuid();
   
   sop.StateOfPlay _stateOfPlay;
   
@@ -497,6 +497,12 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "date": _stateOfPlay.date.toString(),
                     "city": _stateOfPlay.city.toString(),
                     "entryExitDate": _stateOfPlay.entryExitDate.toString(),
+                    "newPdf": MultipartFile.fromBytes(
+                      'pdf',
+                      _stateOfPlay.newPdf.readAsBytesSync(),
+                      filename: '${uuid.v1()}.pdf',
+                      contentType: MediaType("image", "pdf"),
+                    )
                   }
                 });
 

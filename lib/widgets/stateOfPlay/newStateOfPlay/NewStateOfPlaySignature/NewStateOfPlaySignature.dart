@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:open_file/open_file.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/GeneratePdf.dart';
@@ -129,7 +130,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     SizedBox(height: 24),             
                     RaisedButton(
                       child: Text("Visualiser l'état des lieux"),
-                      onPressed: () {
+                      onPressed: () async {
 
                         if (widget.formKey.currentState.validate()) {
                           widget.formKey.currentState.save();
@@ -208,7 +209,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                           }
 
 
-                          generatePdf(widget.stateOfPlay);
+                          widget.stateOfPlay.newPdf = await generatePdf(widget.stateOfPlay);
+                          print('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
+                          OpenFile.open(widget.stateOfPlay.newPdf.path);
+
                         }
                         // widget.onSave();// TODO: save
                       },

@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'package:http/http.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
@@ -160,6 +166,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                   firstName
                   lastName
                 }
+                pdf
               }
             }
             '''),
@@ -235,7 +242,29 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                         actionPane: SlidableDrawerActionPane(),
                         actionExtentRatio: 0.25,
                         child: ListTile(
-                          title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                              IconButton(
+                                icon: Icon(Icons.text_snippet),
+                                onPressed: () async {
+                                  Directory tempDir = await getTemporaryDirectory();
+                                  String tempPath = tempDir.path;
+
+                                  String fileName = stateOfPlays[i].pdf.substring(stateOfPlays[i].pdf.lastIndexOf('/') + 1);
+                                  File pdf = File(tempPath + '/' + fileName);
+
+                                  var request = await get(stateOfPlays[i].pdf);
+                                  var bytes = await request.bodyBytes;
+                                  await pdf.writeAsBytes(bytes);
+
+                                  OpenFile.open(pdf.path);
+
+                                }
+                              )
+                            ]
+                          ),
                           subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
                           onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
                         ),

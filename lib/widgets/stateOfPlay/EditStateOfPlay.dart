@@ -131,6 +131,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     entryExitDate
                     documentHeader
                     documentEnd
+                    pdf
                   }
                 }
               '''),
@@ -146,7 +147,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
               FetchMore fetchMore,
             }) {
 
-              if (_stateOfPlay == null && result.data != null) {
+              if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
                 print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
                 _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
               }
