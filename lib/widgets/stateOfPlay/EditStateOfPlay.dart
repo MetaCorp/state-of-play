@@ -340,6 +340,12 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "date": _stateOfPlay.date.toString(),
                           "city": _stateOfPlay.city.toString(),
                           "entryExitDate": _stateOfPlay.entryExitDate.toString(),
+                          "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
+                            'pdf',
+                            _stateOfPlay.newPdf.readAsBytesSync(),
+                            filename: '${uuid.v1()}.pdf',
+                            contentType: MediaType("image", "pdf"),
+                          ) : null
                         }
                       });
 

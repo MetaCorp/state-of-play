@@ -250,6 +250,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
     images: []
   );
 
+  sop.User user;
+
+
   void _showDialogLeave (context) async {
     await showDialog(
       context: context,
@@ -291,9 +294,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               postalCode
               city
               logo
+              credits
             }
           }
-        ''')
+        '''),
+        fetchPolicy: FetchPolicy.noCache,
       ),
       builder: (
         QueryResult result, {
@@ -310,8 +315,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           );
         }
 
-        sop.User user;
-        if (result.data != null && !result.loading) {
+        if (result.data != null && result.data["user"] != null && !result.loading && user == null) {
           print('NewStateOfPlay user: ' + result.data["user"].toString());
           user = sop.User.fromJSON(result.data["user"]);
         }
@@ -350,6 +354,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             return NewStateOfPlayContent(
               title: "Nouvel état des lieux",
               saveLoading: result.loading,
+              user: user,
               onSave: () async {
                 print("onSave");
 
@@ -497,12 +502,12 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                     "date": _stateOfPlay.date.toString(),
                     "city": _stateOfPlay.city.toString(),
                     "entryExitDate": _stateOfPlay.entryExitDate.toString(),
-                    "newPdf": MultipartFile.fromBytes(
+                    "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
                       'pdf',
                       _stateOfPlay.newPdf.readAsBytesSync(),
                       filename: '${uuid.v1()}.pdf',
                       contentType: MediaType("image", "pdf"),
-                    )
+                    ) : null
                   }
                 });
 
@@ -516,14 +521,14 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                   }
                   else
                     print("networkResult clientException: " + networkResult.exception.clientException.message);
-                  return;//TODO: show error
+                  return false;//TODO: show error
                 }
                 print("");
                 print("");
                 
                 Navigator.pop(context);
                 Navigator.popAndPushNamed(context, "/state-of-plays");
-
+                return true;
               },
               stateOfPlay: _stateOfPlay,
             );

@@ -249,17 +249,19 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                               IconButton(
                                 icon: Icon(Icons.text_snippet),
                                 onPressed: () async {
-                                  Directory tempDir = await getTemporaryDirectory();
-                                  String tempPath = tempDir.path;
+                                  if (stateOfPlays[i].pdf != null) {
+                                    Directory tempDir = await getTemporaryDirectory();
+                                    String tempPath = tempDir.path;
 
-                                  String fileName = stateOfPlays[i].pdf.substring(stateOfPlays[i].pdf.lastIndexOf('/') + 1);
-                                  File pdf = File(tempPath + '/' + fileName);
+                                    String fileName = stateOfPlays[i].pdf.substring(stateOfPlays[i].pdf.lastIndexOf('/') + 1);
+                                    File pdf = File(tempPath + '/' + fileName);
 
-                                  var request = await get(stateOfPlays[i].pdf);
-                                  var bytes = await request.bodyBytes;
-                                  await pdf.writeAsBytes(bytes);
+                                    var request = await get(stateOfPlays[i].pdf);
+                                    var bytes = await request.bodyBytes;
+                                    await pdf.writeAsBytes(bytes);
 
-                                  OpenFile.open(pdf.path);
+                                    OpenFile.open(pdf.path);
+                                  }
 
                                 }
                               )

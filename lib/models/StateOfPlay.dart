@@ -648,6 +648,7 @@ class User {
     this.logo,
     this.newLogo,
     this.email,
+    this.credits,
   });
 
   String firstName;
@@ -663,6 +664,7 @@ class User {
   List<Property> properties;
   bool paidOnce;
   String logo;
+  int credits;
 
   File newLogo;
 
@@ -682,7 +684,8 @@ class User {
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
       logo: json["logo"],
       newLogo: null,
-      email: json["email"]
+      email: json["email"],
+      credits: json["credits"]
     );
   }
 }

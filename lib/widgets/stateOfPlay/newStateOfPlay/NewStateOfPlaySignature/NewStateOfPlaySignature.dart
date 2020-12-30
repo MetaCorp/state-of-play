@@ -1,24 +1,24 @@
 import 'dart:typed_data';
-import 'package:open_file/open_file.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignatureSignature.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
-typedef SaveCallback = void Function();
+typedef SaveCallback = Function();
 
 
 class NewStateOfPlaySignature extends StatefulWidget {
-  NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay, this.formKey }) : super(key: key);
+  NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay, this.formKey, this.isPdfLoading }) : super(key: key);
 
   //final only if signature not to set ? bad idea ?
   final SaveCallback onSave;
   final sop.StateOfPlay stateOfPlay;
   final GlobalKey<FormState> formKey;
+  final bool isPdfLoading;
 
   @override
   _NewStateOfPlaySignatureState createState() => new _NewStateOfPlaySignatureState();
@@ -128,94 +128,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     buildSignatures(),
                     buildSignatureRowsTenants(),
                     SizedBox(height: 24),             
-                    RaisedButton(
+                    RaisedButtonLoading(
                       child: Text("Visualiser l'état des lieux"),
-                      onPressed: () async {
-
-                        if (widget.formKey.currentState.validate()) {
-                          widget.formKey.currentState.save();
-                          for (var i = 0; i < widget.stateOfPlay.rooms.length; i++) {
-                            
-                            for (var j = 0; j < widget.stateOfPlay.rooms[i].decorations.length; j++) {
-                              
-                              for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].images.length; k++) {
-                                
-                                widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                                widget.stateOfPlay.images.add({
-                                  "type": "network",
-                                  "image": widget.stateOfPlay.rooms[i].decorations[j].images[k]
-                                });
-
-                              }
-
-                              for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
-                                
-                                widget.stateOfPlay.rooms[i].decorations[j].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                                widget.stateOfPlay.images.add({
-                                  "type": "file",
-                                  "image": widget.stateOfPlay.rooms[i].decorations[j].newImages[k]
-                                });
-
-                              }
-                            }
-                          }
-
-                          for (var i = 0; i < widget.stateOfPlay.meters.length; i++) {
-                            
-                            for (var j = 0; j < widget.stateOfPlay.meters[i].images.length; j++) {
-                              
-                              widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                              widget.stateOfPlay.images.add({
-                                "type": "network",
-                                "image": widget.stateOfPlay.meters[i].images[j]
-                              });
-                            }
-
-                            for (var j = 0; j < widget.stateOfPlay.meters[i].newImages.length; j++) {
-                              
-                              widget.stateOfPlay.meters[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                              widget.stateOfPlay.images.add({
-                                "type": "file",
-                                "image": widget.stateOfPlay.meters[i].newImages[j]
-                              });
-                            }
-                          }
-
-                          for (var i = 0; i < widget.stateOfPlay.keys.length; i++) {
-                            
-                            for (var j = 0; j < widget.stateOfPlay.keys[i].images.length; j++) {
-                              
-                              widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                              widget.stateOfPlay.images.add({
-                                "type": "network",
-                                "image": widget.stateOfPlay.keys[i].images[j]
-                              });
-                            }
-
-                            for (var j = 0; j < widget.stateOfPlay.keys[i].newImages.length; j++) {
-                              
-                              widget.stateOfPlay.keys[i].imageIndexes.add(widget.stateOfPlay.images.length);
-
-                              widget.stateOfPlay.images.add({
-                                "type": "file",
-                                "image": widget.stateOfPlay.keys[i].newImages[j]
-                              });
-                            }
-                          }
-
-
-                          widget.stateOfPlay.newPdf = await generatePdf(widget.stateOfPlay);
-                          print('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
-                          OpenFile.open(widget.stateOfPlay.newPdf.path);
-
-                        }
-                        // widget.onSave();// TODO: save
-                      },
+                      onPressed: () => widget.onSave(),
+                      loading: widget.isPdfLoading,
                     )
                   ],
                 ),
