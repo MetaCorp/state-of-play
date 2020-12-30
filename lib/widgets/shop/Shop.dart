@@ -42,13 +42,6 @@ class _ShopState extends State<Shop> {
               id
               firstName
               lastName
-              company
-              documentHeader
-              documentEnd
-              address
-              postalCode
-              city
-              logo
               credits
             }
           }
@@ -70,8 +63,8 @@ class _ShopState extends State<Shop> {
         Widget body = Mutation(
           options: MutationOptions(
             documentNode: gql('''
-              mutation pay {
-                pay
+              mutation pay(\$data: PayInput!) {
+                pay(data: \$data)
               }
             '''), // this is the mutation string you just created
             // you can update the cache based on results
@@ -96,11 +89,27 @@ class _ShopState extends State<Shop> {
                     loading: loadings[0],
                     price: 4.99,
                     onPress: () async {
-                      MultiSourceResult result = runMutation({});
+                      MultiSourceResult result = runMutation({
+                        "data": {
+                          "amount": 1
+                        }
+                      });
                 
                       setState(() { loadings[0] = true; });
                       QueryResult queryResult = await result.networkResult;
                       setState(() { loadings[0] = false; });
+                      print('payResult: ' + queryResult.loading.toString());
+                      print('payResult hasException: ' + queryResult.hasException.toString());
+                      print('payResult data: ' + queryResult.data.toString());
+                      if (queryResult.hasException) {
+                        if (queryResult.exception.graphqlErrors.length > 0) { 
+                          print("payResult exception: " + queryResult.exception.graphqlErrors[0].toString());
+                          print("payResult exception: " + queryResult.exception.graphqlErrors[0].extensions.toString());
+                        }
+                        else
+                          print("payResult clientException: " + queryResult.exception.clientException.message);
+                      }
+                      print('');
                     }
                   ),
                   Divider(),
@@ -109,7 +118,11 @@ class _ShopState extends State<Shop> {
                     loading: loadings[1],
                     price: 19.99,
                     onPress: () async {
-                      MultiSourceResult result = runMutation({});
+                      MultiSourceResult result = runMutation({
+                        "data": {
+                          "amount": 5
+                        }
+                      });
                 
                       setState(() { loadings[1] = true; });
                       QueryResult queryResult = await result.networkResult;
@@ -122,7 +135,11 @@ class _ShopState extends State<Shop> {
                     loading: loadings[2],
                     price: 34.99,
                     onPress: () async {
-                      MultiSourceResult result = runMutation({});
+                      MultiSourceResult result = runMutation({
+                        "data": {
+                          "amount": 10
+                        }
+                      });
                 
                       setState(() { loadings[2] = true; });
                       QueryResult queryResult = await result.networkResult;

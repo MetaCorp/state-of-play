@@ -24,6 +24,8 @@ class _MyScaffoldState extends State<MyScaffold> {
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   TextStyle _smallTextStyle = new TextStyle( fontSize: 7 );
   TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold, color: Colors.grey[700]);
+        
+  sop.User user;
 
   @override
   void initState() {
@@ -83,20 +85,19 @@ class _MyScaffoldState extends State<MyScaffold> {
         FetchMore fetchMore,
       }) {
 
-        print('userResult: ' + result.loading.toString());
-        print('userResult hasException: ' + result.hasException.toString());
-        print('userResult data: ' + result.data.toString());
-        if (result.hasException) {
-          if (result.exception.graphqlErrors.length > 0) { 
-            print("userResult exception: " + result.exception.graphqlErrors[0].toString());
-            print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
-          }
-          else
-            print("userResult clientException: " + result.exception.clientException.message);
-        }
-        print('');
+        // print('userResult: ' + result.loading.toString());
+        // print('userResult hasException: ' + result.hasException.toString());
+        // print('userResult data: ' + result.data.toString());
+        // if (result.hasException) {
+        //   if (result.exception.graphqlErrors.length > 0) { 
+        //     print("userResult exception: " + result.exception.graphqlErrors[0].toString());
+        //     print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+        //   }
+        //   else
+        //     print("userResult clientException: " + result.exception.clientException.message);
+        // }
+        // print('');
 
-        sop.User user;
         if (result.data != null && result.data["user"] != null && !result.loading) {
           user = sop.User.fromJSON(result.data["user"]);
           print('user: ' + user.firstName.toString());
