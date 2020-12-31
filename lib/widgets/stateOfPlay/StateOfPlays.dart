@@ -31,14 +31,6 @@ class _StateOfPlaysState extends State<StateOfPlays> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
-        context,
-        const <String>{ // Feature ids for every feature that you want to showcase in order.
-          'search_sop',
-        },
-      ); 
-    });
     super.initState();
   }
 
@@ -222,7 +214,15 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             print('stateOfPlays length: ' + stateOfPlays.length.toString());
 
             if (stateOfPlays.length == 0) {
-              return Text("no stateOfplays");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Pas d'état des lieux pour le moment.",
+                  style: TextStyle(
+                    color: Colors.grey[600]
+                  )
+                )
+              );
             }
 
 

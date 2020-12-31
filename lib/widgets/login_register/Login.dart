@@ -75,6 +75,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox( height: 28,),
                   Center(child: Image.asset('assets/Logo/1/logo.png'),),
                   SizedBox( height: 28,),
                   TextField(

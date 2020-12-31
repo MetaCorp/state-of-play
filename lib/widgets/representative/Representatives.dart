@@ -129,7 +129,15 @@ class _OwnersState extends State<Representatives> {
             print('parsed data: ' + representatives.toString());
 
             if (representatives.length == 0) {
-              return Text("no representatives");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Pas de mandataire pour le moment.",
+                  style: TextStyle(
+                    color: Colors.grey[600]
+                  )
+                )
+              );
             }
 
             return Mutation(

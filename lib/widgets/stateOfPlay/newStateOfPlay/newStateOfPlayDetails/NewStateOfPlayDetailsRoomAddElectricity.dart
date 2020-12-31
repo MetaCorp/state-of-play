@@ -195,7 +195,15 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
           print('electricities length: ' + electricities.length.toString());
 
           if (electricities.length == 0) {
-            body = Text("no electricity");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(

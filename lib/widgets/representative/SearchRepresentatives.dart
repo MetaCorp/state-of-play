@@ -68,7 +68,15 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
           print('stateOfPlays length: ' + representatives.length.toString());
 
           if (representatives.length == 0) {
-            body = Text("no representatives");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Container(

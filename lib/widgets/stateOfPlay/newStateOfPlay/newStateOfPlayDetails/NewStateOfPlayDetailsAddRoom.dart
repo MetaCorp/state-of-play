@@ -209,7 +209,15 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
           print('rooms length: ' + rooms.length.toString());
 
           if (rooms.length == 0) {
-            body = Text("no room");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(
@@ -309,8 +317,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               DescribedFeatureOverlay(
                 featureId: 'validate_rooms',
                 tapTarget: Icon(Icons.check),
-                title: Text('Valider les pièces sélectionner'),
-                description: Text("Pour valider les pièces sélectionner, cliquez sur le bouton check."),
+                title: Text('Valider les pièces sélectionnées'),
+                description: Text("Pour valider les pièces sélectionnées, cliquez sur le bouton check."),
                 child: IconButton(
                   icon: Icon(Icons.check),
                   onPressed: () {

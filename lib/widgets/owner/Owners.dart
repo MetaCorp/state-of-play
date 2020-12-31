@@ -131,7 +131,15 @@ class _OwnersState extends State<Owners> {
             print('parsed data: ' + owners.toString());
 
             if (owners.length == 0) {
-              return Text("no owners");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Pas de propriétaire pour le moment.",
+                  style: TextStyle(
+                    color: Colors.grey[600]
+                  )
+                )
+              );
             }
 
             return Mutation(
