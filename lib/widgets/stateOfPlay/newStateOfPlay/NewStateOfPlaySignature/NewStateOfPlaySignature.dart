@@ -28,7 +28,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
 
   @override
   void initState() {
-    widget.stateOfPlay.signatureTenants = new List(widget.stateOfPlay.tenants.length);
+    widget.stateOfPlay.signatureTenants ??= new List();
 
     super.initState();
   }
@@ -60,6 +60,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 onSaved: (value) => widget.stateOfPlay.documentHeader = value,
                 keyboardType: TextInputType.multiline,
                 maxLength: 256,
+                minLines: 1,
                 maxLines: 2,
               ),
               SizedBox(height: sizedBoxHeight),
@@ -95,7 +96,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               //     ),
               //   ),
               // ),
-              SizedBox(height: sizedBoxHeight),
+              SizedBox(height: sizedBoxHeight*2),
               MyTextFormField(
                 initialValue: widget.stateOfPlay.city,
                 decoration: InputDecoration(labelText: 'Fait à'),

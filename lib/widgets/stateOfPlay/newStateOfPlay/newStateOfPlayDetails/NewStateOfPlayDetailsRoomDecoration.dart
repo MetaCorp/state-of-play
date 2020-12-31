@@ -30,14 +30,23 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
+  int count = 0;
 
-  int count = 1;
   Future<String> getFilePath() async {
-    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
-    String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/img$count.png';
-    count++; // 3
+    List<File> file = new List();
 
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path;
+    String filePath = '$appDocumentsPath/NewStateOdfPlay/RoomDecoration/img$count.png';
+
+    file = Directory("$appDocumentsPath/NewStateOdfPlay/RoomDecoration/").listSync();  //use your folder name insted of resume.   
+    while(file.contains( (element) => (element.path == filePath))){
+      count++;
+      print(file[count].path);
+      print("count:"+count.toString());
+
+      filePath = '$appDocumentsPath/NewStateOdfPlay/RoomDecoration/img$count.png';
+    }
     return filePath;
   }
 

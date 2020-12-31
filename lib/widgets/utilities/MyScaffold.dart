@@ -5,8 +5,10 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/SearchStateOfPlays.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.dart';
-
 import 'package:flutter_tests/widgets/utilities/MyDrawer.dart';
+
+import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
+
 
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
@@ -184,7 +186,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          Icons.home,
+                                          EDLIcons.edlRight,
                                           size: 36,
                                           color: Colors.grey[700],
                                         ),
@@ -255,7 +257,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          Icons.home,
+                                          EDLIcons.edlLeft,
                                           size: 36,
                                           color: Colors.grey[700],
                                         ),

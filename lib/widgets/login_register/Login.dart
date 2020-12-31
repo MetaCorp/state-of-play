@@ -69,65 +69,69 @@ class _LoginState extends State<Login> {
             centerTitle: true,
             automaticallyImplyLeading: false,
           ),
-          body: Container(
-            margin: EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email'
+          body: SingleChildScrollView(
+              child: Container(
+              margin: EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Image.asset('assets/Logo/1/logo.png'),),
+                  SizedBox( height: 28,),
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email'
+                    ),
                   ),
-                ),
-                SizedBox( height: 32,),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password'
+                  SizedBox( height: 28,),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password'
+                    ),
+                    obscureText: true,
                   ),
-                  obscureText: true,
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                RaisedButtonLoading(
-                  child: Text('Se connecter'),
-                  color: Theme.of(context).primaryColor,
-                  loading: result.loading,
-                  onPressed: () async {
-                    MultiSourceResult result = runMutation({
-                      "email": _emailController.text,
-                      "password": _passwordController.text
-                    });
+                  SizedBox(
+                    height: 60,
+                  ),
+                  RaisedButtonLoading(
+                    child: Text('Se connecter'),
+                    color: Theme.of(context).primaryColor,
+                    loading: result.loading,
+                    onPressed: () async {
+                      MultiSourceResult result = runMutation({
+                        "email": _emailController.text,
+                        "password": _passwordController.text
+                      });
 
-                    QueryResult networkResult = await result.networkResult;
+                      QueryResult networkResult = await result.networkResult;
 
-                    if (networkResult.hasException) {
-                    
-                    }
-                    else {
-                      print('queryResult data: ' + networkResult.data.toString());
-                      if (networkResult.data != null) {
-                        if (networkResult.data["login"] == null) {
-                          // TODO: show error
-                        }
-                        else if (networkResult.data["login"] != null) {
-                          _prefs.setString("token", networkResult.data["login"]);
-                          Navigator.popAndPushNamed(context, '/state-of-plays');
+                      if (networkResult.hasException) {
+                      
+                      }
+                      else {
+                        print('queryResult data: ' + networkResult.data.toString());
+                        if (networkResult.data != null) {
+                          if (networkResult.data["login"] == null) {
+                            // TODO: show error
+                          }
+                          else if (networkResult.data["login"] != null) {
+                            _prefs.setString("token", networkResult.data["login"]);
+                            Navigator.popAndPushNamed(context, '/state-of-plays');
+                          }
                         }
                       }
                     }
-                  }
-                ),
-                SizedBox( height: 32,),
-                FlatButton(
-                  child: Text('S\'inscrire'),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, '/register');
-                  },
-                )
-              ],
+                  ),
+                  SizedBox( height: 18,),
+                  FlatButton(
+                    child: Text('S\'inscrire'),
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, '/register');
+                    },
+                  )
+                ],
+              ),
             ),
           )
         );

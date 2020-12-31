@@ -5,6 +5,7 @@ typedef SavedCallback = Function(String);
 typedef ValidatorCallback = String Function(String);
 
 class MyTextFormField extends StatelessWidget {
+
   const MyTextFormField({
     Key key,
     this.initialValue,
@@ -13,7 +14,8 @@ class MyTextFormField extends StatelessWidget {
     this.maxLength,
     this.validator,
     this.keyboardType,
-    this.maxLines
+    this.maxLines,
+    this.minLines,
   }) : super(key: key);
 
   final String initialValue;
@@ -23,6 +25,8 @@ class MyTextFormField extends StatelessWidget {
   final ValidatorCallback validator;
   final TextInputType keyboardType;
   final int maxLines;
+  final int minLines;
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,7 @@ class MyTextFormField extends StatelessWidget {
       maxLength: maxLength,
       keyboardType: keyboardType,
       maxLines: maxLines,
+      minLines: minLines,
     );
   }
 }

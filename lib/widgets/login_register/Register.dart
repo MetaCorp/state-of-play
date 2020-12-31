@@ -70,87 +70,95 @@ class _RegisterState extends State<Register> {
           appBar: AppBar(
             centerTitle: true,
             title: Text('Inscription'),
+            automaticallyImplyLeading: true,
+            leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () { Navigator.popAndPushNamed(context, '/login'); },),
           ),
-          body: Container(
-            margin: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email'
+          body: SingleChildScrollView(
+              child: Container(
+              margin: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 18,
                   ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: _firstNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Prénom'
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email'
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: _lastNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Nom'
+                  SizedBox(
+                    height: 28,
                   ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password'
+                  TextField(
+                    controller: _firstNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Prénom'
+                    ),
                   ),
-                  obscureText: true,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                RaisedButtonLoading(
-                  child: Text('S\'inscrire'),
-                  color: Theme.of(context).primaryColor,
-                  loading: result.loading,
-                  onPressed: () async {
-                    MultiSourceResult result = runMutation({
-                      "data": {
-                        "email": _emailController.text,
-                        "firstName": _firstNameController.text,
-                        "lastName": _lastNameController.text,
-                        "password": _passwordController.text
-                      }
-                    });
-
-                    QueryResult networkResult =  await result.networkResult;
-
-                    if (networkResult.hasException) {
-                      // TODO display snackbar (email already in use)
-                    } else {
-                      print('queryResult data: ' + networkResult.data.toString());
-                      if (networkResult.data != null) {
-                        if (networkResult.data["register"] == null) {
-                          // TODO: show error
+                  SizedBox(
+                    height: 28,
+                  ),
+                  TextField(
+                    controller: _lastNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Nom'
+                    ),
+                  ),
+                  SizedBox(
+                    height: 28,
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password'
+                    ),
+                    obscureText: true,
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  RaisedButtonLoading(
+                    child: Text('S\'inscrire'),
+                    color: Theme.of(context).primaryColor,
+                    loading: result.loading,
+                    onPressed: () async {
+                      MultiSourceResult result = runMutation({
+                        "data": {
+                          "email": _emailController.text,
+                          "firstName": _firstNameController.text,
+                          "lastName": _lastNameController.text,
+                          "password": _passwordController.text
                         }
-                        else if (networkResult.data["register"] != null) {
-                          _prefs.setString("token", networkResult.data["register"]);
-                          Navigator.popAndPushNamed(context, '/state-of-plays');
+                      });
+
+                      QueryResult networkResult =  await result.networkResult;
+
+                      if (networkResult.hasException) {
+                        // TODO display snackbar (email already in use)
+                      } else {
+                        print('queryResult data: ' + networkResult.data.toString());
+                        if (networkResult.data != null) {
+                          if (networkResult.data["register"] == null) {
+                            // TODO: show error
+                          }
+                          else if (networkResult.data["register"] != null) {
+                            _prefs.setString("token", networkResult.data["register"]);
+                            Navigator.popAndPushNamed(context, '/state-of-plays');
+                          }
                         }
                       }
                     }
-                  }
-                ),
-                FlatButton(
-                  child: Text('Se connecter'),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, '/login');
-                  },
-                )
-              ],
+                  ),
+                  SizedBox( height: 18,),
+                  FlatButton(
+                    child: Text('Se connecter'),
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, '/login');
+                    },
+                  )
+                ],
+              ),
             ),
           )
         );
