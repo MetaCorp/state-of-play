@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 typedef PressedCallback = Function();
 
 class RaisedButtonLoading extends StatelessWidget {
-  const RaisedButtonLoading({ Key key, this.child, this.loading, this.color, this.onPressed }) : super(key: key);
+  const RaisedButtonLoading({ Key key, this.child, this.loading = false, this.color, this.onPressed }) : super(key: key);
 
   final Widget child;
   final bool loading;
@@ -22,7 +22,7 @@ class RaisedButtonLoading extends StatelessWidget {
             height: 16,
             width: 16,
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[600]),
               strokeWidth: 2,
             )
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 
 import 'package:open_file/open_file.dart';
 import 'package:flutter_tests/GeneratePdf.dart';
@@ -237,11 +238,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
-          _selectedIndex == _tabsContent.length - 1 ? (widget.saveLoading || _isPdfLoading) ? IconButton(// TODO: _isPdfLoading doesnt work
-            icon: CircularProgressIndicator(),
-            onPressed: null,
-          ) : IconButton(
+        actions: [// TODO : isPdfLoading doesnt work
+          _selectedIndex == _tabsContent.length - 1 ? IconButtonLoading(
+            loading: widget.saveLoading || _isPdfLoading,
             icon: Icon(Icons.check),
             onPressed: () => _onSave(),
           ) : Container(),

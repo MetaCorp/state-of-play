@@ -714,10 +714,10 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
                               borderRadius: 2
                             ),
                             height: 20,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 5, right: 20, bottom: 15),
+                            padding: const pw.EdgeInsets.only(left: 20, top: 5, right: 5, bottom: 15),
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlay.out ? 'Date de sortie : ' : "Date d'entrée : " + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryExitDate),
+                              (stateOfPlay.out ? 'Date de sortie : ' : "Date d'entrée : ") + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryExitDate),
                               style: pw.TextStyle(
                                 color: PdfColors.white,
                                 fontSize: 9

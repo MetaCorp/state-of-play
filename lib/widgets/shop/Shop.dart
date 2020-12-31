@@ -98,18 +98,6 @@ class _ShopState extends State<Shop> {
                       setState(() { loadings[0] = true; });
                       QueryResult queryResult = await result.networkResult;
                       setState(() { loadings[0] = false; });
-                      print('payResult: ' + queryResult.loading.toString());
-                      print('payResult hasException: ' + queryResult.hasException.toString());
-                      print('payResult data: ' + queryResult.data.toString());
-                      if (queryResult.hasException) {
-                        if (queryResult.exception.graphqlErrors.length > 0) { 
-                          print("payResult exception: " + queryResult.exception.graphqlErrors[0].toString());
-                          print("payResult exception: " + queryResult.exception.graphqlErrors[0].extensions.toString());
-                        }
-                        else
-                          print("payResult clientException: " + queryResult.exception.clientException.message);
-                      }
-                      print('');
                     }
                   ),
                   Divider(),
@@ -152,24 +140,38 @@ class _ShopState extends State<Shop> {
           }
         );
 
+        Widget appBar = AppBar(
+          title: Text('Boutique'),
+          actions: [// TODO : result.loading doesnt work
+            user == null || result.loading || result.data == null ? Container(
+              child: IconButton(
+                  icon: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator()
+                ),
+              )
+            ) : Container(
+              margin: EdgeInsets.only(top: 16, right: 16),
+              child: Text(
+                user.credits.toString() + ' crédits',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              )
+            )
+          ],
+        );
+
 
         return WillPopScope(
           onWillPop: () => _onWillPop(user),
           child: widget.isPopup ? Scaffold(
-            appBar: AppBar(
-              title: Text('Boutique'),
-              actions: [// TODO : result.loading doesnt work
-                user == null || result.loading || result.data == null ? CircularProgressIndicator() : Text(user.credits.toString() + ' crédits')
-              ],
-            ),
+            appBar: appBar,
             body: body
           ) : MyScaffold(
-            appBar: AppBar(
-              title: Text('Boutique'),
-              actions: [// TODO : result.loading doesnt work
-                user == null || result.loading || result.data == null ? CircularProgressIndicator() : Text(user.credits.toString() + ' crédits')
-              ],
-            ),
+            appBar: appBar,
             body: body
           ),
         );

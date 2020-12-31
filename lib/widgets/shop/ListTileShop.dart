@@ -34,7 +34,7 @@ class ListTileShop extends StatelessWidget {
                     height: 16,
                     width: 16,
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[600]),
                       strokeWidth: 2,
                     )
                   ),
