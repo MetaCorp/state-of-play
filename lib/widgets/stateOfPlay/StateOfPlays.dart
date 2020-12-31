@@ -12,6 +12,9 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 
+import 'package:feature_discovery/feature_discovery.dart';
+
+
 class StateOfPlays extends StatefulWidget {
   StateOfPlays({Key key}) : super(key: key);
 
@@ -25,6 +28,19 @@ class _StateOfPlaysState extends State<StateOfPlays> {
 
   bool _in = false;
   bool _out = true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'search_sop',
+        },
+      ); 
+    });
+    super.initState();
+  }
 
   void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
     await showDialog(
@@ -129,9 +145,15 @@ class _StateOfPlaysState extends State<StateOfPlays> {
       appBar: AppBar(
         title: Text('États des lieux'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+          DescribedFeatureOverlay(
+            featureId: 'search_sop',
+            tapTarget: Icon(Icons.search),
+            title: Text('Recherche'),
+            description: Text('Accédez à la recherche'),
+            child: IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+            ),
           ),
           IconButton(
             icon: Icon(Icons.filter_list),

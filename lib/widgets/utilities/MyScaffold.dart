@@ -8,6 +8,8 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.
 
 import 'package:flutter_tests/widgets/utilities/MyDrawer.dart';
 
+import 'package:feature_discovery/feature_discovery.dart';
+
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
 
@@ -29,7 +31,14 @@ class _MyScaffoldState extends State<MyScaffold> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'add_sop',
+        },
+      ); 
+    });
     super.initState();
     _bottomSheetOpen = false;
   }
@@ -108,191 +117,196 @@ class _MyScaffoldState extends State<MyScaffold> {
           appBar: widget.appBar,
           body: widget.body,
           drawer: MyDrawer(user: user),
-          floatingActionButton: FloatingActionButton(
-            // Put animation Icon rotation
-            // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
-            backgroundColor: Theme.of(context).primaryColor,
-            child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
-            onPressed: () {
-              if (_bottomSheetOpen) {
-                Navigator.pop(context);
-                return;
-              }
+          floatingActionButton: DescribedFeatureOverlay(
+            featureId: 'add_sop',
+            tapTarget: Icon(Icons.add),
+            title: Text('Ajoutez un état des lieux'),
+            child: FloatingActionButton(
+              // Put animation Icon rotation
+              // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
+              backgroundColor: Theme.of(context).primaryColor,
+              child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
+              onPressed: () {
+                if (_bottomSheetOpen) {
+                  Navigator.pop(context);
+                  return;
+                }
 
-              if (user == null)
-                return;
+                if (user == null)
+                  return;
 
-              if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
-                _showDialogPaidOnce(context);
-                return;
-              }
+                if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
+                  _showDialogPaidOnce(context);
+                  return;
+                }
 
-              if (_bottomSheetOpen == false) {
-                print('open BottomSheet');          
-                setState(() { 
-                  _bottomSheetOpen = true;
-                  print("VALUE:"+_bottomSheetOpen.toString()); 
-                });
-                globalKey.currentState.showBottomSheet((context) {            
-                  return Container(
-                    color: Colors.grey[200],
-                    height: 150,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              children: [
-                                Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("Nouvel\nEDL d'entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
+                if (_bottomSheetOpen == false) {
+                  print('open BottomSheet');          
+                  setState(() { 
+                    _bottomSheetOpen = true;
+                    print("VALUE:"+_bottomSheetOpen.toString()); 
+                  });
+                  globalKey.currentState.showBottomSheet((context) {            
+                    return Container(
+                      color: Colors.grey[200],
+                      height: 150,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                children: [
+                                  Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  FlatButton(
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                                    minWidth: 0,
+                                    height: 0,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.add,
+                                            size: 36,
+                                            color: Colors.grey[700],
+                                          ),
+                                          //add space
+                                          Text("Nouvel\nEDL d'entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                        ],
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
-                                  },
-                                ),
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.home,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
+                                  FlatButton(
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                                    minWidth: 0,
+                                    height: 0,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.home,
+                                            size: 36,
+                                            color: Colors.grey[700],
+                                          ),
+                                          //add space
+                                          Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                        ],
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                        out: true,
+                                        sIn: false,
+                                        onSelect: (stateOfPlayId) {
+                                          print("onSelect");
+                                          Navigator.pop(globalKey.currentContext);
+                                          Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
+                                        }
+                                      ),),);
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                      out: true,
-                                      sIn: false,
-                                      onSelect: (stateOfPlayId) {
-                                        print("onSelect");
-                                        Navigator.pop(globalKey.currentContext);
-                                        Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
-                                      }
-                                    ),),);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        VerticalDivider(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children :[
-                            Row(
-                              children: [
-                                Center(child:Text("Sortie",style: _titleTextStyle, textAlign: TextAlign.center,)),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("Nouvel\nEDL de sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
+                                ],
+                              ),
+                            ],
+                          ),
+                          VerticalDivider(),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children :[
+                              Row(
+                                children: [
+                                  Center(child:Text("Sortie",style: _titleTextStyle, textAlign: TextAlign.center,)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  FlatButton(
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                                    minWidth: 0,
+                                    height: 0,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.add,
+                                            size: 36,
+                                            color: Colors.grey[700],
+                                          ),
+                                          //add space
+                                          Text("Nouvel\nEDL de sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                        ],
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
-                                  },
-                                ),
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.home,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
+                                  FlatButton(
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                                    minWidth: 0,
+                                    height: 0,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.home,
+                                            size: 36,
+                                            color: Colors.grey[700],
+                                          ),
+                                          //add space
+                                          Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
+                                        ],
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                                        out: false,
+                                        sIn: true,
+                                        onSelect: (stateOfPlayId) {
+                                          print("onSelect");
+                                          Navigator.pop(globalKey.currentContext);
+                                          Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
+                                        }))
+                                      );
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                      out: false,
-                                      sIn: true,
-                                      onSelect: (stateOfPlayId) {
-                                        print("onSelect");
-                                        Navigator.pop(globalKey.currentContext);
-                                        Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
-                                      }))
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).closed.then((value) {
-                  print('THEN close BottomSheet');
-                  setState(() { _bottomSheetOpen = false; });
-                });
-              } else {
-                Navigator.pop(context);
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }).closed.then((value) {
+                    print('THEN close BottomSheet');
+                    setState(() { _bottomSheetOpen = false; });
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
               }
-            }
+            ),
           )
         );
       }

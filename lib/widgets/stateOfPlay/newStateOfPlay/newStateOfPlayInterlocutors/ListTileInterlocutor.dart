@@ -37,27 +37,5 @@ class ListTileInterlocutor extends StatelessWidget {
       onTap: onPress,
       tileColor: text != null ? null : Colors.grey[200],
     );
-    
-    // Row(
-    //   children: [
-    //     RaisedButton(
-    //       child: Text(
-    //         ,
-    //         style: TextStyle(
-    //           color: text != null ? Colors.black : Colors.black
-    //         ),
-    //       ),
-    //       onPressed: text != null ? null : onPress,
-    //     ),
-    //     text != null ? RaisedButton(
-    //       child: Icon(Icons.close),
-    //       onPressed: onPressRemove,
-    //     ) : Container(),
-    //     onPressAdd != null && text == null ? RaisedButton(
-    //       child: Icon(Icons.add),
-    //       onPressed: onPressAdd,
-    //     ) : Container()
-    //   ],
-    // );
   }
 }
