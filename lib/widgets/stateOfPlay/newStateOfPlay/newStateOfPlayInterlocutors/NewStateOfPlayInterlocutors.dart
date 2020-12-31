@@ -5,11 +5,14 @@ import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/HeaderInterlocutor.dart';
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutor.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutorDiscovery.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
 import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
+
+import 'package:feature_discovery/feature_discovery.dart';
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -22,6 +25,22 @@ class NewStateOfPlayInterlocutors extends StatefulWidget {
 }
 
 class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutors> {
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'add_interlocutor',
+          'select_interlocutor',
+        },
+      ); 
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -31,7 +50,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
           HeaderInterlocutor(
             text: "Propriétaire"
           ),
-          ListTileInterlocutor(
+          ListTileInterlocutorDiscovery(
             text: widget.stateOfPlay.owner.lastName != null ? widget.stateOfPlay.owner.firstName + ' ' + widget.stateOfPlay.owner.lastName : null,
             labelText: "Sélectionner un propriétaire",
             onPress: () {

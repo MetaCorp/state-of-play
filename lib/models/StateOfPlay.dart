@@ -209,6 +209,9 @@ class StateOfPlay {
     this.images,
 
     this.logo,
+
+    this.pdf,
+    this.newPdf
   });
 
   String id;
@@ -247,6 +250,9 @@ class StateOfPlay {
 
   String logo;
 
+  String pdf;
+  File newPdf;
+
   factory StateOfPlay.fromJSON(Map<String, dynamic> json) {
 
     return StateOfPlay(
@@ -267,7 +273,8 @@ class StateOfPlay {
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       documentHeader: json["documentHeader"],
       documentEnd: json["documentEnd"],
-      images: []
+      images: [],
+      pdf: json["pdf"]// TODO : parse pdf file
     );
   }
 }
@@ -641,6 +648,7 @@ class User {
     this.logo,
     this.newLogo,
     this.email,
+    this.credits,
   });
 
   String firstName;
@@ -656,6 +664,7 @@ class User {
   List<Property> properties;
   bool paidOnce;
   String logo;
+  int credits;
 
   File newLogo;
 
@@ -675,7 +684,8 @@ class User {
       properties: json["properties"] != null ? (json["properties"] as List).map((property) => Property.fromJSON(property)).toList() : null,
       logo: json["logo"],
       newLogo: null,
-      email: json["email"]
+      email: json["email"],
+      credits: json["credits"]
     );
   }
 }

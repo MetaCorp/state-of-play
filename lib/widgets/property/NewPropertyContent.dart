@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/property/ListTilePropertyType.dart';
 import 'package:flutter_tests/widgets/property/NewPropertyAddType.dart';
+import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
@@ -10,7 +11,7 @@ typedef SaveCallback = Function(sop.Property);
 typedef DeleteCallback = Function();
 
 class NewPropertyContent extends StatefulWidget {
-  NewPropertyContent({ Key key, this.title, this.property, this.onSave, this.onDelete, this.saveLoading }) : super(key: key);
+  NewPropertyContent({ Key key, this.title, this.property, this.onSave, this.onDelete, this.saveLoading = false }) : super(key: key);
 
   final String title;
   final sop.Property property;
@@ -236,10 +237,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          widget.saveLoading ? IconButton(
-            icon: CircularProgressIndicator(),
-            onPressed: null
-          ) : IconButton(
+          IconButtonLoading(
+            loading: widget.saveLoading,
             icon: Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState.validate()) {

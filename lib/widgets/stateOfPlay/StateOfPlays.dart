@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'package:http/http.dart';
+
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
+
+import 'package:feature_discovery/feature_discovery.dart';
+
 
 class StateOfPlays extends StatefulWidget {
   StateOfPlays({Key key}) : super(key: key);
@@ -19,6 +28,19 @@ class _StateOfPlaysState extends State<StateOfPlays> {
 
   bool _in = false;
   bool _out = true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'search_sop',
+        },
+      ); 
+    });
+    super.initState();
+  }
 
   void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
     await showDialog(
@@ -123,9 +145,15 @@ class _StateOfPlaysState extends State<StateOfPlays> {
       appBar: AppBar(
         title: Text('États des lieux'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+          DescribedFeatureOverlay(
+            featureId: 'search_sop',
+            tapTarget: Icon(Icons.search),
+            title: Text('Recherche'),
+            description: Text('Accédez à la recherche'),
+            child: IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => Navigator.pushNamed(context, '/search-state-of-plays'),
+            ),
           ),
           IconButton(
             icon: Icon(Icons.filter_list),
@@ -160,6 +188,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                   firstName
                   lastName
                 }
+                pdf
               }
             }
             '''),
@@ -235,7 +264,31 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                         actionPane: SlidableDrawerActionPane(),
                         actionExtentRatio: 0.25,
                         child: ListTile(
-                          title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
+                              IconButton(
+                                icon: Icon(Icons.text_snippet),
+                                onPressed: () async {
+                                  if (stateOfPlays[i].pdf != null) {
+                                    Directory tempDir = await getTemporaryDirectory();
+                                    String tempPath = tempDir.path;
+
+                                    String fileName = stateOfPlays[i].pdf.substring(stateOfPlays[i].pdf.lastIndexOf('/') + 1);
+                                    File pdf = File(tempPath + '/' + fileName);
+
+                                    var request = await get(stateOfPlays[i].pdf);
+                                    var bytes = await request.bodyBytes;
+                                    await pdf.writeAsBytes(bytes);
+
+                                    OpenFile.open(pdf.path);
+                                  }
+
+                                }
+                              )
+                            ]
+                          ),
                           subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
                           onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
                         ),

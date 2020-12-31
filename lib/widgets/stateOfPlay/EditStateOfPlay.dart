@@ -131,6 +131,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                     entryExitDate
                     documentHeader
                     documentEnd
+                    pdf
                   }
                 }
               '''),
@@ -146,7 +147,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
               FetchMore fetchMore,
             }) {
 
-              if (_stateOfPlay == null && result.data != null) {
+              if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
                 print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
                 _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
               }
@@ -339,6 +340,12 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           "date": _stateOfPlay.date.toString(),
                           "city": _stateOfPlay.city.toString(),
                           "entryExitDate": _stateOfPlay.entryExitDate.toString(),
+                          "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
+                            'pdf',
+                            _stateOfPlay.newPdf.readAsBytesSync(),
+                            filename: '${uuid.v1()}.pdf',
+                            contentType: MediaType("image", "pdf"),
+                          ) : null
                         }
                       });
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'dart:async';
@@ -17,6 +16,9 @@ import 'package:flutter_tests/models/StateOfPlayTexts.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:intl/intl.dart';// DateFormat
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 // import 'package:http/http.dart' as http;
 
@@ -58,18 +60,18 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
 
 final pw.Document pdf = pw.Document();
 
-Future<void> _saveAsFile(pdf) async {
+Future<File> _saveAsFile(pdf) async {
   final Uint8List bytes = pdf.save();
 
   final Directory appDocDir = await getApplicationDocumentsDirectory();
   final String appDocPath = appDocDir.path;
-  final File file = File(appDocPath + '/' + 'document.pdf');
+  final File file = File(appDocPath + '/' + uuid.v1() + '.pdf');
   print('Save as file ${file.path} ...');
   await file.writeAsBytes(bytes);
   // setState(() {
   //   _pdfPath = file.path;
   // });
-  OpenFile.open(file.path);
+  return file;
 }
 
 pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
@@ -427,7 +429,7 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
   );
 }
 
-Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
+Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
 
   // TODO: Load Image From Internet
   // http.Response response = await http.get(
@@ -712,10 +714,10 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
                               borderRadius: 2
                             ),
                             height: 20,
-                            padding: const pw.EdgeInsets.only(left: 20, top: 5, right: 20, bottom: 15),
+                            padding: const pw.EdgeInsets.only(left: 20, top: 5, right: 5, bottom: 15),
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Text(
-                              stateOfPlayTexts.entryDate + ' : ' + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryExitDate),
+                              (stateOfPlay.out ? 'Date de sortie : ' : "Date d'entrée : ") + DateFormat('dd/MM/yyyy').format(stateOfPlay.entryExitDate),
                               style: pw.TextStyle(
                                 color: PdfColors.white,
                                 fontSize: 9
@@ -1087,6 +1089,6 @@ Future<void> generatePdf(sop.StateOfPlay stateOfPlay) async {
   // final file = File("example.pdf");
   // await file.writeAsBytes(pdf.save());
 
-  _saveAsFile(pdf);
+  return await _saveAsFile(pdf);
 
 }

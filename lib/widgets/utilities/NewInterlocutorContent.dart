@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
@@ -7,7 +8,7 @@ typedef SaveCallback = Function(dynamic);
 typedef DeleteCallback = Function();
 
 class NewInterlocutorContent extends StatefulWidget {
-  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave, this.onDelete, this.saveLoading }) : super(key: key);
+  NewInterlocutorContent({ Key key, this.title, this.interlocutor, this.onSave, this.onDelete, this.saveLoading = false }) : super(key: key);
 
   final String title;
   final dynamic interlocutor;
@@ -169,10 +170,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          widget.saveLoading ? IconButton(
-            icon: CircularProgressIndicator(),
-            onPressed: null,
-          ) : IconButton(
+          IconButtonLoading(
+            loading: widget.saveLoading,
             icon: Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState.validate()) {
