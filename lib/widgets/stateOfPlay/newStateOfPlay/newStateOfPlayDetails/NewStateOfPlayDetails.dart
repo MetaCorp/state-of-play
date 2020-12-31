@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/HeaderDiscovery.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoom.dart';
+
+import 'package:feature_discovery/feature_discovery.dart';
+
 
 class NewStateOfPlayDetails extends StatefulWidget {
   NewStateOfPlayDetails({ Key key, this.rooms }) : super(key: key);
@@ -16,6 +20,19 @@ class NewStateOfPlayDetails extends StatefulWidget {
 class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
   final int maxRooms = 10;
+
+  @override
+  void initState() { 
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'add_room',
+        },
+      ); 
+    });
+  }
 
   void _showDialogDeleteRoom (context, sop.Room room) async {
     await showDialog(
@@ -66,7 +83,7 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
 
     return Column(
       children: [
-        Header(
+        HeaderDiscovery(
           title: "Liste des pièces",
           onPressAdd: () {
             if (widget.rooms.length < maxRooms) {

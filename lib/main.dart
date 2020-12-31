@@ -97,7 +97,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
     
-
     super.initState();
   }
 
@@ -130,6 +129,7 @@ class _MyAppState extends State<MyApp> {
     return GraphQLProvider(
       client: client,
       child: FeatureDiscovery(
+        recordStepsInSharedPreferences: false,
         child: MaterialApp(
           title: 'États des lieux',
           theme: ThemeData(

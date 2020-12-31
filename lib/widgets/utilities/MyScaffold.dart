@@ -9,6 +9,7 @@ import 'package:flutter_tests/widgets/utilities/MyDrawer.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
+
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
 
@@ -67,6 +68,187 @@ class _MyScaffoldState extends State<MyScaffold> {
     );
   }
 
+  _onFabPress() {
+    if (_bottomSheetOpen) {
+      Navigator.pop(context);
+      return;
+    }
+
+    if (user == null)
+      return;
+
+    if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
+      _showDialogPaidOnce(context);
+      return;
+    }
+
+    if (_bottomSheetOpen == false) {
+      print('open BottomSheet');          
+      setState(() { 
+        _bottomSheetOpen = true;
+        print("VALUE:"+_bottomSheetOpen.toString()); 
+      });
+      globalKey.currentState.showBottomSheet((context) {            
+        return Container(
+          color: Colors.grey[200],
+          height: 150,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      FlatButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        minWidth: 0,
+                        height: 0,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 36,
+                                color: Colors.grey[700],
+                              ),
+                              //add space
+                              Text("Nouvel\nEDL d'entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
+                        },
+                      ),
+                      FlatButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        minWidth: 0,
+                        height: 0,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.home,
+                                size: 36,
+                                color: Colors.grey[700],
+                              ),
+                              //add space
+                              Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                            out: true,
+                            sIn: false,
+                            onSelect: (stateOfPlayId) {
+                              print("onSelect");
+                              Navigator.pop(globalKey.currentContext);
+                              Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
+                            }
+                          ),),);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              VerticalDivider(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children :[
+                  Row(
+                    children: [
+                      Center(child:Text("Sortie",style: _titleTextStyle, textAlign: TextAlign.center,)),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      FlatButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        minWidth: 0,
+                        height: 0,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 36,
+                                color: Colors.grey[700],
+                              ),
+                              //add space
+                              Text("Nouvel\nEDL de sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
+                        },
+                      ),
+                      FlatButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        minWidth: 0,
+                        height: 0,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.home,
+                                size: 36,
+                                color: Colors.grey[700],
+                              ),
+                              //add space
+                              Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
+                            out: false,
+                            sIn: true,
+                            onSelect: (stateOfPlayId) {
+                              print("onSelect");
+                              Navigator.pop(globalKey.currentContext);
+                              Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
+                            }))
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }).closed.then((value) {
+        print('THEN close BottomSheet');
+        setState(() { _bottomSheetOpen = false; });
+      });
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -119,193 +301,19 @@ class _MyScaffoldState extends State<MyScaffold> {
           floatingActionButton: DescribedFeatureOverlay(
             featureId: 'add_sop',
             tapTarget: Icon(Icons.add),
-            title: Text('Ajoutez un état des lieux'),
+            title: Text('Réaliser un nouvel état des lieux'),
+            description: Text("Pour réaliser un état des lieux, cliquez sur le bouton + en bas de l'app. Puis choisissez entre état des lieux de sortie ou d'entrée."),
+            onComplete: () async {
+              _onFabPress();
+              return true;
+            },
             child: FloatingActionButton(
               // Put animation Icon rotation
               // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
               backgroundColor: Theme.of(context).primaryColor,
               child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
-              onPressed: () {
-                if (_bottomSheetOpen) {
-                  Navigator.pop(context);
-                  return;
-                }
-
-                if (user == null)
-                  return;
-
-                if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
-                  _showDialogPaidOnce(context);
-                  return;
-                }
-
-                if (_bottomSheetOpen == false) {
-                  print('open BottomSheet');          
-                  setState(() { 
-                    _bottomSheetOpen = true;
-                    print("VALUE:"+_bottomSheetOpen.toString()); 
-                  });
-                  globalKey.currentState.showBottomSheet((context) {            
-                    return Container(
-                      color: Colors.grey[200],
-                      height: 150,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                children: [
-                                  Center(child:Text("Entrée",style: _titleTextStyle, textAlign: TextAlign.center,),),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  FlatButton(
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                    minWidth: 0,
-                                    height: 0,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            size: 36,
-                                            color: Colors.grey[700],
-                                          ),
-                                          //add space
-                                          Text("Nouvel\nEDL d'entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                        ],
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
-                                    },
-                                  ),
-                                  FlatButton(
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                    minWidth: 0,
-                                    height: 0,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.home,
-                                            size: 36,
-                                            color: Colors.grey[700],
-                                          ),
-                                          //add space
-                                          Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                        ],
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                        out: true,
-                                        sIn: false,
-                                        onSelect: (stateOfPlayId) {
-                                          print("onSelect");
-                                          Navigator.pop(globalKey.currentContext);
-                                          Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
-                                        }
-                                      ),),);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          VerticalDivider(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children :[
-                              Row(
-                                children: [
-                                  Center(child:Text("Sortie",style: _titleTextStyle, textAlign: TextAlign.center,)),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  FlatButton(
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                    minWidth: 0,
-                                    height: 0,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            size: 36,
-                                            color: Colors.grey[700],
-                                          ),
-                                          //add space
-                                          Text("Nouvel\nEDL de sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                        ],
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
-                                    },
-                                  ),
-                                  FlatButton(
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                    minWidth: 0,
-                                    height: 0,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.home,
-                                            size: 36,
-                                            color: Colors.grey[700],
-                                          ),
-                                          //add space
-                                          Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                        ],
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays(
-                                        out: false,
-                                        sIn: true,
-                                        onSelect: (stateOfPlayId) {
-                                          print("onSelect");
-                                          Navigator.pop(globalKey.currentContext);
-                                          Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
-                                        }))
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }).closed.then((value) {
-                    print('THEN close BottomSheet');
-                    setState(() { _bottomSheetOpen = false; });
-                  });
-                } else {
-                  Navigator.pop(context);
-                }
-              }
-            ),
+              onPressed: _onFabPress,
+            )
           )
         );
       }

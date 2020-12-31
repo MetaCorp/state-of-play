@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 
+import 'package:feature_discovery/feature_discovery.dart';
+
 import 'package:open_file/open_file.dart';
 import 'package:flutter_tests/GeneratePdf.dart';
 import 'package:flutter_tests/widgets/shop/Shop.dart';
@@ -34,6 +36,21 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   
   int _selectedIndex = 0;
   bool _isPdfLoading = false;
+
+  @override
+  void initState() { 
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{
+          'navigate_newsop',
+          'add_interlocutor',
+          'select_interlocutor'
+        },
+      ); 
+    });
+  }
 
   void onNext() {
     print('property: ' + widget.stateOfPlay.property.address);
@@ -265,13 +282,15 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
+            icon: DescribedFeatureOverlay(
+              featureId: 'navigate_newsop',
+              tapTarget: Icon(Icons.group),
+              title: Text("Naviguez"),
+              description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la bar en bas de l'app."),
+              child: Icon(Icons.group),
+            ),
             label: 'Interlocuteurs',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.house),
-          //   label: 'Propriété',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.apps),
             label: 'Pièces',
