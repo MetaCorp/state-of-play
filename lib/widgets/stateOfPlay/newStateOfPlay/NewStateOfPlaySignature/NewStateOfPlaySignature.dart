@@ -30,6 +30,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
   @override
   void initState() {
     widget.stateOfPlay.signatureTenants ??= new List();
+    widget.stateOfPlay.signatureTenants.length = widget.stateOfPlay.tenants.length;
 
     super.initState();
   }

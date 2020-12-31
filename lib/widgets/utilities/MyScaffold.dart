@@ -7,12 +7,9 @@ import 'package:flutter_tests/widgets/stateOfPlay/SearchStateOfPlays.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlay.dart';
 import 'package:flutter_tests/widgets/utilities/MyDrawer.dart';
 
-<<<<<<< HEAD
 import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
 
-=======
 import 'package:feature_discovery/feature_discovery.dart';
->>>>>>> mobile-app
 
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
@@ -192,30 +189,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                       Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
                                     },
                                   ),
-<<<<<<< HEAD
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: false)));
-                                  },
-                                ),
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          EDLIcons.edlRight,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
-=======
                                   FlatButton(
                                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -234,7 +207,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                           Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
                                         ],
                                       ),
->>>>>>> mobile-app
                                     ),
                                     onPressed: () {
                                       Navigator.pop(context);
@@ -288,30 +260,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                       Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
                                     },
                                   ),
-<<<<<<< HEAD
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(out: true)));
-                                  },
-                                ),
-                                FlatButton(
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                  minWidth: 0,
-                                  height: 0,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          EDLIcons.edlLeft,
-                                          size: 36,
-                                          color: Colors.grey[700],
-                                        ),
-                                        //add space
-                                        Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
-                                      ],
-=======
                                   FlatButton(
                                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -330,7 +278,6 @@ class _MyScaffoldState extends State<MyScaffold> {
                                           Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
                                         ],
                                       ),
->>>>>>> mobile-app
                                     ),
                                     onPressed: () {
                                       Navigator.pop(context);

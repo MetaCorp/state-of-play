@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:pdf/pdf.dart';
@@ -58,9 +59,10 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
   'assets/images/logo.png'
 );
 
-final pw.Document pdf = pw.Document();
+pw.Document pdf;
 
 Future<File> _saveAsFile(pdf) async {
+  
   final Uint8List bytes = pdf.save();
 
   final Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -71,6 +73,7 @@ Future<File> _saveAsFile(pdf) async {
   // setState(() {
   //   _pdfPath = file.path;
   // });
+ 
   return file;
 }
 
@@ -430,21 +433,23 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
 }
 
 Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
-
+  pw.Document pdf = pw.Document();
   // TODO: Load Image From Internet
   // http.Response response = await http.get(
   //   'https://flutter.io/images/flutter-mark-square-100.png',
   // );   
   // response.bodyBytes //Uint8List
 
-  PdfImage logo = PdfImage.file(
-    pdf.document,
-    bytes: (await NetworkAssetBundle(Uri.parse(stateOfPlay.logo)).load(stateOfPlay.logo)).buffer.asUint8List()
-  );
+  //TODO logo rfeturn null ?
+  PdfImage logo = 
   // PdfImage.file(
   //   pdf.document,
-  //   bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+  //   bytes: (await NetworkAssetBundle(Uri.parse(stateOfPlay.logo)).load(stateOfPlay.logo)).buffer.asUint8List()
   // );
+  PdfImage.file(
+    pdf.document,
+    bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+  );
 
   PdfImage logoKitchen = PdfImage.file(
     pdf.document,
@@ -481,7 +486,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
   )).toList();
 
   pw.Widget _photos = await _buildPhotos(imagesType: stateOfPlay.images, logo: logo);
-
+  
   pdf.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -1088,7 +1093,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
 
   // final file = File("example.pdf");
   // await file.writeAsBytes(pdf.save());
-
+  print("DOCID:"+pdf.document.pdfPageList.pages[pdf.document.pdfPageList.pages.length-1].pdfDocument.documentID.toString());
   return await _saveAsFile(pdf);
 
 }
