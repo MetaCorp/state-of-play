@@ -166,7 +166,7 @@ class _ShopState extends State<Shop> {
 
 
         return WillPopScope(
-          onWillPop: () => _onWillPop(user),
+          onWillPop: () async => _onWillPop(user),
           child: widget.isPopup ? Scaffold(
             appBar: appBar,
             body: body

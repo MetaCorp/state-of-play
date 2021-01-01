@@ -9,11 +9,8 @@ import 'package:flutter_tests/widgets/utilities/MyDrawer.dart';
 
 import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
 
-<<<<<<< HEAD
 import 'package:feature_discovery/feature_discovery.dart';
 
-=======
->>>>>>> mobile-app
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
 

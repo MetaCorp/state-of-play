@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/owner/OwnersList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -163,31 +164,10 @@ class _OwnersState extends State<Owners> {
                 QueryResult mutationResult,
               ) {
                 
-                return Container(
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(top: 8),
-                    itemCount: owners.length,
-                    itemBuilder: (_, i) => Slidable(
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.25,
-                      child: ListTile(
-                        title: Text(owners[i].firstName + ' ' + owners[i].lastName),
-                        onTap: () => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owners[i].id }),
-                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                      ),
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Supprimer',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () => _showDialogDelete(context, owners[i], runDeleteMutation),
-                        ),
-                      ],
-                    ),
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
+                return OwnersList(
+                  owners: owners,
+                  onTap: (owner) => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owner.id }),
+                  onDelete: (owner) => _showDialogDelete(context, owner, runDeleteMutation)
                 );
               }
             );

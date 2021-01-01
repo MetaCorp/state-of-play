@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlaysList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -22,6 +23,58 @@ class SearchStateOfPlays extends StatefulWidget {
 class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
 
   TextEditingController _searchController = TextEditingController(text: "");
+
+  
+  void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Supprimer '" + stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city + "' ?"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "stateOfPlayId": stateOfPlay.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteStateOfPlay"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteStateOfPlay"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   void dispose() {
@@ -101,33 +154,35 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             );
           }
           else {
-            body = Container(
-              child: ListView.separated(
-                padding: EdgeInsets.only(top: 8),
-                itemCount: stateOfPlays.length,
-                itemBuilder: (_, i) {
-                  
-                  String tenantsString = "";
-
-                  for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
-                    tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
-                    if (j < stateOfPlays[i].tenants.length - 1)
-                      tenantsString += ', ';
-                  }  
-
-                  return ListTile(
-                    title: Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
-                    subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                    onTap: () => widget.onSelect != null ? widget.onSelect(stateOfPlays[i].id) : Navigator.pushNamed(context, '/edit-state-of-play', arguments: { "stateOfPlayId": stateOfPlays[i].id }),
-                  );
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteStateOfPlay(\$data: DeleteStateOfPlayInput!) {
+                    deleteStateOfPlay(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
                 },
-                separatorBuilder: (context, index) {
-                  return Divider();
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return StateOfPlaysList(
+                  stateOfPlays: stateOfPlays,
+                  onTap: (stateOfPlay) => widget.onSelect != null ? widget.onSelect(stateOfPlay.id) : Navigator.pushNamed(context, '/edit-state-of-play', arguments: { "stateOfPlayId": stateOfPlay.id }),
+                  onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation),
+                );
+              }
             );
           }
-
         }
 
         return Scaffold(

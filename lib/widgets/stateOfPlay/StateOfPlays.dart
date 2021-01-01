@@ -1,12 +1,8 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlaysList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-
-import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
-import 'package:http/http.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
@@ -254,65 +250,10 @@ class _StateOfPlaysState extends State<StateOfPlays> {
                 QueryResult mutationResult,
               ) {
                 
-                return Container(
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(top: 8),
-                    itemCount: stateOfPlays.length,
-                    itemBuilder: (_, i)  {
-                      String tenantsString = "";
-
-                      for (var j = 0; j < stateOfPlays[i].tenants.length; j++) {
-                        tenantsString += stateOfPlays[i].tenants[j].firstName + ' ' + stateOfPlays[i].tenants[j].lastName;
-                        if (j < stateOfPlays[i].tenants.length - 1)
-                          tenantsString += ', ';
-                      }
-
-                      return Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Propriétaire: " + stateOfPlays[i].owner.firstName + " " + stateOfPlays[i].owner.lastName),
-                              IconButton(
-                                icon: Icon(Icons.text_snippet),
-                                onPressed: () async {
-                                  if (stateOfPlays[i].pdf != null) {
-                                    Directory tempDir = await getTemporaryDirectory();
-                                    String tempPath = tempDir.path;
-
-                                    String fileName = stateOfPlays[i].pdf.substring(stateOfPlays[i].pdf.lastIndexOf('/') + 1);
-                                    File pdf = File(tempPath + '/' + fileName);
-
-                                    var request = await get(stateOfPlays[i].pdf);
-                                    var bytes = await request.bodyBytes;
-                                    await pdf.writeAsBytes(bytes);
-
-                                    OpenFile.open(pdf.path);
-                                  }
-
-                                }
-                              )
-                            ]
-                          ),
-                          subtitle: Text("Locataire" + (stateOfPlays[i].tenants.length > 1 ? "s" : "") + ": " + tenantsString),
-                          onTap: () => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlays[i].id }),
-                        ),
-                        secondaryActions: [
-                          IconSlideAction(
-                            caption: 'Supprimer',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => _showDialogDelete(context, stateOfPlays[i], runDeleteMutation),
-                          ),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
+                return StateOfPlaysList(
+                  stateOfPlays: stateOfPlays,
+                  onTap: (stateOfPlay) => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlay.id }),
+                  onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation),
                 );
               }
             );

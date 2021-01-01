@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/tenant/TenantsList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -164,33 +165,10 @@ class _TenantsState extends State<Tenants> {
                 QueryResult mutationResult,
               ) {
                 
-                return Container(
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(top: 8),
-                    itemCount: tenants.length,
-                    itemBuilder: (_, i) => Slidable(
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.25,
-                      child: ListTile(
-                        title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
-                        onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
-                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                      ),
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Supprimer',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () => _showDialogDelete(context, tenants[i], runDeleteMutation),
-                        ),
-                      ],
-                    ),
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 0.0,
-                      );
-                    },
-                  ),
+                return TenantsList(
+                  tenants: tenants,
+                  onTap: (tenant) => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenant.id }),
+                  onDelete: (tenant) => _showDialogDelete(context, tenant, runDeleteMutation)
                 );
               }
             );

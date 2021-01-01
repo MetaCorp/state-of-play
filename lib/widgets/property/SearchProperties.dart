@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/property/PropertiesList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -16,6 +17,63 @@ class SearchProperties extends StatefulWidget {
 class _SearchPropertiesState extends State<SearchProperties> {
 
   TextEditingController _searchController = TextEditingController(text: "");
+
+  void _showDialogDelete(context, sop.Property property, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" +property.address + ', ' + property.postalCode + ' ' + property.city + "' ?"),
+            property.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + property.stateOfPlays.length.toString() + "' état" + (property.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "propertyId": property.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteProperty"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteProperty"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/propertys');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   void dispose() {
@@ -35,6 +93,9 @@ class _SearchPropertiesState extends State<SearchProperties> {
               address
               postalCode
               city
+              stateOfPlays {
+                id
+              }
             }
           }
         '''),
@@ -80,19 +141,33 @@ class _SearchPropertiesState extends State<SearchProperties> {
             );
           }
           else {
-            body = Container(
-              child: ListView.separated(
-                padding: EdgeInsets.only(top: 8),
-                itemCount: properties.length,
-                itemBuilder: (_, i) => ListTile(
-                  title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(properties[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
-                ),
-                separatorBuilder: (context, index) {
-                  return Divider();
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteProperty(\$data: DeletePropertyInput!) {
+                    deleteProperty(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return PropertiesList(
+                  properties: properties,
+                  onTap: (property) => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": property.id }),
+                  onDelete: (property) => _showDialogDelete(context, property, runDeleteMutation)
+                );
+              }
             );
           }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/tenant/TenantsList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -17,6 +18,63 @@ class _SearchTenantsState extends State<SearchTenants> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
+  void _showDialogDelete(context, sop.Tenant tenant, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
+            tenant.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + tenant.stateOfPlays.length.toString() + "' état" + (tenant.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "tenantId": tenant.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteTenant"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteTenant"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -34,6 +92,9 @@ class _SearchTenantsState extends State<SearchTenants> {
               id
               firstName
               lastName
+              stateOfPlays {
+                id
+              }
             }
           }
         '''),
@@ -79,19 +140,33 @@ class _SearchTenantsState extends State<SearchTenants> {
             );
           }
           else {
-            body = Container(
-              child: ListView.separated(
-                padding: EdgeInsets.only(top: 8),
-                itemCount: tenants.length,
-                itemBuilder: (_, i) => ListTile(
-                  title: Text(tenants[i].firstName + ' ' + tenants[i].lastName),
-                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(tenants[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenants[i].id }),
-                ),
-                separatorBuilder: (context, index) {
-                  return Divider();
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteTenant(\$data: DeleteTenantInput!) {
+                    deleteTenant(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return TenantsList(
+                  tenants: tenants,
+                  onTap: (tenant) => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenant.id }),
+                  onDelete: (tenant) => _showDialogDelete(context, tenant, runDeleteMutation)
+                );
+              }
             );
           }
 

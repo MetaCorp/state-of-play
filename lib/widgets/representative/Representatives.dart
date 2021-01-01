@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/representative/RepresentativesList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -74,6 +75,7 @@ class _OwnersState extends State<Representatives> {
       )
     );
   }
+  
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
@@ -161,31 +163,10 @@ class _OwnersState extends State<Representatives> {
                 QueryResult mutationResult,
               ) {
                 
-                return Container(
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(top: 8),
-                    itemCount: representatives.length,
-                    itemBuilder: (_, i) => Slidable(
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.25,
-                      child: ListTile(
-                        title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                        onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
-                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                      ),
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Supprimer',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () => _showDialogDelete(context, representatives[i], runDeleteMutation),
-                        ),
-                      ],
-                    ),
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
+                return RepresentativesList(
+                  representatives: representatives,
+                  onTap: (representative) => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representative.id }),
+                  onDelete: (representative) => _showDialogDelete(context, representative, runDeleteMutation)
                 );
               }
             );

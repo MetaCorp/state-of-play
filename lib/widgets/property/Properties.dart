@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/property/PropertiesList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -164,31 +165,10 @@ class _PropertiesState extends State<Properties> {
                 QueryResult mutationResult,
               ) {
                 
-                return Container(
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(top: 8),
-                    itemCount: properties.length,
-                    itemBuilder: (_, i) => Slidable(
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.25,
-                      child: ListTile(
-                        title: Text(properties[i].address + ', ' + properties[i].postalCode + ' ' + properties[i].city),
-                        onTap: () => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": properties[i].id }),
-                        contentPadding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                      ),
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Supprimer',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () => _showDialogDelete(context, properties[i], runDeleteMutation),
-                        ),
-                      ],
-                    ),
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
+                return PropertiesList(
+                  properties: properties,
+                  onTap: (property) => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": property.id }),
+                  onDelete: (property) => _showDialogDelete(context, property, runDeleteMutation)
                 );
               }
             );

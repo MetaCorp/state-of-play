@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/representative/RepresentativesList.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -17,6 +18,63 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
+  void _showDialogDelete(context, sop.Representative representative, RunMutation runDeleteMutation) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Supprimer '" + representative.firstName + ' ' + representative.lastName + "' ?"),
+            representative.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + representative.stateOfPlays.length.toString() + "' état" + (representative.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+          ]
+        ),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('SUPPRIMER'),
+            onPressed: () async {
+              print('runDeleteMutation');
+
+              MultiSourceResult mutationResult = runDeleteMutation({
+                "data": {
+                  "representativeId": representative.id,
+                }
+              });
+              QueryResult networkResult = await mutationResult.networkResult;
+
+              if (networkResult.hasException) {
+                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                if (networkResult.exception.clientException != null)
+                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                else
+                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+              }
+              else {
+                print('queryResult data: ' + networkResult.data.toString());
+                if (networkResult.data != null) {
+                  if (networkResult.data["deleteRepresentative"] == null) {
+                    // TODO: show error
+                  }
+                  else if (networkResult.data["deleteRepresentative"] != null) {
+                    Navigator.pop(context);
+                    setState(() { });
+                    // Navigator.popAndPushNamed(context, '/representatives');// To refresh
+                  }
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -34,6 +92,9 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
               id
               firstName
               lastName
+              stateOfPlays {
+                id
+              }
             }
           }
         '''),
@@ -79,19 +140,33 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
             );
           }
           else {
-            body = Container(
-              child: ListView.separated(
-                padding: EdgeInsets.only(top: 8),
-                itemCount: representatives.length,
-                itemBuilder: (_, i) => ListTile(
-                  title: Text(representatives[i].firstName + ' ' + representatives[i].lastName),
-                  // subtitle: Text(DateFormat('dd/MM/yyyy').format(representatives[i].date)) ,
-                  onTap: () => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representatives[i].id }),
-                ),
-                separatorBuilder: (context, index) {
-                  return Divider();
+            body = Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  mutation deleteRepresentative(\$data: DeleteRepresentativeInput!) {
+                    deleteRepresentative(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
                 },
               ),
+              builder: (
+                RunMutation runDeleteMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return RepresentativesList(
+                  representatives: representatives,
+                  onTap: (representative) => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representative.id }),
+                  onDelete: (representative) => _showDialogDelete(context, representative, runDeleteMutation)
+                );
+              }
             );
           }
 
