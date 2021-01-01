@@ -88,45 +88,52 @@ class _StateOfPlaysState extends State<StateOfPlays> {
   void _showDialogFilter(context) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Column(
-          children: [
-            Text("Filtres"),
-            CheckboxListTile(
-              title: Text("Entrée"),
-              value: _in,
-              onChanged: (value) {// TODO: doesnt work -> https://stackoverflow.com/questions/51578824/flutter-checkbox-doesnt-work
-                print('onChanged: ' + value.toString());
-                setState(() {
-                  _in = value; 
-                }); 
-              },
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Filtres"),
+                  CheckboxListTile(
+                    title: Text("Entrée"),
+                    value: _in,
+                    onChanged: (value) {// TODO: doesnt work -> https://stackoverflow.com/questions/51578824/flutter-checkbox-doesnt-work
+                      print('onChanged: ' + value.toString());
+                      setState(() {
+                        _in = value; 
+                      }); 
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Sortie"),
+                    value: _out,
+                    onChanged: (value) { 
+                      setState(() {
+                        _out = value; 
+                      }); 
+                    },
+                  )
+                ],
+              ),
             ),
-            CheckboxListTile(
-              title: Text("Sortie"),
-              value: _out,
-              onChanged: (value) { 
-                setState(() {
-                  _out = value; 
-                }); 
-              },
-            )
-          ],
-        ),
-        actions: [
-          FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () async {
-              Navigator.pop(context);
-            }
-          ),
-          FlatButton(
-            child: Text('APPLIQUER'),
-            onPressed: () async {
-              Navigator.pop(context);
-            }
-          )
-        ],
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }
+              ),
+              FlatButton(
+                child: Text('APPLIQUER'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }
+              )
+            ],
+          );
+        }
       )
     );
   }

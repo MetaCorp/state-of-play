@@ -311,7 +311,13 @@ class _MyScaffoldState extends State<MyScaffold> {
               // Put animation Icon rotation
               // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
               backgroundColor: Theme.of(context).primaryColor,
-              child: _bottomSheetOpen == false ? Icon(Icons.add) : Icon(Icons.close),
+              child: _bottomSheetOpen == false ? Icon(
+                Icons.add,
+                color: Colors.black,  
+              ) : Icon(
+                Icons.close,
+                color: Colors.black
+              ),
               onPressed: _onFabPress,
             )
           )
