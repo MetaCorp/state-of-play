@@ -90,7 +90,15 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
           print('stateOfPlays length: ' + stateOfPlays.length.toString());
 
           if (stateOfPlays.length == 0) {
-            body = Text("no stateOfplays");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Container(

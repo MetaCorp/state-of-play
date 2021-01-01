@@ -195,7 +195,15 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
           print('meters length: ' + meters.length.toString());
 
           if (meters.length == 0) {
-            body = Text("no meter");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(

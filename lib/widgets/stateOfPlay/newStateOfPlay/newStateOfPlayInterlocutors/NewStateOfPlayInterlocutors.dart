@@ -12,7 +12,6 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayI
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
 import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
 
-import 'package:feature_discovery/feature_discovery.dart';
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -29,15 +28,6 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
-        context,
-        const <String>{ // Feature ids for every feature that you want to showcase in order.
-          'add_interlocutor',
-          'select_interlocutor',
-        },
-      ); 
-    });
     super.initState();
   }
 

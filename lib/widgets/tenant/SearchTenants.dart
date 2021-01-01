@@ -68,7 +68,15 @@ class _SearchTenantsState extends State<SearchTenants> {
           print('stateOfPlays length: ' + tenants.length.toString());
 
           if (tenants.length == 0) {
-            body = Text("no tenants");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Container(

@@ -195,7 +195,15 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           print('equipments length: ' + equipments.length.toString());
 
           if (equipments.length == 0) {
-            body = Text("no equipment");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(

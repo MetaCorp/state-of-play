@@ -31,14 +31,6 @@ class _StateOfPlaysState extends State<StateOfPlays> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
-        context,
-        const <String>{ // Feature ids for every feature that you want to showcase in order.
-          'search_sop',
-        },
-      ); 
-    });
     super.initState();
   }
 
@@ -96,45 +88,52 @@ class _StateOfPlaysState extends State<StateOfPlays> {
   void _showDialogFilter(context) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Column(
-          children: [
-            Text("Filtres"),
-            CheckboxListTile(
-              title: Text("Entrée"),
-              value: _in,
-              onChanged: (value) {// TODO: doesnt work -> https://stackoverflow.com/questions/51578824/flutter-checkbox-doesnt-work
-                print('onChanged: ' + value.toString());
-                setState(() {
-                  _in = value; 
-                }); 
-              },
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Filtres"),
+                  CheckboxListTile(
+                    title: Text("Entrée"),
+                    value: _in,
+                    onChanged: (value) {// TODO: doesnt work -> https://stackoverflow.com/questions/51578824/flutter-checkbox-doesnt-work
+                      print('onChanged: ' + value.toString());
+                      setState(() {
+                        _in = value; 
+                      }); 
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Sortie"),
+                    value: _out,
+                    onChanged: (value) { 
+                      setState(() {
+                        _out = value; 
+                      }); 
+                    },
+                  )
+                ],
+              ),
             ),
-            CheckboxListTile(
-              title: Text("Sortie"),
-              value: _out,
-              onChanged: (value) { 
-                setState(() {
-                  _out = value; 
-                }); 
-              },
-            )
-          ],
-        ),
-        actions: [
-          FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () async {
-              Navigator.pop(context);
-            }
-          ),
-          FlatButton(
-            child: Text('APPLIQUER'),
-            onPressed: () async {
-              Navigator.pop(context);
-            }
-          )
-        ],
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }
+              ),
+              FlatButton(
+                child: Text('APPLIQUER'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }
+              )
+            ],
+          );
+        }
       )
     );
   }
@@ -222,7 +221,15 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             print('stateOfPlays length: ' + stateOfPlays.length.toString());
 
             if (stateOfPlays.length == 0) {
-              return Text("no stateOfplays");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Pas d'état des lieux pour le moment.",
+                  style: TextStyle(
+                    color: Colors.grey[600]
+                  )
+                )
+              );
             }
 
 

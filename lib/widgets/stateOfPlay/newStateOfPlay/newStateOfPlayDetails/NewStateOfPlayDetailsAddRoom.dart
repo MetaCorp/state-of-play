@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'package:feature_discovery/feature_discovery.dart';
+
 typedef SelectCallback = void Function(List<String>);
 
 class NewStateOfPlayDetailsAddRoom extends StatefulWidget {
@@ -20,7 +22,22 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newRoomController = TextEditingController(text: "");
 
-  List<String> _selectedRooms = []; 
+  List<String> _selectedRooms = [];
+
+  @override
+  void initState() { 
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'search_room',
+          'add_newroom',
+          'validate_rooms'
+        },
+      ));
+    });
+  }
 
   void _showDialogDelete(context, room, RunMutation runDeleteMutation) async {
     await showDialog(
@@ -192,7 +209,15 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
           print('rooms length: ' + rooms.length.toString());
 
           if (rooms.length == 0) {
-            body = Text("no room");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(
@@ -254,35 +279,53 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
 
         return Scaffold(
           appBar: AppBar(
-            title: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Entrez votre recherche'
+            title: DescribedFeatureOverlay(
+              featureId: 'search_room',
+              tapTarget: Icon(Icons.touch_app),
+              title: Text('Rechercher une pièce'),
+              description: Text("Pour rechercher une pièce, entrez votre recherche dans ce champs texte."),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Entrez votre recherche'
+                ),
+                onChanged: (value) {
+                  fetchMore(FetchMoreOptions(
+                    variables: { "filter": { "search": value } },
+                    updateQuery: (existing, newRooms) => ({
+                      "rooms": newRooms["rooms"]
+                    }),
+                  ));
+                }
               ),
-              onChanged: (value) {
-                fetchMore(FetchMoreOptions(
-                  variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newRooms) => ({
-                    "rooms": newRooms["rooms"]
-                  }),
-                ));
-              }
             ),
             actions: [
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () => null,
               ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewRoom(context)
+              DescribedFeatureOverlay(
+                featureId: 'add_newroom',
+                tapTarget: Icon(Icons.add),
+                title: Text('Ajouter une nouvelle pièce à la liste de référence'),
+                description: Text("Si la pièce que vous chercher n'est pas présente dans la liste de référence pré-remplie. Vous pouvez l'ajouter en cliquant sur le +."),
+                child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => _showDialogNewRoom(context)
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.check),
-                onPressed: () {
-                  Navigator.pop(context);
-                  widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
-                }
+              DescribedFeatureOverlay(
+                featureId: 'validate_rooms',
+                tapTarget: Icon(Icons.check),
+                title: Text('Valider les pièces sélectionnées'),
+                description: Text("Pour valider les pièces sélectionnées, cliquez sur le bouton check."),
+                child: IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
+                  }
+                ),
               ),
             ],
             backgroundColor: Colors.grey,

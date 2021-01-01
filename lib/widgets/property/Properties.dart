@@ -132,7 +132,15 @@ class _PropertiesState extends State<Properties> {
             print('parsed data: ' + properties.toString());
 
             if (properties.length == 0) {
-              return Text("no properties");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Pas de propriété pour le moment.",
+                  style: TextStyle(
+                    color: Colors.grey[600]
+                  )
+                )
+              );
             }
 
             return Mutation(
