@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/owner/EditOwner.dart';
 import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/HeaderInterlocutor.dart';
 

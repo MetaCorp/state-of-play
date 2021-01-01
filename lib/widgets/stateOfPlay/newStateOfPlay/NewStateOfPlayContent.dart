@@ -41,14 +41,14 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
         context,
         const <String>{
           'navigate_newsop',
           'add_interlocutor',
           'select_interlocutor'
         },
-      ); 
+      )); 
     });
   }
 
@@ -164,7 +164,8 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
       if (ret || widget.user.credits > 0) {
 
-        if (!await _showDialogConfirmPay(context))
+        bool retConfirmPay = await _showDialogConfirmPay(context);
+        if (retConfirmPay == null || !retConfirmPay)
           return;
 
         setState(() { _isPdfLoading = true; });

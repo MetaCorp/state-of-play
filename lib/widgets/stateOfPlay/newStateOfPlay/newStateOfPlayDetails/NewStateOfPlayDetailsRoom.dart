@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_tests/widgets/stateOfPlay/HeaderDiscoveryRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddDecoration.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddElectricity.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayD
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomElectricity.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomEquipment.dart';
+
+import 'package:feature_discovery/feature_discovery.dart';
 
 class NewStateOfPlayDetailsRoom extends StatefulWidget {
   NewStateOfPlayDetailsRoom({ Key key, this.room }) : super(key: key);
@@ -20,6 +23,19 @@ class NewStateOfPlayDetailsRoom extends StatefulWidget {
 class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
 
   final int maxEntities = 15;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'add_decoration',
+        },
+      ));
+    });
+  }
 
   void _showDialogDeleteDecoration(context, sop.Decoration decoration) async {
     await showDialog(
@@ -140,11 +156,11 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 if(index == 0){
-                  return  Header(
+                  return HeaderDiscoveryRoom(
                     title: "Décorations",
-                    onPressAdd: () {
-                      if (widget.room.decorations.length < maxEntities)
-                        Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
+                    onPressAdd: () async {
+                      if (widget.room.decorations.length < maxEntities) {
+                        await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
                           onSelect: (decorations) {
                             print('decorations: ' + decorations.toString());
                             if (widget.room.decorations.length + decorations.length > maxEntities)
@@ -164,6 +180,16 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                             setState(() { });
                           },
                         )));
+
+                        if (widget.room.decorations.length > 0 && !await FeatureDiscovery.hasPreviouslyCompleted(context, 'select_decoration')) {
+                          Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
+                            context,
+                            const <String>{ // Feature ids for every feature that you want to showcase in order.
+                              'select_decoration',
+                            },
+                          ));
+                        }
+                      }
                       else
                         _showDialogLimit(context, "décorations");
                     }
@@ -172,7 +198,39 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                 index -=1;
                 return Column(
                   children: [
-                    ListTile(
+                    index == 0 ? DescribedFeatureOverlay(
+                      featureId: 'select_decoration',
+                      tapTarget: Icon(Icons.touch_app),
+                      title: Text('Sélectionner une décoration'),
+                      description: Text("Pour sélectionner une décoration et accéder à son descriptif, cliquez sur l'élément de la liste correspondant"),
+                      onComplete: () async {
+                        Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomDecoration(
+                          decoration: widget.room.decorations[index],
+                          roomName: widget.room.name,
+                        )));
+                        return true;
+                      },
+                      contentLocation: ContentLocation.below,
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Text(widget.room.decorations[index].type),
+                            Spacer(),
+                            IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () {
+                                _showDialogDeleteDecoration(context, widget.room.decorations[index]);
+                              },
+                            )
+                          ]
+                        ),
+                        // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
+                        onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomDecoration(
+                          decoration: widget.room.decorations[index],
+                          roomName: widget.room.name,
+                        )))
+                      ),
+                    ) : ListTile(
                       title: Row(
                         children: [
                           Text(widget.room.decorations[index].type),

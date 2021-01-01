@@ -33,12 +33,12 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
         context,
         const <String>{ // Feature ids for every feature that you want to showcase in order.
           'add_sop',
         },
-      ); 
+      ));
     });
     super.initState();
     _bottomSheetOpen = false;

@@ -129,7 +129,7 @@ class _MyAppState extends State<MyApp> {
     return GraphQLProvider(
       client: client,
       child: FeatureDiscovery(
-        recordStepsInSharedPreferences: true,
+        recordStepsInSharedPreferences: false,
         child: MaterialApp(
           title: 'États des lieux',
           theme: ThemeData(

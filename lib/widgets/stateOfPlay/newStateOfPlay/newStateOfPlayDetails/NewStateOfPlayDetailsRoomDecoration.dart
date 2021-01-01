@@ -7,6 +7,8 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.d
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:feature_discovery/feature_discovery.dart';
+
 class ImageType {
   ImageType({ this.type, this.image });
 
@@ -31,6 +33,19 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
 
   final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
   int count = 0;
+
+  @override
+  void initState() { 
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'validate_decoration',
+        },
+      ));
+    });
+  }
 
   Future<String> getFilePath() async {
     List<File> file = new List();
@@ -87,9 +102,19 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
         appBar: AppBar(
           title: Text(widget.roomName + ' / ' + widget.decoration.type),
           actions: [
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: _onSave,
+            DescribedFeatureOverlay(
+              featureId: 'validate_decoration',
+              tapTarget: Icon(Icons.check),
+              title: Text('Valider un élément'),
+              description: Text("Pour valider un élément, cliquez sur le bouton valider en haut à droite de l'app."),
+              // onComplete: () async {
+              //   _onSave();
+              //   return true;
+              // },
+              child: IconButton(
+                icon: Icon(Icons.check),
+                onPressed: _onSave,
+              ),
             )
           ],
         ),

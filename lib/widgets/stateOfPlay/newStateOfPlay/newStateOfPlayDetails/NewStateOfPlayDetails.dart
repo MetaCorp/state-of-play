@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/HeaderDiscovery.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoom.dart';
 
@@ -25,12 +24,12 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(
+      Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
         context,
         const <String>{ // Feature ids for every feature that you want to showcase in order.
           'add_room',
         },
-      ); 
+      ));
     });
   }
 
@@ -85,9 +84,9 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
       children: [
         HeaderDiscovery(
           title: "Liste des pièces",
-          onPressAdd: () {
+          onPressAdd: () async {
             if (widget.rooms.length < maxRooms) {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
+              await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
                 onSelect: (rooms) {
                   print('rooms: ' + rooms.toString());
                   if (widget.rooms.length + rooms.length > maxRooms)
@@ -105,6 +104,15 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
                   setState(() { });
                 }
               )));
+              
+              if (widget.rooms.length > 0 && !await FeatureDiscovery.hasPreviouslyCompleted(context, 'select_room')) {
+                Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
+                  context,
+                  const <String>{ // Feature ids for every feature that you want to showcase in order.
+                    'select_room',
+                  },
+                ));
+              }
             }
             else {
               _showDialogLimitRoom(context);
@@ -114,7 +122,37 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
         Flexible(
           child: ListView.separated(
             itemCount: widget.rooms.length,
-            itemBuilder: (_, i) => ListTile(
+            itemBuilder: (_, i) => i == 0 ? DescribedFeatureOverlay(
+              featureId: 'select_room',
+              tapTarget: Icon(Icons.touch_app),
+              title: Text('Sélectionner une pièce'),
+              description: Text("Pour sélectionner une pièce et accéder à son descriptif, cliquez sur l'élément de la liste correspondant"),
+              onComplete: () async {
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
+                  room: widget.rooms[i],
+                )));
+                return true;
+              },
+              contentLocation: ContentLocation.below,
+              child: ListTile(
+                title: Row(
+                  children: [
+                    Text(widget.rooms[i].name),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        _showDialogDeleteRoom(context, widget.rooms[i]);
+                      },
+                    )
+                  ]
+                ),
+                // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
+                onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
+                  room: widget.rooms[i],
+                )))
+              ),
+            ) : ListTile(
               title: Row(
                 children: [
                   Text(widget.rooms[i].name),
