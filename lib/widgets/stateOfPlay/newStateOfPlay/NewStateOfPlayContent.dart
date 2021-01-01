@@ -106,7 +106,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
     );
   }
   
-  Future<bool> _showDialogPay (context) async {// TODO: comment faire poour qu'un modale return un bool
+  Future<bool> _showDialogPay(context) async {
     return await showDialog(
       context: context,
       child: AlertDialog(
@@ -130,6 +130,29 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
     );
   }
 
+  Future<bool> _showDialogConfirmPay(context) async {
+    return await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            }
+          ),
+          new FlatButton(
+            child: Text('CONFIRMER'),
+            onPressed: () async {
+              Navigator.pop(context, true);
+            }
+          )
+        ],
+      )
+    );
+  }
+
   _onSave() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -140,6 +163,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       }
 
       if (ret || widget.user.credits > 0) {
+
+        if (!await _showDialogConfirmPay(context))
+          return;
 
         setState(() { _isPdfLoading = true; });
         
