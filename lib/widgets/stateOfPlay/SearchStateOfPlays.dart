@@ -24,6 +24,9 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
+  bool _out = true;
+  bool _in = true;
+
   
   void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
     await showDialog(
@@ -72,6 +75,70 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             }
           )
         ],
+      )
+    );
+  }
+
+  void _showDialogFilter(context, fetchMore) async {
+    await showDialog(
+      context: context,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Filtres"),
+                  CheckboxListTile(
+                    title: Text("Entrée"),
+                    value: _in,
+                    onChanged: (value) {
+                      setState(() {
+                        _in = value; 
+                      }); 
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Sortie"),
+                    value: _out,
+                    onChanged: (value) { 
+                      setState(() {
+                        _out = value; 
+                      }); 
+                    },
+                  )
+                ],
+              ),
+            ),
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }
+              ),
+              FlatButton(
+                child: Text('APPLIQUER'),
+                onPressed: !_in && !_out ? null : () async {
+                  fetchMore(FetchMoreOptions(
+                    variables: {
+                      "filter": {
+                        "search": _searchController.text,
+                        "out":  _out == null || _out,
+                        "in": _out == null || !_out,
+                      }
+                    },
+                    updateQuery: (existing, newStateOfPlays) => ({
+                      "stateOfPlays": newStateOfPlays["stateOfPlays"]
+                    }),
+                  ));
+                  Navigator.pop(context);
+                }
+              )
+            ],
+          );
+        }
       )
     );
   }
@@ -212,6 +279,10 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                 icon: Icon(Icons.search),
                 onPressed: () => null,
               ),
+              widget.out == null ? IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () => _showDialogFilter(context, fetchMore),
+              ) : Container(),
             ],
             backgroundColor: Colors.grey,
           ),
