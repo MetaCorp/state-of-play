@@ -333,30 +333,60 @@ class _ShopState extends State<Shop> {
                     loading: loadings[0],
                     price: 4.99,
                     onPress: () async {
-                      StripePayment.paymentRequestWithNativePay(
-                        androidPayOptions: AndroidPayPaymentRequest(
-                          totalPrice: "1.20",
-                          currencyCode: "EUR",
-                        ),
-                        applePayOptions: ApplePayPaymentOptions(
-                          countryCode: 'FR',
-                          currencyCode: 'EUR',
-                          items: [
-                            ApplePayItem(
-                              label: 'Test',
-                              amount: '13',
-                            )
-                          ],
-                        ),
-                      ).then((token) {
-                        print('stripe token: ' + token.toString());
+
+                      StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest()).then((paymentMethod) {
+                        print('tokenWithCard: ' + paymentMethod.toString());
+                        // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${paymentMethod.id}')));
                         // setState(() {
-                        //   _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
-                        //   _paymentToken = token;
+                        //   _paymentMethod = paymentMethod;
                         // });
                       }).catchError((error) {
                         print('stripe error: ' + error.toString());
                       });
+
+                      // final CreditCard testCard = CreditCard(
+                      //   number: '4000002760003184',
+                      //   expMonth: 12,
+                      //   expYear: 21,
+                      // );
+
+                      // StripePayment.createTokenWithCard(
+                      //   testCard,
+                      // ).then((token) {
+                      //   print('tokenWithCard: ' + token.toString());
+                      //   // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
+                      //   // setState(() {
+                      //   //   _paymentToken = token;
+                      //   // });
+                      // }).catchError((error) {
+                      //   print('stripe error: ' + error.toString());
+                      // });
+
+                      // StripePayment.paymentRequestWithNativePay(
+                      //   androidPayOptions: AndroidPayPaymentRequest(
+                      //     totalPrice: "1.20",
+                      //     currencyCode: "EUR",
+                      //   ),
+                      //   applePayOptions: ApplePayPaymentOptions(
+                      //     countryCode: 'FR',
+                      //     currencyCode: 'EUR',
+                      //     items: [
+                      //       ApplePayItem(
+                      //         label: 'Test',
+                      //         amount: '13',
+                      //       )
+                      //     ],
+                      //   ),
+                      // ).then((token) {
+                      //   print('stripe token: ' + token.toString());
+                      //   // setState(() {
+                      //   //   _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
+                      //   //   _paymentToken = token;
+                      //   // });
+                      // }).catchError((error) {
+                      //   print('stripe error: ' + error.toString());
+                      // });
+
                       // checkIfNativePayReady(runMutation);
                       // MultiSourceResult result = runMutation({
                       //   "data": {
