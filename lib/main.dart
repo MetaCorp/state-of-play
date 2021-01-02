@@ -44,6 +44,9 @@ import 'package:flutter_tests/widgets/settings/Settings.dart';
 
 import 'package:flutter_tests/widgets/shop/Shop.dart';
 
+import 'package:stripe_payment/stripe_payment.dart' as stripe;
+
+
 String get host {
   if (Platform.isAndroid) {
     return 'localhost';
@@ -97,6 +100,12 @@ class _MyAppState extends State<MyApp> {
       ),
     );
     
+    stripe.StripeOptions(
+      publishableKey: 'pk_test_51I5BaICPxFg6weCsCClCXyavXZd18yMNkLuFp04YIo8P3eeOqFuEOIYB8C1GvsuilYjPdgUuUxPL6WRg5Pg0IbWW00HgBE9oIO', // add you key as per Stripe dashboard
+      merchantId: 'merchant.thegreatestmarketplace',// add you merchantId as per apple developer account
+      androidPayMode: 'test',
+    );
+
     super.initState();
   }
 
