@@ -4,9 +4,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
+typedef SelectCallback = Function(sop.Representative);
 
 class SearchRepresentatives extends StatefulWidget {
-  SearchRepresentatives({Key key}) : super(key: key);
+  SearchRepresentatives({ Key key, this.onSelect }) : super(key: key);
+
+  SelectCallback onSelect;
 
   @override
   _SearchRepresentativesState createState() => _SearchRepresentativesState();
@@ -163,7 +166,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
                 
                 return RepresentativesList(
                   representatives: representatives,
-                  onTap: (representative) => Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representative.id }),
+                  onTap: (representative) => widget.onSelect != null ? widget.onSelect(representative) : Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representative.id }),
                   onDelete: (representative) => _showDialogDelete(context, representative, runDeleteMutation)
                 );
               }

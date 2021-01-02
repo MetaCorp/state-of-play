@@ -5,8 +5,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
+typedef SelectCallback = Function(sop.Owner);
+
 class SearchOwners extends StatefulWidget {
-  SearchOwners({Key key}) : super(key: key);
+  SearchOwners({ Key key, this.onSelect }) : super(key: key);
+
+  SelectCallback onSelect;
 
   @override
   _SearchOwnersState createState() => _SearchOwnersState();
@@ -163,7 +167,7 @@ class _SearchOwnersState extends State<SearchOwners> {
                 
                 return OwnersList(
                   owners: owners,
-                  onTap: (owner) => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owner.id }),
+                  onTap: (owner) => widget.onSelect != null ? widget.onSelect(owner) : Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owner.id }),
                   onDelete: (owner) => _showDialogDelete(context, owner, runDeleteMutation)
                 );
               }

@@ -3,14 +3,13 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/property/NewPropertyContent.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/HeaderInterlocutor.dart';
 
+import 'package:flutter_tests/widgets/owner/SearchOwners.dart';
+import 'package:flutter_tests/widgets/representative/SearchRepresentatives.dart';
+import 'package:flutter_tests/widgets/tenant/SearchTenants.dart';
+import 'package:flutter_tests/widgets/property/SearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutor.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutorDiscovery.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchOwners.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchProperties.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchRepresentatives.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutorsSearchTenants.dart';
 import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
-
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -54,10 +53,11 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                   }
                 )));
               else
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchOwners(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchOwners(
                   onSelect : (owner) {
+                    Navigator.pop(context);
                     widget.stateOfPlay.owner = owner;
-                    setState(() { }); // To rerender widget
+                    setState(() { });// To rerender widget
                   }
                 )));
             },
@@ -97,8 +97,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                   }
                 )));
               else
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchRepresentatives(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchRepresentatives(
                   onSelect : (representative) {
+                    Navigator.pop(context);
                     widget.stateOfPlay.representative = representative;
                     setState(() { });
                   }
@@ -128,8 +129,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
           ListTileInterlocutor(
             labelText: "Selectionner un locataire",
             onPress: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchTenants(
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants(
                 onSelect : (tenant) {
+                  Navigator.pop(context);
                   widget.stateOfPlay.tenants.add(tenant);
                   setState(() { });
                 }
@@ -190,8 +192,9 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                   }
                 )));
               else
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayInterlocutorsSearchProperties(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties(
                   onSelect : (property) {
+                    Navigator.pop(context);
                     widget.stateOfPlay.property = property;
                     setState(() { });
                   }
@@ -201,16 +204,16 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
               Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewPropertyContent(
                 title: 'Nouvelle propriété',
                 property: sop.Property(
-                  reference: "000",
-                  address: "42 rue du Test",
-                  postalCode: "75001",
-                  city: "Paris",
-                  lot: "000",
-                  floor: 4,
-                  roomCount: 4,
-                  area: 60,
-                  heatingType: "test",
-                  hotWater: "test"
+                  // reference: "000",
+                  // address: "42 rue du Test",
+                  // postalCode: "75001",
+                  // city: "Paris",
+                  // lot: "000",
+                  // floor: 4,
+                  // roomCount: 4,
+                  // area: 60,
+                  // heatingType: "test",
+                  // hotWater: "test"
                 ),
                 onSave : (property) {
                   widget.stateOfPlay.property = property;

@@ -5,8 +5,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 // import 'package:intl/intl.dart';// DateFormat
 
+typedef SelectCallback = Function(sop.Property);
+
 class SearchProperties extends StatefulWidget {
-  SearchProperties({Key key}) : super(key: key);
+  SearchProperties({ Key key, this.onSelect }) : super(key: key);
+
+  SelectCallback onSelect;
 
   @override
   _SearchPropertiesState createState() => _SearchPropertiesState();
@@ -164,7 +168,7 @@ class _SearchPropertiesState extends State<SearchProperties> {
                 
                 return PropertiesList(
                   properties: properties,
-                  onTap: (property) => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": property.id }),
+                  onTap: (property) => widget.onSelect != null ? widget.onSelect(property) : Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": property.id }),
                   onDelete: (property) => _showDialogDelete(context, property, runDeleteMutation)
                 );
               }
