@@ -123,6 +123,10 @@ class _RegisterState extends State<Register> {
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
                     onPressed: () async {
+                      
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString("token", null);
+
                       MultiSourceResult result = runMutation({
                         "data": {
                           "email": _emailController.text,

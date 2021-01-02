@@ -5,6 +5,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flip_panel/flip_panel.dart';
+import 'dart:math';
+
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -37,6 +40,14 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     
+    final imageWidth = 128.0;
+    final imageHeight = 129.0;
+    final toleranceFactor = 0.033;
+    final widthFactor = 0.125;
+    final heightFactor = 0.5;
+
+    final random = Random();
+
     return Mutation(
       options: MutationOptions(
         documentNode: gql('''
@@ -76,7 +87,87 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox( height: 28,),
-                  Center(child: Image.asset('assets/Logo/1/logo.png'),),
+                  Center(
+                    child: Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [0, 1, 2, 3, 4, 5, 6, 7].map((count) => FlipPanel.stream(
+                              itemStream: Stream.fromFuture(Future.delayed(
+                                Duration(milliseconds: random.nextInt(20) * 100), () => 1)),
+                              itemBuilder: (_, value) => value <= 0 ? Container(
+                                // color: Colors.white,
+                                width: widthFactor * imageWidth,
+                                height: heightFactor * imageHeight,
+                              ) : ClipRect(
+                                child: Align(
+                                  alignment: Alignment(
+                                    -1.0 + count * 2 * 0.125 + count * toleranceFactor,
+                                    -1.0),
+                                  widthFactor: widthFactor,
+                                  heightFactor: heightFactor,
+                                  child: Image.asset(
+                                    'assets/Logo/1/logo.png',
+                                    width: imageWidth,
+                                    height: imageHeight,
+                                  )
+                                )
+                              ),
+                              initValue: 0,
+                              spacing: 0.0,
+                              direction: FlipDirection.up,
+                            )).toList(),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [0, 1, 2, 3, 4, 5, 6, 7].map((count) => FlipPanel.stream(
+                              itemStream: Stream.fromFuture(Future.delayed(
+                                Duration(milliseconds: random.nextInt(20) * 100), () => 1)),
+                              itemBuilder: (_, value) => value <= 0 ? Container(
+                                // color: Colors.white,
+                                width: widthFactor * imageWidth,
+                                height: heightFactor * imageHeight,
+                              ) : ClipRect(
+                                child: Align(
+                                  alignment: Alignment(
+                                    -1.0 + count * 2 * 0.125 + count * toleranceFactor,
+                                    1.0),
+                                  widthFactor: widthFactor,
+                                  heightFactor: heightFactor,
+                                  child: Image.asset(
+                                    'assets/Logo/1/logo.png',
+                                    width: imageWidth,
+                                    height: imageHeight,
+                                  )
+                                )
+                              ),
+                              initValue: 0,
+                              spacing: 0.0,
+                              direction: FlipDirection.down,
+                            )).toList(),
+                          )
+                        ],
+                      ),
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.only(
+                      //     topLeft: Radius.circular(24),
+                      //     topRight: Radius.circular(24),
+                      //     bottomLeft: Radius.circular(24),
+                      //     bottomRight: Radius.circular(24)
+                      //   ),
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       color: Colors.grey.withOpacity(0.5),
+                      //       spreadRadius: 3,
+                      //       blurRadius: 4,
+                      //       offset: Offset(0, 3), // changes position of shadow
+                      //     ),
+                      //   ],
+                      // ),
+                    )
+                  ),
                   SizedBox( height: 28,),
                   TextField(
                     controller: _emailController,
@@ -100,6 +191,10 @@ class _LoginState extends State<Login> {
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
                     onPressed: () async {
+                      
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString("token", null);
+                      
                       MultiSourceResult result = runMutation({
                         "email": _emailController.text,
                         "password": _passwordController.text

@@ -201,8 +201,8 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                     index == 0 ? DescribedFeatureOverlay(
                       featureId: 'select_decoration',
                       tapTarget: Icon(Icons.touch_app),
-                      title: Text('Sélectionner une décoration'),
-                      description: Text("Pour sélectionner une décoration et accéder à son descriptif, cliquez sur l'élément de la liste correspondant"),
+                      title: Container(margin: EdgeInsets.only(right: 32), child: Text('Sélectionner une décoration')),
+                      description: Container(margin: EdgeInsets.only(right: 64), child: Text("Pour sélectionner une décoration et accéder à son descriptif, cliquez sur l'élément de la liste correspondant.")),
                       onComplete: () async {
                         Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomDecoration(
                           decoration: widget.room.decorations[index],

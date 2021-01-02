@@ -39,7 +39,8 @@ dependencies:
   painter2: ^1.0.1
   flutter_colorpicker: ^0.3.4
   feature_discovery: ^0.13.0
-  flutter_slidable:
+  flutter_slidable: any
+  flip_panel: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

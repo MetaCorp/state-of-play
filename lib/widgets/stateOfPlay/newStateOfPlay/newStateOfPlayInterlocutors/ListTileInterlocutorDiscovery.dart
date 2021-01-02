@@ -21,12 +21,13 @@ class ListTileInterlocutorDiscovery extends StatelessWidget {
     return DescribedFeatureOverlay(
       featureId: 'select_interlocutor',
       tapTarget: Icon(Icons.touch_app),
-      title: Text('Ou sélectionner un propriétaire déjà éxistant'),
-      description: Text("Pour sélectionner un propriétaire déjà éxistant, cliquez sur 'Sélectionner un propriétaire'."),
+      title: Container(margin: EdgeInsets.only(right: 32), child: Text('Ou sélectionner un propriétaire déjà éxistant')),
+      description: Container(margin: EdgeInsets.only(right: 64), child: Text("Pour sélectionner un propriétaire déjà éxistant, cliquez sur 'Sélectionner un propriétaire'.")),
       // onComplete: () async {
       //   onPress();
       //   return true;
       // },
+      contentLocation: ContentLocation.below,
       child: ListTile(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,6 +48,7 @@ class ListTileInterlocutorDiscovery extends StatelessWidget {
               //   onPressAdd();
               //   return true;
               // },
+              contentLocation: ContentLocation.below,
               child: IconButton(
                 icon: text != null ? Icon(Icons.close) : Icon(Icons.add),
                 onPressed: text != null ? onPressRemove : onPressAdd,

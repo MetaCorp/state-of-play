@@ -32,7 +32,7 @@ class HeaderDiscoveryRoom extends StatelessWidget {
             tapTarget: Icon(Icons.add),
             targetColor: Colors.grey[200],
             title: Text('Ajouter une décoration'),
-            description: Text('Pour ajouter une décoration, cliquez sur le bouton +, puis choisissez parmis la liste de décoration pré-remplie'),
+            description: Text('Pour ajouter une décoration, cliquez sur le bouton +, puis choisissez parmis la liste de décoration pré-remplie.'),
             onComplete: () async {
               onPressAdd();
               return true;

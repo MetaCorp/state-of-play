@@ -125,8 +125,8 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
             itemBuilder: (_, i) => i == 0 ? DescribedFeatureOverlay(
               featureId: 'select_room',
               tapTarget: Icon(Icons.touch_app),
-              title: Text('Sélectionner une pièce'),
-              description: Text("Pour sélectionner une pièce et accéder à son descriptif, cliquez sur l'élément de la liste correspondant"),
+              title: Container(margin: EdgeInsets.only(right: 32), child: Text('Sélectionner une pièce')),
+              description: Container(margin: EdgeInsets.only(right: 64), child: Text("Pour sélectionner une pièce et accéder à son descriptif, cliquez sur l'élément de la liste correspondant.")),
               onComplete: () async {
                 Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoom(
                   room: widget.rooms[i],
