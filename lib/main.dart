@@ -80,8 +80,8 @@ class _MyAppState extends State<MyApp> {
     deleteToken();
     
     final HttpLink httpLink = HttpLink(
-      uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
-      // uri: 'http://$host:4000/graphql',
+      // uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
+      uri: 'http://$host:4000/graphql',
     );
   
     final AuthLink authLink = AuthLink(
@@ -98,12 +98,6 @@ class _MyAppState extends State<MyApp> {
         cache: InMemoryCache(),
         link: link,
       ),
-    );
-    
-    stripe.StripeOptions(
-      publishableKey: 'pk_test_51I5BaICPxFg6weCsCClCXyavXZd18yMNkLuFp04YIo8P3eeOqFuEOIYB8C1GvsuilYjPdgUuUxPL6WRg5Pg0IbWW00HgBE9oIO', // add you key as per Stripe dashboard
-      merchantId: 'merchant.thegreatestmarketplace',// add you merchantId as per apple developer account
-      androidPayMode: 'test',
     );
 
     super.initState();
@@ -138,7 +132,7 @@ class _MyAppState extends State<MyApp> {
     return GraphQLProvider(
       client: client,
       child: FeatureDiscovery(
-        recordStepsInSharedPreferences: false,
+        recordStepsInSharedPreferences: true,
         child: MaterialApp(
           title: 'États des lieux',
           theme: ThemeData(

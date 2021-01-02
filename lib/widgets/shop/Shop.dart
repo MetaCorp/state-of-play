@@ -8,6 +8,9 @@ import 'package:flutter_tests/widgets/utilities/MyScaffold.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 
+import 'dart:convert';
+
+
 class ShowDialogToDismiss extends StatelessWidget {
   final String content;
   final String title;
@@ -75,6 +78,13 @@ class _ShopState extends State<Shop> {
     super.initState();
 
     loadings = loadings.map((value) => false).toList();
+
+    
+    StripePayment.setOptions(StripeOptions(
+      publishableKey: 'pk_test_51I5BaICPxFg6weCsCClCXyavXZd18yMNkLuFp04YIo8P3eeOqFuEOIYB8C1GvsuilYjPdgUuUxPL6WRg5Pg0IbWW00HgBE9oIO', // add you key as per Stripe dashboard
+      merchantId: 'merchant.test',// add you merchantId as per apple developer account
+      androidPayMode: 'test',
+    ));
   }
 
   _onWillPop(sop.User user) {
@@ -86,14 +96,14 @@ class _ShopState extends State<Shop> {
     return false;
   }
 
-  void checkIfNativePayReady(runMutation) async {
+  Future<bool> checkIfNativePayReady() async {
     print('started to check if native pay ready');
-    // bool deviceSupportNativePay = await StripePayment.deviceSupportsNativePay();
-    // bool isNativeReady = await StripePayment.canMakeNativePayPayments(['american_express', 'visa', 'maestro', 'master_card']);
-    /*deviceSupportNativePay && isNativeReady*/ false ? createPaymentMethodNative(4.99) : createPaymentMethod(4.99);
+    bool deviceSupportNativePay = await StripePayment.deviceSupportsNativePay();
+    bool isNativeReady = await StripePayment.canMakeNativePayPayments(['american_express', 'visa', 'maestro', 'master_card']);
+    return deviceSupportNativePay && isNativeReady;
   }
 
-  Future<void> createPaymentMethodNative(double totalCost) async {
+  Future<void> createPaymentMethodNative(double totalCost, int i, RunMutation runStripePIMutation) async {
     print('started NATIVE payment...');
     StripePayment.setStripeAccount(null);
     List<ApplePayItem> items = [];
@@ -142,18 +152,18 @@ class _ShopState extends State<Shop> {
       ),
     );
 
-    // paymentMethod != null
-    //     ? processPaymentAsDirectCharge(paymentMethod)
-    //     : showDialog(
-    //         context: context,
-    //         builder: (BuildContext context) => ShowDialogToDismiss(
-    //             title: 'Error',
-    //             content:
-    //                 'It is not possible to pay with this card. Please try again with a different card',
-    //             buttonText: 'CLOSE'));
+    paymentMethod != null
+        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation)
+        : showDialog(
+            context: context,
+            builder: (BuildContext context) => ShowDialogToDismiss(
+                title: 'Error',
+                content:
+                    'It is not possible to pay with this card. Please try again with a different card',
+                buttonText: 'CLOSE'));
   }
 
-  Future<void> createPaymentMethod(double totalCost) async {
+  Future<void> createPaymentMethod(double totalCost, int i, RunMutation runStripePIMutation) async {
     StripePayment.setStripeAccount(null);
 
     // double tax = ((totalCost * taxPercent) * 100).ceil() / 100;
@@ -167,114 +177,144 @@ class _ShopState extends State<Shop> {
     ).then((PaymentMethod paymentMethod) {
       return paymentMethod;
     }).catchError((e) {
-      print('Errore Card: ${e.toString()}');
+      print('Error Card: ${e.toString()}');
     });
-    // paymentMethod != null
-    //     ? processPaymentAsDirectCharge(paymentMethod)
-    //     : showDialog(
-    //         context: context,
-    //         builder: (BuildContext context) => ShowDialogToDismiss(
-    //             title: 'Error',
-    //             content:
-    //                 'It is not possible to pay with this card. Please try again with a different card',
-    //             buttonText: 'CLOSE'));
+    paymentMethod != null
+        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation)
+        : showDialog(
+            context: context,
+            builder: (BuildContext context) => ShowDialogToDismiss(
+                title: 'Error',
+                content:
+                    'It is not possible to pay with this card. Please try again with a different card',
+                buttonText: 'CLOSE'));
   }
 
-  // Future<void> processPaymentAsDirectCharge(PaymentMethod paymentMethod) async {
-  //   setState(() { loadings[0] = true; });
+  Future<void> processPaymentAsDirectCharge(PaymentMethod paymentMethod, double amount, int i, RunMutation runStripePIMutation) async {
+    setState(() { loadings[i] = true; });
 
-  //   //step 2: request to create PaymentIntent, attempt to confirm the payment & return PaymentIntent
-  //   final http.Response response = await http
-  //       .post('$url?amount=$amount&currency=GBP&paym=${paymentMethod.id}');
-  //   print('Now i decode');
-  //   if (response.body != null && response.body != 'error') {
-  //     final paymentIntentX = jsonDecode(response.body);
-  //     final status = paymentIntentX['paymentIntent']['status'];
-  //     final strAccount = paymentIntentX['stripeAccount'];
+    //step 2: request to create PaymentIntent, attempt to confirm the payment & return PaymentIntent
+    // final http.Response response = await http
+    //     .post('$url?amount=$amount&currency=GBP&paym=${paymentMethod.id}');
+    MultiSourceResult res = runStripePIMutation({
+      "data": {
+        "amount": (amount * 100).toInt(),
+        "paym": paymentMethod.id
+      }
+    });
 
-  //     //step 3: check if payment was succesfully confirmed
-  //     if (status == 'succeeded') {
-  //       //payment was confirmed by the server without need for futher authentification
-  //       StripePayment.completeNativePayRequest();
-  //       setState(() {
-  //         // text = 'Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}p succesfully charged';
-  //         loadings[0] = false;
-  //       });
-  //     } else {
-  //       //step 4: there is a need to authenticate
-  //       StripePayment.setStripeAccount(strAccount);
+    QueryResult queryResult = await res.networkResult;
 
-  //       await StripePayment.confirmPaymentIntent(PaymentIntent(
-  //               paymentMethodId: paymentIntentX['paymentIntent']
-  //                   ['payment_method'],
-  //               clientSecret: paymentIntentX['paymentIntent']['client_secret']))
-  //           .then(
-  //         (PaymentIntentResult paymentIntentResult) async {
-  //           //This code will be executed if the authentication is successful
-  //           //step 5: request the server to confirm the payment with
-  //           final statusFinal = paymentIntentResult.status;
-  //           if (statusFinal == 'succeeded') {
-  //             StripePayment.completeNativePayRequest();
-  //             setState(() {
-  //               loadings[0] = false;
-  //             });
-  //           } else if (statusFinal == 'processing') {
-  //             StripePayment.cancelNativePayRequest();
-  //             setState(() {
-  //               loadings[0] = false;
-  //             });
-  //             showDialog(
-  //                 context: context,
-  //                 builder: (BuildContext context) => ShowDialogToDismiss(
-  //                     title: 'Warning',
-  //                     content:
-  //                         'The payment is still in \'processing\' state. This is unusual. Please contact us',
-  //                     buttonText: 'CLOSE'));
-  //           } else {
-  //             StripePayment.cancelNativePayRequest();
-  //             setState(() {
-  //               loadings[0] = false;
-  //             });
-  //             showDialog(
-  //                 context: context,
-  //                 builder: (BuildContext context) => ShowDialogToDismiss(
-  //                     title: 'Error',
-  //                     content:
-  //                         'There was an error to confirm the payment. Details: $statusFinal',
-  //                     buttonText: 'CLOSE'));
-  //           }
-  //         },
-  //         //If Authentication fails, a PlatformException will be raised which can be handled here
-  //       ).catchError((e) {
-  //         //case B1
-  //         StripePayment.cancelNativePayRequest();
-  //         setState(() {
-  //           loadings[0] = false;
-  //         });
-  //         showDialog(
-  //             context: context,
-  //             builder: (BuildContext context) => ShowDialogToDismiss(
-  //                 title: 'Error',
-  //                 content:
-  //                     'There was an error to confirm the payment. Please try again with another card',
-  //                 buttonText: 'CLOSE'));
-  //       });
-  //     }
-  //   } else {
-  //     //case A
-  //    StripePayment.cancelNativePayRequest();
-  //     setState(() {
-  //       loadings[0] = false;
-  //     });
-  //     showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) => ShowDialogToDismiss(
-  //             title: 'Error',
-  //             content:
-  //                 'There was an error in creating the payment. Please try again with another card',
-  //             buttonText: 'CLOSE'));
-  //   }
-  // }
+    print('Now i decode');
+    if (queryResult.hasException) {
+      print('runStripePIMutation exception: ' + queryResult.exception.toString());
+      StripePayment.cancelNativePayRequest();
+      setState(() {
+        loadings[i] = false;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => ShowDialogToDismiss(
+              title: 'Error',
+              content:
+                  'There was an error in creating the payment. Please try again with another card',
+              buttonText: 'CLOSE'));
+    }
+    else {
+      print('queryResult: ' + queryResult.data.toString());
+
+      if (queryResult.data["stripePI"] == "") {
+        StripePayment.cancelNativePayRequest();
+          setState(() {
+            loadings[i] = false;
+          });
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => ShowDialogToDismiss(
+                  title: 'Error',
+                  content:
+                      'There was an error to confirm the payment. Please try again with another card',
+                  buttonText: 'CLOSE'));
+      }
+      else {
+        final paymentIntentX = jsonDecode(queryResult.data["stripePI"]);// jsonDecode(response.body);
+
+        print('paymentIntentX: ' + paymentIntentX.toString());
+        final status = paymentIntentX['paymentIntent']['status'];
+        final strAccount = paymentIntentX['stripeAccount'];
+
+        //step 3: check if payment was succesfully confirmed
+        if (status == 'succeeded') {
+          //payment was confirmed by the server without need for futher authentification
+          StripePayment.completeNativePayRequest();
+          print('Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}c succesfully charged');
+          setState(() {
+            // text = 'Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}p succesfully charged';
+            loadings[i] = false;
+          });
+        } else {
+          //step 4: there is a need to authenticate
+          StripePayment.setStripeAccount(strAccount);
+
+          await StripePayment.confirmPaymentIntent(PaymentIntent(
+                  paymentMethodId: paymentIntentX['paymentIntent']
+                      ['payment_method'],
+                  clientSecret: paymentIntentX['paymentIntent']['client_secret']))
+              .then((PaymentIntentResult paymentIntentResult) async {
+              //This code will be executed if the authentication is successful
+              //step 5: request the server to confirm the payment with
+              final statusFinal = paymentIntentResult.status;
+              if (statusFinal == 'succeeded') {
+                StripePayment.completeNativePayRequest();
+                setState(() {
+                  loadings[i] = false;
+                });
+              } else if (statusFinal == 'processing') {
+                StripePayment.cancelNativePayRequest();
+                setState(() {
+                  loadings[i] = false;
+                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ShowDialogToDismiss(
+                        title: 'Warning',
+                        content:
+                            'The payment is still in \'processing\' state. This is unusual. Please contact us',
+                        buttonText: 'CLOSE'));
+              } else {
+                StripePayment.cancelNativePayRequest();
+                setState(() {
+                  loadings[i] = false;
+                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ShowDialogToDismiss(
+                        title: 'Error',
+                        content:
+                            'There was an error to confirm the payment. Details: $statusFinal',
+                        buttonText: 'CLOSE'));
+              }
+            },
+            //If Authentication fails, a PlatformException will be raised which can be handled here
+          ).catchError((e) {
+            //case B1
+            StripePayment.cancelNativePayRequest();
+            setState(() {
+              loadings[i] = false;
+            });
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => ShowDialogToDismiss(
+                    title: 'Error',
+                    content:
+                        'There was an error to confirm the payment. Please try again with another card',
+                    buttonText: 'CLOSE'));
+          });
+        }
+
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,116 +365,80 @@ class _ShopState extends State<Shop> {
             QueryResult mutationResult,
           ) {
             
-            return Container(
-              child: ListView(
-                children: [
-                  ListTileShop(
-                    title: '1 crédit',
-                    loading: loadings[0],
-                    price: 4.99,
-                    onPress: () async {
-
-                      StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest()).then((paymentMethod) {
-                        print('tokenWithCard: ' + paymentMethod.toString());
-                        // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${paymentMethod.id}')));
-                        // setState(() {
-                        //   _paymentMethod = paymentMethod;
-                        // });
-                      }).catchError((error) {
-                        print('stripe error: ' + error.toString());
-                      });
-
-                      // final CreditCard testCard = CreditCard(
-                      //   number: '4000002760003184',
-                      //   expMonth: 12,
-                      //   expYear: 21,
-                      // );
-
-                      // StripePayment.createTokenWithCard(
-                      //   testCard,
-                      // ).then((token) {
-                      //   print('tokenWithCard: ' + token.toString());
-                      //   // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
-                      //   // setState(() {
-                      //   //   _paymentToken = token;
-                      //   // });
-                      // }).catchError((error) {
-                      //   print('stripe error: ' + error.toString());
-                      // });
-
-                      // StripePayment.paymentRequestWithNativePay(
-                      //   androidPayOptions: AndroidPayPaymentRequest(
-                      //     totalPrice: "1.20",
-                      //     currencyCode: "EUR",
-                      //   ),
-                      //   applePayOptions: ApplePayPaymentOptions(
-                      //     countryCode: 'FR',
-                      //     currencyCode: 'EUR',
-                      //     items: [
-                      //       ApplePayItem(
-                      //         label: 'Test',
-                      //         amount: '13',
-                      //       )
-                      //     ],
-                      //   ),
-                      // ).then((token) {
-                      //   print('stripe token: ' + token.toString());
-                      //   // setState(() {
-                      //   //   _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
-                      //   //   _paymentToken = token;
-                      //   // });
-                      // }).catchError((error) {
-                      //   print('stripe error: ' + error.toString());
-                      // });
-
-                      // checkIfNativePayReady(runMutation);
-                      // MultiSourceResult result = runMutation({
-                      //   "data": {
-                      //     "amount": 1
-                      //   }
-                      // });
-                
-                      // setState(() { loadings[0] = true; });
-                      // QueryResult queryResult = await result.networkResult;
-                      // setState(() { loadings[0] = false; });
-                    }
-                  ),
-                  Divider(),
-                  ListTileShop(
-                    title: '5 crédits',
-                    loading: loadings[1],
-                    price: 19.99,
-                    onPress: () async {
-                      MultiSourceResult result = runMutation({
-                        "data": {
-                          "amount": 5
-                        }
-                      });
-                
-                      setState(() { loadings[1] = true; });
-                      QueryResult queryResult = await result.networkResult;
-                      setState(() { loadings[1] = false; });
-                    }
-                  ),
-                  Divider(),
-                  ListTileShop(
-                    title: '10 crédits',
-                    loading: loadings[2],
-                    price: 34.99,
-                    onPress: () async {
-                      MultiSourceResult result = runMutation({
-                        "data": {
-                          "amount": 10
-                        }
-                      });
-                
-                      setState(() { loadings[2] = true; });
-                      QueryResult queryResult = await result.networkResult;
-                      setState(() { loadings[2] = false; });
-                    }
-                  )
-                ],
+            return Mutation(
+              options: MutationOptions(
+                documentNode: gql('''
+                  query stripePI(\$data: StripePIInput!) {
+                    stripePI(data: \$data)
+                  }
+                '''), // this is the mutation string you just created
+                // you can update the cache based on results
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                // or do something with the result.data on completion
+                onCompleted: (dynamic resultData) {
+                  // print('onCompleted: ' + resultData.hasException);
+                },
               ),
+              builder: (
+                RunMutation runStripePIMutation,
+                QueryResult mutationResult,
+              ) {
+                
+                return Container(
+                  child: ListView(
+                    children: [
+                      ListTileShop(
+                        title: '1 crédit',
+                        loading: loadings[0],
+                        price: 4.99,
+                        onPress: () async {
+
+                          if (await checkIfNativePayReady())
+                            createPaymentMethodNative(0.50, 0, runStripePIMutation);
+                          else
+                            createPaymentMethod(0.50, 0, runStripePIMutation);
+                        }
+                      ),
+                      Divider(),
+                      ListTileShop(
+                        title: '5 crédits',
+                        loading: loadings[1],
+                        price: 19.99,
+                        onPress: () async {
+                          MultiSourceResult result = runMutation({
+                            "data": {
+                              "amount": 5
+                            }
+                          });
+                    
+                          setState(() { loadings[1] = true; });
+                          QueryResult queryResult = await result.networkResult;
+                          setState(() { loadings[1] = false; });
+                        }
+                      ),
+                      Divider(),
+                      ListTileShop(
+                        title: '10 crédits',
+                        loading: loadings[2],
+                        price: 34.99,
+                        onPress: () async {
+                          MultiSourceResult result = runMutation({
+                            "data": {
+                              "amount": 10
+                            }
+                          });
+                    
+                          setState(() { loadings[2] = true; });
+                          QueryResult queryResult = await result.networkResult;
+                          setState(() { loadings[2] = false; });
+                        }
+                      )
+                    ],
+                  ),
+                );
+              }
             );
           }
         );
