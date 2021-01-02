@@ -46,6 +46,20 @@ class _ImageListState extends State<ImageList> {
                   width: 150,
                   height: 150,
                   fit: BoxFit.fill,
+                  // frameBuilder: (BuildContext context, Widget child, int frame,
+                  //   bool wasSynchronouslyLoaded) {
+                  //   if (wasSynchronouslyLoaded) {
+                  //     return child;
+                  //   } return Container(
+                  //     width: 150,
+                  //     height: 150,
+                  //     child: Center(
+                  //       child: CircularProgressIndicator(
+                  //         value: null,
+                  //       ),
+                  //     ),
+                  //   );
+                  //   }
               );
               
               else if (imageType.type == "memory")
@@ -54,7 +68,21 @@ class _ImageListState extends State<ImageList> {
                   width: 150,
                   height: 150,
                   fit: BoxFit.fill,
-              );
+                  // frameBuilder: (BuildContext context, Widget child, int frame,
+                  //   bool wasSynchronouslyLoaded) {
+                  //   if (wasSynchronouslyLoaded) {
+                  //     return child;
+                  //   } return Container(
+                  //     width: 150,
+                  //     height: 150,
+                  //     child: Center(
+                  //       child: CircularProgressIndicator(
+                  //         value: null,
+                  //       ),
+                  //     ),
+                  //   );
+                  //   }
+                );
               else
                 image = Image.network(
                   imageType.image,

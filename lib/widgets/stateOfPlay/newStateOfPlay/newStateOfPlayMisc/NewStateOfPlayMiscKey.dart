@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 
@@ -5,6 +7,8 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -24,6 +28,17 @@ class NewStateOfPlayMiscKey extends StatefulWidget {
 
 class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
   final _formKey = GlobalKey<FormState>();
+   Uuid uuid = Uuid();
+
+
+  Future<String> getFilePath() async {
+
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path;
+    String filePath = '$appDocumentsPath/NewStateOfPlay/MiscKey/${uuid.v1()}.png';
+
+    return filePath;
+  }
 
   _onSave() {
     if (_formKey.currentState.validate()) {
@@ -112,7 +127,26 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
                     else
                       widget.sKey.images.remove(imageType["image"]);
                     setState(() {});  
-                  }
+                  },
+                  onUpdate: (image, index) async {
+                    print("FILEPATH:");
+
+                    File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
+                    print("FILEPATH:"+file.path);
+
+                    //TODO FINISH
+                    if(index < widget.sKey.images.length){   
+                      print("index"+index.toString());
+                      widget.sKey.images.removeAt(index);
+                      widget.sKey.newImages.add(file);
+                    } 
+                    else {
+                      print("Else index" + index.toString());
+                      index -= widget.sKey.images.length;
+                      widget.sKey.newImages[index] = file;
+                    }  
+                    setState(() {});  
+                  },
                 )
               ]
             ),

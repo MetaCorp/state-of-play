@@ -386,7 +386,7 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
         alignment: pw.WrapAlignment.start,
         runAlignment: pw.WrapAlignment.start,
         // crossAxisAlignment: pw.WrapCrossAlignment.end,
-        spacing: 20,
+        spacing: 50,
         runSpacing: 20,
         children: await Future.wait(
           imagesType.map((imageType) async {
@@ -400,7 +400,7 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
             );
 
             return pw.Container(
-              width: 100,
+              width: 150,
               // TODO: width: ???
               alignment: pw.Alignment.center,
               child: pw.Column(
@@ -409,8 +409,8 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
                 children: [
                   pw.Container(
                     padding: pw.EdgeInsets.only(bottom: 4),
-                    height: 200,
-                    width: 100,
+                    height: 300,
+                    width: 1500,
                     child: pw.Image(
                       _pdfImage
                     )
@@ -433,7 +433,7 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
 }
 
 Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
-  pw.Document pdf = pw.Document();
+  pdf = pw.Document();
   // TODO: Load Image From Internet
   // http.Response response = await http.get(
   //   'https://flutter.io/images/flutter-mark-square-100.png',

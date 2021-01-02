@@ -133,12 +133,12 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     SizedBox(height: 24),             
                     RaisedButtonLoading(
                       child: Text("Visualiser l'état des lieux"),
-                      onPressed: () {
-                        // bool ret = true;
-                        // if(widget.stateOfPlay.signatureOwner == null || widget.stateOfPlay.signatureRepresentative == null ||
-                        // widget.stateOfPlay.signatureTenants.any((element) => element == null))
-                        //   ret = await showAlertignature();
-                        // if(ret)
+                      onPressed: () async {
+                        bool ret = true;
+                        if(widget.stateOfPlay.signatureOwner == null || widget.stateOfPlay.signatureRepresentative == null ||
+                        widget.stateOfPlay.signatureTenants.any((element) => element == null))
+                          ret = await showAlertignature();
+                        if(ret)
                           widget.onSave();
                       },
                       loading: widget.isPdfLoading,
