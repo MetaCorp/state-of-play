@@ -28,6 +28,23 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
   void initState() {
     super.initState();
   }
+  
+  void _showDialogLimitTenants(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Nombre de locataire maximal atteint (3)."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+        ],
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,24 +146,30 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
           ListTileInterlocutor(
             labelText: "Selectionner un locataire",
             onPress: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants(
-                onSelect : (tenant) {
-                  Navigator.pop(context);
-                  widget.stateOfPlay.tenants.add(tenant);
-                  setState(() { });
-                }
-              )));
+              if (widget.stateOfPlay.tenants.length >= 3)
+                _showDialogLimitTenants(context);
+              else
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants(
+                  onSelect : (tenant) {
+                    Navigator.pop(context);
+                    widget.stateOfPlay.tenants.add(tenant);
+                    setState(() { });
+                  }
+                )));
             },
             onPressAdd: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
-                title: 'Nouveau locataire',
-                interlocutor: sop.Tenant(),
-                onSave : (tenant) {
-                  widget.stateOfPlay.tenants.add(tenant);
-                  Navigator.pop(context);
-                  setState(() { });
-                }
-              )));
+              if (widget.stateOfPlay.tenants.length >= 3)
+                _showDialogLimitTenants(context);
+              else
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                  title: 'Nouveau locataire',
+                  interlocutor: sop.Tenant(),
+                  onSave : (tenant) {
+                    widget.stateOfPlay.tenants.add(tenant);
+                    Navigator.pop(context);
+                    setState(() { });
+                  }
+                )));
             }, 
           ),
           Column(

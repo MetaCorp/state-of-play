@@ -26,7 +26,7 @@ class NewStateOfPlayDetailsRoomEquipment extends StatefulWidget {
 class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetailsRoomEquipment> {
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
+  final List<String> stateValues = ['Neuf', 'Très Bon', 'Bon', 'Moyen', 'Mauvais', 'Défaillant'];
 
   _onSave() {
     if (_formKey.currentState.validate()) {

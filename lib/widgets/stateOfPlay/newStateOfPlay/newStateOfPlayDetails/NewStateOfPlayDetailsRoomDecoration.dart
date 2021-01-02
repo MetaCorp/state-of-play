@@ -31,7 +31,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> stateValues = ['Neuf', 'Bon', 'En état de marche', 'Défaillant'];
+  final List<String> stateValues = ['Neuf', 'Très Bon', 'Bon', 'Moyen', 'Mauvais', 'Défaillant'];
   int count = 0;
 
   @override
