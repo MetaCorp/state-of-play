@@ -136,10 +136,12 @@ class _LoginState extends State<Login> {
                                     1.0),
                                   widthFactor: widthFactor,
                                   heightFactor: heightFactor,
-                                  child: Image.asset(
-                                    'assets/Logo/1/logo.png',
-                                    width: imageWidth,
-                                    height: imageHeight,
+                                  child: Container(
+                                    child: Image.asset(
+                                      'assets/Logo/1/logo.png',
+                                      width: imageWidth,
+                                      height: imageHeight,
+                                    ),
                                   )
                                 )
                               ),

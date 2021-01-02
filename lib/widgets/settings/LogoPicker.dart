@@ -47,32 +47,34 @@ class _LogoPickerState extends State<LogoPicker> {
     print('LogoPicker newLogo: ' + widget.newLogo.toString());
     print('');
 
-    return Row(
+    return Stack(
+      alignment: Alignment.topLeft,
       children: [
         widget.newLogo != null ? Image.file(
           widget.newLogo,
-          width: 150,
-          height: 150,
+          width: 170,
+          height: 170,
           fit: BoxFit.cover,
         ) : widget.logo != null ? Image.network(
           widget.logo,
-          width: 150,
-          height: 150,
+          width: 170,
+          height: 170,
           fit: BoxFit.cover,
-        ) : Container(),
-        SizedBox(
-          width: 16
-        ),
-        RaisedButton(
-          color: Colors.grey[200],
-          child: Row(
-            children: [
-              Icon(Icons.camera_alt),
-              SizedBox(width: 8),
-              Text('Choisir un logo')
-            ]
+        ) : Container(), 
+        Container(
+          width: 170,
+          child: RaisedButton(
+              color: Colors.grey[200],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.camera_alt),
+                  SizedBox(width: 8),
+                  Text('Choisir un logo')
+                ]
+              ),
+              onPressed: () => _imgFromCamera(),
           ),
-          onPressed: () => _imgFromCamera(),
         ),
       ],
     );

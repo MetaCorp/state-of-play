@@ -8,6 +8,7 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayC
 
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class EditStateOfPlay extends StatefulWidget {
@@ -25,6 +26,30 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
 
   sop.StateOfPlay _stateOfPlay;
   
+    Future<void> _deleteCacheDir() async {
+    final cacheDir = await getTemporaryDirectory();
+
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+    }
+  }
+
+  Future<void> _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+
+    if(appDir.existsSync()){
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
+   Future<void> _deleteAppDocumentsDirectory() async {
+    final appDir = await getApplicationDocumentsDirectory();
+
+    if(appDir.existsSync()){
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
   void _showDialogLeave (context) async {
     await showDialog(
       context: context,
@@ -40,6 +65,9 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
           new FlatButton(
             child: Text('QUITTER'),
             onPressed: () async {
+              // _deleteCacheDir();
+              // _deleteAppDir();
+              // _deleteAppDocumentsDirectory();
               Navigator.pop(context);
               Navigator.pop(context);
             }

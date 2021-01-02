@@ -158,15 +158,16 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       _formKey.currentState.save();
 
       bool ret = false;
-      if (widget.user.credits == 0) {// TODO : abonnement
-        ret = await _showDialogPay(context);
-      }
+      // TODO : abonnement LEO
+      // if (widget.user.credits == 0) {
+      //   ret = await _showDialogPay(context);
+      // }
 
-      if (ret || widget.user.credits > 0) {
+      // if (ret || widget.user.credits > 0) {
 
-        bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay)
-          return;
+      //   bool retConfirmPay = await _showDialogConfirmPay(context);
+      //   if (retConfirmPay == null || !retConfirmPay)
+      //     return;
 
         setState(() { _isPdfLoading = true; });
         
@@ -182,7 +183,6 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
                 "type": "network",
                 "image": widget.stateOfPlay.rooms[i].decorations[j].images[k]
               });
-
             }
 
             for (var k = 0; k < widget.stateOfPlay.rooms[i].decorations[j].newImages.length; k++) {
@@ -249,7 +249,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
         setState(() { _isPdfLoading = false; });
-      }
+      // }
 
     }
   }
@@ -305,46 +305,73 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         ]
       ),
       body: _tabsContent[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: DescribedFeatureOverlay(
-              featureId: 'navigate_newsop',
-              tapTarget: Icon(Icons.group),
-              title: Text("Naviguez"),
-              description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la bar en bas de l'app."),
-              child: Icon(Icons.group),
+      bottomNavigationBar: SizedBox(
+        height: 70,
+          child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: DescribedFeatureOverlay(
+                featureId: 'navigate_newsop',
+                tapTarget: Icon(Icons.group),
+                title: Text("Naviguez"),
+                description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la bar en bas de l'app."),
+                child: SizedBox(
+                    height: 30,
+                    child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Icon(Icons.group),
+                      Positioned(
+                        top: 15.0,
+                        child: Stack(
+                          alignment: Alignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.brightness_1,
+                                size: 20.0, color: Colors.transparent,),//Colors.green[800]),
+                              Center(
+                                child: Positioned(
+                                  child: Text("1"),
+                                  ),
+                              ),                                                                     
+                            ],
+                        )
+                      ),
+                    ],
+                  ),
+                ) 
+              ),
+              label: 'Interlocuteurs',
             ),
-            label: 'Interlocuteurs',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.apps),
-            label: 'Pièces',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'Divers',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.edit),
-            label: 'Signatures',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        backgroundColor: Colors.grey,
-        onTap: (index) {
-          if (index == 3 && ((widget.stateOfPlay.owner == null || widget.stateOfPlay.owner.lastName == null)
-            || (widget.stateOfPlay.representative == null || widget.stateOfPlay.representative.lastName == null)
-            || (widget.stateOfPlay.property == null || widget.stateOfPlay.property.address == null)
-            || (widget.stateOfPlay.tenants.length == 0))) {
-            _showDialogCompleteInterlocutors(context);
-            return;
-          }
+            BottomNavigationBarItem(
+              icon: Icon(Icons.apps),
+              label: 'Pièces',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.more_horiz),
+              label: 'Divers',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.edit),
+              label: 'Signatures',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.white,
+          backgroundColor: Colors.grey,
+          onTap: (index) {
+            if (index == 3 && ((widget.stateOfPlay.owner == null || widget.stateOfPlay.owner.lastName == null)
+              || (widget.stateOfPlay.representative == null || widget.stateOfPlay.representative.lastName == null)
+              || (widget.stateOfPlay.property == null || widget.stateOfPlay.property.address == null)
+              || (widget.stateOfPlay.tenants.length == 0))) {
+              _showDialogCompleteInterlocutors(context);
+              return;
+            }
 
-          setState(() { _selectedIndex = index; });
-        },
+            setState(() { _selectedIndex = index; });
+          },
+        ),
       )
     );
   }
