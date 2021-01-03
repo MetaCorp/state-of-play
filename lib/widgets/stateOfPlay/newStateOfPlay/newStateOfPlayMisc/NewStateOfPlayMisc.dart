@@ -42,7 +42,7 @@ class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
     }];
 
     return Container(
-      margin: EdgeInsets.only(top; 8),
+      margin: EdgeInsets.only(top: 8),
       child: Column(
         children: [
           Flexible(

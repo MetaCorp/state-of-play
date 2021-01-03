@@ -14,6 +14,9 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayM
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignature.dart';
 
+// import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+
+
 typedef SaveCallback = void Function();
 typedef DeleteCallback = void Function();
 
@@ -131,10 +134,20 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   }
 
   Future<bool> _showDialogConfirmPay(context) async {
+    // PDFDocument doc = await PDFDocument.fromFile(widget.stateOfPlay.newPdf);
+    // PDFPage pageOne = await doc.get(page: 1);
+    
     return await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
+            SizedBox(height: 16),
+            // PDFViewer(document: doc)
+          ],
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),
@@ -163,10 +176,6 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       }
 
       if (ret || widget.user.credits > 0) {
-
-        bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay)
-          return;
 
         setState(() { _isPdfLoading = true; });
         
@@ -246,6 +255,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
         widget.stateOfPlay.newPdf = await generatePdf(widget.stateOfPlay);
         print('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
+
+        
+        bool retConfirmPay = await _showDialogConfirmPay(context);
+        if (retConfirmPay == null || !retConfirmPay)
+          return;
+
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
         setState(() { _isPdfLoading = false; });
