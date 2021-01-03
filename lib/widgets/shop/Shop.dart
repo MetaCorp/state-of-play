@@ -85,6 +85,11 @@ class _ShopState extends State<Shop> {
       merchantId: 'merchant.test',// add you merchantId as per apple developer account
       androidPayMode: 'test',
     ));
+    // StripePayment.setOptions(StripeOptions(
+    //   publishableKey: 'pk_live_51I5BaICPxFg6weCsOFKDR5GoB8R1wm909YEi9IvHRJKpoMFj7ewAHQ7JIRA9UPiayTWO8kTXRY0nZTB8w3Phz3aJ00pZmxHZhy', // add you key as per Stripe dashboard
+    //   merchantId: 'merchant.live',// add you merchantId as per apple developer account
+    //   androidPayMode: 'live',
+    // ));
   }
 
   _onWillPop(sop.User user) {
@@ -103,7 +108,7 @@ class _ShopState extends State<Shop> {
     return deviceSupportNativePay && isNativeReady;
   }
 
-  Future<void> createPaymentMethodNative(double totalCost, int i, RunMutation runStripePIMutation) async {
+  Future<void> createPaymentMethodNative(double totalCost, int i, RunMutation runStripePIMutation, RunMutation runMutation, int credits) async {
     print('started NATIVE payment...');
     StripePayment.setStripeAccount(null);
     List<ApplePayItem> items = [];
@@ -153,7 +158,7 @@ class _ShopState extends State<Shop> {
     );
 
     paymentMethod != null
-        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation)
+        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation, runMutation, credits)
         : showDialog(
             context: context,
             builder: (BuildContext context) => ShowDialogToDismiss(
@@ -163,7 +168,7 @@ class _ShopState extends State<Shop> {
                 buttonText: 'CLOSE'));
   }
 
-  Future<void> createPaymentMethod(double totalCost, int i, RunMutation runStripePIMutation) async {
+  Future<void> createPaymentMethod(double totalCost, int i, RunMutation runStripePIMutation, RunMutation runMutation, int credits) async {
     StripePayment.setStripeAccount(null);
 
     // double tax = ((totalCost * taxPercent) * 100).ceil() / 100;
@@ -180,7 +185,7 @@ class _ShopState extends State<Shop> {
       print('Error Card: ${e.toString()}');
     });
     paymentMethod != null
-        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation)
+        ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation, runMutation, credits)
         : showDialog(
             context: context,
             builder: (BuildContext context) => ShowDialogToDismiss(
@@ -190,7 +195,7 @@ class _ShopState extends State<Shop> {
                 buttonText: 'CLOSE'));
   }
 
-  Future<void> processPaymentAsDirectCharge(PaymentMethod paymentMethod, double amount, int i, RunMutation runStripePIMutation) async {
+  Future<void> processPaymentAsDirectCharge(PaymentMethod paymentMethod, double amount, int i, RunMutation runStripePIMutation, RunMutation runMutation, int credits) async {
     setState(() { loadings[i] = true; });
 
     //step 2: request to create PaymentIntent, attempt to confirm the payment & return PaymentIntent
@@ -248,10 +253,16 @@ class _ShopState extends State<Shop> {
           //payment was confirmed by the server without need for futher authentification
           StripePayment.completeNativePayRequest();
           print('Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}c succesfully charged');
+          await runMutation({
+            "data": {
+              "amount": credits
+            }
+          }).networkResult;
           setState(() {
             // text = 'Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}p succesfully charged';
             loadings[i] = false;
           });
+
         } else {
           //step 4: there is a need to authenticate
           StripePayment.setStripeAccount(strAccount);
@@ -265,10 +276,17 @@ class _ShopState extends State<Shop> {
               //step 5: request the server to confirm the payment with
               final statusFinal = paymentIntentResult.status;
               if (statusFinal == 'succeeded') {
+
                 StripePayment.completeNativePayRequest();
+                await runMutation({
+                  "data": {
+                    "amount": credits
+                  }
+                }).networkResult;
                 setState(() {
                   loadings[i] = false;
                 });
+
               } else if (statusFinal == 'processing') {
                 StripePayment.cancelNativePayRequest();
                 setState(() {
@@ -396,9 +414,9 @@ class _ShopState extends State<Shop> {
                         onPress: () async {
 
                           if (await checkIfNativePayReady())
-                            createPaymentMethodNative(0.50, 0, runStripePIMutation);
+                            createPaymentMethodNative(0.50, 0, runStripePIMutation, runMutation, 1);
                           else
-                            createPaymentMethod(0.50, 0, runStripePIMutation);
+                            createPaymentMethod(0.50, 0, runStripePIMutation, runMutation, 1);
                         }
                       ),
                       Divider(),
@@ -407,15 +425,11 @@ class _ShopState extends State<Shop> {
                         loading: loadings[1],
                         price: 19.99,
                         onPress: () async {
-                          MultiSourceResult result = runMutation({
-                            "data": {
-                              "amount": 5
-                            }
-                          });
-                    
-                          setState(() { loadings[1] = true; });
-                          QueryResult queryResult = await result.networkResult;
-                          setState(() { loadings[1] = false; });
+
+                          if (await checkIfNativePayReady())
+                            createPaymentMethodNative(0.50, 1, runStripePIMutation, runMutation, 5);
+                          else
+                            createPaymentMethod(0.50, 1, runStripePIMutation, runMutation, 5);
                         }
                       ),
                       Divider(),
@@ -424,15 +438,11 @@ class _ShopState extends State<Shop> {
                         loading: loadings[2],
                         price: 34.99,
                         onPress: () async {
-                          MultiSourceResult result = runMutation({
-                            "data": {
-                              "amount": 10
-                            }
-                          });
-                    
-                          setState(() { loadings[2] = true; });
-                          QueryResult queryResult = await result.networkResult;
-                          setState(() { loadings[2] = false; });
+
+                          if (await checkIfNativePayReady())
+                            createPaymentMethodNative(0.50, 2, runStripePIMutation, runMutation, 10);
+                          else
+                            createPaymentMethod(0.50, 2, runStripePIMutation, runMutation, 10);
                         }
                       )
                     ],
