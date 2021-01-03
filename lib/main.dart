@@ -44,6 +44,9 @@ import 'package:flutter_tests/widgets/settings/Settings.dart';
 
 import 'package:flutter_tests/widgets/shop/Shop.dart';
 
+import 'package:stripe_payment/stripe_payment.dart' as stripe;
+
+
 String get host {
   if (Platform.isAndroid) {
     return 'localhost';
@@ -96,7 +99,7 @@ class _MyAppState extends State<MyApp> {
         link: link,
       ),
     );
-    
+
     super.initState();
   }
 
@@ -129,7 +132,7 @@ class _MyAppState extends State<MyApp> {
     return GraphQLProvider(
       client: client,
       child: FeatureDiscovery(
-        recordStepsInSharedPreferences: false,
+        recordStepsInSharedPreferences: true,
         child: MaterialApp(
           title: 'États des lieux',
           theme: ThemeData(

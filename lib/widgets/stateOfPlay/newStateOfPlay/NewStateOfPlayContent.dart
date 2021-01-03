@@ -14,6 +14,8 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayM
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignature.dart';
 
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+
 typedef SaveCallback = void Function();
 typedef DeleteCallback = void Function();
 
@@ -32,6 +34,7 @@ class NewStateOfPlayContent extends StatefulWidget {
 }
 
 class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
+
   final _formKey = GlobalKey<FormState>();
   
   int _selectedIndex = 0;
@@ -131,10 +134,63 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   }
 
   Future<bool> _showDialogConfirmPay(context) async {
+    
     return await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
+            SizedBox(height: 16),
+            Container(
+              // decoration: BoxDecoration(// TODO: can't use a Flexible inside BoxDecoration
+                // color: Colors.white,
+                // borderRadius: BorderRadius.only(
+                //   topLeft: Radius.circular(10),
+                //     topRight: Radius.circular(10),
+                //     bottomLeft: Radius.circular(10),
+                //     bottomRight: Radius.circular(10)
+                // ),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.grey.withOpacity(0.5),
+                //     spreadRadius: 5,
+                //     blurRadius: 7,
+                //     offset: Offset(0, 3), // changes position of shadow
+                //   ),
+                // ],
+              // ),
+              child: Flexible(
+                child: PDFView(
+                  filePath: widget.stateOfPlay.newPdf.path,
+                  enableSwipe: false,
+                  swipeHorizontal: false,
+                  autoSpacing: false,
+                  pageFling: false,
+                  // onRender: (_pages) {
+                  //   setState(() {
+                  //     pages = _pages;
+                  //     isReady = true;
+                  //   });
+                  // },
+                  onError: (error) {
+                    print(error.toString());
+                  },
+                  // onPageError: (page, error) {
+                  //   print('$page: ${error.toString()}');
+                  // },
+                  // onViewCreated: (PDFViewController pdfViewController) {
+                  //   .complete(pdfViewController);
+                  // },
+                  // onPageChanged: (int page, int total) {
+                  //   print('page change: $page/$total');
+                  // },
+                ),
+              )
+            )
+          ],
+        ),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),
@@ -163,10 +219,6 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       }
 
       if (ret || widget.user.credits > 0) {
-
-        bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay)
-          return;
 
         setState(() { _isPdfLoading = true; });
         
@@ -246,6 +298,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
         widget.stateOfPlay.newPdf = await generatePdf(widget.stateOfPlay);
         print('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
+
+        
+        bool retConfirmPay = await _showDialogConfirmPay(context);
+        if (retConfirmPay == null || !retConfirmPay)
+          return;
+
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
         setState(() { _isPdfLoading = false; });

@@ -8,8 +8,10 @@ import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayS
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
-typedef SaveCallback = Function();
+import 'package:stripe_payment/stripe_payment.dart';
 
+
+typedef SaveCallback = Function();
 
 class NewStateOfPlaySignature extends StatefulWidget {
   NewStateOfPlaySignature({ Key key, this.onSave, this.stateOfPlay, this.formKey, this.isPdfLoading }) : super(key: key);

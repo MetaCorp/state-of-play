@@ -1,4 +1,4 @@
-package com.example.state_of_play
+package com.company.housely
 
 import io.flutter.embedding.android.FlutterActivity
 
