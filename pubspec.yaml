@@ -42,8 +42,8 @@ dependencies:
   flutter_slidable: any
   flip_panel: ^1.0.1
   stripe_payment: ^1.0.9
-  advance_pdf_viewer: any
-
+  flutter_pdfview: ^1.0.4
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
