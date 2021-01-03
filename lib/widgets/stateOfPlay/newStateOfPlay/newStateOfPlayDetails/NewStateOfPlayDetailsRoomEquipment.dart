@@ -145,6 +145,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.equipment.newImages.add(imageFile);
                     setState(() { });

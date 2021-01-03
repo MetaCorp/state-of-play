@@ -113,6 +113,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.sKey.newImages.add(imageFile);
                     setState(() { });

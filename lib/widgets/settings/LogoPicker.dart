@@ -6,28 +6,19 @@ import 'package:image_picker/image_picker.dart';
 typedef SelectCallback = void Function(File);
 
 class LogoPicker extends StatefulWidget {
+
   LogoPicker({ Key key, this.onSelect, this.logo, this.newLogo }) : super(key: key);
 
   SelectCallback onSelect;
   String logo;
   File newLogo;
 
+
   @override
   _LogoPickerState createState() => _LogoPickerState();
 }
 
 class _LogoPickerState extends State<LogoPicker> {
-
-  _imgFromCamera() async {
-    File image = await ImagePicker.pickImage(
-      source: ImageSource.camera, imageQuality: 50
-    );
-
-    if(image == null)
-      return;
-
-    widget.onSelect(image);
-  }
 
   _imgFromGallery() async {
     File image = await  ImagePicker.pickImage(
@@ -73,7 +64,9 @@ class _LogoPickerState extends State<LogoPicker> {
                   Text('Choisir un logo')
                 ]
               ),
-              onPressed: () => _imgFromCamera(),
+            onPressed: () =>  {
+              _imgFromGallery(),        
+            }
           ),
         ),
       ],

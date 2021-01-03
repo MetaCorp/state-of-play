@@ -140,6 +140,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.electricity.newImages.add(imageFile);
                     setState(() { });
