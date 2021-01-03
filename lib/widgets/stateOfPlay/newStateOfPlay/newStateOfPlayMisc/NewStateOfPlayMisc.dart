@@ -41,30 +41,32 @@ class _NewStateOfPlayMiscState extends State<NewStateOfPlayMisc> {
       ),
     }];
 
-    return Column(
-      children: [
-        Flexible(
-          child: ListView.separated(
-            itemCount: listItems.length,
-            itemBuilder: (_, i) => ListTile(
-              title: Row(
-                children: [
-                  Text(listItems[i]["title"]),
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.chevron_right),
-                  )
-                ]
+    return Container(
+      margin: EdgeInsets.only(top; 8),
+      child: Column(
+        children: [
+          Flexible(
+            child: ListView.separated(
+              itemCount: listItems.length,
+              itemBuilder: (_, i) => ListTile(
+                title: Row(
+                  children: [
+                    Text(listItems[i]["title"]),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.chevron_right),
+                    )
+                  ]
+                ),
+                onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => listItems[i]["route"]))
               ),
-              // subtitle: Text(DateFormat('dd/MM/yyyy').format(stateOfPlays[i].date)),
-              onTap: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => listItems[i]["route"]))
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
             ),
-            separatorBuilder: (context, index) {
-              return Divider();
-            },
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
 }

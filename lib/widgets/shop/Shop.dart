@@ -80,16 +80,17 @@ class _ShopState extends State<Shop> {
     loadings = loadings.map((value) => false).toList();
 
     
-    StripePayment.setOptions(StripeOptions(
-      publishableKey: 'pk_test_51I5BaICPxFg6weCsCClCXyavXZd18yMNkLuFp04YIo8P3eeOqFuEOIYB8C1GvsuilYjPdgUuUxPL6WRg5Pg0IbWW00HgBE9oIO', // add you key as per Stripe dashboard
-      merchantId: 'merchant.test',// add you merchantId as per apple developer account
-      androidPayMode: 'test',
-    ));
     // StripePayment.setOptions(StripeOptions(
-    //   publishableKey: 'pk_live_51I5BaICPxFg6weCsOFKDR5GoB8R1wm909YEi9IvHRJKpoMFj7ewAHQ7JIRA9UPiayTWO8kTXRY0nZTB8w3Phz3aJ00pZmxHZhy', // add you key as per Stripe dashboard
-    //   merchantId: 'merchant.live',// add you merchantId as per apple developer account
-    //   androidPayMode: 'live',
+    //   publishableKey: 'pk_test_51I5BaICPxFg6weCsCClCXyavXZd18yMNkLuFp04YIo8P3eeOqFuEOIYB8C1GvsuilYjPdgUuUxPL6WRg5Pg0IbWW00HgBE9oIO', // add you key as per Stripe dashboard
+    //   merchantId: 'merchant.test',// add you merchantId as per apple developer account
+    //   androidPayMode: 'test',
     // ));
+
+    StripePayment.setOptions(StripeOptions(
+      publishableKey: 'pk_live_51I5BaICPxFg6weCsOFKDR5GoB8R1wm909YEi9IvHRJKpoMFj7ewAHQ7JIRA9UPiayTWO8kTXRY0nZTB8w3Phz3aJ00pZmxHZhy', // add you key as per Stripe dashboard
+      merchantId: 'merchant.production',// add you merchantId as per apple developer account
+      androidPayMode: 'production',
+    ));
   }
 
   _onWillPop(sop.User user) {
@@ -405,6 +406,7 @@ class _ShopState extends State<Shop> {
               ) {
                 
                 return Container(
+                  margin: EdgeInsets.only(top: 8),
                   child: ListView(
                     children: [
                       ListTileShop(
@@ -465,7 +467,7 @@ class _ShopState extends State<Shop> {
                 ),
               )
             ) : Container(
-              margin: EdgeInsets.only(top: 16, right: 16),
+              margin: EdgeInsets.only(top: 14, right: 16),
               child: Text(
                 user.credits.toString() + ' crédits',
                 style: TextStyle(
