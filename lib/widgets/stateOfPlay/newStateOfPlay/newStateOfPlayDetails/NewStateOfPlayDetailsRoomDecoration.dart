@@ -8,6 +8,7 @@ import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:uuid/uuid.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -32,7 +33,6 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Très Bon', 'Bon', 'Moyen', 'Mauvais', 'Défaillant'];
-  int count = 0;
 
   @override
   void initState() { 
@@ -47,21 +47,15 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
     });
   }
 
+  Uuid uuid = Uuid();
+
+
   Future<String> getFilePath() async {
-    List<File> file = new List();
 
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
     String appDocumentsPath = appDocumentsDirectory.path;
-    String filePath = '$appDocumentsPath/NewStateOdfPlay/RoomDecoration/img$count.png';
+    String filePath = '$appDocumentsPath/NewStateOfPlay/RoomDecoration/${uuid.v1()}.png';
 
-    file = Directory("$appDocumentsPath/NewStateOdfPlay/RoomDecoration/").listSync();  //use your folder name insted of resume.   
-    while(file.contains( (element) => (element.path == filePath))){
-      count++;
-      print(file[count].path);
-      print("count:"+count.toString());
-
-      filePath = '$appDocumentsPath/NewStateOdfPlay/RoomDecoration/img$count.png';
-    }
     return filePath;
   }
 
@@ -164,6 +158,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.decoration.newImages.add(imageFile);
                     setState(() { });
@@ -180,8 +175,11 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
+                    print("FILEPATH:");
 
-                    File file = await File(await getFilePath()).writeAsBytes(image);
+                    File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
+                    print("FILEPATH:"+file.path);
+
                     //TODO FINISH
                     if(index < widget.decoration.images.length){   
                       print("index"+index.toString());

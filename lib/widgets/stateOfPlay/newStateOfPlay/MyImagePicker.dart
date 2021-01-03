@@ -1,21 +1,31 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
+
 
 typedef SelectCallback = void Function(File);
 
 class MyImagePicker extends StatefulWidget {
-  MyImagePicker({ Key key, this.onSelect, this.imagesCount }) : super(key: key);
+
+  MyImagePicker({ Key key, this.onSelect, this.imagesCount, this.isMultiSelection }) : super(key: key);
 
   SelectCallback onSelect;
   int imagesCount;
+  bool isMultiSelection;
 
   @override
   _MyImagePickerState createState() => _MyImagePickerState();
 }
 
 class _MyImagePickerState extends State<MyImagePicker> {
+  String _error = 'No Error Dectected';
+  Uuid uuid = Uuid();
+
 
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
@@ -41,6 +51,55 @@ class _MyImagePickerState extends State<MyImagePicker> {
     widget.onSelect(image);
   }
 
+  Future<void> _imgsFromGallery() async {
+    List<Asset> images = List<Asset>();
+
+
+    try {
+      images = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      String error = e.toString();
+      print(error);
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    images.forEach((image) async  { 
+      ByteData data = await image.getByteData();
+      final buffer = data.buffer;
+
+      File file = await File(await getFilePath()).create(recursive: true).then((file)async => await file.writeAsBytes(
+      buffer.asUint8List(data.offsetInBytes, data.lengthInBytes)));
+
+      widget.onSelect(file);
+    });
+  }
+
+  Future<String> getFilePath() async {
+
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path;
+    String filePath = '$appDocumentsPath/NewStateOfPlay/MultiSelected/${uuid.v1()}.png';
+
+    return filePath;
+  }
+
+
   void _showPicker(context) {
     showModalBottomSheet(
       context: context,
@@ -53,7 +112,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   leading: Icon(Icons.photo_library),
                   title: Text('Gallerie'),
                   onTap: () {
-                    _imgFromGallery();
+                    widget.isMultiSelection?
+                    _imgsFromGallery() : _imgFromGallery();
                     Navigator.of(context).pop();
                   }),
                 ListTile(

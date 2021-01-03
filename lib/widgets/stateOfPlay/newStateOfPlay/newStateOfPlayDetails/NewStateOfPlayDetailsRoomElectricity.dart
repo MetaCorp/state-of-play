@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 
@@ -5,6 +7,8 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -28,7 +32,17 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Très Bon', 'Bon', 'Moyen', 'Mauvais', 'Défaillant'];
+  Uuid uuid = Uuid();
 
+
+  Future<String> getFilePath() async {
+
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path;
+    String filePath = '$appDocumentsPath/NewStateOfPlay/RoomElectricity/${uuid.v1()}.png';
+
+    return filePath;
+  }
   _onSave() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -126,6 +140,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.electricity.newImages.add(imageFile);
                     setState(() { });
@@ -140,7 +155,26 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                     else
                       widget.electricity.images.remove(imageType["image"]);
                     setState(() {});  
-                  }
+                  },
+                  onUpdate: (image, index) async {
+                    print("FILEPATH:");
+
+                    File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
+                    print("FILEPATH:"+file.path);
+
+                    //TODO FINISH
+                    if(index < widget.electricity.images.length){   
+                      print("index"+index.toString());
+                      widget.electricity.images.removeAt(index);
+                      widget.electricity.newImages.add(file);
+                    } 
+                    else {
+                      print("Else index" + index.toString());
+                      index -= widget.electricity.images.length;
+                      widget.electricity.newImages[index] = file;
+                    }  
+                    setState(() {});  
+                  },
                 )
               ]
             ),

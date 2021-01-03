@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart'as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/DateButton.dart';
 
@@ -134,7 +135,14 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     SizedBox(height: 24),             
                     RaisedButtonLoading(
                       child: Text("Visualiser l'état des lieux"),
-                      onPressed: () => widget.onSave(),
+                      onPressed: () async {
+                        bool ret = true;
+                        if(widget.stateOfPlay.signatureOwner == null || widget.stateOfPlay.signatureRepresentative == null ||
+                        widget.stateOfPlay.signatureTenants.any((element) => element == null))
+                          ret = await showAlertignature();
+                        if(ret)
+                          widget.onSave();
+                      },
                       loading: widget.isPdfLoading,
                     )
                   ],
@@ -195,7 +203,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): null,        
+                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),        
               ),
               onTap: () => {widget.stateOfPlay.signatureOwner != null ? showDeleteSignature(widget.stateOfPlay.owner) : goToSignatureSignature(widget.stateOfPlay.owner)},
             ),
@@ -247,7 +255,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): null,                 
+                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),                 
               ),
               onTap: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
             ),
@@ -306,7 +314,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): null,                           
+                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),                           
               ),
               onTap: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(widget.stateOfPlay.tenants[index],index: index) : goToSignatureSignature(widget.stateOfPlay.tenants[index],index: index)},
             ),
@@ -371,5 +379,32 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         ],
       )
     );
-  }  
+  }
+
+  Future<bool> showAlertignature() async  {
+    bool ret = false;
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Certaines signatures sont manquantes"),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              ret = true;
+              Navigator.pop(context);
+              //validate anyway               
+            }
+          )
+        ],
+      )
+    );
+    return ret;
+  }    
 }

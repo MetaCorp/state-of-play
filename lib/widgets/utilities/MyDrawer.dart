@@ -17,29 +17,12 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountEmail: new Text(""),//to keep since needed
-            accountName:  Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(shape: BoxShape.circle),
-                  child: user != null ? CircleAvatar(
+            accountEmail: Text(user.email), //to keep since needed
+            accountName: Text(user.firstName + ' ' + user.lastName),
+            currentAccountPicture: user != null ? CircleAvatar(
                     backgroundColor: Colors.grey,
-                    child: new Text(user.firstName[0] + user.lastName[0]),
-                  ) : CircularProgressIndicator(),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: user != null ? [
-                    Text(user.firstName + ' ' + user.lastName),
-                    SizedBox(height: 4),
-                    Text(user.email),
-                  ] : [],
-                ),
-              ],
-            ),
+                    child: new Text(user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()),
+                  ) : CircularProgressIndicator(), 
           ),
           ListTile(
             title: Text('États des lieux'),

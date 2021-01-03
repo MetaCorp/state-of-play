@@ -141,11 +141,12 @@ class _MyScaffoldState extends State<MyScaffold> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.home,
-                                size: 36,
+                                EDLIcons.edlRight,
+                                size: 30,
                                 color: Colors.grey[700],
                               ),
                               //add space
+                              SizedBox(height: 6,),
                               Text("A partir\n d'une sortie",style: _smallTextStyle, textAlign: TextAlign.center,),
                             ],
                           ),
@@ -212,11 +213,12 @@ class _MyScaffoldState extends State<MyScaffold> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.home,
-                                size: 36,
+                                EDLIcons.edlLeft,
+                                size: 30,
                                 color: Colors.grey[700],
                               ),
                               //add space
+                              SizedBox(height: 6,),
                               Text("A partir  \n d'une entrée",style: _smallTextStyle, textAlign: TextAlign.center,),
                             ],
                           ),

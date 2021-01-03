@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 
@@ -5,6 +7,8 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/ImageList.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/MyImagePicker.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ImageType {
   ImageType({ this.type, this.image });
@@ -27,6 +31,17 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
   final _formKey = GlobalKey<FormState>();
 
   final List<String> stateValues = ['Neuf', 'Très Bon', 'Bon', 'Moyen', 'Mauvais', 'Défaillant'];
+  Uuid uuid = Uuid();
+
+
+  Future<String> getFilePath() async {
+
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path;
+    String filePath = '$appDocumentsPath/NewStateOfPlay/RoomEquipment/${uuid.v1()}.png';
+
+    return filePath;
+  }
 
   _onSave() {
     if (_formKey.currentState.validate()) {
@@ -130,6 +145,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                   height: 16,
                 ),
                 MyImagePicker(
+                  isMultiSelection : true,
                   onSelect: (imageFile) {
                     widget.equipment.newImages.add(imageFile);
                     setState(() { });
@@ -144,7 +160,26 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                     else
                       widget.equipment.images.remove(imageType["image"]);
                     setState(() {});  
-                  }
+                  },
+                  onUpdate: (image, index) async {
+                    print("FILEPATH:");
+
+                    File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
+                    print("FILEPATH:"+file.path);
+
+                    //TODO FINISH
+                    if(index < widget.equipment.images.length){   
+                      print("index"+index.toString());
+                      widget.equipment.images.removeAt(index);
+                      widget.equipment.newImages.add(file);
+                    } 
+                    else {
+                      print("Else index" + index.toString());
+                      index -= widget.equipment.images.length;
+                      widget.equipment.newImages[index] = file;
+                    }  
+                    setState(() {});  
+                  },
                 )
               ]
             ),
