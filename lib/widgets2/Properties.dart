@@ -45,10 +45,10 @@ class _PropertiesState extends State<Properties> {
             Refetch refetch,
             FetchMore fetchMore,
           }) {
-            print('loading: ' + result.loading.toString());
-            print('exception: ' + result.exception.toString());
-            print('data: ' + result.data.toString());
-            print('');
+            debugPrint('loading: ' + result.loading.toString());
+            debugPrint('exception: ' + result.exception.toString());
+            debugPrint('data: ' + result.data.toString());
+            debugPrint('');
 
             if (result.hasException) {
               return Text(result.exception.toString());
@@ -60,7 +60,7 @@ class _PropertiesState extends State<Properties> {
 
             sop.User user = sop.User.fromJSON(result.data["user"]);
 
-            print('parsed data: ' + user.toString());
+            debugPrint('parsed data: ' + user.toString());
 
             if (user.properties.length == 0) {
               return Text("no properties");

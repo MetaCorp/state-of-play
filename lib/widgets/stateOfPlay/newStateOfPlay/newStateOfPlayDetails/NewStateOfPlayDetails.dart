@@ -78,7 +78,7 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
   @override
   Widget build(BuildContext context) {
 
-    print('rooms: ' + widget.rooms.toString());
+    debugPrint('rooms: ' + widget.rooms.toString());
 
     return Column(
       children: [
@@ -88,7 +88,7 @@ class _NewStateOfPlayDetailsState extends State<NewStateOfPlayDetails> {
             if (widget.rooms.length < maxRooms) {
               await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsAddRoom(
                 onSelect: (rooms) {
-                  print('rooms: ' + rooms.toString());
+                  debugPrint('rooms: ' + rooms.toString());
                   if (widget.rooms.length + rooms.length > maxRooms)
                     _showDialogLimitRoom(context);
 

@@ -53,8 +53,8 @@ class _EditPropertyState extends State<EditProperty> {
         sop.Property property;
         if (result.data != null) {
           property = sop.Property.fromJSON(result.data["property"]);
-          print('EditProperty: ' + result.data["property"].toString());
-          print('EditProperty: ' + property.toString());
+          debugPrint('EditProperty: ' + result.data["property"].toString());
+          debugPrint('EditProperty: ' + property.toString());
         }
 
         if (result.data == null || result.loading)
@@ -80,7 +80,7 @@ class _EditPropertyState extends State<EditProperty> {
             },
             // or do something with the result.data on completion
             onCompleted: (dynamic resultData) {
-              // print('onCompleted: ' + resultData.hasException);
+              // debugPrint('onCompleted: ' + resultData.hasException);
             },
           ),
           builder: (
@@ -101,7 +101,7 @@ class _EditPropertyState extends State<EditProperty> {
                 },
                 // or do something with the result.data on completion
                 onCompleted: (dynamic resultData) {
-                  // print('onCompleted: ' + resultData.hasException);
+                  // debugPrint('onCompleted: ' + resultData.hasException);
                 },
               ),
               builder: (
@@ -114,7 +114,7 @@ class _EditPropertyState extends State<EditProperty> {
                   saveLoading: mutationUpdateResult.loading,
                   property: property,
                   onSave: (property) async {
-                    print('runUpdateMutation');
+                    debugPrint('runUpdateMutation');
 
                     MultiSourceResult mutationResult = runUpdateMutation({
                       "data": {
@@ -135,14 +135,14 @@ class _EditPropertyState extends State<EditProperty> {
                     QueryResult networkResult = await mutationResult.networkResult;
 
                     if (networkResult.hasException) {
-                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                       if (networkResult.exception.clientException != null)
-                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                        debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                       else
-                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                        debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
                     else {
-                      print('queryResult data: ' + networkResult.data.toString());
+                      debugPrint('queryResult data: ' + networkResult.data.toString());
                       if (networkResult.data != null) {
                         if (networkResult.data["updateProperty"] == null) {
                           // TODO: show error
@@ -155,7 +155,7 @@ class _EditPropertyState extends State<EditProperty> {
                     }
                   },
                   onDelete: () async {
-                    print('runDeleteMutation');
+                    debugPrint('runDeleteMutation');
 
                     MultiSourceResult mutationResult = runDeleteMutation({
                       "data": {
@@ -165,14 +165,14 @@ class _EditPropertyState extends State<EditProperty> {
                     QueryResult networkResult = await mutationResult.networkResult;
 
                     if (networkResult.hasException) {
-                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                       if (networkResult.exception.clientException != null)
-                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                        debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                       else
-                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                        debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
                     else {
-                      print('queryResult data: ' + networkResult.data.toString());
+                      debugPrint('queryResult data: ' + networkResult.data.toString());
                       if (networkResult.data != null) {
                         if (networkResult.data["deleteProperty"] == null) {
                           // TODO: show error

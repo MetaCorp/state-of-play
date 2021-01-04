@@ -57,10 +57,10 @@ class _TenantState extends State<Tenant> {
               Refetch refetch,
               FetchMore fetchMore,
             }) {
-              print('loading: ' + result.loading.toString());
-              print('exception: ' + result.exception.toString());
-              print('data: ' + result.data.toString());
-              print('');
+              debugPrint('loading: ' + result.loading.toString());
+              debugPrint('exception: ' + result.exception.toString());
+              debugPrint('data: ' + result.data.toString());
+              debugPrint('');
 
               if (result.hasException) {
                 return Text(result.exception.toString());
@@ -72,7 +72,7 @@ class _TenantState extends State<Tenant> {
 
               sop.Tenant tenant = sop.Tenant.fromJSON(result.data["tenant"]);
 
-              print('parsed data: ' + tenant.toString());
+              debugPrint('parsed data: ' + tenant.toString());
 
               return Text(tenant.id);
             }

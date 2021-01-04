@@ -54,7 +54,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
   @override
   Widget build(BuildContext context) {
 
-    // print('electricity.state: ' + widget.electricity.state);
+    // debugPrint('electricity.state: ' + widget.electricity.state);
 
     List<ImageType> imagesType = widget.electricity.images.map((image) => ImageType(
       type: "network",
@@ -157,19 +157,19 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
-                    print("FILEPATH:");
+                    debugPrint("FILEPATH:");
 
                     File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
-                    print("FILEPATH:"+file.path);
+                    debugPrint("FILEPATH:"+file.path);
 
                     //TODO FINISH
                     if(index < widget.electricity.images.length){   
-                      print("index"+index.toString());
+                      debugPrint("index"+index.toString());
                       widget.electricity.images.removeAt(index);
                       widget.electricity.newImages.add(file);
                     } 
                     else {
-                      print("Else index" + index.toString());
+                      debugPrint("Else index" + index.toString());
                       index -= widget.electricity.images.length;
                       widget.electricity.newImages[index] = file;
                     }  

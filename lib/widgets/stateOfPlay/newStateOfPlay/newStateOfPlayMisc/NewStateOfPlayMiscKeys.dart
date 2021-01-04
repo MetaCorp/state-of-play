@@ -64,7 +64,7 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
   @override
   Widget build(BuildContext context) {
 
-    print('keys: ' + widget.keys.toString());
+    debugPrint('keys: ' + widget.keys.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -86,7 +86,7 @@ class _NewStateOfPlayMiscKeysState extends State<NewStateOfPlayMiscKeys> {
               if (widget.keys.length < maxKeys)
                 Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddKey(
                   onSelect: (keys) {
-                    print('keys: ' + keys.toString());
+                    debugPrint('keys: ' + keys.toString());
                     if (widget.keys.length + keys.length > maxKeys)
                       _showDialogLimitKeys(context);
 

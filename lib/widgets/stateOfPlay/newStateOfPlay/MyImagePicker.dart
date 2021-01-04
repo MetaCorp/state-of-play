@@ -71,7 +71,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
       );
     } on Exception catch (e) {
       String error = e.toString();
-      print(error);
+      debugPrint(error);
     }
 
     // If the widget was removed from the tree while the asynchronous platform

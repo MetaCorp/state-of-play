@@ -54,7 +54,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
   @override
   Widget build(BuildContext context) {
 
-    // print('equipment.state: ' + widget.equipment.state);
+    // debugPrint('equipment.state: ' + widget.equipment.state);
 
     List<ImageType> imagesType = widget.equipment.images.map((image) => ImageType(
       type: "network",
@@ -162,19 +162,19 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
-                    print("FILEPATH:");
+                    debugPrint("FILEPATH:");
 
                     File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
-                    print("FILEPATH:"+file.path);
+                    debugPrint("FILEPATH:"+file.path);
 
                     //TODO FINISH
                     if(index < widget.equipment.images.length){   
-                      print("index"+index.toString());
+                      debugPrint("index"+index.toString());
                       widget.equipment.images.removeAt(index);
                       widget.equipment.newImages.add(file);
                     } 
                     else {
-                      print("Else index" + index.toString());
+                      debugPrint("Else index" + index.toString());
                       index -= widget.equipment.images.length;
                       widget.equipment.newImages[index] = file;
                     }  

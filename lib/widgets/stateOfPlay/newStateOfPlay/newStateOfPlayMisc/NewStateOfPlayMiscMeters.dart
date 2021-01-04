@@ -62,7 +62,7 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
   @override
   Widget build(BuildContext context) {
 
-    print('meters: ' + widget.meters.toString());
+    debugPrint('meters: ' + widget.meters.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -84,7 +84,7 @@ class _NewStateOfPlayMiscMetersState extends State<NewStateOfPlayMiscMeters> {
               if (widget.meters.length < maxMeters)
                 Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscAddMeter(
                   onSelect: (meters) {
-                    print('meters: ' + meters.toString());
+                    debugPrint('meters: ' + meters.toString());
                     if (widget.meters.length + meters.length > maxMeters)
                       _showDialogLimitMeters(context);
 

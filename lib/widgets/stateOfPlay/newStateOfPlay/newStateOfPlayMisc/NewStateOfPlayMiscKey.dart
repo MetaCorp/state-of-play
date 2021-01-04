@@ -51,7 +51,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
   @override
   Widget build(BuildContext context) {
 
-    // print('sKey.state: ' + widget.sKey.state);
+    // debugPrint('sKey.state: ' + widget.sKey.state);
 
     List<ImageType> imagesType = widget.sKey.images.map((image) => ImageType(
       type: "network",
@@ -130,19 +130,19 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
-                    print("FILEPATH:");
+                    debugPrint("FILEPATH:");
 
                     File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
-                    print("FILEPATH:"+file.path);
+                    debugPrint("FILEPATH:"+file.path);
 
                     //TODO FINISH
                     if(index < widget.sKey.images.length){   
-                      print("index"+index.toString());
+                      debugPrint("index"+index.toString());
                       widget.sKey.images.removeAt(index);
                       widget.sKey.newImages.add(file);
                     } 
                     else {
-                      print("Else index" + index.toString());
+                      debugPrint("Else index" + index.toString());
                       index -= widget.sKey.images.length;
                       widget.sKey.newImages[index] = file;
                     }  

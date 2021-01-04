@@ -55,17 +55,17 @@ class _AccountState extends State<Account> {
       QueryResult queryResult = await result.networkResult;
       setState(() { });
 
-      print("networkResult hasException: " + queryResult.hasException.toString());
+      debugPrint("networkResult hasException: " + queryResult.hasException.toString());
       if (queryResult.hasException) {
         if (queryResult.exception.graphqlErrors.length > 0) { 
-          print("queryResult exception: " + queryResult.exception.graphqlErrors[0].toString());
-          print("queryResult exception: " + queryResult.exception.graphqlErrors[0].extensions.toString());
+          debugPrint("queryResult exception: " + queryResult.exception.graphqlErrors[0].toString());
+          debugPrint("queryResult exception: " + queryResult.exception.graphqlErrors[0].extensions.toString());
         }
         else
-          print("queryResult clientException: " + queryResult.exception.clientException.message);
+          debugPrint("queryResult clientException: " + queryResult.exception.clientException.message);
         return;//TODO: show error
       }
-      print("");
+      debugPrint("");
 
       Navigator.pop(context);
     }
@@ -99,25 +99,25 @@ class _AccountState extends State<Account> {
         FetchMore fetchMore,
       }) {
 
-        // print('userResult: ' + result.loading.toString());
-        // print('userResult hasException: ' + result.hasException.toString());
-        // print('userResult data: ' + result.data.toString());
+        // debugPrint('userResult: ' + result.loading.toString());
+        // debugPrint('userResult hasException: ' + result.hasException.toString());
+        // debugPrint('userResult data: ' + result.data.toString());
         // if (result.hasException) {
         //   if (result.exception.graphqlErrors.length > 0) { 
-        //     print("userResult exception: " + result.exception.graphqlErrors[0].toString());
-        //     print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
+        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
         //   }
         //   else
-        //     print("userResult clientException: " + result.exception.clientException.message);
+        //     debugPrint("userResult clientException: " + result.exception.clientException.message);
         // }
-        // print('');
+        // debugPrint('');
 
         if (result.data != null && result.data["user"] != null && !result.loading && user == null) {
           user = sop.User.fromJSON(result.data["user"]);
-          print('user: ' + user.firstName.toString());
+          debugPrint('user: ' + user.firstName.toString());
         }
 
-        // print('Account user.newLogo: ' + user.newLogo.toString());
+        // debugPrint('Account user.newLogo: ' + user.newLogo.toString());
         
         return Mutation(
           options: MutationOptions(
@@ -132,7 +132,7 @@ class _AccountState extends State<Account> {
             },
             // or do something with the result.data on completion
             onCompleted: (dynamic resultData) {
-              // print('onCompleted: ' + resultData.hasException);
+              // debugPrint('onCompleted: ' + resultData.hasException);
             },
           ),
           builder: (

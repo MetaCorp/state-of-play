@@ -56,7 +56,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
   }
 
   void onNext() {
-    print('property: ' + widget.stateOfPlay.property.address);
+    debugPrint('property: ' + widget.stateOfPlay.property.address);
     setState(() {
       _selectedIndex = _selectedIndex + 1;
     });
@@ -175,16 +175,16 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
                   //   });
                   // },
                   onError: (error) {
-                    print(error.toString());
+                    debugPrint(error.toString());
                   },
                   // onPageError: (page, error) {
-                  //   print('$page: ${error.toString()}');
+                  //   debugPrint('$page: ${error.toString()}');
                   // },
                   // onViewCreated: (PDFViewController pdfViewController) {
                   //   .complete(pdfViewController);
                   // },
                   // onPageChanged: (int page, int total) {
-                  //   print('page change: $page/$total');
+                  //   debugPrint('page change: $page/$total');
                   // },
                 ),
               )
@@ -297,7 +297,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         }
 
         widget.stateOfPlay.newPdf = await generatePdf(widget.stateOfPlay);
-        print('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
+        debugPrint('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
 
         
         bool retConfirmPay = await _showDialogConfirmPay(context);
@@ -356,7 +356,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
               )
             ],
             onSelected: (result) {
-              print("onSelected: " + result);
+              debugPrint("onSelected: " + result);
               if (result == "delete")
                 _showDialogDelete(context);
             }

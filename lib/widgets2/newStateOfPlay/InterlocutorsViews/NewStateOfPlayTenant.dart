@@ -239,7 +239,7 @@ class _NewStateOfPlayTenantState extends State<NewStateOfPlayTenant> {
   
   bool _submit(BuildContext context){
     bool done = false;
-    print(currentTenant.firstname);
+    debugPrint(currentTenant.firstname);
     if (_formKey.currentState.validate() ) {
       _formKey.currentState.save();
       currentTenant.firstname = _firstnameController.text;
@@ -262,7 +262,7 @@ class _NewStateOfPlayTenantState extends State<NewStateOfPlayTenant> {
       itemList.add(Tenant);
       itemList.add(Tenant2);
     });
-    print('lilength:'+itemList.length.toString());
+    debugPrint('lilength:'+itemList.length.toString());
   }
 
   void _showSelectKnownTenantDialog(context) {

@@ -52,7 +52,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
   @override
   Widget build(BuildContext context) {
 
-    // print('meter.state: ' + widget.meter.state);
+    // debugPrint('meter.state: ' + widget.meter.state);
 
     List<ImageType> imagesType = widget.meter.images.map((image) => ImageType(
       type: "network",
@@ -132,19 +132,19 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
-                    print("FILEPATH:");
+                    debugPrint("FILEPATH:");
 
                     File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
-                    print("FILEPATH:"+file.path);
+                    debugPrint("FILEPATH:"+file.path);
 
                     //TODO FINISH
                     if(index < widget.meter.images.length){   
-                      print("index"+index.toString());
+                      debugPrint("index"+index.toString());
                       widget.meter.images.removeAt(index);
                       widget.meter.newImages.add(file);
                     } 
                     else {
-                      print("Else index" + index.toString());
+                      debugPrint("Else index" + index.toString());
                       index -= widget.meter.images.length;
                       widget.meter.newImages[index] = file;
                     }  

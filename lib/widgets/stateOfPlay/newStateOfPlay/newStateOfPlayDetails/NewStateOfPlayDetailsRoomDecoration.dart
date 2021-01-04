@@ -71,8 +71,8 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
   @override
   Widget build(BuildContext context) {
 
-    // print('decoration.images: ' + widget.decoration.images.toString());
-    // print('decoration.newImages: ' + widget.decoration.newImages.length.toString());
+    // debugPrint('decoration.images: ' + widget.decoration.images.toString());
+    // debugPrint('decoration.newImages: ' + widget.decoration.newImages.length.toString());
 
     List<ImageType> imagesType = widget.decoration.images.map((image) => ImageType(
       type: "network",
@@ -87,7 +87,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
       ));
     }
 
-    // print('imagesType: ' + imagesType.toString());
+    // debugPrint('imagesType: ' + imagesType.toString());
 
 
     return WillPopScope(
@@ -175,19 +175,19 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                     setState(() {});  
                   },
                   onUpdate: (image, index) async {
-                    print("FILEPATH:");
+                    debugPrint("FILEPATH:");
 
                     File file = await File(await getFilePath()).create(recursive: true).then((file) => file.writeAsBytes(image));
-                    print("FILEPATH:"+file.path);
+                    debugPrint("FILEPATH:"+file.path);
 
                     //TODO FINISH
                     if(index < widget.decoration.images.length){   
-                      print("index"+index.toString());
+                      debugPrint("index"+index.toString());
                       widget.decoration.images.removeAt(index);
                       widget.decoration.newImages.add(file);
                     } 
                     else {
-                      print("Else index" + index.toString());
+                      debugPrint("Else index" + index.toString());
                       index -= widget.decoration.images.length;
                       widget.decoration.newImages[index] = file;
                     }  

@@ -189,7 +189,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               )
             ],
             onSelected: (result) {
-              print("onSelected: " + result);
+              debugPrint("onSelected: " + result);
               if (result == "delete")
                 _showDialogDelete(context);
             }

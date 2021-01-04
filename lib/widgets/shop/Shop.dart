@@ -103,14 +103,14 @@ class _ShopState extends State<Shop> {
   }
 
   Future<bool> checkIfNativePayReady() async {
-    print('started to check if native pay ready');
+    debugPrint('started to check if native pay ready');
     bool deviceSupportNativePay = await StripePayment.deviceSupportsNativePay();
     bool isNativeReady = await StripePayment.canMakeNativePayPayments(['american_express', 'visa', 'maestro', 'master_card']);
     return deviceSupportNativePay && isNativeReady;
   }
 
   Future<void> createPaymentMethodNative(double totalCost, int i, RunMutation runStripePIMutation, RunMutation runMutation, int credits) async {
-    print('started NATIVE payment...');
+    debugPrint('started NATIVE payment...');
     StripePayment.setStripeAccount(null);
     List<ApplePayItem> items = [];
     items.add(ApplePayItem(
@@ -134,7 +134,7 @@ class _ShopState extends State<Shop> {
       amount: (totalCost/* + tip + tax*/).toString(),
     ));
     int amount = ((totalCost/* + tip + tax*/) * 100).toInt();
-    print('amount in pence/cent which will be charged = $amount');
+    debugPrint('amount in pence/cent which will be charged = $amount');
 
     //step 1: add card
     PaymentMethod paymentMethod = PaymentMethod();
@@ -174,7 +174,7 @@ class _ShopState extends State<Shop> {
 
     // double tax = ((totalCost * taxPercent) * 100).ceil() / 100;
     int amount = ((totalCost/* + tip + tax*/) * 100).toInt();
-    print('amount in pence/cent which will be charged = $amount');
+    debugPrint('amount in pence/cent which will be charged = $amount');
 
     //step 1: add card
     PaymentMethod paymentMethod = PaymentMethod();
@@ -183,7 +183,7 @@ class _ShopState extends State<Shop> {
     ).then((PaymentMethod paymentMethod) {
       return paymentMethod;
     }).catchError((e) {
-      print('Error Card: ${e.toString()}');
+      debugPrint('Error Card: ${e.toString()}');
     });
     paymentMethod != null
         ? processPaymentAsDirectCharge(paymentMethod, totalCost, i, runStripePIMutation, runMutation, credits)
@@ -211,9 +211,9 @@ class _ShopState extends State<Shop> {
 
     QueryResult queryResult = await res.networkResult;
 
-    print('Now i decode');
+    debugPrint('Now i decode');
     if (queryResult.hasException) {
-      print('runStripePIMutation exception: ' + queryResult.exception.toString());
+      debugPrint('runStripePIMutation exception: ' + queryResult.exception.toString());
       StripePayment.cancelNativePayRequest();
       setState(() {
         loadings[i] = false;
@@ -227,7 +227,7 @@ class _ShopState extends State<Shop> {
               buttonText: 'FERMER'));
     }
     else {
-      print('queryResult: ' + queryResult.data.toString());
+      debugPrint('queryResult: ' + queryResult.data.toString());
 
       if (queryResult.data["stripePI"] == "") {
         StripePayment.cancelNativePayRequest();
@@ -245,7 +245,7 @@ class _ShopState extends State<Shop> {
       else {
         final paymentIntentX = jsonDecode(queryResult.data["stripePI"]);// jsonDecode(response.body);
 
-        print('paymentIntentX: ' + paymentIntentX.toString());
+        debugPrint('paymentIntentX: ' + paymentIntentX.toString());
         final status = paymentIntentX['paymentIntent']['status'];
         final strAccount = paymentIntentX['stripeAccount'];
 
@@ -253,7 +253,7 @@ class _ShopState extends State<Shop> {
         if (status == 'succeeded') {
           //payment was confirmed by the server without need for futher authentification
           StripePayment.completeNativePayRequest();
-          print('Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}c succesfully charged');
+          debugPrint('Payment completed. ${paymentIntentX['paymentIntent']['amount'].toString()}c succesfully charged');
           await runMutation({
             "data": {
               "amount": credits
@@ -359,7 +359,7 @@ class _ShopState extends State<Shop> {
 
         sop.User user;
         if (result.data != null && result.data["user"] != null && !result.loading) {
-          print('Shop user: ' + result.data["user"].toString());
+          debugPrint('Shop user: ' + result.data["user"].toString());
           user = sop.User.fromJSON(result.data["user"]);
         }
 
@@ -376,7 +376,7 @@ class _ShopState extends State<Shop> {
             },
             // or do something with the result.data on completion
             onCompleted: (dynamic resultData) {
-              // print('onCompleted: ' + resultData.hasException);
+              // debugPrint('onCompleted: ' + resultData.hasException);
             },
           ),
           builder: (
@@ -397,7 +397,7 @@ class _ShopState extends State<Shop> {
                 },
                 // or do something with the result.data on completion
                 onCompleted: (dynamic resultData) {
-                  // print('onCompleted: ' + resultData.hasException);
+                  // debugPrint('onCompleted: ' + resultData.hasException);
                 },
               ),
               builder: (

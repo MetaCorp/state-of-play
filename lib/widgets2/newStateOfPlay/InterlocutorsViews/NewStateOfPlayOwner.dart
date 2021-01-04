@@ -233,7 +233,7 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
   
   bool _submit(BuildContext context){
     bool done = false;
-    print(currentOwner.firstname);
+    debugPrint(currentOwner.firstname);
     if (_formKey.currentState.validate() ) {
       _formKey.currentState.save();
       currentOwner.firstname = _firstnameController.text;
@@ -257,7 +257,7 @@ class _NewStateOfPlayOwnerState extends State<NewStateOfPlayOwner> {
       itemList.add(owner);
       itemList.add(owner2);
     });
-    print('lilength:'+itemList.length.toString());
+    debugPrint('lilength:'+itemList.length.toString());
   }
 
   void _showSelectKnownOwnerDialog(context) {

@@ -29,7 +29,7 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() => print("Value changed"));
+    _controller.addListener(() => debugPrint("Value changed"));
   }
 
   @override

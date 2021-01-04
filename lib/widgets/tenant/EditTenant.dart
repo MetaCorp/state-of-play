@@ -72,7 +72,7 @@ class _EditTenantState extends State<EditTenant> {
             },
             // or do something with the result.data on completion
             onCompleted: (dynamic resultData) {
-              // print('onCompleted: ' + resultData.hasException);
+              // debugPrint('onCompleted: ' + resultData.hasException);
             },
           ),
           builder: (
@@ -93,7 +93,7 @@ class _EditTenantState extends State<EditTenant> {
                 },
                 // or do something with the result.data on completion
                 onCompleted: (dynamic resultData) {
-                  // print('onCompleted: ' + resultData.hasException);
+                  // debugPrint('onCompleted: ' + resultData.hasException);
                 },
               ),
               builder: (
@@ -106,7 +106,7 @@ class _EditTenantState extends State<EditTenant> {
                   saveLoading: mutationUpdateResult.loading,
                   interlocutor: tenant,
                   onSave: (tenant) async {
-                    print('runUpdateMutation');
+                    debugPrint('runUpdateMutation');
 
                     MultiSourceResult mutationResult = runUpdateMutation({
                       "data": {
@@ -121,14 +121,14 @@ class _EditTenantState extends State<EditTenant> {
                     QueryResult networkResult = await mutationResult.networkResult;
 
                     if (networkResult.hasException) {
-                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                       if (networkResult.exception.clientException != null)
-                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                        debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                       else
-                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                        debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
                     else {
-                      print('queryResult data: ' + networkResult.data.toString());
+                      debugPrint('queryResult data: ' + networkResult.data.toString());
                       if (networkResult.data != null) {
                         if (networkResult.data["updateTenant"] == null) {
                           // TODO: show error
@@ -141,7 +141,7 @@ class _EditTenantState extends State<EditTenant> {
                     }
                   },
                   onDelete: () async {
-                    print('runDeleteMutation');
+                    debugPrint('runDeleteMutation');
 
                     MultiSourceResult mutationResult = runDeleteMutation({
                       "data": {
@@ -151,14 +151,14 @@ class _EditTenantState extends State<EditTenant> {
                     QueryResult networkResult = await mutationResult.networkResult;
 
                     if (networkResult.hasException) {
-                      print('networkResult.hasException: ' + networkResult.hasException.toString());
+                      debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                       if (networkResult.exception.clientException != null)
-                        print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                        debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                       else
-                        print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                        debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                     }
                     else {
-                      print('queryResult data: ' + networkResult.data.toString());
+                      debugPrint('queryResult data: ' + networkResult.data.toString());
                       if (networkResult.data != null) {
                         if (networkResult.data["deleteTenant"] == null) {
                           // TODO: show error

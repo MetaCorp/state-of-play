@@ -57,10 +57,10 @@ class _OwnerState extends State<Owner> {
               Refetch refetch,
               FetchMore fetchMore,
             }) {
-              print('loading: ' + result.loading.toString());
-              print('exception: ' + result.exception.toString());
-              print('data: ' + result.data.toString());
-              print('');
+              debugPrint('loading: ' + result.loading.toString());
+              debugPrint('exception: ' + result.exception.toString());
+              debugPrint('data: ' + result.data.toString());
+              debugPrint('');
 
               if (result.hasException) {
                 return Text(result.exception.toString());
@@ -72,7 +72,7 @@ class _OwnerState extends State<Owner> {
 
               sop.Owner owner = sop.Owner.fromJSON(result.data["owner"]);
 
-              print('parsed data: ' + owner.toString());
+              debugPrint('parsed data: ' + owner.toString());
 
               return Text(owner.id);
             }

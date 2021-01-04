@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
         },
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
-          // print('onCompleted: ' + resultData.hasException);
+          // debugPrint('onCompleted: ' + resultData.hasException);
         },
       ),
       builder: (
@@ -69,10 +69,10 @@ class _LoginState extends State<Login> {
         QueryResult result,
       ) {
 
-        print('queryResult hasException: ' + result.hasException.toString());
-        print('queryResult loading: ' + result.loading.toString());
-        if(result.hasException && result.exception.graphqlErrors.length > 0) print('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
-        else if(result.hasException) print('queryResult clientException: ' + result.exception.clientException.message);
+        debugPrint('queryResult hasException: ' + result.hasException.toString());
+        debugPrint('queryResult loading: ' + result.loading.toString());
+        if(result.hasException && result.exception.graphqlErrors.length > 0) debugPrint('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
+        else if(result.hasException) debugPrint('queryResult clientException: ' + result.exception.clientException.message);
 
         return Scaffold(
           appBar: AppBar(
@@ -209,7 +209,7 @@ class _LoginState extends State<Login> {
                       
                       }
                       else {
-                        print('queryResult data: ' + networkResult.data.toString());
+                        debugPrint('queryResult data: ' + networkResult.data.toString());
                         if (networkResult.data != null) {
                           if (networkResult.data["login"] == null) {
                             // TODO: show error

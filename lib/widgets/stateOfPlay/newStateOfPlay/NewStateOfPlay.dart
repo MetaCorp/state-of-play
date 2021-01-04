@@ -316,7 +316,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
         }
 
         if (result.data != null && result.data["user"] != null && !result.loading && user == null) {
-          print('NewStateOfPlay user: ' + result.data["user"].toString());
+          debugPrint('NewStateOfPlay user: ' + result.data["user"].toString());
           user = sop.User.fromJSON(result.data["user"]);
         }
 
@@ -340,10 +340,10 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
             RunMutation runMutation,
             QueryResult result,
           ) {
-            // print('NewStateOfPlay: ' + widget.stateOfPlayId);
+            // debugPrint('NewStateOfPlay: ' + widget.stateOfPlayId);
 
             if (_stateOfPlay == null) {
-              print('new stateOfPlay: ' + user.logo.toString());
+              debugPrint('new stateOfPlay: ' + user.logo.toString());
               _stateOfPlay = _stateOfPlay2;
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
@@ -356,7 +356,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               saveLoading: result.loading,
               user: user,
               onSave: () async {
-                print("onSave");
+                debugPrint("onSave");
 
                 MultiSourceResult result = runMutation({
                   "data": {
@@ -513,18 +513,18 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
 
                 QueryResult networkResult = await result.networkResult;
 
-                print("networkResult hasException: " + networkResult.hasException.toString());
+                debugPrint("networkResult hasException: " + networkResult.hasException.toString());
                 if (networkResult.hasException) {
                   if (networkResult.exception.graphqlErrors.length > 0) { 
-                    print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
-                    print("networkResult exception: " + networkResult.exception.graphqlErrors[0].extensions.toString());
+                    debugPrint("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                    debugPrint("networkResult exception: " + networkResult.exception.graphqlErrors[0].extensions.toString());
                   }
                   else
-                    print("networkResult clientException: " + networkResult.exception.clientException.message);
+                    debugPrint("networkResult clientException: " + networkResult.exception.clientException.message);
                   return false;//TODO: show error
                 }
-                print("");
-                print("");
+                debugPrint("");
+                debugPrint("");
                 
                 Navigator.pop(context);
                 Navigator.popAndPushNamed(context, "/state-of-plays");
@@ -612,11 +612,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           FetchMore fetchMore,
         }) {
 
-          print('newStateOfPlay: ' + _stateOfPlay.toString() + ' ' + result.data.toString());
+          debugPrint('newStateOfPlay: ' + _stateOfPlay.toString() + ' ' + result.data.toString());
           if (_stateOfPlay == null && result.data != null) {
-            print('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
+            debugPrint('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
             _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
-            print('loaded stateOfPlay: ' + _stateOfPlay.toString());
+            debugPrint('loaded stateOfPlay: ' + _stateOfPlay.toString());
           }
 
           if (result.hasException) {

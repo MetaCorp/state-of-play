@@ -83,24 +83,24 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
         },
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
-          // print('onCompleted: ' + resultData.hasException);
+          // debugPrint('onCompleted: ' + resultData.hasException);
         },
       ),
       builder: (
         RunMutation runMutation,
         QueryResult result,
       ) {
-        print('queryResult hasException: ' + result.hasException.toString());
-        print('queryResult loading: ' + result.loading.toString());
-        if(result.hasException) print('queryResult exception: ' + result.exception.graphqlErrors[0].toString());
+        debugPrint('queryResult hasException: ' + result.hasException.toString());
+        debugPrint('queryResult loading: ' + result.loading.toString());
+        if(result.hasException) debugPrint('queryResult exception: ' + result.exception.graphqlErrors[0].toString());
         return SingleChildScrollView(
           reverse: true,
           child: Form(
             key: _formKey,
             child: Consumer<NewStateOfPlayProvider>(
               builder: (context, newStateOfPlayState, child) {
-                print("in builder for consumer: ");
-                print(newStateOfPlayState.value.property.reference);
+                debugPrint("in builder for consumer: ");
+                debugPrint(newStateOfPlayState.value.property.reference);
 
                 if (_refController.text != newStateOfPlayState.value.property.reference) {
                   _refController.text = newStateOfPlayState.value.property.reference ?? '';
@@ -147,8 +147,8 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
                           child: TextFormField(
                             controller: _refController,
                             onChanged: (value) {
-                              // print("TextField new value: ");
-                              // print(value);
+                              // debugPrint("TextField new value: ");
+                              // debugPrint(value);
                               newStateOfPlayState.value.property.reference = value;
                               context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
                             },
@@ -323,7 +323,7 @@ class _NewStateOfPlayPropertyState extends State<NewStateOfPlayProperty> {
       _propertyList.add(new sop.Property(reference: "ref1", address: "007 Here Street"));
       _propertyList.add(new sop.Property(reference: "ref1", address: "007 Here Street"));
     });
-    print('lilength:'+_propertyList.length.toString());
+    debugPrint('lilength:'+_propertyList.length.toString());
   }
 
   void _showSelectKnownPropertyDialog(context) {

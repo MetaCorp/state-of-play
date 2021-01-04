@@ -205,7 +205,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                 }) {
 
                   if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
-                    print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
+                    debugPrint('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
                     _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
                   }
 
@@ -228,8 +228,12 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                   }
 
                   if (resultUser.data != null && resultUser.data["user"] != null && !resultUser.loading && user == null) {
-                    print('EditStateOfPlay user: ' + resultUser.data["user"].toString());
+                    debugPrint('EditStateOfPlay user: ' + resultUser.data["user"].toString());
                     user = sop.User.fromJSON(resultUser.data["user"]);
+                  }
+
+                  if (_stateOfPlay != null && user != null) {
+                    _stateOfPlay.logo = user.logo;
                   }
                   
                   return Mutation(
@@ -245,7 +249,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                       },
                       // or do something with the result.data on completion
                       onCompleted: (dynamic resultData) {
-                        // print('onCompleted: ' + resultData.hasException);
+                        // debugPrint('onCompleted: ' + resultData.hasException);
                       },
                     ),
                     builder: (
@@ -258,7 +262,7 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                         saveLoading: mutationUpdateResult.loading,
                         user: user,
                         onSave: () async {
-                          print("onSave");
+                          debugPrint("onSave");
                           MultiSourceResult result = runMutation({
                             "data": {
                               "id": _stateOfPlay.id,
@@ -414,23 +418,23 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
 
                           QueryResult networkResult = await result.networkResult;
 
-                          print("networkResult hasException: " + networkResult.hasException.toString());
+                          debugPrint("networkResult hasException: " + networkResult.hasException.toString());
                           if (networkResult.hasException) {
                             if (networkResult.exception.graphqlErrors.length > 0)
-                              print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                              debugPrint("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
                             else
-                              print("networkResult clientException: " + networkResult.exception.clientException.message);
+                              debugPrint("networkResult clientException: " + networkResult.exception.clientException.message);
                             return;//TODO: show error
                           }
-                          print("");
-                          print("");
+                          debugPrint("");
+                          debugPrint("");
                           
                           Navigator.pop(context);
                           Navigator.popAndPushNamed(context, "/state-of-plays");
 
                         },
                         onDelete: () async {
-                          print('runDeleteMutation');
+                          debugPrint('runDeleteMutation');
 
                           MultiSourceResult mutationResult = runDeleteMutation({
                             "data": {
@@ -440,14 +444,14 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
                           QueryResult networkResult = await mutationResult.networkResult;
 
                           if (networkResult.hasException) {
-                            print('networkResult.hasException: ' + networkResult.hasException.toString());
+                            debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                             if (networkResult.exception.clientException != null)
-                              print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                              debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                             else
-                              print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                              debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                           }
                           else {
-                            print('queryResult data: ' + networkResult.data.toString());
+                            debugPrint('queryResult data: ' + networkResult.data.toString());
                             if (networkResult.data != null) {
                               if (networkResult.data["deleteStateOfPlay"] == null) {
                                 // TODO: show error

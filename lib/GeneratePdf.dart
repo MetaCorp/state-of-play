@@ -68,7 +68,7 @@ Future<File> _saveAsFile(pdf) async {
   final Directory appDocDir = await getApplicationDocumentsDirectory();
   final String appDocPath = appDocDir.path;
   final File file = File(appDocPath + '/' + uuid.v1() + '.pdf');
-  print('Save as file ${file.path} ...');
+  debugPrint('Save as file ${file.path} ...');
   await file.writeAsBytes(bytes);
   // setState(() {
   //   _pdfPath = file.path;
@@ -78,7 +78,7 @@ Future<File> _saveAsFile(pdf) async {
 }
 
 pw.Widget _buildTable({ List<String> tableHeaders, List<dynamic> array, Map<int, pw.TableColumnWidth> columnWidths, PdfColor primaryColor }) {
-  print(array.length);
+  debugPrint(array.length.toString());
 
   return pw.Table.fromTextArray(
     columnWidths: columnWidths,
@@ -366,7 +366,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
 
 Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
 
-  print('imagesType: ' + imagesType.toString());
+  debugPrint('imagesType: ' + imagesType.toString());
 
   if (imagesType.length == 0)
     return pw.Container();
@@ -1093,7 +1093,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
 
   // final file = File("example.pdf");
   // await file.writeAsBytes(pdf.save());
-  print("DOCID:"+pdf.document.pdfPageList.pages[pdf.document.pdfPageList.pages.length-1].pdfDocument.documentID.toString());
+  debugPrint("DOCID:"+pdf.document.pdfPageList.pages[pdf.document.pdfPageList.pages.length-1].pdfDocument.documentID.toString());
   return await _saveAsFile(pdf);
 
 }

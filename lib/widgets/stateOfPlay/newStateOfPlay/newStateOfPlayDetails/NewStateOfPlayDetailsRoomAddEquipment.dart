@@ -37,7 +37,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           new FlatButton(
             child: Text('SUPPRIMER'),
             onPressed: () async {
-              print('runDeleteMutation');
+              debugPrint('runDeleteMutation');
 
               MultiSourceResult mutationResult = runDeleteMutation({
                 "data": {
@@ -47,14 +47,14 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               QueryResult networkResult = await mutationResult.networkResult;
 
               if (networkResult.hasException) {
-                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                 if (networkResult.exception.clientException != null)
-                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                 else
-                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
               }
               else {
-                print('queryResult data: ' + networkResult.data.toString());
+                debugPrint('queryResult data: ' + networkResult.data.toString());
                 if (networkResult.data != null) {
                   if (networkResult.data["deleteEquipment"] == null) {
                     // TODO: show error
@@ -173,10 +173,10 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
 
         Widget body;
         
-        print('loading: ' + result.loading.toString());
-        print('exception: ' + result.exception.toString());
-        print('data: ' + result.data.toString());
-        print('');
+        debugPrint('loading: ' + result.loading.toString());
+        debugPrint('exception: ' + result.exception.toString());
+        debugPrint('data: ' + result.data.toString());
+        debugPrint('');
 
         List<Map> equipments;
 
@@ -192,7 +192,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
             "id": equipment["id"],
             "type": equipment["type"],
           }).toList();
-          print('equipments length: ' + equipments.length.toString());
+          debugPrint('equipments length: ' + equipments.length.toString());
 
           if (equipments.length == 0) {
             body = Container(
@@ -219,7 +219,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                 },
                 // or do something with the result.data on completion
                 onCompleted: (dynamic resultData) {
-                  // print('onCompleted: ' + resultData.hasException);
+                  // debugPrint('onCompleted: ' + resultData.hasException);
                 },
               ),
               builder: (

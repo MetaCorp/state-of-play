@@ -76,10 +76,10 @@ class _PropertyState extends State<StateOfPlay> {
               Refetch refetch,
               FetchMore fetchMore,
             }) {
-              print('loading: ' + result.loading.toString());
-              print('exception: ' + result.exception.toString());
-              print('data: ' + result.data.toString());
-              print('');
+              debugPrint('loading: ' + result.loading.toString());
+              debugPrint('exception: ' + result.exception.toString());
+              debugPrint('data: ' + result.data.toString());
+              debugPrint('');
 
               if (result.hasException) {
                 return Text(result.exception.toString());
@@ -91,7 +91,7 @@ class _PropertyState extends State<StateOfPlay> {
 
               sop.StateOfPlay stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
 
-              print('parsed data: ' + stateOfPlay.toString());
+              debugPrint('parsed data: ' + stateOfPlay.toString());
 
               return Text(stateOfPlay.id);
             }

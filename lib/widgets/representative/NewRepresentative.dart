@@ -33,7 +33,7 @@ class _NewRepresentativeState extends State<NewRepresentative> {
         },
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
-          // print('onCompleted: ' + resultData.hasException);
+          // debugPrint('onCompleted: ' + resultData.hasException);
         },
       ),
       builder: (
@@ -46,7 +46,7 @@ class _NewRepresentativeState extends State<NewRepresentative> {
           saveLoading: result.loading,
           interlocutor: sop.Representative(),
           onSave: (representative) async {
-            print('runMutation');
+            debugPrint('runMutation');
 
             MultiSourceResult mutationResult = runMutation({
               "data": {
@@ -62,14 +62,14 @@ class _NewRepresentativeState extends State<NewRepresentative> {
             QueryResult networkResult = await mutationResult.networkResult;
 
             if (networkResult.hasException) {
-              print('networkResult.hasException: ' + networkResult.hasException.toString());
+              debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
               if (networkResult.exception.clientException != null)
-                print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
               else
-                print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
             }
             else {
-              print('queryResult data: ' + networkResult.data.toString());
+              debugPrint('queryResult data: ' + networkResult.data.toString());
               if (networkResult.data != null) {
                 if (networkResult.data["createRepresentative"] == null) {
                   // TODO: show error

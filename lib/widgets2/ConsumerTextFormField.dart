@@ -16,16 +16,16 @@ class ConsumerTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<NewStateOfPlayProvider>(
       builder: (context, newStateOfPlayState, child) {
-        print("in builder for consumer: ");
-        print(newStateOfPlayState.value.property.reference);// TODO Abstraire ca via la variable modelVariable
+        debugPrint("in builder for consumer: ");
+        debugPrint(newStateOfPlayState.value.property.reference);// TODO Abstraire ca via la variable modelVariable
         if (controller.text != newStateOfPlayState.value.property.reference) {
           controller.text = newStateOfPlayState.value.property.reference ?? '';
         }
         return TextFormField(
           controller: controller,
           onChanged: (value) {
-            print("TextField new value: ");
-            print(value);
+            debugPrint("TextField new value: ");
+            debugPrint(value);
             newStateOfPlayState.value.property.reference = value;
             context.read<NewStateOfPlayProvider>().update(newStateOfPlayState.value);
           },

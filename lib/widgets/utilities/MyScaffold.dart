@@ -84,10 +84,10 @@ class _MyScaffoldState extends State<MyScaffold> {
     // }
 
     if (_bottomSheetOpen == false) {
-      print('open BottomSheet');          
+      debugPrint('open BottomSheet');          
       setState(() { 
         _bottomSheetOpen = true;
-        print("VALUE:"+_bottomSheetOpen.toString()); 
+        debugPrint("VALUE:"+_bottomSheetOpen.toString()); 
       });
       globalKey.currentState.showBottomSheet((context) {            
         return Container(
@@ -157,7 +157,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                             out: true,
                             sIn: false,
                             onSelect: (stateOfPlayId) {
-                              print("onSelect");
+                              debugPrint("onSelect");
                               Navigator.pop(globalKey.currentContext);
                               Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: false)));
                             }
@@ -229,7 +229,7 @@ class _MyScaffoldState extends State<MyScaffold> {
                             out: false,
                             sIn: true,
                             onSelect: (stateOfPlayId) {
-                              print("onSelect");
+                              debugPrint("onSelect");
                               Navigator.pop(globalKey.currentContext);
                               Navigator.push(globalKey.currentContext, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: stateOfPlayId, out: true)));
                             }))
@@ -244,7 +244,7 @@ class _MyScaffoldState extends State<MyScaffold> {
           ),
         );
       }).closed.then((value) {
-        print('THEN close BottomSheet');
+        debugPrint('THEN close BottomSheet');
         setState(() { _bottomSheetOpen = false; });
       });
     } else {
@@ -279,22 +279,22 @@ class _MyScaffoldState extends State<MyScaffold> {
         FetchMore fetchMore,
       }) {
 
-        // print('userResult: ' + result.loading.toString());
-        // print('userResult hasException: ' + result.hasException.toString());
-        // print('userResult data: ' + result.data.toString());
+        // debugPrint('userResult: ' + result.loading.toString());
+        // debugPrint('userResult hasException: ' + result.hasException.toString());
+        // debugPrint('userResult data: ' + result.data.toString());
         // if (result.hasException) {
         //   if (result.exception.graphqlErrors.length > 0) { 
-        //     print("userResult exception: " + result.exception.graphqlErrors[0].toString());
-        //     print("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
+        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
         //   }
         //   else
-        //     print("userResult clientException: " + result.exception.clientException.message);
+        //     debugPrint("userResult clientException: " + result.exception.clientException.message);
         // }
-        // print('');
+        // debugPrint('');
 
         if (result.data != null && result.data["user"] != null && !result.loading) {
           user = sop.User.fromJSON(result.data["user"]);
-          print('user: ' + user.firstName.toString());
+          debugPrint('user: ' + user.firstName.toString());
         }
         
         return Scaffold(

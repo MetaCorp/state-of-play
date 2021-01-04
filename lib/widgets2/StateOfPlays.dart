@@ -48,10 +48,10 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             Refetch refetch,
             FetchMore fetchMore,
           }) {
-            print('loading: ' + result.loading.toString());
-            print('exception: ' + result.exception.toString());
-            print('data: ' + result.data.toString());
-            print('');
+            debugPrint('loading: ' + result.loading.toString());
+            debugPrint('exception: ' + result.exception.toString());
+            debugPrint('data: ' + result.data.toString());
+            debugPrint('');
 
             if (result.hasException) {
               return Text(result.exception.toString());
@@ -62,7 +62,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
             }
 
             sop.User user = sop.User.fromJSON(result.data["user"]);
-            print('stateOfPlays length: ' + user.stateOfPlays.length.toString());
+            debugPrint('stateOfPlays length: ' + user.stateOfPlays.length.toString());
 
             if (user.stateOfPlays.length == 0) {
               return Text("no stateOfplays");

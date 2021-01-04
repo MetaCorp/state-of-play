@@ -193,7 +193,7 @@ class NewStateOfPlayProvider with ChangeNotifier {
   );
 
   void update(sop.StateOfPlay newValue) {
-    print('NewStateOfPlayProvider update: ' + newValue.property.reference);
+    debugPrint('NewStateOfPlayProvider update: ' + newValue.property.reference);
     value = newValue;
     notifyListeners();
   }

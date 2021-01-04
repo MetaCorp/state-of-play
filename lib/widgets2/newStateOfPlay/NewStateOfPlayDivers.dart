@@ -79,7 +79,7 @@ class _NewStateOfPlayDiversState extends State<NewStateOfPlayDivers> {
                               color: Colors.red,
                               child: Icon(Icons.add),
                               onPressed: (){
-                                print("pressed");
+                                debugPrint("pressed");
                               },
                             ),
                           ],
@@ -93,7 +93,7 @@ class _NewStateOfPlayDiversState extends State<NewStateOfPlayDivers> {
                           value: isSwitched,
                           onChanged: (bool value) { 
                             setState(() {
-                              print("pressed");
+                              debugPrint("pressed");
                               isSwitched = value;
                             });
                           }, 

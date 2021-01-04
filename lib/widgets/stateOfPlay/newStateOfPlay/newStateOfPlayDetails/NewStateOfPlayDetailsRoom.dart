@@ -133,9 +133,9 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
   @override
   Widget build(BuildContext context) {
 
-    print('room.decorations: ' + widget.room.decorations.toString());
-    print('room.electricities: ' + widget.room.electricities.toString());
-    print('room.equipments: ' + widget.room.equipments.toString());
+    debugPrint('room.decorations: ' + widget.room.decorations.toString());
+    debugPrint('room.electricities: ' + widget.room.electricities.toString());
+    debugPrint('room.equipments: ' + widget.room.equipments.toString());
 
     // TODO: Flexible messed up layout (used because of an error)
     return Scaffold(
@@ -162,7 +162,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                       if (widget.room.decorations.length < maxEntities) {
                         await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
                           onSelect: (decorations) {
-                            print('decorations: ' + decorations.toString());
+                            debugPrint('decorations: ' + decorations.toString());
                             if (widget.room.decorations.length + decorations.length > maxEntities)
                               _showDialogLimit(context, 'décorations');
 
@@ -269,7 +269,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                           if (widget.room.electricities.length < maxEntities)
                             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddElectricity(
                               onSelect: (electricities) {
-                                print('electricities: ' + electricities.toString());
+                                debugPrint('electricities: ' + electricities.toString());
                                 if (widget.room.electricities.length + electricities.length > maxEntities)
                                   _showDialogLimit(context, 'électricités / chauffages');
 
@@ -336,7 +336,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
                           if (widget.room.equipments.length < maxEntities)
                             Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddEquipment(
                               onSelect: (equipments) {
-                                print('equipments: ' + equipments.toString());
+                                debugPrint('equipments: ' + equipments.toString());
                                 if (widget.room.equipments.length + equipments.length > maxEntities)
                                   _showDialogLimit(context, 'équipements');
 
@@ -399,7 +399,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
       //         title: "Décorations",
       //         onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddDecoration(
       //           onSelect: (decorations) {
-      //             print('decorations: ' + decorations.toString());
+      //             debugPrint('decorations: ' + decorations.toString());
       //             for (var i = 0; i < decorations.length; i++) {
       //               widget.room.decorations.add(sop.Decoration(
       //                 type: decorations[i],
@@ -450,7 +450,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
       //         title: "Électricité / Chauffage",
       //         onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddElectricity(
       //           onSelect: (electricities) {
-      //             print('electricities: ' + electricities.toString());
+      //             debugPrint('electricities: ' + electricities.toString());
       //             for (var i = 0; i < electricities.length; i++) {
       //               widget.room.electricities.add(sop.Electricity(
       //                 type: electricities[i],
@@ -502,7 +502,7 @@ class _NewStateOfPlayDetailsRoomState extends State<NewStateOfPlayDetailsRoom> {
       //         title: "Équipement",
       //         onPressAdd: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayDetailsRoomAddEquipment(
       //           onSelect: (equipments) {
-      //             print('equipments: ' + equipments.toString());
+      //             debugPrint('equipments: ' + equipments.toString());
       //             for (var i = 0; i < equipments.length; i++) {
       //               widget.room.equipments.add(sop.Equipment(
       //                 type: equipments[i],

@@ -57,10 +57,10 @@ class _RepresentativeState extends State<Representative> {
               Refetch refetch,
               FetchMore fetchMore,
             }) {
-              print('loading: ' + result.loading.toString());
-              print('exception: ' + result.exception.toString());
-              print('data: ' + result.data.toString());
-              print('');
+              debugPrint('loading: ' + result.loading.toString());
+              debugPrint('exception: ' + result.exception.toString());
+              debugPrint('data: ' + result.data.toString());
+              debugPrint('');
 
               if (result.hasException) {
                 return Text(result.exception.toString());
@@ -72,7 +72,7 @@ class _RepresentativeState extends State<Representative> {
 
               sop.Representative representative = sop.Representative.fromJSON(result.data["representative"]);
 
-              print('parsed data: ' + representative.toString());
+              debugPrint('parsed data: ' + representative.toString());
 
               return Text(representative.id);
             }

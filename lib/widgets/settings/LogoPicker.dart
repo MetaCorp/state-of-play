@@ -34,9 +34,9 @@ class _LogoPickerState extends State<LogoPicker> {
   @override
   Widget build(BuildContext context) {
 
-    print('LogoPicker logo: ' + widget.logo.toString());
-    print('LogoPicker newLogo: ' + widget.newLogo.toString());
-    print('');
+    debugPrint('LogoPicker logo: ' + widget.logo.toString());
+    debugPrint('LogoPicker newLogo: ' + widget.newLogo.toString());
+    debugPrint('');
 
     return Stack(
       alignment: Alignment.topLeft,

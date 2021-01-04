@@ -22,7 +22,7 @@ class _EditImageState extends State<EditImage> {
   @override
   void initState() {
     super.initState();
-    print("Init Controller !!!");
+    debugPrint("Init Controller !!!");
     _controller = PainterController();
     _controller.thickness = 5.0;
     _controller.drawColor = Colors.red;

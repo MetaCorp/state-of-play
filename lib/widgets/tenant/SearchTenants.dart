@@ -42,7 +42,7 @@ class _SearchTenantsState extends State<SearchTenants> {
           new FlatButton(
             child: Text('SUPPRIMER'),
             onPressed: () async {
-              print('runDeleteMutation');
+              debugPrint('runDeleteMutation');
 
               MultiSourceResult mutationResult = runDeleteMutation({
                 "data": {
@@ -52,14 +52,14 @@ class _SearchTenantsState extends State<SearchTenants> {
               QueryResult networkResult = await mutationResult.networkResult;
 
               if (networkResult.hasException) {
-                print('networkResult.hasException: ' + networkResult.hasException.toString());
+                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
                 if (networkResult.exception.clientException != null)
-                  print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
                 else
-                  print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
+                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
               }
               else {
-                print('queryResult data: ' + networkResult.data.toString());
+                debugPrint('queryResult data: ' + networkResult.data.toString());
                 if (networkResult.data != null) {
                   if (networkResult.data["deleteTenant"] == null) {
                     // TODO: show error
@@ -115,10 +115,10 @@ class _SearchTenantsState extends State<SearchTenants> {
 
         Widget body;
         
-        print('loading: ' + result.loading.toString());
-        print('exception: ' + result.exception.toString());
-        print('data: ' + result.data.toString());
-        print('');
+        debugPrint('loading: ' + result.loading.toString());
+        debugPrint('exception: ' + result.exception.toString());
+        debugPrint('data: ' + result.data.toString());
+        debugPrint('');
 
         if (result.hasException) {
           body = Text(result.exception.toString());
@@ -129,7 +129,7 @@ class _SearchTenantsState extends State<SearchTenants> {
         else {
 
           List<sop.Tenant> tenants = (result.data["tenants"] as List).map((tenant) => sop.Tenant.fromJSON(tenant)).toList();
-          print('stateOfPlays length: ' + tenants.length.toString());
+          debugPrint('stateOfPlays length: ' + tenants.length.toString());
 
           if (tenants.length == 0) {
             body = Container(
@@ -156,7 +156,7 @@ class _SearchTenantsState extends State<SearchTenants> {
                 },
                 // or do something with the result.data on completion
                 onCompleted: (dynamic resultData) {
-                  // print('onCompleted: ' + resultData.hasException);
+                  // debugPrint('onCompleted: ' + resultData.hasException);
                 },
               ),
               builder: (

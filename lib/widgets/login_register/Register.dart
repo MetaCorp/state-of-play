@@ -51,7 +51,7 @@ class _RegisterState extends State<Register> {
         },
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
-          // print('onCompleted: ' + resultData.hasException);
+          // debugPrint('onCompleted: ' + resultData.hasException);
         },
       ),
       builder: (
@@ -59,12 +59,12 @@ class _RegisterState extends State<Register> {
         QueryResult result,
       ) {
 
-        print('queryResult hasException: ' + result.hasException.toString());
-        print('queryResult loading: ' + result.loading.toString());
-        if(result.hasException && result.exception.graphqlErrors.length > 0) print('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
-        else if(result.hasException) print('queryResult clientException: ' + result.exception.clientException.message);
+        debugPrint('queryResult hasException: ' + result.hasException.toString());
+        debugPrint('queryResult loading: ' + result.loading.toString());
+        if(result.hasException && result.exception.graphqlErrors.length > 0) debugPrint('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
+        else if(result.hasException) debugPrint('queryResult clientException: ' + result.exception.clientException.message);
 
-        print('');
+        debugPrint('');
 
         return Scaffold(
           appBar: AppBar(
@@ -141,7 +141,7 @@ class _RegisterState extends State<Register> {
                       if (networkResult.hasException) {
                         // TODO display snackbar (email already in use)
                       } else {
-                        print('queryResult data: ' + networkResult.data.toString());
+                        debugPrint('queryResult data: ' + networkResult.data.toString());
                         if (networkResult.data != null) {
                           if (networkResult.data["register"] == null) {
                             // TODO: show error

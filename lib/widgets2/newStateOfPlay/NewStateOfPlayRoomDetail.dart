@@ -73,7 +73,7 @@ class _NewStateOfPlayRoomDetailState extends State<NewStateOfPlayRoomDetail> {
                               color: Colors.red,
                               child: Icon(Icons.add),
                               onPressed: (){
-                                print("pressed");
+                                debugPrint("pressed");
                               },
                             ),
                           ],
@@ -87,7 +87,7 @@ class _NewStateOfPlayRoomDetailState extends State<NewStateOfPlayRoomDetail> {
                           value: isSwitched,
                           onChanged: (bool value) { 
                             setState(() {
-                              print("pressed");
+                              debugPrint("pressed");
                               isSwitched = value;
                             });
                           }, 
@@ -148,7 +148,7 @@ class _NewStateOfPlayRoomDetailState extends State<NewStateOfPlayRoomDetail> {
                                 value: isSwitched,
                                 onChanged: (bool value) { 
                                   setState(() {
-                                    print("pressed");
+                                    debugPrint("pressed");
                                     isSwitched = value;
                                   });
                                 }, 
@@ -254,7 +254,7 @@ class _NewStateOfPlayRoomDetailState extends State<NewStateOfPlayRoomDetail> {
     } 
 
   void reorderData(int oldIndex, int newIndex) {
-    print("test");
+    debugPrint("test");
     setState(() {
       if(newIndex>oldIndex){
         newIndex-=1;

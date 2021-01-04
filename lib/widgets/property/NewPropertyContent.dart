@@ -53,7 +53,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
   @override
   Widget build(BuildContext context) {
 
-    print('NewPropertyContent: ' + widget.property.roomCount.toString());
+    debugPrint('NewPropertyContent: ' + widget.property.roomCount.toString());
 
     Widget body = SingleChildScrollView(
       child: Container(
@@ -256,7 +256,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
               )
             ],
             onSelected: (result) {
-              print("onSelected: " + result);
+              debugPrint("onSelected: " + result);
               if (result == "delete")
                 _showDialogDelete(context);
             }
