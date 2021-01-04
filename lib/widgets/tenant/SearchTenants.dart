@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/tenant/TenantsList.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -21,59 +22,68 @@ class _SearchTenantsState extends State<SearchTenants> {
 
   TextEditingController _searchController = TextEditingController(text: "");
 
+  bool _deleteLoading = false;
+
   void _showDialogDelete(context, sop.Tenant tenant, RunMutation runDeleteMutation) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
-            tenant.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + tenant.stateOfPlays.length.toString() + "' état" + (tenant.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
-          ]
-        ),
-        actions: [
-          new FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('SUPPRIMER'),
-            onPressed: () async {
-              debugPrint('runDeleteMutation');
-
-              MultiSourceResult mutationResult = runDeleteMutation({
-                "data": {
-                  "tenantId": tenant.id,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Supprimer '" + tenant.firstName + ' ' + tenant.lastName + "' ?"),
+                tenant.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + tenant.stateOfPlays.length.toString() + "' état" + (tenant.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+              ]
+            ),
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () {
+                  Navigator.pop(context);
                 }
-              });
-              QueryResult networkResult = await mutationResult.networkResult;
+              ),
+              FlatButtonLoading(
+                child: Text('SUPPRIMER'),
+                loading: _deleteLoading,
+                onPressed: () async {
+                  debugPrint('runDeleteMutation');
 
-              if (networkResult.hasException) {
-                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
-                if (networkResult.exception.clientException != null)
-                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                else
-                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-              }
-              else {
-                debugPrint('queryResult data: ' + networkResult.data.toString());
-                if (networkResult.data != null) {
-                  if (networkResult.data["deleteTenant"] == null) {
-                    // TODO: show error
+                  setState(() { _deleteLoading = true; });
+                  MultiSourceResult mutationResult = runDeleteMutation({
+                    "data": {
+                      "tenantId": tenant.id,
+                    }
+                  });
+                  QueryResult networkResult = await mutationResult.networkResult;
+                  setState(() { _deleteLoading = false; });
+
+                  if (networkResult.hasException) {
+                    debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
+                    if (networkResult.exception.clientException != null)
+                      debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                    else
+                      debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                   }
-                  else if (networkResult.data["deleteTenant"] != null) {
-                    Navigator.pop(context);
-                    setState(() { });
-                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  else {
+                    debugPrint('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["deleteTenant"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["deleteTenant"] != null) {
+                        Navigator.pop(context);
+                        setState(() { });
+                        // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                      }
+                    }
                   }
                 }
-              }
-            }
-          )
-        ],
+              )
+            ],
+          );
+        }
       )
     );
   }

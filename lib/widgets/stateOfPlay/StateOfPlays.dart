@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/StateOfPlaysList.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
@@ -25,6 +26,8 @@ class _StateOfPlaysState extends State<StateOfPlays> {
   bool _in = true;
   bool _out = true;
 
+  bool _deleteLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,50 +36,58 @@ class _StateOfPlaysState extends State<StateOfPlays> {
   void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Text("Supprimer '" + stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city + "' ?"),
-        actions: [
-          new FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('SUPPRIMER'),
-            onPressed: () async {
-              debugPrint('runDeleteMutation');
-
-              MultiSourceResult mutationResult = runDeleteMutation({
-                "data": {
-                  "stateOfPlayId": stateOfPlay.id,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Text("Supprimer '" + stateOfPlay.property.address + ', ' + stateOfPlay.property.postalCode + ' ' + stateOfPlay.property.city + "' ?"),
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () {
+                  Navigator.pop(context);
                 }
-              });
-              QueryResult networkResult = await mutationResult.networkResult;
+              ),
+              FlatButtonLoading(
+                child: Text('SUPPRIMER'),
+                loading: _deleteLoading,
+                onPressed: () async {
+                  debugPrint('runDeleteMutation');
 
-              if (networkResult.hasException) {
-                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
-                if (networkResult.exception.clientException != null)
-                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                else
-                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-              }
-              else {
-                debugPrint('queryResult data: ' + networkResult.data.toString());
-                if (networkResult.data != null) {
-                  if (networkResult.data["deleteStateOfPlay"] == null) {
-                    // TODO: show error
+                  setState(() { _deleteLoading = true; });
+
+                  MultiSourceResult mutationResult = runDeleteMutation({
+                    "data": {
+                      "stateOfPlayId": stateOfPlay.id,
+                    }
+                  });
+                  QueryResult networkResult = await mutationResult.networkResult;
+                  setState(() { _deleteLoading = false; });
+
+                  if (networkResult.hasException) {
+                    debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
+                    if (networkResult.exception.clientException != null)
+                      debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                    else
+                      debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                   }
-                  else if (networkResult.data["deleteStateOfPlay"] != null) {
-                    Navigator.pop(context);
-                    setState(() { });
-                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  else {
+                    debugPrint('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["deleteStateOfPlay"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["deleteStateOfPlay"] != null) {
+                        Navigator.pop(context);
+                        setState(() { });
+                        // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                      }
+                    }
                   }
                 }
-              }
-            }
-          )
-        ],
+              )
+            ],
+          );
+        }
       )
     );
   }

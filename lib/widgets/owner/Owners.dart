@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/owner/OwnersList.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -19,60 +20,68 @@ class Owners extends StatefulWidget {
 
 class _OwnersState extends State<Owners> {
 
+  bool _deleteLoading = false;
   
   void _showDialogDelete(context, sop.Owner owner, RunMutation runDeleteMutation) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Supprimer '" + owner.firstName + ' ' + owner.lastName + "' ?"),
-            owner.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + owner.stateOfPlays.length.toString() + "' état" + (owner.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
-          ]
-        ),
-        actions: [
-          new FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('SUPPRIMER'),
-            onPressed: () async {
-              debugPrint('runDeleteMutation');
-
-              MultiSourceResult mutationResult = runDeleteMutation({
-                "data": {
-                  "ownerId": owner.id,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Supprimer '" + owner.firstName + ' ' + owner.lastName + "' ?"),
+                owner.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + owner.stateOfPlays.length.toString() + "' état" + (owner.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
+              ]
+            ),
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () {
+                  Navigator.pop(context);
                 }
-              });
-              QueryResult networkResult = await mutationResult.networkResult;
+              ),
+              FlatButtonLoading(
+                child: Text('SUPPRIMER'),
+                loading: _deleteLoading,
+                onPressed: () async {
+                  debugPrint('runDeleteMutation');
 
-              if (networkResult.hasException) {
-                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
-                if (networkResult.exception.clientException != null)
-                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                else
-                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-              }
-              else {
-                debugPrint('queryResult data: ' + networkResult.data.toString());
-                if (networkResult.data != null) {
-                  if (networkResult.data["deleteOwner"] == null) {
-                    // TODO: show error
+                  setState(() { _deleteLoading = true; });
+                  MultiSourceResult mutationResult = runDeleteMutation({
+                    "data": {
+                      "ownerId": owner.id,
+                    }
+                  });
+                  QueryResult networkResult = await mutationResult.networkResult;
+                  setState(() { _deleteLoading = false; });
+
+                  if (networkResult.hasException) {
+                    debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
+                    if (networkResult.exception.clientException != null)
+                      debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                    else
+                      debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                   }
-                  else if (networkResult.data["deleteOwner"] != null) {
-                    Navigator.pop(context);
-                    setState(() { });
-                    // Navigator.popAndPushNamed(context, '/owners');// To refresh
+                  else {
+                    debugPrint('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["deleteOwner"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["deleteOwner"] != null) {
+                        Navigator.pop(context);
+                        setState(() { });
+                        // Navigator.popAndPushNamed(context, '/owners');// To refresh
+                      }
+                    }
                   }
                 }
-              }
-            }
-          )
-        ],
+              )
+            ],
+          );
+        }
       )
     );
   }

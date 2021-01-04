@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -20,55 +21,64 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newMeterController = TextEditingController(text: "");
 
-  List<String> _selectedMeters = []; 
+  List<String> _selectedMeters = [];
+
+  bool _deleteLoading = false;
 
   void _showDialogDelete(context, meter, RunMutation runDeleteMutation) async {
     await showDialog(
       context: context,
-      child: AlertDialog(
-        content: Text("Supprimer '" + meter["type"] + "' ?"),
-        actions: [
-          new FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('SUPPRIMER'),
-            onPressed: () async {
-              debugPrint('runDeleteMutation');
-
-              MultiSourceResult mutationResult = runDeleteMutation({
-                "data": {
-                  "meterId": meter["id"],
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: Text("Supprimer '" + meter["type"] + "' ?"),
+            actions: [
+              FlatButton(
+                child: Text('ANNULER'),
+                onPressed: () {
+                  Navigator.pop(context);
                 }
-              });
-              QueryResult networkResult = await mutationResult.networkResult;
+              ),
+              FlatButtonLoading(
+                child: Text('SUPPRIMER'),
+                loading: _deleteLoading,
+                onPressed: () async {
+                  debugPrint('runDeleteMutation');
 
-              if (networkResult.hasException) {
-                debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
-                if (networkResult.exception.clientException != null)
-                  debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                else
-                  debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-              }
-              else {
-                debugPrint('queryResult data: ' + networkResult.data.toString());
-                if (networkResult.data != null) {
-                  if (networkResult.data["deleteMeter"] == null) {
-                    // TODO: show error
+                  setState(() { _deleteLoading = true; });
+                  MultiSourceResult mutationResult = runDeleteMutation({
+                    "data": {
+                      "meterId": meter["id"],
+                    }
+                  });
+                  QueryResult networkResult = await mutationResult.networkResult;
+                  setState(() { _deleteLoading = false; });
+
+                  if (networkResult.hasException) {
+                    debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
+                    if (networkResult.exception.clientException != null)
+                      debugPrint('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                    else
+                      debugPrint('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                   }
-                  else if (networkResult.data["deleteMeter"] != null) {
-                    Navigator.pop(context);
-                    setState(() { });
-                    // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                  else {
+                    debugPrint('queryResult data: ' + networkResult.data.toString());
+                    if (networkResult.data != null) {
+                      if (networkResult.data["deleteMeter"] == null) {
+                        // TODO: show error
+                      }
+                      else if (networkResult.data["deleteMeter"] != null) {
+                        Navigator.pop(context);
+                        setState(() { });
+                        // Navigator.popAndPushNamed(context, '/tenants');// To refresh
+                      }
+                    }
                   }
                 }
-              }
-            }
-          )
-        ],
+              )
+            ],
+          );
+        }
       )
     );
   }
