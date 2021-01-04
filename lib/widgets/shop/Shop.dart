@@ -414,11 +414,12 @@ class _ShopState extends State<Shop> {
                         loading: loadings[0],
                         price: 4.99,
                         onPress: () async {
-
+                          setState(() { loadings[0] = true; });
                           if (await checkIfNativePayReady())
                             createPaymentMethodNative(0.50, 0, runStripePIMutation, runMutation, 1);
                           else
                             createPaymentMethod(0.50, 0, runStripePIMutation, runMutation, 1);
+                          setState(() { loadings[0] = false; });
                         }
                       ),
                       Divider(),
@@ -427,11 +428,12 @@ class _ShopState extends State<Shop> {
                         loading: loadings[1],
                         price: 19.99,
                         onPress: () async {
-
+                          setState(() { loadings[1] = true; });
                           if (await checkIfNativePayReady())
                             createPaymentMethodNative(0.50, 1, runStripePIMutation, runMutation, 5);
                           else
                             createPaymentMethod(0.50, 1, runStripePIMutation, runMutation, 5);
+                          setState(() { loadings[1] = false; });
                         }
                       ),
                       Divider(),
@@ -440,11 +442,12 @@ class _ShopState extends State<Shop> {
                         loading: loadings[2],
                         price: 34.99,
                         onPress: () async {
-
+                          setState(() { loadings[2] = true; });
                           if (await checkIfNativePayReady())
                             createPaymentMethodNative(0.50, 2, runStripePIMutation, runMutation, 10);
                           else
                             createPaymentMethod(0.50, 2, runStripePIMutation, runMutation, 10);
+                          setState(() { loadings[2] = false; });
                         }
                       )
                     ],

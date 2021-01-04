@@ -41,7 +41,7 @@ class ListTileShop extends StatelessWidget {
                 ) : Container() 
               ]
             ),
-            onPressed: onPress
+            onPressed: loading ? null : onPress
           )
         ]
       )
