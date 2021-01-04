@@ -190,10 +190,10 @@ class _ShopState extends State<Shop> {
         : showDialog(
             context: context,
             builder: (BuildContext context) => ShowDialogToDismiss(
-                title: 'Error',
+                title: 'Erreur',
                 content:
-                    'It is not possible to pay with this card. Please try again with a different card',
-                buttonText: 'CLOSE'));
+                    "Il n'est pas possible de payer avec cette carte. Veuillez essayer avec une carte différente.",
+                buttonText: 'FERMER'));
   }
 
   Future<void> processPaymentAsDirectCharge(PaymentMethod paymentMethod, double amount, int i, RunMutation runStripePIMutation, RunMutation runMutation, int credits) async {
@@ -221,10 +221,10 @@ class _ShopState extends State<Shop> {
       showDialog(
           context: context,
           builder: (BuildContext context) => ShowDialogToDismiss(
-              title: 'Error',
+              title: 'Erreur',
               content:
-                  'There was an error in creating the payment. Please try again with another card',
-              buttonText: 'CLOSE'));
+                  'Il y a eu une erreur pour confirmer le paiement. Veuillez essayer avec une autre carte.',
+              buttonText: 'FERMER'));
     }
     else {
       print('queryResult: ' + queryResult.data.toString());
@@ -237,10 +237,10 @@ class _ShopState extends State<Shop> {
           showDialog(
               context: context,
               builder: (BuildContext context) => ShowDialogToDismiss(
-                  title: 'Error',
+                  title: 'Erreur',
                   content:
-                      'There was an error to confirm the payment. Please try again with another card',
-                  buttonText: 'CLOSE'));
+                      'Il y a eu une erreur pour confirmer le paiement. Veuillez essayer avec une autre carte.',
+                  buttonText: 'FERMER'));
       }
       else {
         final paymentIntentX = jsonDecode(queryResult.data["stripePI"]);// jsonDecode(response.body);
@@ -294,24 +294,24 @@ class _ShopState extends State<Shop> {
                   loadings[i] = false;
                 });
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ShowDialogToDismiss(
-                        title: 'Warning',
-                        content:
-                            'The payment is still in \'processing\' state. This is unusual. Please contact us',
-                        buttonText: 'CLOSE'));
+                  context: context,
+                  builder: (BuildContext context) => ShowDialogToDismiss(
+                    title: 'Avertissement',
+                    content:
+                        'Le paiement est encore en cours. Ceci est inhabituel. Veuillez nous contacter',
+                    buttonText: 'FERMER'));
               } else {
                 StripePayment.cancelNativePayRequest();
                 setState(() {
                   loadings[i] = false;
                 });
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ShowDialogToDismiss(
-                        title: 'Error',
-                        content:
-                            'There was an error to confirm the payment. Details: $statusFinal',
-                        buttonText: 'CLOSE'));
+                  context: context,
+                  builder: (BuildContext context) => ShowDialogToDismiss(
+                    title: 'Erreur',
+                    content:
+                        'Il y a eu une erreur pour confirmer le paiement. Détails: $statusFinal',
+                    buttonText: 'FERMER'));
               }
             },
             //If Authentication fails, a PlatformException will be raised which can be handled here
@@ -322,12 +322,12 @@ class _ShopState extends State<Shop> {
               loadings[i] = false;
             });
             showDialog(
-                context: context,
-                builder: (BuildContext context) => ShowDialogToDismiss(
-                    title: 'Error',
-                    content:
-                        'There was an error to confirm the payment. Please try again with another card',
-                    buttonText: 'CLOSE'));
+              context: context,
+              builder: (BuildContext context) => ShowDialogToDismiss(
+                title: 'Erreur',
+                content:
+                    'Il y a eu une erreur pour confirmer le paiement. Veuillez essayer avec une autre carte',
+                buttonText: 'FERMER'));
           });
         }
 
