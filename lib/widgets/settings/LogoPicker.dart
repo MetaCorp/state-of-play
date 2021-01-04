@@ -54,20 +54,26 @@ class _LogoPickerState extends State<LogoPicker> {
         ) : Container(), 
         Container(
           width: 170,
-          child: RaisedButton(
-              color: Colors.grey[200],
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.camera_alt),
-                  SizedBox(width: 8),
-                  Text('Choisir un logo')
-                ]
-              ),
+          child: IconButton(
+            icon: Icon(Icons.camera_alt),
             onPressed: () =>  {
               _imgFromGallery(),        
             }
-          ),
+          )
+          //   RaisedButton(
+          //     color: Colors.grey[200],
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         Icon(Icons.camera_alt),
+          //         SizedBox(width: 8),
+          //         Text('Choisir un logo')
+          //       ]
+          //     ),
+          //   onPressed: () =>  {
+          //     _imgFromGallery(),        
+          //   }
+          // ),
         ),
       ],
     );

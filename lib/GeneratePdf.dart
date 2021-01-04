@@ -442,14 +442,14 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
 
   //TODO logo rfeturn null ?
   PdfImage logo = 
-  // PdfImage.file(
-  //   pdf.document,
-  //   bytes: (await NetworkAssetBundle(Uri.parse(stateOfPlay.logo)).load(stateOfPlay.logo)).buffer.asUint8List()
-  // );
     PdfImage.file(
       pdf.document,
-      bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+      bytes: (await NetworkAssetBundle(Uri.parse(stateOfPlay.logo)).load(stateOfPlay.logo)).buffer.asUint8List()
     );
+    // PdfImage.file(
+    //   pdf.document,
+    //   bytes: (await rootBundle.load(stateOfPlayOptions.logo)).buffer.asUint8List(),
+    // );
 
   PdfImage logoKitchen = PdfImage.file(
     pdf.document,

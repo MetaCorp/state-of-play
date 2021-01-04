@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/settings/LogoPicker.dart';
+import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
+import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:uuid/uuid.dart';
@@ -142,7 +144,8 @@ class _AccountState extends State<Account> {
               appBar: AppBar(
                 title: Text('Mon compte'),
                 actions: [
-                  IconButton(
+                  IconButtonLoading(
+                    loading: mutationResult.loading,
                     icon: Icon(Icons.check),
                     onPressed: () => _save(runMutation)
                   )
@@ -255,7 +258,8 @@ class _AccountState extends State<Account> {
                             SizedBox(
                               height: 16,
                             ),
-                            RaisedButton(
+                            RaisedButtonLoading(
+                              loading: mutationResult.loading,
                               color: Colors.grey[100],
                               child: Text('Sauvegarder'),
                               onPressed: () => _save(runMutation)
