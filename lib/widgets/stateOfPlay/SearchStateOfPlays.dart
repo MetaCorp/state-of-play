@@ -142,6 +142,29 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
       )
     );
   }
+  
+  Future<bool> _showDialogEdit(context) async {
+    return await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("En éditant cet état des lieux, vous perdrez les signatures des interlocuteurs."),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            }
+          ),
+          new FlatButton(
+            child: Text('EDITER'),
+            onPressed: () {
+              Navigator.pop(context, true);
+            }
+          )
+        ],
+      )
+    );
+  }
 
   @override
   void dispose() {
@@ -174,6 +197,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                 firstName
                 lastName
               }
+              pdf
             }
           }
         '''),
@@ -244,7 +268,16 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                 
                 return StateOfPlaysList(
                   stateOfPlays: stateOfPlays,
-                  onTap: (stateOfPlay) => widget.onSelect != null ? widget.onSelect(stateOfPlay.id) : Navigator.pushNamed(context, '/edit-state-of-play', arguments: { "stateOfPlayId": stateOfPlay.id }),
+                  onTap: (stateOfPlay) async {
+                    if (widget.onSelect != null) {
+                      widget.onSelect(stateOfPlay.id);
+                    }
+                    else {
+                      bool ret = await _showDialogEdit(context); 
+                      if (ret != null && ret)
+                        Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlay.id });
+                    }
+                  },
                   onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation),
                 );
               }

@@ -21,7 +21,7 @@ class MyDrawer extends StatelessWidget {
             accountName: Text(user.firstName + ' ' + user.lastName),
             currentAccountPicture: user != null ? CircleAvatar(
                     backgroundColor: Colors.grey,
-                    child: new Text(user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()),
+                    child: Text(user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()),
                   ) : CircularProgressIndicator(), 
           ),
           ListTile(

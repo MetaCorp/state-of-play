@@ -221,10 +221,6 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
       if (ret || widget.user.credits > 0) {
 
-        bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay)
-          return;
-
         setState(() { _isPdfLoading = true; });
         
         for (var i = 0; i < widget.stateOfPlay.rooms.length; i++) {
@@ -305,13 +301,14 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
         
         bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay)
-          return;
+        if (retConfirmPay == null || !retConfirmPay) {
+          setState(() { _isPdfLoading = false; });
+          return;}
 
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
         setState(() { _isPdfLoading = false; });
-      // }
+      }
 
     }
   }
@@ -368,7 +365,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       ),
       body: _tabsContent[_selectedIndex],
       bottomNavigationBar: SizedBox(
-        height: 70,
+        // height: 70,
           child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: [
@@ -378,31 +375,32 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
                 tapTarget: Icon(Icons.group),
                 title: Text("Naviguez"),
                 description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la bar en bas de l'app."),
-                child: SizedBox(
-                    height: 30,
-                    child: Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      Icon(Icons.group),
-                      Positioned(
-                        top: 15.0,
-                        child: Stack(
-                          alignment: Alignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.brightness_1,
-                                size: 20.0, color: Colors.transparent,),//Colors.green[800]),
-                              Center(
-                                child: Positioned(
-                                  child: Text("1"),
-                                  ),
-                              ),                                                                     
-                            ],
-                        )
-                      ),
-                    ],
-                  ),
-                ) 
+                child: Icon(Icons.group),
+                // SizedBox(
+                //     height: 30,
+                //     child: Stack(
+                //     alignment: Alignment.topCenter,
+                //     children: [
+                //       Icon(Icons.group),
+                //       Positioned(
+                //         top: 15.0,
+                //         child: Stack(
+                //           alignment: Alignment.center,
+                //             children: <Widget>[
+                //               Icon(
+                //                 Icons.brightness_1,
+                //                 size: 20.0, color: Colors.transparent,),//Colors.green[800]),
+                //               Center(
+                //                 child: Positioned(
+                //                   child: Text("1"),
+                //                   ),
+                //               ),                                                                     
+                //             ],
+                //         )
+                //       ),
+                //     ],
+                //   ),
+                // ) 
               ),
               label: 'Interlocuteurs',
             ),

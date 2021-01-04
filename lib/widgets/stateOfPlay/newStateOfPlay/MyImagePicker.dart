@@ -57,14 +57,14 @@ class _MyImagePickerState extends State<MyImagePicker> {
 
     try {
       images = await MultiImagePicker.pickImages(
-        maxImages: 300,
+        maxImages: 5,
         enableCamera: true,
         selectedAssets: images,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
+          actionBarTitle: "Housely",
+          allViewTitle: "Toutes les photos",
           useDetailsView: false,
           selectCircleStrokeColor: "#000000",
         ),
@@ -83,8 +83,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
       ByteData data = await image.getByteData();
       final buffer = data.buffer;
 
-      File file = await File(await getFilePath()).create(recursive: true).then((file)async => await file.writeAsBytes(
-      buffer.asUint8List(data.offsetInBytes, data.lengthInBytes)));
+      File file = await File(await getFilePath()).create(recursive: true).then((file) async => await file.writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes)));
 
       widget.onSelect(file);
     });
@@ -112,8 +112,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   leading: Icon(Icons.photo_library),
                   title: Text('Gallerie'),
                   onTap: () {
-                    widget.isMultiSelection?
-                    _imgsFromGallery() : _imgFromGallery();
+                    widget.isMultiSelection ? _imgsFromGallery() : _imgFromGallery();
                     Navigator.of(context).pop();
                   }),
                 ListTile(

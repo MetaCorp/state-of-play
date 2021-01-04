@@ -91,7 +91,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
 
 
     return WillPopScope(
-      onWillPop: () => _onSave(),
+      onWillPop: () async => _onSave(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.roomName + ' / ' + widget.decoration.type),

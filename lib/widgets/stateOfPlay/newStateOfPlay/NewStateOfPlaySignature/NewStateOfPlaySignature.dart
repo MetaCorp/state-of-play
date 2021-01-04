@@ -136,11 +136,10 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     RaisedButtonLoading(
                       child: Text("Visualiser l'état des lieux"),
                       onPressed: () async {
-                        bool ret = true;
-                        if(widget.stateOfPlay.signatureOwner == null || widget.stateOfPlay.signatureRepresentative == null ||
-                        widget.stateOfPlay.signatureTenants.any((element) => element == null))
-                          ret = await showAlertignature();
-                        if(ret)
+                        if(widget.stateOfPlay.signatureOwner == null && widget.stateOfPlay.signatureRepresentative == null ||
+                          widget.stateOfPlay.signatureTenants.any((element) => element == null))
+                          await showAlertSignature();
+                        else
                           widget.onSave();
                       },
                       loading: widget.isPdfLoading,
@@ -203,7 +202,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),        
+                ): Center(child: Icon(Icons.edit , color: Colors.grey[600],)),        
               ),
               onTap: () => {widget.stateOfPlay.signatureOwner != null ? showDeleteSignature(widget.stateOfPlay.owner) : goToSignatureSignature(widget.stateOfPlay.owner)},
             ),
@@ -255,7 +254,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),                 
+                ): Center(child: Icon(Icons.edit , color: Colors.grey[600],)),                 
               ),
               onTap: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
             ),
@@ -314,7 +313,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                       ),
                     ),
                   ],
-                ): Center(child: Icon(EDLIcons.signature,color: Colors.red,)),                           
+                ): Center(child: Icon(Icons.edit , color: Colors.grey[600],)),                           
               ),
               onTap: () => {widget.stateOfPlay.signatureTenants[index] != null ? showDeleteSignature(widget.stateOfPlay.tenants[index],index: index) : goToSignatureSignature(widget.stateOfPlay.tenants[index],index: index)},
             ),
@@ -381,23 +380,15 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
     );
   }
 
-  Future<bool> showAlertignature() async  {
-    bool ret = false;
+  Future<bool> showAlertSignature() async  {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Certaines signatures sont manquantes"),
+        content: Text("Certaines signatures sont manquantes."),
         actions: [
           new FlatButton(
-            child: Text('ANNULER'),
+            child: Text('COMPRIS'),
             onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('OK'),
-            onPressed: () {
-              ret = true;
               Navigator.pop(context);
               //validate anyway               
             }
@@ -405,6 +396,5 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
         ],
       )
     );
-    return ret;
   }    
 }

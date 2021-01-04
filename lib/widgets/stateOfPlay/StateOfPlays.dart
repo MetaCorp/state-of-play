@@ -145,6 +145,29 @@ class _StateOfPlaysState extends State<StateOfPlays> {
     );
   }
 
+  Future<bool> _showDialogEdit(context) async {
+    return await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("En éditant cet état des lieux, vous perdrez les signatures des interlocuteurs."),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            }
+          ),
+          new FlatButton(
+            child: Text('EDITER'),
+            onPressed: () {
+              Navigator.pop(context, true);
+            }
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -275,7 +298,11 @@ class _StateOfPlaysState extends State<StateOfPlays> {
               
               return StateOfPlaysList(
                 stateOfPlays: stateOfPlays,
-                onTap: (stateOfPlay) => Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlay.id }),
+                onTap: (stateOfPlay) async {
+                  bool ret = await _showDialogEdit(context); 
+                  if (ret != null && ret)
+                    Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlay.id });
+                },
                 onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation),
               );
             }

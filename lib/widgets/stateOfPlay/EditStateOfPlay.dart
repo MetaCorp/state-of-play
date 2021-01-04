@@ -26,7 +26,9 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
 
   sop.StateOfPlay _stateOfPlay;
   
-    Future<void> _deleteCacheDir() async {
+  sop.User user;
+
+  Future<void> _deleteCacheDir() async {
     final cacheDir = await getTemporaryDirectory();
 
     if (cacheDir.existsSync()) {
@@ -104,327 +106,362 @@ class _EditStateOfPlayState extends State<EditStateOfPlay> {
           return Query(
             options: QueryOptions(
               documentNode: gql('''
-                query stateOfPlay(\$data: StateOfPlayInput!) {
-                  stateOfPlay(data: \$data) {
+                query user {
+                  user {
                     id
-                    out
-                    property {
-                      id
-                      reference
-                      address
-                      postalCode
-                      city
-                      lot
-                      floor
-                      roomCount
-                      area
-                      heatingType
-                      hotWater
-                      type
-                    }
-                    owner {
-                      id
-                      firstName
-                      lastName
-                      company
-                      address
-                      postalCode
-                      city
-                    }
-                    representative {
-                      id
-                      firstName
-                      lastName
-                      company
-                      address
-                      postalCode
-                      city
-                    }
-                    tenants {
-                      id
-                      firstName
-                      lastName
-                      address
-                      postalCode
-                      city
-                    }
-                    rooms
-                    meters
-                    keys
-                    insurance
-                    comments
-                    reserve
-                    date
-                    city
-                    entryExitDate
+                    firstName
+                    lastName
+                    company
                     documentHeader
                     documentEnd
-                    pdf
+                    address
+                    postalCode
+                    city
+                    logo
+                    credits
                   }
                 }
               '''),
-              variables: {
-                "data": {
-                  "stateOfPlayId": widget.stateOfPlayId
-                }
-              }
+              fetchPolicy: FetchPolicy.noCache,
             ),
             builder: (
-              QueryResult result, {
+              QueryResult resultUser, {
               Refetch refetch,
               FetchMore fetchMore,
             }) {
 
-              if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
-                print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
-                _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
-              }
-
-              if (result.hasException) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("Modification d'un état des lieux"),
-                  ),
-                  body: Text(result.exception.toString())
-                );
-              }
-
-              if (result.loading || result.data == null) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("Modification d'un état des lieux"),
-                  ),
-                  body: Center(child: CircularProgressIndicator())
-                );
-              }
-              
-              return Mutation(
-                options: MutationOptions(
+              return Query(
+                options: QueryOptions(
                   documentNode: gql('''
-                    mutation deleteStateOfPlay(\$data: DeleteStateOfPlayInput!) {
-                      deleteStateOfPlay(data: \$data)
+                    query stateOfPlay(\$data: StateOfPlayInput!) {
+                      stateOfPlay(data: \$data) {
+                        id
+                        out
+                        property {
+                          id
+                          reference
+                          address
+                          postalCode
+                          city
+                          lot
+                          floor
+                          roomCount
+                          area
+                          heatingType
+                          hotWater
+                          type
+                        }
+                        owner {
+                          id
+                          firstName
+                          lastName
+                          company
+                          address
+                          postalCode
+                          city
+                        }
+                        representative {
+                          id
+                          firstName
+                          lastName
+                          company
+                          address
+                          postalCode
+                          city
+                        }
+                        tenants {
+                          id
+                          firstName
+                          lastName
+                          address
+                          postalCode
+                          city
+                        }
+                        rooms
+                        meters
+                        keys
+                        insurance
+                        comments
+                        reserve
+                        date
+                        city
+                        entryExitDate
+                        documentHeader
+                        documentEnd
+                        pdf
+                      }
                     }
-                  '''), // this is the mutation string you just created
-                  // you can update the cache based on results
-                  update: (Cache cache, QueryResult result) {
-                    return cache;
-                  },
-                  // or do something with the result.data on completion
-                  onCompleted: (dynamic resultData) {
-                    // print('onCompleted: ' + resultData.hasException);
-                  },
+                  '''),
+                  variables: {
+                    "data": {
+                      "stateOfPlayId": widget.stateOfPlayId
+                    }
+                  }
                 ),
                 builder: (
-                  RunMutation runDeleteMutation,
-                  QueryResult mutationResult,
-                ) {
+                  QueryResult result, {
+                  Refetch refetch,
+                  FetchMore fetchMore,
+                }) {
+
+                  if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
+                    print('editStateOfPlay: ' + result.data["stateOfPlay"].toString());
+                    _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
+                  }
+
+                  if (result.hasException) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text("Modification d'un état des lieux"),
+                      ),
+                      body: Text(result.exception.toString())
+                    );
+                  }
+
+                  if (result.loading || result.data == null || resultUser.loading || resultUser.data == null) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text("Modification d'un état des lieux"),
+                      ),
+                      body: Center(child: CircularProgressIndicator())
+                    );
+                  }
+
+                  if (resultUser.data != null && resultUser.data["user"] != null && !resultUser.loading && user == null) {
+                    print('EditStateOfPlay user: ' + resultUser.data["user"].toString());
+                    user = sop.User.fromJSON(resultUser.data["user"]);
+                  }
                   
-                  return NewStateOfPlayContent(
-                    title: "Modification d'un état des lieux",
-                    saveLoading: mutationUpdateResult.loading,
-                    onSave: () async {
-                      print("onSave");
-                      MultiSourceResult result = runMutation({
-                        "data": {
-                          "id": _stateOfPlay.id,
-                          "owner": {
-                            "id": _stateOfPlay.owner.id,
-                            "firstName": _stateOfPlay.owner.firstName,
-                            "lastName": _stateOfPlay.owner.lastName,
-                            "address": _stateOfPlay.owner.address,
-                            "postalCode": _stateOfPlay.owner.postalCode,
-                            "city": _stateOfPlay.owner.city,
-                            "company": _stateOfPlay.owner.company
-                          },
-                          "representative": {
-                            "id": _stateOfPlay.representative.id,
-                            "firstName": _stateOfPlay.representative.firstName,
-                            "lastName": _stateOfPlay.representative.lastName,
-                            "address": _stateOfPlay.representative.address,
-                            "postalCode": _stateOfPlay.representative.postalCode,
-                            "city": _stateOfPlay.representative.city,
-                            "company": _stateOfPlay.representative.company
-                          },
-                          "tenants": _stateOfPlay.tenants.map((tenant) => {
-                            "id": tenant.id,
-                            "firstName": tenant.firstName,
-                            "lastName": tenant.lastName,
-                            "address": tenant.address,
-                            "postalCode": tenant.postalCode,
-                            "city": tenant.city,
-                          }).toList(),
-                          "property": {
-                            "id": _stateOfPlay.property.id,
-                            "reference": _stateOfPlay.property.reference,
-                            "address": _stateOfPlay.property.address,
-                            "postalCode": _stateOfPlay.property.postalCode,
-                            "city": _stateOfPlay.property.city,
-                            "lot": _stateOfPlay.property.lot,
-                            "floor": _stateOfPlay.property.floor,
-                            "roomCount": _stateOfPlay.property.roomCount,
-                            "area": _stateOfPlay.property.area,
-                            "heatingType": _stateOfPlay.property.heatingType,
-                            "hotWater": _stateOfPlay.property.hotWater,
-                            "type": _stateOfPlay.property.type,
-                          },
-                          "rooms": _stateOfPlay.rooms.map((room) => {
-                            "name": room.name,
-                            "decorations": room.decorations.map((decoration) => {
-                              "type": decoration.type,
-                              "nature": decoration.nature,
-                              "state": decoration.state,
-                              "comments": decoration.comments,
-                              "images": decoration.images,
-                              "newImages": decoration.newImages.map((imageFile) {
-                                var byteData = imageFile.readAsBytesSync();
-
-                                return MultipartFile.fromBytes(
-                                  'photo',
-                                  byteData,
-                                  filename: '${uuid.v1()}.jpg',
-                                  contentType: MediaType("image", "jpg"),
-                                );
-                              }).toList()
-                            }).toList(),
-                            "electricities": room.electricities.map((electricity) => {
-                              "type": electricity.type,
-                              "quantity": electricity.quantity,
-                              "state": electricity.state,
-                              "comments": electricity.comments,
-                              "images": electricity.images,
-                              "newImages": electricity.newImages.map((imageFile) {
-                                var byteData = imageFile.readAsBytesSync();
-
-                                return MultipartFile.fromBytes(
-                                  'photo',
-                                  byteData,
-                                  filename: '${uuid.v1()}.jpg',
-                                  contentType: MediaType("image", "jpg"),
-                                );
-                              }).toList()
-                            }).toList(),
-                            "equipments": room.equipments.map((equipment) => {
-                              "type": equipment.type,
-                              "brandOrObject": equipment.brandOrObject,
-                              "quantity": equipment.quantity,
-                              "state": equipment.state,
-                              "comments": equipment.comments,
-                              "images": equipment.images,
-                              "newImages": equipment.newImages.map((imageFile) {
-                                var byteData = imageFile.readAsBytesSync();
-
-                                return MultipartFile.fromBytes(
-                                  'photo',
-                                  byteData,
-                                  filename: '${uuid.v1()}.jpg',
-                                  contentType: MediaType("image", "jpg"),
-                                );
-                              }).toList()
-                            }).toList()
-                          }).toList(),
-                          "keys": _stateOfPlay.keys.map((key) => {
-                            "type": key.type,
-                            "quantity": key.quantity,
-                            "comments": key.comments,// TODO : complete data,
-                            "images": key.images,
-                            "newImages": key.newImages.map((imageFile) {
-                              var byteData = imageFile.readAsBytesSync();
-
-                              return MultipartFile.fromBytes(
-                                'photo',
-                                byteData,
-                                filename: '${uuid.v1()}.jpg',
-                                contentType: MediaType("image", "jpg"),
-                              );
-                            }).toList()
-                          }).toList(),
-                          "meters": _stateOfPlay.meters.map((meter) => {
-                            "type": meter.type,
-                            "location": meter.location,
-                            "index": meter.index,
-                            "dateOfSuccession": meter.dateOfSuccession.toString(),
-                            "images": meter.images,
-                            "newImages": meter.newImages.map((imageFile) {
-                              var byteData = imageFile.readAsBytesSync();
-
-                              return MultipartFile.fromBytes(
-                                'photo',
-                                byteData,
-                                filename: '${uuid.v1()}.jpg',
-                                contentType: MediaType("image", "jpg"),
-                              );
-                            }).toList()
-                          }).toList(),
-                          "comments": _stateOfPlay.comments,
-                          "reserve": _stateOfPlay.reserve,
-                          "insurance": {
-                            "company": _stateOfPlay.insurance.company,
-                            "number": _stateOfPlay.insurance.number,
-                            "dateStart": _stateOfPlay.insurance.dateStart.toString(),
-                            "dateEnd": _stateOfPlay.insurance.dateEnd.toString(),
-                          },
-                          "documentHeader": _stateOfPlay.documentHeader,
-                          "documentEnd": _stateOfPlay.documentEnd,
-                          "date": _stateOfPlay.date.toString(),
-                          "city": _stateOfPlay.city.toString(),
-                          "entryExitDate": _stateOfPlay.entryExitDate.toString(),
-                          "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
-                            'pdf',
-                            _stateOfPlay.newPdf.readAsBytesSync(),
-                            filename: '${uuid.v1()}.pdf',
-                            contentType: MediaType("image", "pdf"),
-                          ) : null
+                  return Mutation(
+                    options: MutationOptions(
+                      documentNode: gql('''
+                        mutation deleteStateOfPlay(\$data: DeleteStateOfPlayInput!) {
+                          deleteStateOfPlay(data: \$data)
                         }
-                      });
-
-                      QueryResult networkResult = await result.networkResult;
-
-                      print("networkResult hasException: " + networkResult.hasException.toString());
-                      if (networkResult.hasException) {
-                        if (networkResult.exception.graphqlErrors.length > 0)
-                          print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
-                        else
-                          print("networkResult clientException: " + networkResult.exception.clientException.message);
-                        return;//TODO: show error
-                      }
-                      print("");
-                      print("");
+                      '''), // this is the mutation string you just created
+                      // you can update the cache based on results
+                      update: (Cache cache, QueryResult result) {
+                        return cache;
+                      },
+                      // or do something with the result.data on completion
+                      onCompleted: (dynamic resultData) {
+                        // print('onCompleted: ' + resultData.hasException);
+                      },
+                    ),
+                    builder: (
+                      RunMutation runDeleteMutation,
+                      QueryResult mutationResult,
+                    ) {
                       
-                      Navigator.pop(context);
-                      Navigator.popAndPushNamed(context, "/state-of-plays");
+                      return NewStateOfPlayContent(
+                        title: "Modification d'un état des lieux",
+                        saveLoading: mutationUpdateResult.loading,
+                        user: user,
+                        onSave: () async {
+                          print("onSave");
+                          MultiSourceResult result = runMutation({
+                            "data": {
+                              "id": _stateOfPlay.id,
+                              "owner": {
+                                "id": _stateOfPlay.owner.id,
+                                "firstName": _stateOfPlay.owner.firstName,
+                                "lastName": _stateOfPlay.owner.lastName,
+                                "address": _stateOfPlay.owner.address,
+                                "postalCode": _stateOfPlay.owner.postalCode,
+                                "city": _stateOfPlay.owner.city,
+                                "company": _stateOfPlay.owner.company
+                              },
+                              "representative": {
+                                "id": _stateOfPlay.representative.id,
+                                "firstName": _stateOfPlay.representative.firstName,
+                                "lastName": _stateOfPlay.representative.lastName,
+                                "address": _stateOfPlay.representative.address,
+                                "postalCode": _stateOfPlay.representative.postalCode,
+                                "city": _stateOfPlay.representative.city,
+                                "company": _stateOfPlay.representative.company
+                              },
+                              "tenants": _stateOfPlay.tenants.map((tenant) => {
+                                "id": tenant.id,
+                                "firstName": tenant.firstName,
+                                "lastName": tenant.lastName,
+                                "address": tenant.address,
+                                "postalCode": tenant.postalCode,
+                                "city": tenant.city,
+                              }).toList(),
+                              "property": {
+                                "id": _stateOfPlay.property.id,
+                                "reference": _stateOfPlay.property.reference,
+                                "address": _stateOfPlay.property.address,
+                                "postalCode": _stateOfPlay.property.postalCode,
+                                "city": _stateOfPlay.property.city,
+                                "lot": _stateOfPlay.property.lot,
+                                "floor": _stateOfPlay.property.floor,
+                                "roomCount": _stateOfPlay.property.roomCount,
+                                "area": _stateOfPlay.property.area,
+                                "heatingType": _stateOfPlay.property.heatingType,
+                                "hotWater": _stateOfPlay.property.hotWater,
+                                "type": _stateOfPlay.property.type,
+                              },
+                              "rooms": _stateOfPlay.rooms.map((room) => {
+                                "name": room.name,
+                                "decorations": room.decorations.map((decoration) => {
+                                  "type": decoration.type,
+                                  "nature": decoration.nature,
+                                  "state": decoration.state,
+                                  "comments": decoration.comments,
+                                  "images": decoration.images,
+                                  "newImages": decoration.newImages.map((imageFile) {
+                                    var byteData = imageFile.readAsBytesSync();
 
-                    },
-                    onDelete: () async {
-                      print('runDeleteMutation');
+                                    return MultipartFile.fromBytes(
+                                      'photo',
+                                      byteData,
+                                      filename: '${uuid.v1()}.jpg',
+                                      contentType: MediaType("image", "jpg"),
+                                    );
+                                  }).toList()
+                                }).toList(),
+                                "electricities": room.electricities.map((electricity) => {
+                                  "type": electricity.type,
+                                  "quantity": electricity.quantity,
+                                  "state": electricity.state,
+                                  "comments": electricity.comments,
+                                  "images": electricity.images,
+                                  "newImages": electricity.newImages.map((imageFile) {
+                                    var byteData = imageFile.readAsBytesSync();
 
-                      MultiSourceResult mutationResult = runDeleteMutation({
-                        "data": {
-                          "stateOfPlayId": widget.stateOfPlayId,
-                        }
-                      });
-                      QueryResult networkResult = await mutationResult.networkResult;
+                                    return MultipartFile.fromBytes(
+                                      'photo',
+                                      byteData,
+                                      filename: '${uuid.v1()}.jpg',
+                                      contentType: MediaType("image", "jpg"),
+                                    );
+                                  }).toList()
+                                }).toList(),
+                                "equipments": room.equipments.map((equipment) => {
+                                  "type": equipment.type,
+                                  "brandOrObject": equipment.brandOrObject,
+                                  "quantity": equipment.quantity,
+                                  "state": equipment.state,
+                                  "comments": equipment.comments,
+                                  "images": equipment.images,
+                                  "newImages": equipment.newImages.map((imageFile) {
+                                    var byteData = imageFile.readAsBytesSync();
 
-                      if (networkResult.hasException) {
-                        print('networkResult.hasException: ' + networkResult.hasException.toString());
-                        if (networkResult.exception.clientException != null)
-                          print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
-                        else
-                          print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
-                      }
-                      else {
-                        print('queryResult data: ' + networkResult.data.toString());
-                        if (networkResult.data != null) {
-                          if (networkResult.data["deleteStateOfPlay"] == null) {
-                            // TODO: show error
+                                    return MultipartFile.fromBytes(
+                                      'photo',
+                                      byteData,
+                                      filename: '${uuid.v1()}.jpg',
+                                      contentType: MediaType("image", "jpg"),
+                                    );
+                                  }).toList()
+                                }).toList()
+                              }).toList(),
+                              "keys": _stateOfPlay.keys.map((key) => {
+                                "type": key.type,
+                                "quantity": key.quantity,
+                                "comments": key.comments,// TODO : complete data,
+                                "images": key.images,
+                                "newImages": key.newImages.map((imageFile) {
+                                  var byteData = imageFile.readAsBytesSync();
+
+                                  return MultipartFile.fromBytes(
+                                    'photo',
+                                    byteData,
+                                    filename: '${uuid.v1()}.jpg',
+                                    contentType: MediaType("image", "jpg"),
+                                  );
+                                }).toList()
+                              }).toList(),
+                              "meters": _stateOfPlay.meters.map((meter) => {
+                                "type": meter.type,
+                                "location": meter.location,
+                                "index": meter.index,
+                                "dateOfSuccession": meter.dateOfSuccession.toString(),
+                                "images": meter.images,
+                                "newImages": meter.newImages.map((imageFile) {
+                                  var byteData = imageFile.readAsBytesSync();
+
+                                  return MultipartFile.fromBytes(
+                                    'photo',
+                                    byteData,
+                                    filename: '${uuid.v1()}.jpg',
+                                    contentType: MediaType("image", "jpg"),
+                                  );
+                                }).toList()
+                              }).toList(),
+                              "comments": _stateOfPlay.comments,
+                              "reserve": _stateOfPlay.reserve,
+                              "insurance": {
+                                "company": _stateOfPlay.insurance.company,
+                                "number": _stateOfPlay.insurance.number,
+                                "dateStart": _stateOfPlay.insurance.dateStart.toString(),
+                                "dateEnd": _stateOfPlay.insurance.dateEnd.toString(),
+                              },
+                              "documentHeader": _stateOfPlay.documentHeader,
+                              "documentEnd": _stateOfPlay.documentEnd,
+                              "date": _stateOfPlay.date.toString(),
+                              "city": _stateOfPlay.city.toString(),
+                              "entryExitDate": _stateOfPlay.entryExitDate.toString(),
+                              "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
+                                'pdf',
+                                _stateOfPlay.newPdf.readAsBytesSync(),
+                                filename: '${uuid.v1()}.pdf',
+                                contentType: MediaType("image", "pdf"),
+                              ) : null
+                            }
+                          });
+
+                          QueryResult networkResult = await result.networkResult;
+
+                          print("networkResult hasException: " + networkResult.hasException.toString());
+                          if (networkResult.hasException) {
+                            if (networkResult.exception.graphqlErrors.length > 0)
+                              print("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                            else
+                              print("networkResult clientException: " + networkResult.exception.clientException.message);
+                            return;//TODO: show error
                           }
-                          else if (networkResult.data["deleteStateOfPlay"] != null) {
-                            Navigator.pop(context);
-                            Navigator.popAndPushNamed(context, '/state-of-plays');// To refresh
+                          print("");
+                          print("");
+                          
+                          Navigator.pop(context);
+                          Navigator.popAndPushNamed(context, "/state-of-plays");
+
+                        },
+                        onDelete: () async {
+                          print('runDeleteMutation');
+
+                          MultiSourceResult mutationResult = runDeleteMutation({
+                            "data": {
+                              "stateOfPlayId": widget.stateOfPlayId,
+                            }
+                          });
+                          QueryResult networkResult = await mutationResult.networkResult;
+
+                          if (networkResult.hasException) {
+                            print('networkResult.hasException: ' + networkResult.hasException.toString());
+                            if (networkResult.exception.clientException != null)
+                              print('networkResult.exception.clientException: ' + networkResult.exception.clientException.toString());
+                            else
+                              print('networkResult.exception.graphqlErrors[0]: ' + networkResult.exception.graphqlErrors[0].toString());
                           }
-                        }
-                      }
-                    },
-                    stateOfPlay: _stateOfPlay
+                          else {
+                            print('queryResult data: ' + networkResult.data.toString());
+                            if (networkResult.data != null) {
+                              if (networkResult.data["deleteStateOfPlay"] == null) {
+                                // TODO: show error
+                              }
+                              else if (networkResult.data["deleteStateOfPlay"] != null) {
+                                Navigator.pop(context);
+                                Navigator.popAndPushNamed(context, '/state-of-plays');// To refresh
+                              }
+                            }
+                          }
+                        },
+                        stateOfPlay: _stateOfPlay
+                      );
+                    }
                   );
                 }
               );

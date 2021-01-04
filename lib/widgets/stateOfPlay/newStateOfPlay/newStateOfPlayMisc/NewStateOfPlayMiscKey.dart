@@ -28,7 +28,7 @@ class NewStateOfPlayMiscKey extends StatefulWidget {
 
 class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
   final _formKey = GlobalKey<FormState>();
-   Uuid uuid = Uuid();
+  Uuid uuid = Uuid();
 
 
   Future<String> getFilePath() async {
@@ -66,7 +66,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
     }
     
     return WillPopScope(
-      onWillPop: () => _onSave(),
+      onWillPop: () async => _onSave(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Clés / ' + widget.sKey.type),

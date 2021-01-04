@@ -67,7 +67,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
     }
 
     return WillPopScope(
-      onWillPop: () => _onSave(),
+      onWillPop: () async => _onSave(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Compteurs / ' + widget.meter.type),

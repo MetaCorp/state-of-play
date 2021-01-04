@@ -75,13 +75,13 @@ class _MyScaffoldState extends State<MyScaffold> {
       return;
     }
 
-    if (user == null)
-      return;
+    // if (user == null)
+    //   return;
 
-    if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
-      _showDialogPaidOnce(context);
-      return;
-    }
+    // if ((user.paidOnce == null || !user.paidOnce) && user.stateOfPlays.length >= 1) {
+    //   _showDialogPaidOnce(context);
+    //   return;
+    // }
 
     if (_bottomSheetOpen == false) {
       print('open BottomSheet');          
@@ -268,6 +268,7 @@ class _MyScaffoldState extends State<MyScaffold> {
               stateOfPlays {
                 id
               }
+              logo
             }
           }
         ''')

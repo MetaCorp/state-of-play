@@ -622,7 +622,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           if (result.hasException) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Création d'un état des lieux"),
+                title: Text("Nouvel état des lieux"),
               ),
               body: Text(result.exception.toString())
             );
@@ -631,9 +631,9 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           if (result.loading || result.data == null) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Création d'un état des lieux"),
+                title: Text("Nouvel état des lieux"),
               ),
-              body: CircularProgressIndicator()
+              body: Center(child: CircularProgressIndicator())
             );
           }
           
