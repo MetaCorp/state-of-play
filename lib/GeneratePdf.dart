@@ -441,7 +441,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
   // response.bodyBytes //Uint8List
 
   //TODO logo rfeturn null ?
-  print(stateOfPlay.logo);
+  debugPrint(stateOfPlay.logo);
   PdfImage logo = 
     PdfImage.file(
       pdf.document,
@@ -461,7 +461,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(
-        stateOfPlay.representative.lastName.toUpperCase() + ' ' + tenant.firstName,
+        tenant.lastName.toUpperCase() + ' ' + tenant.firstName,
         style: pw.TextStyle(
           color: PdfColors.black,
           fontWeight: pw.FontWeight.bold,
@@ -612,7 +612,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
                   ),
 
                   // Box Representative
-                  pw.Expanded(
+                  stateOfPlay.representative != null && stateOfPlay.representative.lastName != null ? pw.Expanded(
                     child: pw.Column(
                       children: [
                         pw.Container(
@@ -674,7 +674,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
                           )
                         ),
                       ])
-                  ),
+                  ) : pw.Container(),
 
                   // Box Tenants
                   pw.Expanded(

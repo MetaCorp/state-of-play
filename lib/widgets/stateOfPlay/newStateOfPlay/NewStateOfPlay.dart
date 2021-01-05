@@ -367,7 +367,6 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
               _stateOfPlay.documentEnd = user.documentEnd != null ? user.documentEnd : _stateOfPlay.documentEnd;
-              print("USR LOGO"+user.logo);
               _stateOfPlay.logo = user.logo;
             }
             
@@ -378,157 +377,162 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               onSave: () async {
                 debugPrint("onSave");
 
+                Map<String, dynamic> newStateOfPlay = {
+                  "out": _stateOfPlay.out,
+                  "owner": {
+                    "id": _stateOfPlay.owner.id,
+                    "firstName": _stateOfPlay.owner.firstName,
+                    "lastName": _stateOfPlay.owner.lastName,
+                    "address": _stateOfPlay.owner.address,
+                    "postalCode": _stateOfPlay.owner.postalCode,
+                    "city": _stateOfPlay.owner.city,
+                    "company": _stateOfPlay.owner.company
+                  },
+                  "tenants": _stateOfPlay.tenants.map((tenant) => {
+                    "id": tenant.id,
+                    "firstName": tenant.firstName,
+                    "lastName": tenant.lastName,
+                    "address": tenant.address,
+                    "postalCode": tenant.postalCode,
+                    "city": tenant.city,
+                  }).toList(),
+                  "property": {
+                    "id": _stateOfPlay.property.id,
+                    "reference": _stateOfPlay.property.reference,
+                    "address": _stateOfPlay.property.address,
+                    "postalCode": _stateOfPlay.property.postalCode,
+                    "city": _stateOfPlay.property.city,
+                    "lot": _stateOfPlay.property.lot,
+                    "floor": _stateOfPlay.property.floor,
+                    "roomCount": _stateOfPlay.property.roomCount,
+                    "area": _stateOfPlay.property.area,
+                    "heatingType": _stateOfPlay.property.heatingType,
+                    "hotWater": _stateOfPlay.property.hotWater,
+                    "type": _stateOfPlay.property.type,
+                  },
+                  "rooms": _stateOfPlay.rooms.map((room) => {
+                    "name": room.name,
+                    "decorations": room.decorations.map((decoration) => {
+                      "type": decoration.type,
+                      "nature": decoration.nature,
+                      "state": decoration.state,
+                      "comments": decoration.comments,
+                      "images": [],
+                      "newImages": decoration.newImages.map((imageFile) {
+                        var byteData = imageFile.readAsBytesSync();
+
+                        return MultipartFile.fromBytes(
+                          'photo',
+                          byteData,
+                          filename: '${uuid.v1()}.jpg',
+                          contentType: MediaType("image", "jpg"),
+                        );
+                      }).toList()
+                    }).toList(),
+                    "electricities": room.electricities.map((electricity) => {
+                      "type": electricity.type,
+                      "quantity": electricity.quantity,
+                      "state": electricity.state,
+                      "comments": electricity.comments,
+                      "images": [],
+                      "newImages": electricity.newImages.map((imageFile) {
+                        var byteData = imageFile.readAsBytesSync();
+
+                        return MultipartFile.fromBytes(
+                          'photo',
+                          byteData,
+                          filename: '${uuid.v1()}.jpg',
+                          contentType: MediaType("image", "jpg"),
+                        );
+                      }).toList()
+                    }).toList(),
+                    "equipments": room.equipments.map((equipment) => {
+                      "type": equipment.type,
+                      "brandOrObject": equipment.brandOrObject,
+                      "quantity": equipment.quantity,
+                      "state": equipment.state,
+                      "comments": equipment.comments,
+                      "images": [],
+                      "newImages": equipment.newImages.map((imageFile) {
+                        var byteData = imageFile.readAsBytesSync();
+
+                        return MultipartFile.fromBytes(
+                          'photo',
+                          byteData,
+                          filename: '${uuid.v1()}.jpg',
+                          contentType: MediaType("image", "jpg"),
+                        );
+                      }).toList()
+                    }).toList()
+                  }).toList(),
+                  "meters": _stateOfPlay.meters.map((meter) => {
+                    "type": meter.type,
+                    "location": meter.location,
+                    "index": meter.index,
+                    "dateOfSuccession": meter.dateOfSuccession.toString(),
+                    "images": [],
+                    "newImages": meter.newImages.map((imageFile) {
+                      var byteData = imageFile.readAsBytesSync();
+
+                      return MultipartFile.fromBytes(
+                        'photo',
+                        byteData,
+                        filename: '${uuid.v1()}.jpg',
+                        contentType: MediaType("image", "jpg"),
+                      );
+                    }).toList()
+                  }).toList(),
+                  "keys": _stateOfPlay.keys.map((key) => {
+                    "type": key.type,
+                    "quantity": key.quantity,
+                    "comments": key.comments,// TODO : complete data,
+                    "images": [],
+                    "newImages": key.newImages.map((imageFile) {
+                      var byteData = imageFile.readAsBytesSync();
+
+                      return MultipartFile.fromBytes(
+                        'photo',
+                        byteData,
+                        filename: '${uuid.v1()}.jpg',
+                        contentType: MediaType("image", "jpg"),
+                      );
+                    }).toList()
+                  }).toList(),
+                  "comments": _stateOfPlay.comments,
+                  "reserve": _stateOfPlay.reserve,
+                  "insurance": {
+                    "company": _stateOfPlay.insurance.company,
+                    "number": _stateOfPlay.insurance.number,
+                    "dateStart": _stateOfPlay.insurance.dateStart.toString(),
+                    "dateEnd": _stateOfPlay.insurance.dateEnd.toString(),
+                  },
+                  "documentHeader": _stateOfPlay.documentHeader,
+                  "documentEnd": _stateOfPlay.documentEnd,
+                  "date": _stateOfPlay.date.toString(),
+                  "city": _stateOfPlay.city.toString(),
+                  "entryExitDate": _stateOfPlay.entryExitDate.toString(),
+                  "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
+                    'pdf',
+                    _stateOfPlay.newPdf.readAsBytesSync(),
+                    filename: '${uuid.v1()}.pdf',
+                    contentType: MediaType("image", "pdf"),
+                  ) : null
+                };
+
+                if (_stateOfPlay.representative != null && _stateOfPlay.representative.lastName != null) {
+                  newStateOfPlay["representative"] = {
+                    "id": _stateOfPlay.representative.id,
+                    "firstName": _stateOfPlay.representative.firstName,
+                    "lastName": _stateOfPlay.representative.lastName,
+                    "address": _stateOfPlay.representative.address,
+                    "postalCode": _stateOfPlay.representative.postalCode,
+                    "city": _stateOfPlay.representative.city,
+                    "company": _stateOfPlay.representative.company
+                  };
+                }
+
                 MultiSourceResult result = runMutation({
-                  "data": {
-                    "out": _stateOfPlay.out,
-                    "owner": {
-                      "id": _stateOfPlay.owner.id,
-                      "firstName": _stateOfPlay.owner.firstName,
-                      "lastName": _stateOfPlay.owner.lastName,
-                      "address": _stateOfPlay.owner.address,
-                      "postalCode": _stateOfPlay.owner.postalCode,
-                      "city": _stateOfPlay.owner.city,
-                      "company": _stateOfPlay.owner.company
-                    },
-                    "representative": {
-                      "id": _stateOfPlay.representative.id,
-                      "firstName": _stateOfPlay.representative.firstName,
-                      "lastName": _stateOfPlay.representative.lastName,
-                      "address": _stateOfPlay.representative.address,
-                      "postalCode": _stateOfPlay.representative.postalCode,
-                      "city": _stateOfPlay.representative.city,
-                      "company": _stateOfPlay.representative.company
-                    },
-                    "tenants": _stateOfPlay.tenants.map((tenant) => {
-                      "id": tenant.id,
-                      "firstName": tenant.firstName,
-                      "lastName": tenant.lastName,
-                      "address": tenant.address,
-                      "postalCode": tenant.postalCode,
-                      "city": tenant.city,
-                    }).toList(),
-                    "property": {
-                      "id": _stateOfPlay.property.id,
-                      "reference": _stateOfPlay.property.reference,
-                      "address": _stateOfPlay.property.address,
-                      "postalCode": _stateOfPlay.property.postalCode,
-                      "city": _stateOfPlay.property.city,
-                      "lot": _stateOfPlay.property.lot,
-                      "floor": _stateOfPlay.property.floor,
-                      "roomCount": _stateOfPlay.property.roomCount,
-                      "area": _stateOfPlay.property.area,
-                      "heatingType": _stateOfPlay.property.heatingType,
-                      "hotWater": _stateOfPlay.property.hotWater,
-                      "type": _stateOfPlay.property.type,
-                    },
-                    "rooms": _stateOfPlay.rooms.map((room) => {
-                      "name": room.name,
-                      "decorations": room.decorations.map((decoration) => {
-                        "type": decoration.type,
-                        "nature": decoration.nature,
-                        "state": decoration.state,
-                        "comments": decoration.comments,
-                        "images": [],
-                        "newImages": decoration.newImages.map((imageFile) {
-                          var byteData = imageFile.readAsBytesSync();
-
-                          return MultipartFile.fromBytes(
-                            'photo',
-                            byteData,
-                            filename: '${uuid.v1()}.jpg',
-                            contentType: MediaType("image", "jpg"),
-                          );
-                        }).toList()
-                      }).toList(),
-                      "electricities": room.electricities.map((electricity) => {
-                        "type": electricity.type,
-                        "quantity": electricity.quantity,
-                        "state": electricity.state,
-                        "comments": electricity.comments,
-                        "images": [],
-                        "newImages": electricity.newImages.map((imageFile) {
-                          var byteData = imageFile.readAsBytesSync();
-
-                          return MultipartFile.fromBytes(
-                            'photo',
-                            byteData,
-                            filename: '${uuid.v1()}.jpg',
-                            contentType: MediaType("image", "jpg"),
-                          );
-                        }).toList()
-                      }).toList(),
-                      "equipments": room.equipments.map((equipment) => {
-                        "type": equipment.type,
-                        "brandOrObject": equipment.brandOrObject,
-                        "quantity": equipment.quantity,
-                        "state": equipment.state,
-                        "comments": equipment.comments,
-                        "images": [],
-                        "newImages": equipment.newImages.map((imageFile) {
-                          var byteData = imageFile.readAsBytesSync();
-
-                          return MultipartFile.fromBytes(
-                            'photo',
-                            byteData,
-                            filename: '${uuid.v1()}.jpg',
-                            contentType: MediaType("image", "jpg"),
-                          );
-                        }).toList()
-                      }).toList()
-                    }).toList(),
-                    "meters": _stateOfPlay.meters.map((meter) => {
-                      "type": meter.type,
-                      "location": meter.location,
-                      "index": meter.index,
-                      "dateOfSuccession": meter.dateOfSuccession.toString(),
-                      "images": [],
-                      "newImages": meter.newImages.map((imageFile) {
-                        var byteData = imageFile.readAsBytesSync();
-
-                        return MultipartFile.fromBytes(
-                          'photo',
-                          byteData,
-                          filename: '${uuid.v1()}.jpg',
-                          contentType: MediaType("image", "jpg"),
-                        );
-                      }).toList()
-                    }).toList(),
-                    "keys": _stateOfPlay.keys.map((key) => {
-                      "type": key.type,
-                      "quantity": key.quantity,
-                      "comments": key.comments,// TODO : complete data,
-                      "images": [],
-                      "newImages": key.newImages.map((imageFile) {
-                        var byteData = imageFile.readAsBytesSync();
-
-                        return MultipartFile.fromBytes(
-                          'photo',
-                          byteData,
-                          filename: '${uuid.v1()}.jpg',
-                          contentType: MediaType("image", "jpg"),
-                        );
-                      }).toList()
-                    }).toList(),
-                    "comments": _stateOfPlay.comments,
-                    "reserve": _stateOfPlay.reserve,
-                    "insurance": {
-                      "company": _stateOfPlay.insurance.company,
-                      "number": _stateOfPlay.insurance.number,
-                      "dateStart": _stateOfPlay.insurance.dateStart.toString(),
-                      "dateEnd": _stateOfPlay.insurance.dateEnd.toString(),
-                    },
-                    "documentHeader": _stateOfPlay.documentHeader,
-                    "documentEnd": _stateOfPlay.documentEnd,
-                    "date": _stateOfPlay.date.toString(),
-                    "city": _stateOfPlay.city.toString(),
-                    "entryExitDate": _stateOfPlay.entryExitDate.toString(),
-                    "newPdf": _stateOfPlay.newPdf != null ? MultipartFile.fromBytes(
-                      'pdf',
-                      _stateOfPlay.newPdf.readAsBytesSync(),
-                      filename: '${uuid.v1()}.pdf',
-                      contentType: MediaType("image", "pdf"),
-                    ) : null
-                  }
+                  "data": newStateOfPlay
                 });
 
                 QueryResult networkResult = await result.networkResult;

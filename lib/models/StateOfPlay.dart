@@ -541,7 +541,7 @@ class Meter {
       case 1:
         return location;
       case 2:
-        return DateFormat('dd/MM/yyyy').format(dateOfSuccession);
+        return dateOfSuccession != null ? DateFormat('dd/MM/yyyy').format(dateOfSuccession) : '';
       case 3:
         return index.toString();
       case 4:

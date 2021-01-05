@@ -165,7 +165,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
     );
   }
 
-  Widget buildSignatures(){
+  Widget buildSignatures() {
     return Row(     
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -219,8 +219,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
             ),
           ],
         ),
-        SizedBox(width:16),
-        Column(
+        widget.stateOfPlay.representative != null && widget.stateOfPlay.representative.lastName != null ? SizedBox(width:16) : Container(),
+        widget.stateOfPlay.representative != null && widget.stateOfPlay.representative.lastName != null ? Column(
           children: [
             // TODO foreach on list 
             SizedBox(
@@ -270,7 +270,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               onTap: () => {widget.stateOfPlay.signatureRepresentative != null ? showDeleteSignature(widget.stateOfPlay.representative) : goToSignatureSignature(widget.stateOfPlay.representative)},
             ),
           ],
-        ),
+        ) : Container(),
       ],   
     );
   }

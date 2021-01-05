@@ -90,7 +90,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
     await showDialog(
       context: context,
       child: AlertDialog(
-        content: Text("Pour accéder à la page 'Signatures', veuillez compléter les champs Propriétaire, Mandataire, Locataires et Propriété de la page 'Interlocuteurs'."),
+        content: Text("Pour accéder à la page 'Signatures', veuillez compléter les champs Propriétaire, Locataires et Propriété de la page 'Interlocuteurs'."),
         actions: [
           new FlatButton(
             child: Text('ANNULER'),
@@ -206,7 +206,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
                 //   });
                 // },
                 onError: (error) {
-                  print(error.toString());
+                  debugPrint(error.toString());
                 },
                 // onPageError: (page, error) {
                 //   print('$page: ${error.toString()}');
@@ -485,7 +485,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
           backgroundColor: Colors.grey,
           onTap: (index) {
             if (index == 3 && ((widget.stateOfPlay.owner == null || widget.stateOfPlay.owner.lastName == null)
-              || (widget.stateOfPlay.representative == null || widget.stateOfPlay.representative.lastName == null)
+              && (widget.stateOfPlay.representative == null || widget.stateOfPlay.representative.lastName == null)
               || (widget.stateOfPlay.property == null || widget.stateOfPlay.property.address == null)
               || (widget.stateOfPlay.tenants.length == 0))) {
               _showDialogCompleteInterlocutors(context);
