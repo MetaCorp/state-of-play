@@ -20,9 +20,11 @@ class MyDrawer extends StatelessWidget {
             accountEmail: Text(user.email), //to keep since needed
             accountName: Text(user.firstName + ' ' + user.lastName),
             currentAccountPicture: user != null ? CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    child: Text(user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()),
-                  ) : CircularProgressIndicator(), 
+              radius: 30.0,
+              backgroundImage: user.logo != null ? NetworkImage(user.logo) : null,
+              backgroundColor: Colors.grey,
+              child: user.logo == null ?  Text(user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()) : null,
+            ) : CircularProgressIndicator(), 
           ),
           ListTile(
             title: Text('États des lieux'),

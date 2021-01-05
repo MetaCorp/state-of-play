@@ -348,6 +348,7 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
               _stateOfPlay.documentEnd = user.documentEnd != null ? user.documentEnd : _stateOfPlay.documentEnd;
+              print("USR LOGO"+user.logo);
               _stateOfPlay.logo = user.logo;
             }
             
