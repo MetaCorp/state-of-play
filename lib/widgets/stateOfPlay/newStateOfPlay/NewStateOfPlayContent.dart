@@ -168,55 +168,57 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       child: AlertDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
             SizedBox(height: 16),
-            Container(
-              // decoration: BoxDecoration(// TODO: can't use a Flexible inside BoxDecoration
-                // color: Colors.white,
-                // borderRadius: BorderRadius.only(
-                //   topLeft: Radius.circular(10),
-                //     topRight: Radius.circular(10),
-                //     bottomLeft: Radius.circular(10),
-                //     bottomRight: Radius.circular(10)
-                // ),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey.withOpacity(0.5),
-                //     spreadRadius: 5,
-                //     blurRadius: 7,
-                //     offset: Offset(0, 3), // changes position of shadow
-                //   ),
-                // ],
-              // ),
-              child: Flexible(
-                child: PDFView(
-                  filePath: widget.stateOfPlay.newPdf.path,
-                  enableSwipe: false,
-                  swipeHorizontal: false,
-                  autoSpacing: false,
-                  pageFling: false,
-                  // onRender: (_pages) {
-                  //   setState(() {
-                  //     pages = _pages;
-                  //     isReady = true;
-                  //   });
-                  // },
-                  onError: (error) {
-                    debugPrint(error.toString());
-                  },
-                  // onPageError: (page, error) {
-                  //   debugPrint('$page: ${error.toString()}');
-                  // },
-                  // onViewCreated: (PDFViewController pdfViewController) {
-                  //   .complete(pdfViewController);
-                  // },
-                  // onPageChanged: (int page, int total) {
-                  //   debugPrint('page change: $page/$total');
-                  // },
+            Container(  
+              height: 300,  
+              decoration: BoxDecoration(// TODO: can't use a Flexible inside BoxDecoration
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)
                 ),
-              )
-            )
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: PDFView(
+                defaultPage: 0,
+                fitEachPage: false,
+                filePath: widget.stateOfPlay.newPdf.path,
+                enableSwipe: false,
+                swipeHorizontal: false,
+                autoSpacing: true,
+                pageFling: true,
+                // onRender: (_pages) {
+                //   setState(() {
+                //     pages = _pages;
+                //     isReady = true;
+                //   });
+                // },
+                onError: (error) {
+                  print(error.toString());
+                },
+                // onPageError: (page, error) {
+                //   print('$page: ${error.toString()}');
+                // },
+                // onViewCreated: (PDFViewController pdfViewController) {
+                //   .complete(pdfViewController);
+                // },
+                // onPageChanged: (int page, int total) {
+                //   print('page change: $page/$total');
+                // },
+                ),
+              )          
           ],
         ),
         actions: [

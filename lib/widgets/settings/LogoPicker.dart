@@ -55,7 +55,7 @@ class _LogoPickerState extends State<LogoPicker> {
         Container(
           width: 170,
           child: IconButton(
-            icon: Icon(Icons.camera_alt),
+            icon: Icon(Icons.folder_open),
             onPressed: () =>  {
               _imgFromGallery(),        
             }

@@ -441,6 +441,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
   // response.bodyBytes //Uint8List
 
   //TODO logo rfeturn null ?
+  print(stateOfPlay.logo);
   PdfImage logo = 
     PdfImage.file(
       pdf.document,
