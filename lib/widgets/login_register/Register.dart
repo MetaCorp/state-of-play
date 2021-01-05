@@ -14,10 +14,15 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  TextEditingController _emailController = TextEditingController(text: 'bob1@bob.com');
-  TextEditingController _passwordController = TextEditingController(text: 'test123');
-  TextEditingController _firstNameController = TextEditingController(text: 'bob1');
-  TextEditingController _lastNameController = TextEditingController(text: 'Name');
+  TextEditingController _emailController = TextEditingController(text: '');
+  TextEditingController _passwordController = TextEditingController(text: '');
+  TextEditingController _firstNameController = TextEditingController(text: '');
+  TextEditingController _lastNameController = TextEditingController(text: '');
+
+  // TextEditingController _emailController = TextEditingController(text: 'bob1@bob.com');
+  // TextEditingController _passwordController = TextEditingController(text: 'test123');
+  // TextEditingController _firstNameController = TextEditingController(text: 'bob1');
+  // TextEditingController _lastNameController = TextEditingController(text: 'Name');
 
 
   SharedPreferences _prefs;

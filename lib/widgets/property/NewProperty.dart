@@ -45,19 +45,20 @@ class _NewPropertyState extends State<NewProperty> {
         return NewPropertyContent(
           title: 'Nouvelle propriété',
           saveLoading: result.loading,
-          property: sop.Property(
-            reference: "000",
-            address: "42 rue du Test",
-            postalCode: "75001",
-            city: "Paris",
-            lot: "000",
-            floor: 4,
-            roomCount: 4,
-            area: 60,
-            heatingType: "test",
-            hotWater: "test",
-            type: "Maison"
-          ),
+          property: sop.Property(),
+          // sop.Property(
+          //   reference: "000",
+          //   address: "42 rue du Test",
+          //   postalCode: "75001",
+          //   city: "Paris",
+          //   lot: "000",
+          //   floor: 4,
+          //   roomCount: 4,
+          //   area: 60,
+          //   heatingType: "test",
+          //   hotWater: "test",
+          //   type: "Maison"
+          // ),
           onSave: (property) async {
             debugPrint('runMutation');
 

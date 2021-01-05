@@ -29,226 +29,245 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
   
   sop.StateOfPlay _stateOfPlay2 = sop.StateOfPlay(
     date: DateTime.now(),
-    owner: sop.Owner(
-      firstName: 'Robert',
-      lastName: 'Dupont',
-      company: "SCI d'Investisseurs",
-      address: '3 rue des Mésanges',
-      postalCode: '75001',
-      city: 'Paris'
-    ),
-    representative: sop.Representative(
-      firstName: 'Elise',
-      lastName: 'Lenotre',
-      company: 'Marketin Immobilier',
-      address: '3 rue des Mésanges',
-      postalCode: '75001',
-      city: 'Paris'
-    ),
-    tenants: [
-      sop.Tenant(
-        firstName: 'Emilie',
-        lastName: 'Dupond',
-        address: '3 rue des Mésanges',
-        postalCode: '75001',
-        city: 'Paris'
-      ),
-      sop.Tenant(
-        firstName: 'Schmitt',
-        lastName: 'Albert',
-        address: '3 rue des Mésanges',
-        postalCode: '75001',
-        city: 'Paris'
-      )
-    ],
+    owner: sop.Owner(),
+    representative: sop.Representative(),
+    tenants: [],
     entryExitDate: DateTime.now(),// To be changed
-    property: sop.Property(
-      address: '3 rue des Mésanges',
-      postalCode: '75001',
-      city: 'Paris',
-      type: 'Appartement',
-      reference: '3465',
-      lot: '34',
-      floor: 5,
-      roomCount: 5,
-      area: 108,
-      annexes: 'balcon / cave / terasse',
-      heatingType: 'chauffage collectif',
-      hotWater: 'eau chaude collective'
-    ),
-    rooms: [
-      sop.Room(
-        name: 'Cuisine',
-        decorations: [
-          sop.Decoration(
-            type: 'Porte',
-            nature: 'Pas de porte',
-            state: 'Bon',
-            comments: 'Il manque la porte',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Decoration(
-            type: 'Porte',
-            nature: 'Pas de porte',
-            state: 'Bon',
-            comments: 'Il manque la porte',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          )
-        ],
-        electricities: [
-          sop.Electricity(
-            type: 'Interrupteur',
-            quantity: 1,
-            state: 'Neuf',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Electricity(
-            type: 'Prise électrique',
-            quantity: 3,
-            state: 'Neuf',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-        ],
-        equipments: [
-          sop.Equipment(
-            type: 'Interrupteur',
-            brandOrObject: 'Brandt',
-            quantity: 1,
-            state: 'Bon',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Equipment(
-            type: 'Interrupteur',
-            brandOrObject: 'Brandt',
-            quantity: 1,
-            state: 'Bon',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-        ],
-        generalAspect: sop.GeneralAspect(
-          comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-        )
-      ),
-      sop.Room(
-        name: 'Séjour / Salon',
-        decorations: [
-          sop.Decoration(
-            type: 'Porte',
-            nature: 'Pas de porte',
-            state: 'Bon',
-            comments: 'Il manque la porte',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Decoration(
-            type: 'Porte',
-            nature: 'Pas de porte',
-            state: 'Bon',
-            comments: 'Il manque la porte',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          )
-        ],
-        electricities: [
-          sop.Electricity(
-            type: 'Interrupteur',
-            quantity: 1,
-            state: 'Neuf',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Electricity(
-            type: 'Prise électrique',
-            quantity: 3,
-            state: 'Neuf',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-        ],
-        equipments: [
-          sop.Equipment(
-            type: 'Interrupteur',
-            brandOrObject: 'Brandt',
-            quantity: 1,
-            state: 'Bon',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-          sop.Equipment(
-            type: 'Interrupteur',
-            brandOrObject: 'Brandt',
-            quantity: 1,
-            state: 'Bon',
-            comments: '',
-            images: [],
-            newImages: [],
-            imageIndexes: []
-          ),
-        ],
-        generalAspect: sop.GeneralAspect(
-          comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
-          image: 0
-        ),
-      )
-    ],
-    meters: [
-      sop.Meter(
-        type: 'Eau froide',
-        location: 'Cuisine',
-        dateOfSuccession: DateTime.now(),
-        index: 4567,
-        images: [],
-        newImages: [],
-        imageIndexes: []
-      )
-    ],
-    keys: [
-      sop.Key(
-        type: 'Clé ascenceur',
-        quantity: 1,
-        comments: '',
-        images: [],
-        newImages: [],
-        imageIndexes: []
-      )
-    ],
-    insurance: sop.Insurance(
-      company: 'Homestar',
-      number: '123465468',
-      dateStart: DateTime.now(),
-      dateEnd: DateTime.now(),
-    ),
-    comments: "L'appartement vient d'être repeint",
-    reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
-    city: 'Mulhouse',
+    property: sop.Property(),
+    rooms: [],
+    meters: [],
+    keys: [],
+    insurance: sop.Insurance(),
+    comments: "",
+    reserve: '',
+    city: '',
     documentHeader: "",
     documentEnd: "",
     images: []
   );
+  
+  // sop.StateOfPlay _stateOfPlay2 = sop.StateOfPlay(
+  //   date: DateTime.now(),
+  //   owner: sop.Owner(
+  //     firstName: 'Robert',
+  //     lastName: 'Dupont',
+  //     company: "SCI d'Investisseurs",
+  //     address: '3 rue des Mésanges',
+  //     postalCode: '75001',
+  //     city: 'Paris'
+  //   ),
+  //   representative: sop.Representative(
+  //     firstName: 'Elise',
+  //     lastName: 'Lenotre',
+  //     company: 'Marketin Immobilier',
+  //     address: '3 rue des Mésanges',
+  //     postalCode: '75001',
+  //     city: 'Paris'
+  //   ),
+  //   tenants: [
+  //     sop.Tenant(
+  //       firstName: 'Emilie',
+  //       lastName: 'Dupond',
+  //       address: '3 rue des Mésanges',
+  //       postalCode: '75001',
+  //       city: 'Paris'
+  //     ),
+  //     sop.Tenant(
+  //       firstName: 'Schmitt',
+  //       lastName: 'Albert',
+  //       address: '3 rue des Mésanges',
+  //       postalCode: '75001',
+  //       city: 'Paris'
+  //     )
+  //   ],
+  //   entryExitDate: DateTime.now(),// To be changed
+  //   property: sop.Property(
+  //     address: '3 rue des Mésanges',
+  //     postalCode: '75001',
+  //     city: 'Paris',
+  //     type: 'Appartement',
+  //     reference: '3465',
+  //     lot: '34',
+  //     floor: 5,
+  //     roomCount: 5,
+  //     area: 108,
+  //     annexes: 'balcon / cave / terasse',
+  //     heatingType: 'chauffage collectif',
+  //     hotWater: 'eau chaude collective'
+  //   ),
+  //   rooms: [
+  //     sop.Room(
+  //       name: 'Cuisine',
+  //       decorations: [
+  //         sop.Decoration(
+  //           type: 'Porte',
+  //           nature: 'Pas de porte',
+  //           state: 'Bon',
+  //           comments: 'Il manque la porte',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Decoration(
+  //           type: 'Porte',
+  //           nature: 'Pas de porte',
+  //           state: 'Bon',
+  //           comments: 'Il manque la porte',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         )
+  //       ],
+  //       electricities: [
+  //         sop.Electricity(
+  //           type: 'Interrupteur',
+  //           quantity: 1,
+  //           state: 'Neuf',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Electricity(
+  //           type: 'Prise électrique',
+  //           quantity: 3,
+  //           state: 'Neuf',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //       ],
+  //       equipments: [
+  //         sop.Equipment(
+  //           type: 'Interrupteur',
+  //           brandOrObject: 'Brandt',
+  //           quantity: 1,
+  //           state: 'Bon',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Equipment(
+  //           type: 'Interrupteur',
+  //           brandOrObject: 'Brandt',
+  //           quantity: 1,
+  //           state: 'Bon',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //       ],
+  //       generalAspect: sop.GeneralAspect(
+  //         comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+  //       )
+  //     ),
+  //     sop.Room(
+  //       name: 'Séjour / Salon',
+  //       decorations: [
+  //         sop.Decoration(
+  //           type: 'Porte',
+  //           nature: 'Pas de porte',
+  //           state: 'Bon',
+  //           comments: 'Il manque la porte',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Decoration(
+  //           type: 'Porte',
+  //           nature: 'Pas de porte',
+  //           state: 'Bon',
+  //           comments: 'Il manque la porte',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         )
+  //       ],
+  //       electricities: [
+  //         sop.Electricity(
+  //           type: 'Interrupteur',
+  //           quantity: 1,
+  //           state: 'Neuf',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Electricity(
+  //           type: 'Prise électrique',
+  //           quantity: 3,
+  //           state: 'Neuf',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //       ],
+  //       equipments: [
+  //         sop.Equipment(
+  //           type: 'Interrupteur',
+  //           brandOrObject: 'Brandt',
+  //           quantity: 1,
+  //           state: 'Bon',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //         sop.Equipment(
+  //           type: 'Interrupteur',
+  //           brandOrObject: 'Brandt',
+  //           quantity: 1,
+  //           state: 'Bon',
+  //           comments: '',
+  //           images: [],
+  //           newImages: [],
+  //           imageIndexes: []
+  //         ),
+  //       ],
+  //       generalAspect: sop.GeneralAspect(
+  //         comments: 'Cuisine La cuisine équipée est en très bon état et complète Photo n°12',
+  //         image: 0
+  //       ),
+  //     )
+  //   ],
+  //   meters: [
+  //     sop.Meter(
+  //       type: 'Eau froide',
+  //       location: 'Cuisine',
+  //       dateOfSuccession: DateTime.now(),
+  //       index: 4567,
+  //       images: [],
+  //       newImages: [],
+  //       imageIndexes: []
+  //     )
+  //   ],
+  //   keys: [
+  //     sop.Key(
+  //       type: 'Clé ascenceur',
+  //       quantity: 1,
+  //       comments: '',
+  //       images: [],
+  //       newImages: [],
+  //       imageIndexes: []
+  //     )
+  //   ],
+  //   insurance: sop.Insurance(
+  //     company: 'Homestar',
+  //     number: '123465468',
+  //     dateStart: DateTime.now(),
+  //     dateEnd: DateTime.now(),
+  //   ),
+  //   comments: "L'appartement vient d'être repeint",
+  //   reserve: 'Le propritaire doit remettre une cuvette dans les toilettes',
+  //   city: 'Mulhouse',
+  //   documentHeader: "",
+  //   documentEnd: "",
+  //   images: []
+  // );
 
   sop.User user;
 
