@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -24,6 +25,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
 
   List<String> _selectedRooms = [];
 
+  bool _deleteLoading = false;
+
   @override
   void initState() { 
     super.initState();
@@ -39,29 +42,33 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
     });
   }
 
-  void _showDialogDelete(context, room, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, room, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: AlertDialog(
         content: Text("Supprimer '" + room["name"] + "' ?"),
         actions: [
-          new FlatButton(
+          FlatButton(
             child: Text('ANNULER'),
             onPressed: () {
               Navigator.pop(context);
             }
           ),
-          new FlatButton(
+          FlatButtonLoading(
+            loading: _deleteLoading,
             child: Text('SUPPRIMER'),
             onPressed: () async {
               debugPrint('runDeleteMutation');
 
+              setState(() { _deleteLoading = true; });
               MultiSourceResult mutationResult = runDeleteMutation({
                 "data": {
                   "roomId": room["id"],
                 }
               });
               QueryResult networkResult = await mutationResult.networkResult;
+              setState(() { _deleteLoading = false; });
+              refetch();
 
               if (networkResult.hasException) {
                 debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -263,7 +270,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                         caption: 'Supprimer',
                         color: Colors.red,
                         icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, rooms[i], runDeleteMutation),
+                        onTap: () => _showDialogDelete(context, rooms[i], runDeleteMutation, refetch),
                       )
                     ]
                   ),

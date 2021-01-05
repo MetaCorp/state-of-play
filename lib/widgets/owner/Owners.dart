@@ -22,7 +22,7 @@ class _OwnersState extends State<Owners> {
 
   bool _deleteLoading = false;
   
-  void _showDialogDelete(context, sop.Owner owner, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, sop.Owner owner, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -56,6 +56,7 @@ class _OwnersState extends State<Owners> {
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -176,7 +177,7 @@ class _OwnersState extends State<Owners> {
                 return OwnersList(
                   owners: owners,
                   onTap: (owner) => Navigator.pushNamed(context, '/edit-owner', arguments: { "ownerId": owner.id }),
-                  onDelete: (owner) => _showDialogDelete(context, owner, runDeleteMutation)
+                  onDelete: (owner) => _showDialogDelete(context, owner, runDeleteMutation, refetch)
                 );
               }
             );

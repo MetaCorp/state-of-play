@@ -21,7 +21,7 @@ class _TenantsState extends State<Tenants> {
 
   bool _deleteLoading = false;
   
-  void _showDialogDelete(context, sop.Tenant tenant, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, sop.Tenant tenant, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -56,6 +56,7 @@ class _TenantsState extends State<Tenants> {
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -178,7 +179,7 @@ class _TenantsState extends State<Tenants> {
                 return TenantsList(
                   tenants: tenants,
                   onTap: (tenant) => Navigator.pushNamed(context, '/edit-tenant', arguments: { "tenantId": tenant.id }),
-                  onDelete: (tenant) => _showDialogDelete(context, tenant, runDeleteMutation)
+                  onDelete: (tenant) => _showDialogDelete(context, tenant, runDeleteMutation, refetch)
                 );
               }
             );

@@ -25,7 +25,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, meter, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, meter, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -53,6 +53,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -260,7 +261,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
                         caption: 'Supprimer',
                         color: Colors.red,
                         icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, meters[i], runDeleteMutation),
+                        onTap: () => _showDialogDelete(context, meters[i], runDeleteMutation, refetch),
                       )
                     ]
                   ),

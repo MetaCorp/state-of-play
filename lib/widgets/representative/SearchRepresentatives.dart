@@ -24,7 +24,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, sop.Representative representative, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, sop.Representative representative, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -58,6 +58,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -181,7 +182,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
                 return RepresentativesList(
                   representatives: representatives,
                   onTap: (representative) => widget.onSelect != null ? widget.onSelect(representative) : Navigator.pushNamed(context, '/edit-representative', arguments: { "representativeId": representative.id }),
-                  onDelete: (representative) => _showDialogDelete(context, representative, runDeleteMutation)
+                  onDelete: (representative) => _showDialogDelete(context, representative, runDeleteMutation, refetch)
                 );
               }
             );

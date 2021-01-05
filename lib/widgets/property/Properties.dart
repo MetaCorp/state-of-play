@@ -22,7 +22,7 @@ class _PropertiesState extends State<Properties> {
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, sop.Property property, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, sop.Property property, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -56,6 +56,7 @@ class _PropertiesState extends State<Properties> {
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -178,7 +179,7 @@ class _PropertiesState extends State<Properties> {
                 return PropertiesList(
                   properties: properties,
                   onTap: (property) => Navigator.pushNamed(context, '/edit-property', arguments: { "propertyId": property.id }),
-                  onDelete: (property) => _showDialogDelete(context, property, runDeleteMutation)
+                  onDelete: (property) => _showDialogDelete(context, property, runDeleteMutation, refetch)
                 );
               }
             );

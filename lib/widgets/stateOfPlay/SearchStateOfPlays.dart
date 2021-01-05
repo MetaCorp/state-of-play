@@ -30,7 +30,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
 
   bool _deleteLoading = false;
   
-  void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, sop.StateOfPlay stateOfPlay, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -59,6 +59,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -288,7 +289,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
                         Navigator.pushNamed(context, "/edit-state-of-play", arguments: { "stateOfPlayId": stateOfPlay.id });
                     }
                   },
-                  onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation),
+                  onDelete: (stateOfPlay) => _showDialogDelete(context, stateOfPlay, runDeleteMutation, refetch),
                 );
               }
             );

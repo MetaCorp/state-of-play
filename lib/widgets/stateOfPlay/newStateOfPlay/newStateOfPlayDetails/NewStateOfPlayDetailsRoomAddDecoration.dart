@@ -25,7 +25,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, decoration, RunMutation runDeleteMutation) async {
+  void _showDialogDelete(context, decoration, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
@@ -53,6 +53,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
                   setState(() { _deleteLoading = false; });
+                  refetch();
 
                   if (networkResult.hasException) {
                     debugPrint('networkResult.hasException: ' + networkResult.hasException.toString());
@@ -260,7 +261,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                         caption: 'Supprimer',
                         color: Colors.red,
                         icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, decorations[i], runDeleteMutation),
+                        onTap: () => _showDialogDelete(context, decorations[i], runDeleteMutation, refetch),
                       )
                     ]
                   ),
