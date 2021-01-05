@@ -14,6 +14,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController _emailController = TextEditingController(text: '');
   TextEditingController _passwordController = TextEditingController(text: '');
   TextEditingController _firstNameController = TextEditingController(text: '');
@@ -69,9 +71,25 @@ class _RegisterState extends State<Register> {
         if(result.hasException && result.exception.graphqlErrors.length > 0) debugPrint('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
         else if(result.hasException) debugPrint('queryResult clientException: ' + result.exception.clientException.message);
 
+        if (result.hasException) {
+          debugPrint('hasException: ' + result.exception.toString());
+
+          if (result.exception.graphqlErrors[0].extensions != null &&
+              result.exception.graphqlErrors[0].extensions["exception"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"]["IsEmailAlreadyExistConstraint"] != null)
+            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Email déjà utilisé.")));
+          else
+            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Impossible de s'inscrire.")));
+
+        }
+
+
         debugPrint('');
 
         return Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             centerTitle: true,
             title: Text('Inscription'),

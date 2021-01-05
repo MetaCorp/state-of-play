@@ -26,14 +26,14 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onSave(),
+      onWillPop: () async => _onSave(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Assurance'),
           actions: [
             IconButton(
               icon: Icon(Icons.check),
-              onPressed: _onSave()
+              onPressed: _onSave
             )
           ],
         ),

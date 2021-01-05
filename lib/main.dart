@@ -54,8 +54,12 @@ String get host {
     return 'localhost';
   }
 }
+const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
 void main() {
+  if (isProduction) {      
+    debugPrint = (String message, {int wrapWidth}) {};    
+  } 
   runApp(MyApp());
 }
 

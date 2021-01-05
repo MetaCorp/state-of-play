@@ -24,6 +24,8 @@ class _LoginState extends State<Login> {
   // TextEditingController _emailController = TextEditingController(text: 'bob49@bob.com');
   // TextEditingController _passwordController = TextEditingController(text: 'test123');
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   SharedPreferences _prefs;
 
   Future<Null> getSharedPrefs() async {
@@ -43,13 +45,13 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     
-    final imageWidth = 128.0;
-    final imageHeight = 129.0;
-    final toleranceFactor = 0.033;
-    final widthFactor = 0.125;
-    final heightFactor = 0.5;
+    // final imageWidth = 128.0;
+    // final imageHeight = 129.0;
+    // final toleranceFactor = 0.033;
+    // final widthFactor = 0.125;
+    // final heightFactor = 0.5;
 
-    final random = Random();
+    // final random = Random();
 
     return Mutation(
       options: MutationOptions(
@@ -78,6 +80,7 @@ class _LoginState extends State<Login> {
         else if(result.hasException) debugPrint('queryResult clientException: ' + result.exception.clientException.message);
 
         return Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             title: Text('Connexion'),
             centerTitle: true,
@@ -215,7 +218,7 @@ class _LoginState extends State<Login> {
                         debugPrint('queryResult data: ' + networkResult.data.toString());
                         if (networkResult.data != null) {
                           if (networkResult.data["login"] == null) {
-                            // TODO: show error
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
                           }
                           else if (networkResult.data["login"] != null) {
                             _prefs.setString("token", networkResult.data["login"]);
