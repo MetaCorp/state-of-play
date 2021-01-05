@@ -64,6 +64,11 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 decoration: InputDecoration(labelText: 'Entête du document'),
                 onSaved: (value) => widget.stateOfPlay.documentHeader = value,
                 keyboardType: TextInputType.multiline,
+                validator: (value) {
+                  if (value == null || value == "")
+                    return "Ce champs est obligatoire.";
+                  return null;
+                },
                 maxLength: 256,
                 minLines: 1,
                 maxLines: 2,
@@ -74,6 +79,11 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 decoration: InputDecoration(labelText: 'Mention en fin du document'),
                 onSaved: (value) => widget.stateOfPlay.documentEnd = value,
                 keyboardType: TextInputType.multiline,
+                validator: (value) {
+                  if (value == null || value == "")
+                    return "Ce champs est obligatoire.";
+                  return null;
+                },
                 maxLength: 1024,
                 maxLines: 4,
               ),
@@ -106,6 +116,11 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 initialValue: widget.stateOfPlay.city,
                 decoration: InputDecoration(labelText: 'Fait à'),
                 onSaved: (value) => widget.stateOfPlay.city = value,
+                validator: (value) {
+                  if (value == null || value == "")
+                    return "Ce champs est obligatoire.";
+                  return null;
+                },
                 maxLength: 24,
               ),
               DateButton(
@@ -136,11 +151,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                     RaisedButtonLoading(
                       child: Text("Visualiser l'état des lieux"),
                       onPressed: () async {
-                        if(widget.stateOfPlay.signatureOwner == null && widget.stateOfPlay.signatureRepresentative == null ||
-                          widget.stateOfPlay.signatureTenants.any((element) => element == null))
-                          await showAlertSignature();
-                        else
-                          widget.onSave();
+                        widget.onSave();
                       },
                       loading: widget.isPdfLoading,
                     )
@@ -379,22 +390,4 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
       )
     );
   }
-
-  Future<bool> showAlertSignature() async  {
-    await showDialog(
-      context: context,
-      child: AlertDialog(
-        content: Text("Certaines signatures sont manquantes."),
-        actions: [
-          new FlatButton(
-            child: Text('COMPRIS'),
-            onPressed: () {
-              Navigator.pop(context);
-              //validate anyway               
-            }
-          )
-        ],
-      )
-    );
-  }    
 }

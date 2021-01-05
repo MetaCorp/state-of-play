@@ -11,6 +11,7 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetails.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMisc.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscInsurance.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/NewStateOfPlayInterlocutors.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlaySignature/NewStateOfPlaySignature.dart';
 
@@ -102,6 +103,33 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
             onPressed: () async {
               Navigator.pop(context);
               setState(() { _selectedIndex = 0; });
+            }
+          )
+        ],
+      )
+    );
+  }
+
+  void _showDialogCompleteInsurance(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Pour générer le pdf, veuillez compléter les champs de la page 'Assurance'."),
+        actions: [
+          new FlatButton(
+            child: Text('ANNULER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          new FlatButton(
+            child: Text('COMPLÉTER'),
+            onPressed: () async {
+              Navigator.pop(context);
+              setState(() { _selectedIndex = 2; });
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlayMiscInsurance(
+                insurance: widget.stateOfPlay.insurance,
+              )));
             }
           )
         ],
@@ -208,10 +236,43 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
       )
     );
   }
+  
+  void showAlertSignature() async  {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("Pour générer le pdf, veuillez compléter les signatures suivantes: soit la signature du propriétaire, soit la signature du mandataire et les signatures des locataires ."),
+        actions: [
+          new FlatButton(
+            child: Text('COMPRIS'),
+            onPressed: () {
+              Navigator.pop(context);
+              //validate anyway               
+            }
+          )
+        ],
+      )
+    );
+  }
 
   _onSave() async {
+    
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      if (widget.stateOfPlay.insurance.company == null ||
+          widget.stateOfPlay.insurance.number == null ||
+          widget.stateOfPlay.insurance.dateStart == null ||
+          widget.stateOfPlay.insurance.dateEnd == null) {
+        _showDialogCompleteInsurance(context);
+        return;
+      }
+
+      if(widget.stateOfPlay.signatureOwner == null && widget.stateOfPlay.signatureRepresentative == null ||
+        widget.stateOfPlay.signatureTenants.any((element) => element == null)) {
+        showAlertSignature();
+        return;
+      }
 
       bool ret = false;
       // TODO : abonnement LEO

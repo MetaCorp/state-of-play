@@ -106,6 +106,10 @@ class _SearchOwnersState extends State<SearchOwners> {
               id
               firstName
               lastName
+              company
+              address
+              postalCode
+              city
               stateOfPlays {
                 id
               }

@@ -208,6 +208,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.noCache,
         variables: {
           "filter": {
             "search": "",

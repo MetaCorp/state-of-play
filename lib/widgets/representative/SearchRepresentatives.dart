@@ -105,6 +105,10 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
               id
               firstName
               lastName
+              company
+              address
+              postalCode
+              city
               stateOfPlays {
                 id
               }

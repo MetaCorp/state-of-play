@@ -105,6 +105,9 @@ class _SearchTenantsState extends State<SearchTenants> {
               id
               firstName
               lastName
+              address
+              postalCode
+              city
               stateOfPlays {
                 id
               }

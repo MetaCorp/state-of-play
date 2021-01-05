@@ -104,9 +104,17 @@ class _SearchPropertiesState extends State<SearchProperties> {
           query properties(\$filter: PropertiesFilterInput!) {
             properties (filter: \$filter) {
               id
+              reference
               address
               postalCode
               city
+              lot
+              floor
+              roomCount
+              area
+              heatingType
+              hotWater
+              type
               stateOfPlays {
                 id
               }
