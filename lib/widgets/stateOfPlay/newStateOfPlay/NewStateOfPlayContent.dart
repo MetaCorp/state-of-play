@@ -310,6 +310,50 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
               });
 
             }
+
+
+            for (var k = 0; k < widget.stateOfPlay.rooms[i].electricities[j].images.length; k++) {
+              
+              widget.stateOfPlay.rooms[i].electricities[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+              widget.stateOfPlay.images.add({
+                "type": "network",
+                "image": widget.stateOfPlay.rooms[i].electricities[j].images[k]
+              });
+            }
+
+            for (var k = 0; k < widget.stateOfPlay.rooms[i].electricities[j].newImages.length; k++) {
+              
+              widget.stateOfPlay.rooms[i].electricities[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+              widget.stateOfPlay.images.add({
+                "type": "file",
+                "image": widget.stateOfPlay.rooms[i].electricities[j].newImages[k]
+              });
+
+            }
+
+
+            for (var k = 0; k < widget.stateOfPlay.rooms[i].equipments[j].images.length; k++) {
+              
+              widget.stateOfPlay.rooms[i].equipments[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+              widget.stateOfPlay.images.add({
+                "type": "network",
+                "image": widget.stateOfPlay.rooms[i].equipments[j].images[k]
+              });
+            }
+
+            for (var k = 0; k < widget.stateOfPlay.rooms[i].equipments[j].newImages.length; k++) {
+              
+              widget.stateOfPlay.rooms[i].equipments[j].imageIndexes.add(widget.stateOfPlay.images.length);
+
+              widget.stateOfPlay.images.add({
+                "type": "file",
+                "image": widget.stateOfPlay.rooms[i].equipments[j].newImages[k]
+              });
+
+            }
           }
         }
 
