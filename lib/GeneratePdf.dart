@@ -1090,16 +1090,17 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
     ]
   ));
 
-  pdf.addPage(
-    pw.MultiPage(
-      pageFormat: PdfPageFormat.a4,
-      build: (pw.Context context) {
-        return [
-          _photos
-        ];
-      }
-    )
-  );
+  if (stateOfPlay.images.length > 0)
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return [
+            _photos
+          ];
+        }
+      )
+    );
 
   // final file = File("example.pdf");
   // await file.writeAsBytes(pdf.save());
