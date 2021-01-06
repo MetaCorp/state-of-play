@@ -109,6 +109,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                 MyTextFormField(
                   initialValue: widget.equipment.brandOrObject,
                   decoration: InputDecoration(labelText: 'Marque/Objet'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.equipment.brandOrObject = value,
                   maxLength: 24,
                 ),
@@ -137,6 +138,7 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                 MyTextFormField(
                   initialValue: widget.equipment.comments,
                   decoration: InputDecoration(labelText: 'Commentaires'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.equipment.comments = value,
                   maxLength: 256,
                   maxLines: 2,

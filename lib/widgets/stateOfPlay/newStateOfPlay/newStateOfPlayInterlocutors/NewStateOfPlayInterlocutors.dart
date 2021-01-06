@@ -100,10 +100,10 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             text: "Mandataire"
           ),
           ListTileInterlocutor(
-            text: widget.stateOfPlay.representative.lastName != null ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
+            text: widget.stateOfPlay.representative != null && widget.stateOfPlay.representative.lastName != null ? widget.stateOfPlay.representative.firstName + ' ' + widget.stateOfPlay.representative.lastName : null,
             labelText: "Sélectionner un mandataire",
             onPress: () {
-              if (widget.stateOfPlay.representative.lastName != null)
+              if (widget.stateOfPlay.representative != null && widget.stateOfPlay.representative.lastName != null)
                 Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
                   title: 'Éditer un mandataire',
                   interlocutor: widget.stateOfPlay.representative,

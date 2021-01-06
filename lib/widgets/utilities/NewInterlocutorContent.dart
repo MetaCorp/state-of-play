@@ -67,6 +67,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               MyTextFormField(
                 initialValue: widget.interlocutor.firstName,
                 decoration: InputDecoration(labelText: 'Prénom'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.interlocutor.firstName = value,
                 validator: (value) {
                   if (value == null || value == "")
@@ -81,6 +82,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               MyTextFormField(
                 initialValue: widget.interlocutor.lastName,
                 decoration: InputDecoration(labelText: 'Nom'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.interlocutor.lastName = value,
                 validator: (value) {
                   if (value == null || value == "")
@@ -95,6 +97,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               !(widget.interlocutor is sop.Tenant) ? MyTextFormField(
                 initialValue: widget.interlocutor.company,
                 decoration: InputDecoration(labelText: 'Entreprise'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.interlocutor.company = value,
                 validator: (value) {
                   if (value == null || value == "")
@@ -138,6 +141,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
               MyTextFormField(
                 initialValue: widget.interlocutor.city,
                 decoration: InputDecoration(labelText: 'Ville'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.interlocutor.city = value,
                 validator: (value) {
                   if (value == null || value == "")

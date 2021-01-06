@@ -118,6 +118,7 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                       labelText: 'Prénom'
                     ),
+                    textCapitalization: TextCapitalization.sentences,
                   ),
                   SizedBox(
                     height: 28,
@@ -127,6 +128,7 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                       labelText: 'Nom'
                     ),
+                    textCapitalization: TextCapitalization.sentences,
                   ),
                   SizedBox(
                     height: 28,

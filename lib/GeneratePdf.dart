@@ -915,182 +915,191 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
   pdf.addPage(pw.MultiPage(
     build: (pw.Context context) => [
 
-              pw.RichText(
-                text:
-                  pw.TextSpan(
-                    text: "Le Locataire a assuré le bien immobilier auprès de la compagnie d'assurance ",
-                    style: pw.TextStyle(
-                      fontSize: 11
-                    ),
-                    children: [
-                      pw.TextSpan(
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 11
-                        ),
-                        text: stateOfPlay.insurance.company
-                      ),
-                      pw.TextSpan(
-                        text: " sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd),
-                        style: pw.TextStyle(
-                          fontSize: 11
-                        ),
-                      )
-                    ]
-                  )
-              ),
-              pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
-
-              // COMMENT
-              pw.Container(
-                decoration: pw.BoxDecoration(
-                  color: PdfColors.grey100,
+      pw.RichText(
+        text:
+          pw.TextSpan(
+            text: "Le Locataire a assuré le bien immobilier auprès de la compagnie d'assurance ",
+            style: pw.TextStyle(
+              fontSize: 11
+            ),
+            children: [
+              pw.TextSpan(
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 11
                 ),
-                height: 100,
-                padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                alignment: pw.Alignment.centerLeft,
-                child:
-                  pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children:
-                      [
-                        pw.Text(
-                          stateOfPlayTexts.comment + ' :',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold
-                          ),
-                        ),
-                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                        pw.Text(stateOfPlay.comments)
-                      ]
-                  )
+                text: stateOfPlay.insurance.company
               ),
-              pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-
-              // RESERVE
-              pw.Container(
-                decoration: pw.BoxDecoration(
-                  color: PdfColors.grey100,
-                ),
-                height: 100,
-                padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                alignment: pw.Alignment.centerLeft,
-                child:
-                  pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children:
-                      [
-                        pw.Text(
-                          stateOfPlayTexts.reserve + ' :',
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold
-                          )
-                        ),
-                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
-                        pw.Text(stateOfPlay.reserve)
-                      ]
-                  )
-              ),
-              pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
-
-              // TEXTE
-              pw.Text(
-                stateOfPlay.documentEnd,
+              pw.TextSpan(
+                text: " sous le numéro de police " + stateOfPlay.insurance.number + " à compter du " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateStart) + " jusqu'au " + DateFormat('dd/MM/yyyy').format(stateOfPlay.insurance.dateEnd),
                 style: pw.TextStyle(
                   fontSize: 11
-                )
-              ),
-              pw.Padding(padding: pw.EdgeInsets.only(bottom: 25)),
+                ),
+              )
+            ]
+          )
+      ),
+      pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
 
-              // Signatures
-              pw.Container(
-                alignment: pw.Alignment.topLeft,
-                child: 
-                  pw.RichText(
-                    text: pw.TextSpan(
-                      text: 'Fait à ' + stateOfPlay.city + ' ',
-                        style: pw.TextStyle(
-                        fontSize: 11
-                      ),
-                      children: [pw.TextSpan(
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 11
-                        ),
-                        text: 'le ' + DateFormat('dd/MM/yyy').format(stateOfPlay.date),
-                      )]
-                    )
-                  )
-              ),
-              pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
-
-              pw.Wrap(
-                spacing: 15,
-                children: [
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.grey100,
-                    ),
-                    height: 120,
-                    width: 230,
-                    padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                    child: pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                      children: [
-                        pw.Container(
-                          height: 40,
-                          child: stateOfPlay.signatureOwner != null ? pw.Image(PdfImage.file(
-                            pdf.document,
-                            bytes: stateOfPlay.signatureOwner,
-                          )) : pw.Container()
-                        ),
-                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
-                        pw.Text(
-                          stateOfPlayTexts.signatureOwnerOrRepresentative,
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            fontStyle: pw.FontStyle.italic 
-                          )  
-                        )
-                      ]
-                    )
+      // COMMENT
+      pw.Container(
+        decoration: pw.BoxDecoration(
+          color: PdfColors.grey100,
+        ),
+        height: 100,
+        padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+        alignment: pw.Alignment.centerLeft,
+        child:
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children:
+              [
+                pw.Text(
+                  stateOfPlayTexts.comment + ' :',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold
                   ),
-                  ...stateOfPlay.signatureTenants.map((signatureTenant) => pw.Container(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.grey100,
-                    ),
-                    height: 120,
-                    width: 230,
-                    padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-                    margin: const pw.EdgeInsets.only(bottom: 15),
-                    alignment: pw.Alignment.bottomCenter,
-                    child: pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                      children: [
-                        pw.Container(
-                          height: 40,
-                          child: signatureTenant != null ? pw.Image(PdfImage.file(
-                            pdf.document,
-                            bytes: signatureTenant,
-                          )) : pw.Container()
-                        ),
-                        pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
-                        pw.Text(
-                          stateOfPlayTexts.signatureTenant + (stateOfPlay.signatureTenants.indexOf(signatureTenant) + 1).toString(),
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            fontStyle: pw.FontStyle.italic 
-                          )    
-                        )
-                      ]
-                    )
-                  ))
-                ]
-              ),
+                ),
+                pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
+                pw.Text(stateOfPlay.comments)
+              ]
+          )
+      ),
+      pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
 
-              _photos
+      // RESERVE
+      pw.Container(
+        decoration: pw.BoxDecoration(
+          color: PdfColors.grey100,
+        ),
+        height: 100,
+        padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+        alignment: pw.Alignment.centerLeft,
+        child:
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children:
+              [
+                pw.Text(
+                  stateOfPlayTexts.reserve + ' :',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold
+                  )
+                ),
+                pw.Padding(padding: pw.EdgeInsets.only(bottom: 5)),
+                pw.Text(stateOfPlay.reserve)
+              ]
+          )
+      ),
+      pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
+
+      // TEXTE
+      pw.Text(
+        stateOfPlay.documentEnd,
+        style: pw.TextStyle(
+          fontSize: 11
+        )
+      ),
+      pw.Padding(padding: pw.EdgeInsets.only(bottom: 25)),
+
+      // Signatures
+      pw.Container(
+        alignment: pw.Alignment.topLeft,
+        child: 
+          pw.RichText(
+            text: pw.TextSpan(
+              text: 'Fait à ' + stateOfPlay.city + ' ',
+                style: pw.TextStyle(
+                fontSize: 11
+              ),
+              children: [pw.TextSpan(
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 11
+                ),
+                text: 'le ' + DateFormat('dd/MM/yyy').format(stateOfPlay.date),
+              )]
+            )
+          )
+      ),
+      pw.Padding(padding: pw.EdgeInsets.only(bottom: 15)),
+
+      pw.Wrap(
+        spacing: 15,
+        children: [
+          pw.Container(
+            decoration: pw.BoxDecoration(
+              color: PdfColors.grey100,
+            ),
+            height: 120,
+            width: 230,
+            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.end,
+              children: [
+                pw.Container(
+                  height: 40,
+                  child: stateOfPlay.signatureOwner != null ? pw.Image(PdfImage.file(
+                    pdf.document,
+                    bytes: stateOfPlay.signatureOwner,
+                  )) : pw.Container()
+                ),
+                pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
+                pw.Text(
+                  stateOfPlayTexts.signatureOwnerOrRepresentative,
+                  style: pw.TextStyle(
+                    fontSize: 9,
+                    fontStyle: pw.FontStyle.italic 
+                  )  
+                )
+              ]
+            )
+          ),
+          ...stateOfPlay.signatureTenants.map((signatureTenant) => pw.Container(
+            decoration: pw.BoxDecoration(
+              color: PdfColors.grey100,
+            ),
+            height: 120,
+            width: 230,
+            padding: const pw.EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+            margin: const pw.EdgeInsets.only(bottom: 15),
+            alignment: pw.Alignment.bottomCenter,
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.end,
+              children: [
+                pw.Container(
+                  height: 40,
+                  child: signatureTenant != null ? pw.Image(PdfImage.file(
+                    pdf.document,
+                    bytes: signatureTenant,
+                  )) : pw.Container()
+                ),
+                pw.Padding(padding: pw.EdgeInsets.only(bottom: 20)),
+                pw.Text(
+                  stateOfPlayTexts.signatureTenant + (stateOfPlay.signatureTenants.indexOf(signatureTenant) + 1).toString(),
+                  style: pw.TextStyle(
+                    fontSize: 9,
+                    fontStyle: pw.FontStyle.italic 
+                  )    
+                )
+              ]
+            )
+          ))
+        ]
+      ),
     ]
   ));
+
+  pdf.addPage(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      build: (pw.Context context) {
+        return [
+          _photos
+        ];
+      }
+    )
+  );
 
   // final file = File("example.pdf");
   // await file.writeAsBytes(pdf.save());

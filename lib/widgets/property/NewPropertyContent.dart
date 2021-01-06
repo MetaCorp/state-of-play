@@ -108,6 +108,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
               MyTextFormField(
                 initialValue: widget.property.city,
                 decoration: InputDecoration(labelText: 'Ville'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.property.city = value,
                 validator: (value) {
                   if (value == null || value == "")

@@ -115,6 +115,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
               MyTextFormField(
                 initialValue: widget.stateOfPlay.city,
                 decoration: InputDecoration(labelText: 'Fait à'),
+                textCapitalization: TextCapitalization.sentences,
                 onSaved: (value) => widget.stateOfPlay.city = value,
                 validator: (value) {
                   if (value == null || value == "")

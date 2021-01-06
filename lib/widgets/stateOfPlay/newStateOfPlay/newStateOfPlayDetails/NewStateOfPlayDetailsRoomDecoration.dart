@@ -141,6 +141,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                 MyTextFormField(
                   initialValue: widget.decoration.nature,
                   decoration: InputDecoration(labelText: 'Nature'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.decoration.nature = value,
                   maxLength: 24,
                 ),
@@ -150,6 +151,7 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                 MyTextFormField(
                   initialValue: widget.decoration.comments,
                   decoration: InputDecoration(labelText: 'Commentaires'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.decoration.comments = value,
                   maxLength: 256,
                   maxLines: 2,

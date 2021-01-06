@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 // import 'package:flutter_tests/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';// DateFormat
 import 'dart:convert';
 
@@ -552,10 +553,12 @@ class Meter {
 
   factory Meter.fromJSON(Map<String, dynamic> json) {
 
+    debugPrint('Meter date: ' + (json["dateOfSuccession"] != "null").toString());
+
     return Meter(
       type: json["type"],
       location: json["location"],
-      dateOfSuccession: json["dateOfSuccession"] != null ? DateTime.parse(json["dateOfSuccession"]) : null,
+      dateOfSuccession: json["dateOfSuccession"] != "null" ? DateTime.parse(json["dateOfSuccession"]) : null,
       index: json["index"],
       newImages: [],
       images: json["images"] != null ? json["images"].cast<String>() : null,

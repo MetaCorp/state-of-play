@@ -87,6 +87,7 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
                 MyTextFormField(
                   initialValue: widget.meter.location,
                   decoration: InputDecoration(labelText: 'Emplacement'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.meter.location = value,
                   maxLength: 24,
                 ),

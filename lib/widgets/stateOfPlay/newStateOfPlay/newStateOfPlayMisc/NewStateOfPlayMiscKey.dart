@@ -105,6 +105,7 @@ class _NewStateOfPlayMiscKeyState extends State<NewStateOfPlayMiscKey> {
                 MyTextFormField(
                   initialValue: widget.sKey.comments,
                   decoration: InputDecoration(labelText: 'Commentaires'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.sKey.comments = value,
                   maxLength: 256,
                   maxLines: 2,

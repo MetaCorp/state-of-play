@@ -132,6 +132,7 @@ class _NewStateOfPlayDetailsRoomElectricityState extends State<NewStateOfPlayDet
                 MyTextFormField(
                   initialValue: widget.electricity.comments,
                   decoration: InputDecoration(labelText: 'Commentaires'),
+                  textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.electricity.comments = value,
                   maxLength: 256,
                   maxLines: 2,

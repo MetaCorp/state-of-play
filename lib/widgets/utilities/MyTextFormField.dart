@@ -16,6 +16,7 @@ class MyTextFormField extends StatelessWidget {
     this.keyboardType,
     this.maxLines,
     this.minLines,
+    this.textCapitalization = TextCapitalization.none
   }) : super(key: key);
 
   final String initialValue;
@@ -26,6 +27,7 @@ class MyTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final int maxLines;
   final int minLines;
+  final TextCapitalization textCapitalization;
 
 
   @override
@@ -33,6 +35,7 @@ class MyTextFormField extends StatelessWidget {
     return TextFormField(
       initialValue: initialValue,
       decoration: decoration,
+      textCapitalization: textCapitalization,
       onSaved: (value) => onSaved(maxLength != null && value.length > maxLength ? value.substring(0, maxLength) : value),
       validator: validator,
       maxLength: maxLength,

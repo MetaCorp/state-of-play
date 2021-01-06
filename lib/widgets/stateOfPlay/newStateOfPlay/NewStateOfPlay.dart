@@ -10,6 +10,10 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/NewStateOfPlayContent.dart';
 
+void printWrapped(String text) {
+  final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => debugPrint(match.group(0)));
+}
 
 class NewStateOfPlay extends StatefulWidget {
   NewStateOfPlay({ Key key, this.stateOfPlayId, this.out }) : super(key: key);
@@ -540,8 +544,8 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
                 debugPrint("networkResult hasException: " + networkResult.hasException.toString());
                 if (networkResult.hasException) {
                   if (networkResult.exception.graphqlErrors.length > 0) { 
-                    debugPrint("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
-                    debugPrint("networkResult exception: " + networkResult.exception.graphqlErrors[0].extensions.toString());
+                    printWrapped("networkResult exception: " + networkResult.exception.graphqlErrors[0].toString());
+                    printWrapped("networkResult exception: " + networkResult.exception.graphqlErrors[0].extensions.toString());
                   }
                   else
                     debugPrint("networkResult clientException: " + networkResult.exception.clientException.message);
