@@ -27,6 +27,12 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Needed by the lybrarie in charge of pictures</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Needed by the lybrarie in charge of pictures</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Needed by the lybrarie in charge of pictures</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
