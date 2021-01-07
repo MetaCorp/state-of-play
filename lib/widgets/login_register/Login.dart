@@ -57,7 +57,10 @@ class _LoginState extends State<Login> {
       options: MutationOptions(
         documentNode: gql('''
           mutation Login(\$email: String!, \$password: String!) {
-            login(email: \$email, password: \$password)
+            login(email: \$email, password: \$password) {
+              token
+              admin
+            }
           }
         '''), // this is the mutation string you just created
         // you can update the cache based on results
@@ -220,8 +223,8 @@ class _LoginState extends State<Login> {
                           if (networkResult.data["login"] == null) {
                             _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
                           }
-                          else if (networkResult.data["login"] != null) {
-                            _prefs.setString("token", networkResult.data["login"]);
+                          else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
+                            _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
                             Navigator.popAndPushNamed(context, '/state-of-plays');
                           }
                         }

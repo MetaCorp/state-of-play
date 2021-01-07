@@ -84,9 +84,9 @@ class _MyAppState extends State<MyApp> {
     deleteToken();
     
     final HttpLink httpLink = HttpLink(
-      uri: 'https://housely-server.ew.r.appspot.com/graphql'
+      // uri: 'https://housely-server.ew.r.appspot.com/graphql'
       // uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
-      // uri: 'http://$host:4000/graphql',
+      uri: 'http://$host:4000/graphql',
     );
   
     final AuthLink authLink = AuthLink(
