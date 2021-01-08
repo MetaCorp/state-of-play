@@ -312,6 +312,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
             }
 
+          }
+
+          for (var j = 0; j < widget.stateOfPlay.rooms[i].electricities.length; j++) {
 
             for (var k = 0; k < widget.stateOfPlay.rooms[i].electricities[j].images.length; k++) {
               
@@ -333,7 +336,9 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
               });
 
             }
+          }
 
+          for (var j = 0; j < widget.stateOfPlay.rooms[i].equipments.length; j++) {
 
             for (var k = 0; k < widget.stateOfPlay.rooms[i].equipments[j].images.length; k++) {
               
