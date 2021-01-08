@@ -11,6 +11,11 @@ import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
 
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
 
@@ -28,10 +33,20 @@ class _MyScaffoldState extends State<MyScaffold> {
   TextStyle _smallTextStyle = new TextStyle( fontSize: 7 );
   TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold, color: Colors.grey[700]);
         
-  sop.User user;
+  sop.User _user;
+
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    sop.User user = sop.User.fromJSON(jsonDecode(prefs.getString("user")));
+    debugPrint('user.stateOfPlays.length: ' + user.stateOfPlays.length.toString());
+    setState(() {
+      _user = user;
+    });
+  }
 
   @override
   void initState() {
+    getSharedPrefs();
     WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
       Future.delayed(const Duration(seconds: 1), () => FeatureDiscovery.discoverFeatures(
         context,
@@ -51,13 +66,13 @@ class _MyScaffoldState extends State<MyScaffold> {
       child: AlertDialog(
         content: Text("Ajouter plus d'un état des lieux demande d'avoir payé une fois."),
         actions: [
-          new FlatButton(
+          FlatButton(
             child: Text('FERMER'),
             onPressed: () {
               Navigator.pop(context);
             }
           ),
-          new FlatButton(
+          FlatButton(
             child: Text('BOUTIQUE'),
             onPressed: () {
               Navigator.pop(context);
@@ -68,8 +83,51 @@ class _MyScaffoldState extends State<MyScaffold> {
       )
     );
   }
+  
+  void _showDialogLimitBeta(context) async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Text("La création d'état des lieux est limité à 5 pendant la béta. Veuillez nous contacter pour toutes demandes."),
+        actions: [
+          FlatButton(
+            child: Text('FERMER'),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+          ),
+          FlatButton(
+            child: Text('CONTACTER'),
+            onPressed: () async {
+              final Email email = Email(
+                // body: 'Email body',
+                // subject: 'Email subject',
+                recipients: ['housely.contact@gmail.com'],
+                // cc: ['cc@example.com'],
+                // bcc: ['bcc@example.com'],
+                // attachmentPaths: ['/path/to/attachment.zip'],
+                isHTML: false,
+              );
+
+              FlutterEmailSender.send(email);
+              Navigator.pop(context);
+            }
+          )
+        ],
+      )
+    );
+  }
 
   _onFabPress() {
+
+    if (_user == null)
+      return;
+
+    if (_user.stateOfPlays.length >= 5) {
+      _showDialogLimitBeta(context);
+      return;
+    }
+
     if (_bottomSheetOpen) {
       Navigator.pop(context);
       return;
@@ -255,29 +313,30 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
 
-    return Query(
-      options: QueryOptions(
-        documentNode: gql('''
-          query user {
-            user {
-              id
-              firstName
-              lastName
-              email
-              paidOnce
-              stateOfPlays {
-                id
-              }
-              logo
-            }
-          }
-        ''')
-      ),
-      builder: (
-        QueryResult result, {
-        Refetch refetch,
-        FetchMore fetchMore,
-      }) {
+    return
+    // Query(
+    //   options: QueryOptions(
+    //     documentNode: gql('''
+    //       query user {
+    //         user {
+    //           id
+    //           firstName
+    //           lastName
+    //           email
+    //           paidOnce
+    //           stateOfPlays {
+    //             id
+    //           }
+    //           logo
+    //         }
+    //       }
+    //     ''')
+    //   ),
+    //   builder: (
+    //     QueryResult result, {
+    //     Refetch refetch,
+    //     FetchMore fetchMore,
+    //   }) {
 
         // debugPrint('userResult: ' + result.loading.toString());
         // debugPrint('userResult hasException: ' + result.hasException.toString());
@@ -292,41 +351,40 @@ class _MyScaffoldState extends State<MyScaffold> {
         // }
         // debugPrint('');
 
-        if (result.data != null && result.data["user"] != null && !result.loading) {
-          user = sop.User.fromJSON(result.data["user"]);
-          debugPrint('user: ' + user.firstName.toString());
-        }
+        // if (result.data != null && result.data["user"] != null && !result.loading) {
+        //   user = sop.User.fromJSON(result.data["user"]);
+        //   debugPrint('user: ' + user.firstName.toString());
+        // }
         
-        return Scaffold(
-          key: globalKey,
-          appBar: widget.appBar,
-          body: widget.body,
-          drawer: MyDrawer(user: user),
-          floatingActionButton: DescribedFeatureOverlay(
-            featureId: 'add_sop',
-            tapTarget: Icon(Icons.add),
-            title: Text('Réaliser un nouvel état des lieux'),
-            description: Text("Pour réaliser un état des lieux, cliquez sur le bouton + en bas de l'app. Puis choisissez entre état des lieux de sortie ou d'entrée."),
-            onComplete: () async {
-              _onFabPress();
-              return true;
-            },
-            child: FloatingActionButton(
-              // Put animation Icon rotation
-              // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
-              backgroundColor: Theme.of(context).primaryColor,
-              child: _bottomSheetOpen == false ? Icon(
-                Icons.add,
-                color: Colors.black,  
-              ) : Icon(
-                Icons.close,
-                color: Colors.black
-              ),
-              onPressed: _onFabPress,
-            )
-          )
-        );
-      }
+        // return
+    Scaffold(
+      key: globalKey,
+      appBar: widget.appBar,
+      body: widget.body,
+      drawer: MyDrawer(user: _user),
+      floatingActionButton: DescribedFeatureOverlay(
+        featureId: 'add_sop',
+        tapTarget: Icon(Icons.add),
+        title: Text('Réaliser un nouvel état des lieux'),
+        description: Text("Pour réaliser un état des lieux, cliquez sur le bouton + en bas de l'app. Puis choisissez entre état des lieux de sortie ou d'entrée."),
+        onComplete: () async {
+          _onFabPress();
+          return true;
+        },
+        child: FloatingActionButton(
+          // Put animation Icon rotation
+          // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
+          backgroundColor: Theme.of(context).primaryColor,
+          child: _bottomSheetOpen == false ? Icon(
+            Icons.add,
+            color: Colors.black,  
+          ) : Icon(
+            Icons.close,
+            color: Colors.black
+          ),
+          onPressed: () => _onFabPress(),
+        )
+      )
     );
   }
 }

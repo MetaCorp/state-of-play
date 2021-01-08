@@ -4,6 +4,7 @@ import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
@@ -49,7 +50,19 @@ class _RegisterState extends State<Register> {
       options: MutationOptions(
         documentNode: gql('''
           mutation Register(\$data: RegisterInput!) {
-            register(data: \$data)
+            register(data: \$data) {
+              token
+              admin
+              user {
+                firstName
+                lastName
+                email
+                credits
+                stateOfPlays {
+                  id
+                }
+              }
+            }
           }
         '''), // this is the mutation string you just created
         // you can update the cache based on results
@@ -171,8 +184,9 @@ class _RegisterState extends State<Register> {
                           if (networkResult.data["register"] == null) {
                             // TODO: show error
                           }
-                          else if (networkResult.data["register"] != null) {
-                            _prefs.setString("token", networkResult.data["register"]);
+                          else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
+                            await _prefs.setString("token", networkResult.data["register"]["token"]);
+                            await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
                             Navigator.popAndPushNamed(context, '/state-of-plays');
                           }
                         }

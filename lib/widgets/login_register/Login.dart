@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flip_panel/flip_panel.dart';
 import 'dart:math';
 
+import 'dart:convert';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -60,6 +61,15 @@ class _LoginState extends State<Login> {
             login(email: \$email, password: \$password) {
               token
               admin
+              user {
+                firstName
+                lastName
+                email
+                credits
+                stateOfPlays {
+                  id
+                }
+              }
             }
           }
         '''), // this is the mutation string you just created
@@ -224,7 +234,8 @@ class _LoginState extends State<Login> {
                             _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
                           }
                           else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
-                            _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
+                            await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
+                            await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
                             Navigator.popAndPushNamed(context, '/state-of-plays');
                           }
                         }

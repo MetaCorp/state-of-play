@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({ Key key, this.user }) : super(key: key);
@@ -54,6 +55,25 @@ class MyDrawer extends StatelessWidget {
             title: Text('Locataires'),
             leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
+          ),
+          Divider(thickness: .8, indent: 18, endIndent: 18),
+          ListTile(
+            title: Text('Nous contacter'),
+            leading: Icon(Icons.account_circle),
+            onTap: () async {
+              final Email email = Email(
+                // body: 'Email body',
+                // subject: 'Email subject',
+                recipients: ['housely.contact@gmail.com'],
+                // cc: ['cc@example.com'],
+                // bcc: ['bcc@example.com'],
+                // attachmentPaths: ['/path/to/attachment.zip'],
+                isHTML: false,
+              );
+
+              await FlutterEmailSender.send(email);
+              Navigator.pop(context);
+            },
           ),
           // Divider(thickness: 2.0), // TODO
           // ListTile(
