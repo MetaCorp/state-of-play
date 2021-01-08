@@ -32,7 +32,7 @@ class HeaderDiscovery extends StatelessWidget {
             tapTarget: Icon(Icons.add),
             targetColor: Colors.grey[200],
             title: Text('Ajouter une pièce'),
-            description: Text('Pour ajouter une pièce, cliquez sur le bouton +, puis choisissez parmis la liste de pièce pré-remplie'),
+            description: Text('Pour ajouter une pièce, cliquez sur le bouton +, puis choisissez parmi la liste de pièce pré-remplie'),
             onComplete: () async {
               onPressAdd();
               return true;

@@ -68,7 +68,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.reference = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,
@@ -82,7 +82,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.address = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 48,
@@ -97,7 +97,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.postalCode = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 12,
@@ -112,7 +112,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.city = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,
@@ -166,7 +166,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.roomCount = int.parse(value),
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 2,
@@ -181,7 +181,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.area = int.parse(value),
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 12,
@@ -195,7 +195,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.heatingType = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 48,
@@ -209,7 +209,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 onSaved: (value) => widget.property.hotWater = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 48,

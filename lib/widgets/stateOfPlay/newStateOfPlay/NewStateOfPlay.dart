@@ -365,12 +365,16 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           ) {
             // debugPrint('NewStateOfPlay: ' + widget.stateOfPlayId);
 
+            // debugPrint('new stateOfPlay user logo: ' + user.logo.toString());
             if (_stateOfPlay == null) {
-              debugPrint('new stateOfPlay: ' + user.logo.toString());
+              // debugPrint('new stateOfPlay2 user logo: ' + user.logo.toString());
               _stateOfPlay = _stateOfPlay2;
               _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
               _stateOfPlay.documentEnd = user.documentEnd != null ? user.documentEnd : _stateOfPlay.documentEnd;
+            }
+
+            if (_stateOfPlay != null && _stateOfPlay.logo == null) {
               _stateOfPlay.logo = user.logo;
             }
             
@@ -640,11 +644,11 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
           FetchMore fetchMore,
         }) {
 
-          debugPrint('newStateOfPlay: ' + _stateOfPlay.toString() + ' ' + result.data.toString());
-          if (_stateOfPlay == null && result.data != null) {
-            debugPrint('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
+          // debugPrint('newStateOfPlay: ' + _stateOfPlay.toString() + ' ' + result.data.toString());
+          if (_stateOfPlay == null && result.data != null && result.data["stateOfPlay"] != null) {
+            // debugPrint('load old StateOfPlay: ' + result.data["stateOfPlay"].toString());
             _stateOfPlay = sop.StateOfPlay.fromJSON(result.data["stateOfPlay"]);
-            debugPrint('loaded stateOfPlay: ' + _stateOfPlay.toString());
+            // debugPrint('loaded stateOfPlay: ' + _stateOfPlay.toString());
           }
 
           if (result.hasException) {

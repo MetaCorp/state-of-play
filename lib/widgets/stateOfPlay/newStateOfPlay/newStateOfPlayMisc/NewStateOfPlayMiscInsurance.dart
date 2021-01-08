@@ -47,6 +47,7 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
                   decoration: InputDecoration(labelText: "Compagnie d'assurance"),
                   initialValue: widget.insurance.company,
                   onSaved: (value) => widget.insurance.company = value,
+                  textCapitalization: TextCapitalization.sentences,
                   maxLength: 24,
                 ),
                 SizedBox(

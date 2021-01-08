@@ -110,7 +110,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               children: [
                 ListTile(
                   leading: Icon(Icons.photo_library),
-                  title: Text('Gallerie'),
+                  title: Text('Galerie'),
                   onTap: () {
                     widget.isMultiSelection ? _imgsFromGallery() : _imgFromGallery();
                     Navigator.of(context).pop();

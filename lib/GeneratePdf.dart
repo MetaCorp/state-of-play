@@ -59,8 +59,6 @@ const StateOfPlayOptions stateOfPlayOptions = StateOfPlayOptions(
   'assets/images/logo.png'
 );
 
-pw.Document pdf;
-
 Future<File> _saveAsFile(pdf) async {
   
   final Uint8List bytes = pdf.save();
@@ -364,7 +362,7 @@ pw.Widget _buildKeys({ List<sop.Key> keys, PdfImage logo }) {
   );
 }
 
-Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) async {
+Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo, pw.Document pdf }) async {
 
   debugPrint('imagesType: ' + imagesType.toString());
 
@@ -433,6 +431,7 @@ Future<pw.Widget> _buildPhotos({ List<dynamic> imagesType, PdfImage logo }) asyn
 }
 
 Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
+  pw.Document pdf;
   pdf = pw.Document();
   // TODO: Load Image From Internet
   // http.Response response = await http.get(
@@ -486,7 +485,7 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
     ]
   )).toList();
 
-  pw.Widget _photos = await _buildPhotos(imagesType: stateOfPlay.images, logo: logo);
+  pw.Widget _photos = await _buildPhotos(imagesType: stateOfPlay.images, logo: logo, pdf: pdf);
   
   pdf.addPage(
     pw.MultiPage(

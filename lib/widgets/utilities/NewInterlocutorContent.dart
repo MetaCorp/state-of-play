@@ -71,7 +71,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.firstName = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,
@@ -86,7 +86,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.lastName = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,
@@ -101,7 +101,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.company = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,
@@ -115,7 +115,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.address = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 48,
@@ -130,7 +130,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.postalCode = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 12,
@@ -145,7 +145,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 onSaved: (value) => widget.interlocutor.city = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,

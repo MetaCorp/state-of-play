@@ -166,7 +166,7 @@ class _AccountState extends State<Account> {
                               onSaved: (value) => user.firstName = value,
                               validator: (value) {
                                 if (value == null || value == "")
-                                  return "Ce champs est obligatoire.";
+                                  return "Ce champ est obligatoire.";
                                 return null;
                               },
                               maxLength: 24,
@@ -180,7 +180,7 @@ class _AccountState extends State<Account> {
                               onSaved: (value) => user.lastName = value,
                               validator: (value) {
                                 if (value == null || value == "")
-                                  return "Ce champs est obligatoire.";
+                                  return "Ce champ est obligatoire.";
                                 return null;
                               },
                               maxLength: 24,

@@ -66,7 +66,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 keyboardType: TextInputType.multiline,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 256,
@@ -81,7 +81,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 keyboardType: TextInputType.multiline,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 1024,
@@ -119,7 +119,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 onSaved: (value) => widget.stateOfPlay.city = value,
                 validator: (value) {
                   if (value == null || value == "")
-                    return "Ce champs est obligatoire.";
+                    return "Ce champ est obligatoire.";
                   return null;
                 },
                 maxLength: 24,

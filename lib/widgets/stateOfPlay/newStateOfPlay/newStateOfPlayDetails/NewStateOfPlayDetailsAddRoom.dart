@@ -290,7 +290,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               featureId: 'search_room',
               tapTarget: Icon(Icons.touch_app),
               title: Text('Rechercher une pièce'),
-              description: Text("Pour rechercher une pièce, entrez votre recherche dans ce champs texte."),
+              description: Text("Pour rechercher une pièce, cliquez sur le champ texte en haut de l'app."),
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
@@ -315,7 +315,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                 featureId: 'add_newroom',
                 tapTarget: Icon(Icons.add),
                 title: Text('Ajouter une nouvelle pièce à la liste de référence'),
-                description: Text("Si la pièce que vous chercher n'est pas présente dans la liste de référence pré-remplie. Vous pouvez l'ajouter en cliquant sur le +."),
+                description: Text("Si la pièce que vous chercher n'est pas dans la liste de référence pré-remplie. Vous pouvez l'ajouter en cliquant sur le +."),
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () => _showDialogNewRoom(context)

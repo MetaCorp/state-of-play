@@ -293,7 +293,7 @@
 // // sop.Decorations deco = sop.Decorations.values[0];
 // // int enumInt = sop.Decorations.values.indexOf(sop.Decorations.ceiling)
 
-// // MAIS pb si on ajoute un champs à l'enum, cela demandera de maj la bdd
+// // MAIS pb si on ajoute un champ à l'enum, cela demandera de maj la bdd
 
 // // solution 2 : https://medium.com/@amir.n3t/advanced-enums-in-flutter-a8f2e2702ffd
 
