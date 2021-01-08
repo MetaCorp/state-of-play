@@ -276,11 +276,12 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         return;
       }
 
-      bool ret = false;
+      // bool ret = false;// TODO: reactivate credits obligation
+      bool ret = true;
       // TODO : abonnement LEO
-      if (widget.user.credits == 0) {
-        ret = await _showDialogPay(context);
-      }
+      // if (widget.user.credits == 0) {
+      //   ret = await _showDialogPay(context);
+      // }
 
       if (ret || widget.user.credits > 0) {
 

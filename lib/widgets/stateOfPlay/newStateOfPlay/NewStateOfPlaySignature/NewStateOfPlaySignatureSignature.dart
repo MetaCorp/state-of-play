@@ -43,7 +43,7 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
         // TODO center title not working
         centerTitle: true,
         title: Text(widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName),
-        actions : [
+        actions: [
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () async {
@@ -52,7 +52,7 @@ class _NewStateOfPlaySignatureSignatureState extends State<NewStateOfPlaySignatu
             },
           ),
         ],
-      ),    
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -35,7 +35,7 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
               icon: Icon(Icons.check),
               onPressed: _onSave
             )
-          ],
+          ]
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),

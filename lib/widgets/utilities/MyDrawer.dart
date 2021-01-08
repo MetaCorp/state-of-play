@@ -55,12 +55,12 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
           ),
-          Divider(thickness: 2.0),
-          ListTile(
-            title: Text('Boutique'),
-            leading: Icon(Icons.shop),
-            onTap: () => Navigator.popAndPushNamed(context, '/shop'),
-          ),
+          // Divider(thickness: 2.0), // TODO
+          // ListTile(
+          //   title: Text('Boutique'),
+          //   leading: Icon(Icons.shop),
+          //   onTap: () => Navigator.popAndPushNamed(context, '/shop'),
+          // ),
           Divider(thickness: 2.0),
           // TODO align not working
           ListTile(
