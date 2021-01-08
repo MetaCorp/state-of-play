@@ -487,7 +487,7 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
                 featureId: 'navigate_newsop',
                 tapTarget: Icon(Icons.group),
                 title: Text("Naviguez"),
-                description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la bar en bas de l'app."),
+                description: Text("Pour naviguer facilement entre les différentes étapes de la création d'un état des lieux, utilisez la barre en bas de l'app."),
                 child: Icon(Icons.group),
                 // SizedBox(
                 //     height: 30,
