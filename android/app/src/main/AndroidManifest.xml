@@ -12,7 +12,10 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Housely"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        >
+        <!-- For Android API > 29 for image_picker in Application tag :-->
+        <!-- android:requestLegacyExternalStorage="true" -->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -49,6 +52,6 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2" />    
     </application>
 </manifest>
