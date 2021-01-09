@@ -313,78 +313,79 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
 
-    return
-    // Query(
-    //   options: QueryOptions(
-    //     documentNode: gql('''
-    //       query user {
-    //         user {
-    //           id
-    //           firstName
-    //           lastName
-    //           email
-    //           paidOnce
-    //           stateOfPlays {
-    //             id
-    //           }
-    //           logo
-    //         }
-    //       }
-    //     ''')
-    //   ),
-    //   builder: (
-    //     QueryResult result, {
-    //     Refetch refetch,
-    //     FetchMore fetchMore,
-    //   }) {
+    return Query(
+      options: QueryOptions(
+        documentNode: gql('''
+          query user {
+            user {
+              id
+              firstName
+              lastName
+              email
+              paidOnce
+              stateOfPlays {
+                id
+              }
+              logo
+            }
+          }
+        ''')
+      ),
+      builder: (
+        QueryResult result, {
+        Refetch refetch,
+        FetchMore fetchMore,
+      }) {
 
-        // debugPrint('userResult: ' + result.loading.toString());
-        // debugPrint('userResult hasException: ' + result.hasException.toString());
-        // debugPrint('userResult data: ' + result.data.toString());
-        // if (result.hasException) {
-        //   if (result.exception.graphqlErrors.length > 0) { 
-        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
-        //     debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
-        //   }
-        //   else
-        //     debugPrint("userResult clientException: " + result.exception.clientException.message);
-        // }
-        // debugPrint('');
+        debugPrint('userResult: ' + result.loading.toString());
+        debugPrint('userResult hasException: ' + result.hasException.toString());
+        debugPrint('userResult data: ' + result.data.toString());
+        if (result.hasException) {
+          if (result.exception.graphqlErrors.length > 0) { 
+            debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
+            debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+          }
+          else
+            debugPrint("userResult clientException: " + result.exception.clientException.message);
+        }
+        debugPrint('');
 
-        // if (result.data != null && result.data["user"] != null && !result.loading) {
-        //   user = sop.User.fromJSON(result.data["user"]);
-        //   debugPrint('user: ' + user.firstName.toString());
-        // }
+        if (result.data != null && result.data["user"] != null && !result.loading) {
+          _user = sop.User.fromJSON(result.data["user"]);
+          debugPrint('user: ' + _user.firstName.toString());
+        }
         
         // return
-    Scaffold(
-      key: globalKey,
-      appBar: widget.appBar,
-      body: widget.body,
-      drawer: MyDrawer(user: _user),
-      floatingActionButton: DescribedFeatureOverlay(
-        featureId: 'add_sop',
-        tapTarget: Icon(Icons.add),
-        title: Text('Réaliser un nouvel état des lieux'),
-        description: Text("Pour réaliser un état des lieux, cliquez sur le bouton + en bas de l'app. Puis choisissez entre état des lieux de sortie ou d'entrée."),
-        onComplete: () async {
-          _onFabPress();
-          return true;
-        },
-        child: FloatingActionButton(
-          // Put animation Icon rotation
-          // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
-          backgroundColor: Theme.of(context).primaryColor,
-          child: _bottomSheetOpen == false ? Icon(
-            Icons.add,
-            color: Colors.black,  
-          ) : Icon(
-            Icons.close,
-            color: Colors.black
-          ),
-          onPressed: () => _onFabPress(),
-        )
-      )
+        Scaffold(
+          key: globalKey,
+          appBar: widget.appBar,
+          body: widget.body,
+          drawer: MyDrawer(user: _user),
+          floatingActionButton: DescribedFeatureOverlay(
+            featureId: 'add_sop',
+            tapTarget: Icon(Icons.add),
+            title: Text('Réaliser un nouvel état des lieux'),
+            description: Text("Pour réaliser un état des lieux, cliquez sur le bouton + en bas de l'app. Puis choisissez entre état des lieux de sortie ou d'entrée."),
+            onComplete: () async {
+              _onFabPress();
+              return true;
+            },
+            child: FloatingActionButton(
+              // Put animation Icon rotation
+              // https://stackoverflow.com/questions/57585755/how-do-i-configure-flutters-showmodalbottomsheet-opening-closing-animation
+              backgroundColor: Theme.of(context).primaryColor,
+              child: _bottomSheetOpen == false ? Icon(
+                Icons.add,
+                color: Colors.black,  
+              ) : Icon(
+                Icons.close,
+                color: Colors.black
+              ),
+              onPressed: () => _onFabPress(),
+            )
+          )
+        );
+      }
     );
   }
 }
