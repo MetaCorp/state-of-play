@@ -27,6 +27,7 @@ class _RegisterState extends State<Register> {
   // TextEditingController _firstNameController = TextEditingController(text: 'bob1');
   // TextEditingController _lastNameController = TextEditingController(text: 'Name');
 
+  bool _isPro = false;
 
   SharedPreferences _prefs;
 
@@ -58,6 +59,7 @@ class _RegisterState extends State<Register> {
                 lastName
                 email
                 credits
+                isPro
                 stateOfPlays {
                   id
                 }
@@ -90,6 +92,7 @@ class _RegisterState extends State<Register> {
           if (result.exception.graphqlErrors[0].extensions != null &&
               result.exception.graphqlErrors[0].extensions["exception"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"]["IsEmailAlreadyExistConstraint"] != null)
             _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Email déjà utilisé.")));
@@ -116,6 +119,18 @@ class _RegisterState extends State<Register> {
                 children: [
                   SizedBox(
                     height: 18,
+                  ),
+                  CheckboxListTile(
+                    title: Text("Professionnel"),
+                    value: _isPro,
+                    onChanged: (value) {
+                      setState(() {
+                        _isPro = value; 
+                      }); 
+                    },
+                  ),
+                  SizedBox(
+                    height: 28,
                   ),
                   TextField(
                     controller: _emailController,
@@ -170,7 +185,8 @@ class _RegisterState extends State<Register> {
                           "email": _emailController.text,
                           "firstName": _firstNameController.text,
                           "lastName": _lastNameController.text,
-                          "password": _passwordController.text
+                          "password": _passwordController.text,
+                          "isPro": _isPro
                         }
                       });
 
@@ -187,7 +203,10 @@ class _RegisterState extends State<Register> {
                           else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
                             await _prefs.setString("token", networkResult.data["register"]["token"]);
                             await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
-                            Navigator.popAndPushNamed(context, '/state-of-plays');
+                            if (networkResult.data["register"]["user"]["isPro"])
+                              Navigator.popAndPushNamed(context, '/accounts');
+                            else
+                              Navigator.popAndPushNamed(context, '/state-of-plays');
                           }
                         }
                       }

@@ -34,13 +34,16 @@ class _MyScaffoldState extends State<MyScaffold> {
   TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold, color: Colors.grey[700]);
         
   sop.User _user;
+  dynamic _account;
 
   Future<Null> getSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     sop.User user = sop.User.fromJSON(jsonDecode(prefs.getString("user")));
+    dynamic account = prefs.getString("account") != null ? jsonDecode(prefs.getString("account")) : null;
     debugPrint('user.stateOfPlays.length: ' + user.stateOfPlays.length.toString());
     setState(() {
       _user = user;
+      _account = account;
     });
   }
 
@@ -360,7 +363,7 @@ class _MyScaffoldState extends State<MyScaffold> {
           key: globalKey,
           appBar: widget.appBar,
           body: widget.body,
-          drawer: MyDrawer(user: _user),
+          drawer: MyDrawer(user: _user, account: _account),
           floatingActionButton: DescribedFeatureOverlay(
             featureId: 'add_sop',
             tapTarget: Icon(Icons.add),

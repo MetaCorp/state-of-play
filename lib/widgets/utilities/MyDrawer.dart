@@ -3,9 +3,10 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({ Key key, this.user }) : super(key: key);
+  const MyDrawer({ Key key, this.user, this.account }) : super(key: key);
 
   final sop.User user;
+  final dynamic account;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,9 @@ class MyDrawer extends StatelessWidget {
              // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(// TODO : change Account
             accountEmail: Text(user.email), //to keep since needed
-            accountName: Text(user.firstName + ' ' + user.lastName),
+            accountName: account != null ? Text(account["firstName"] + ' ' + account["lastName"]) : Text(user.firstName + ' ' + user.lastName),
             currentAccountPicture: user != null ? CircleAvatar(
               radius: 30.0,
               backgroundImage: user.logo != null ? NetworkImage(user.logo) : null,

@@ -8,7 +8,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Account extends StatefulWidget {

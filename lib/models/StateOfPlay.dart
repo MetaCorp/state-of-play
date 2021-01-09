@@ -652,6 +652,7 @@ class User {
     this.newLogo,
     this.email,
     this.credits,
+    this.accounts
   });
 
   String firstName;
@@ -668,6 +669,7 @@ class User {
   bool paidOnce;
   String logo;
   int credits;
+  List<dynamic> accounts;
 
   File newLogo;
 
@@ -688,7 +690,8 @@ class User {
       logo: json["logo"],
       newLogo: null,
       email: json["email"],
-      credits: json["credits"]
+      credits: json["credits"],
+      accounts: json["accounts"] == null || json["accounts"] == "[]" ? [] : jsonDecode(json["accounts"])
     );
   }
 }

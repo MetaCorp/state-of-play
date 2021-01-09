@@ -44,6 +44,8 @@ import 'package:flutter_tests/widgets/settings/Settings.dart';
 
 import 'package:flutter_tests/widgets/shop/Shop.dart';
 
+import 'package:flutter_tests/widgets/accounts/Accounts.dart';
+
 import 'package:stripe_payment/stripe_payment.dart' as stripe;
 
 
@@ -242,6 +244,9 @@ class _MyAppState extends State<MyApp> {
 
             else if (settings.name == '/shop')
               return PageRouteBuilder(pageBuilder: (_, __, ___) => Shop());
+
+            else if (settings.name == '/accounts')
+              return PageRouteBuilder(pageBuilder: (_, __, ___) => Accounts());
 
             return null;
           }
