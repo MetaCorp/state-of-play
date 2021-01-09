@@ -163,6 +163,8 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
 
   Future<bool> _showDialogConfirmPay(context) async {
     
+    final bool isTablet = MediaQuery.of(context).size.shortestSide > 600;
+
     return await showDialog(
       context: context,
       child: AlertDialog(
@@ -172,8 +174,8 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
           children: [
             Text("Vous vous apprétez à dépenser 1 crédit pour la génération du pdf d'état des lieux. (" + widget.user.credits.toString() + " crédit" + (widget.user.credits > 1 ? "s": "") + " disponible" + (widget.user.credits > 1 ? "s": "") + ".)"),
             SizedBox(height: 16),
-            Container(  
-              height: 300,  
+            Container(// TODO calculate height when the device is in landscape mode
+              height: (MediaQuery.of(context).size.width - (isTablet ? 96 : 64) * 2) * 29.7 / 21,// 96 : approximate padding left & right
               decoration: BoxDecoration(// TODO: can't use a Flexible inside BoxDecoration
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
