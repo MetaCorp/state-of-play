@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayRoomDetailsAddDecoration/NewStateOfPlayRoomDetailsAddDecorationContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -237,22 +236,41 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                 RunMutation runDeleteMutation,
                 QueryResult mutationResult,
               ) {
-                return NewStateOfPlayDetailsRoomAddDecorationContent(
-                  decorations: decorations,
-                  selectedDecorations: _selectedDecorations,
-                  onDelete: (decoration) => _showDialogDelete(context, decoration, runDeleteMutation, refetch),
-                  onSelect: (decorationId) => {
-                    setState(() {
-                      if (!_selectedDecorations.contains(decorationId))
-                        _selectedDecorations.add(decorationId);
-                      else
-                        _selectedDecorations.remove(decorationId);
-                    })
+                return ListView.separated(
+                  padding: EdgeInsets.only(top: 8),
+                  itemCount: decorations.length,
+                  itemBuilder: (_, i) => Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      title: Text(decorations[i]["type"]),
+                      selected: _selectedDecorations.contains(decorations[i]["id"]),
+                      onTap: () {
+                        setState(() {
+                          if (!_selectedDecorations.contains(decorations[i]["id"]))
+                            _selectedDecorations.add(decorations[i]["id"]);
+                          else
+                            _selectedDecorations.remove(decorations[i]["id"]);
+                        });
+                      },
+                    ),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: 'Supprimer',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _showDialogDelete(context, decorations[i], runDeleteMutation, refetch),
+                      )
+                    ]
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Divider();
                   },
                 );
               }
             );
           }
+
         }
 
         return Scaffold(
@@ -290,7 +308,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
             ],
             backgroundColor: Colors.grey,
           ),
-          body: body,
+          body: body
         );
       }
     );
