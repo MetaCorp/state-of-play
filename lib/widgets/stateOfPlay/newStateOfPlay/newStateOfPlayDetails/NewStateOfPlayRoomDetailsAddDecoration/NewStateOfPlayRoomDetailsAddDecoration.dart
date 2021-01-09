@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayRoomDetailsAddDecoration/NewStateOfPlayRoomDetailsAddDecorationContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
-class NewStateOfPlayDetailsRoomAddEquipment extends StatefulWidget {
-  NewStateOfPlayDetailsRoomAddEquipment({ Key key, this.onSelect }) : super(key: key);
+class NewStateOfPlayDetailsRoomAddDecoration extends StatefulWidget {
+  NewStateOfPlayDetailsRoomAddDecoration({ Key key, this.onSelect }) : super(key: key);
 
   final SelectCallback onSelect;
 
   @override
-  _NewStateOfPlayDetailsRoomAddEquipmentState createState() => _NewStateOfPlayDetailsRoomAddEquipmentState();
+  _NewStateOfPlayDetailsRoomAddDecorationState createState() => _NewStateOfPlayDetailsRoomAddDecorationState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDetailsRoomAddEquipment> {
+class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayDetailsRoomAddDecoration> {
 
   TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newEquipmentController = TextEditingController(text: "");
+  TextEditingController _newDecorationController = TextEditingController(text: "");
 
-  List<String> _selectedEquipments = [];
+  List<String> _selectedDecorations = []; 
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, equipment, RunMutation runDeleteMutation, Refetch refetch) async {
+  void _showDialogDelete(context, decoration, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            content: Text("Supprimer '" + equipment["type"] + "' ?"),
+            content: Text("Supprimer '" + decoration["type"] + "' ?"),
             actions: [
               FlatButton(
                 child: Text('ANNULER'),
@@ -48,7 +49,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                   setState(() { _deleteLoading = true; });
                   MultiSourceResult mutationResult = runDeleteMutation({
                     "data": {
-                      "equipmentId": equipment["id"],
+                      "decorationId": decoration["id"],
                     }
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
@@ -65,10 +66,10 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                   else {
                     debugPrint('queryResult data: ' + networkResult.data.toString());
                     if (networkResult.data != null) {
-                      if (networkResult.data["deleteEquipment"] == null) {
+                      if (networkResult.data["deleteDecoration"] == null) {
                         // TODO: show error
                       }
-                      else if (networkResult.data["deleteEquipment"] != null) {
+                      else if (networkResult.data["deleteDecoration"] != null) {
                         Navigator.pop(context);
                         setState(() { });
                         // Navigator.popAndPushNamed(context, '/tenants');// To refresh
@@ -94,7 +95,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
   _onAdd(runMutation) async {
     MultiSourceResult result = runMutation({
       "data": {
-        "type": _newEquipmentController.text
+        "type": _newDecorationController.text
       }
     });
 
@@ -103,17 +104,17 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
     setState(() { });
     Navigator.pop(context);
 
-    _newEquipmentController.text = "";
+    _newDecorationController.text = "";
   }
 
-  void _showDialogNewEquipment (context) async {
+  void _showDialogNewDecoration (context) async {
     await showDialog(
       context: context,
       child: Mutation(
         options: MutationOptions(
           documentNode: gql('''
-            mutation createEquipment(\$data: CreateEquipmentInput!) {
-              createEquipment(data: \$data) {
+            mutation createDecoration(\$data: CreateDecorationInput!) {
+              createDecoration(data: \$data) {
                 id
                 type
               }
@@ -132,10 +133,10 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
             
           return AlertDialog(
             content: TextField(
-              controller: _newEquipmentController,
+              controller: _newDecorationController,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: "Entrez un nom d'équipement"
+                labelText: "Entrez un nom de décoration"
               ),
               onSubmitted: (value) => _onAdd(runMutation),
             ),
@@ -143,7 +144,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               new FlatButton(
                 child: Text('ANNULER'),
                 onPressed: () {
-                  _newEquipmentController.text = "";
+                  _newDecorationController.text = "";
                   Navigator.pop(context);
                 }
               ),
@@ -163,8 +164,8 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query equipments(\$filter: EquipmentsFilterInput!) {
-            equipments (filter: \$filter) {
+          query decorations(\$filter: DecorationsFilterInput!) {
+            decorations (filter: \$filter) {
               id
               type
             }
@@ -189,7 +190,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
         debugPrint('data: ' + result.data.toString());
         debugPrint('');
 
-        List<Map> equipments;
+        List<Map> decorations;
 
         if (result.hasException) {
           body = Text(result.exception.toString());
@@ -198,14 +199,13 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
           body = Center(child: CircularProgressIndicator());
         }
         else {
-
-          equipments = (result.data["equipments"] as List).map((equipment) => {
-            "id": equipment["id"],
-            "type": equipment["type"],
+          decorations = (result.data["decorations"] as List).map((decoration) => {
+            "id": decoration["id"],
+            "type": decoration["type"],
           }).toList();
-          debugPrint('equipments length: ' + equipments.length.toString());
+          debugPrint('decorations length: ' + decorations.length.toString());
 
-          if (equipments.length == 0) {
+          if (decorations.length == 0) {
             body = Container(
               alignment: Alignment.center,
               child: Text(
@@ -220,8 +220,8 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
             body = Mutation(
               options: MutationOptions(
                 documentNode: gql('''
-                  mutation deleteEquipment(\$data: DeleteEquipmentInput!) {
-                    deleteEquipment(data: \$data)
+                  mutation deleteDecoration(\$data: DeleteDecorationInput!) {
+                    deleteDecoration(data: \$data)
                   }
                 '''), // this is the mutation string you just created
                 // you can update the cache based on results
@@ -238,41 +238,22 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  padding: EdgeInsets.only(top: 8),
-                  itemCount: equipments.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      title: Text(equipments[i]["type"]),
-                      selected: _selectedEquipments.contains(equipments[i]["id"]),
-                      onTap: () {
-                        setState(() {
-                          if (!_selectedEquipments.contains(equipments[i]["id"]))
-                            _selectedEquipments.add(equipments[i]["id"]);
-                          else
-                            _selectedEquipments.remove(equipments[i]["id"]);
-                        });
-                      },
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, equipments[i], runDeleteMutation, refetch),
-                      )
-                    ]
-                  ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                return NewStateOfPlayDetailsRoomAddDecorationContent(
+                  decorations: decorations,
+                  selectedDecorations: _selectedDecorations,
+                  onDelete: (decoration) => _showDialogDelete(context, decoration, runDeleteMutation, refetch),
+                  onSelect: (decorationId) => {
+                    setState(() {
+                      if (!_selectedDecorations.contains(decorationId))
+                        _selectedDecorations.add(decorationId);
+                      else
+                        _selectedDecorations.remove(decorationId);
+                    })
                   },
                 );
               }
             );
           }
-
         }
 
         return Scaffold(
@@ -285,8 +266,8 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newEquipments) => ({
-                    "equipments": newEquipments["equipments"]
+                  updateQuery: (existing, newDecorations) => ({
+                    "decorations": newDecorations["decorations"]
                   }),
                 ));
               }
@@ -298,19 +279,19 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewEquipment(context)
+                onPressed: () => _showDialogNewDecoration(context)
               ),
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],
             backgroundColor: Colors.grey,
           ),
-          body: body
+          body: body,
         );
       }
     );

@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewSTateOfPlayRoomDetailsAddEquipement/NewStateOfPlayDetailsRoomAddEquipmentContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
-class NewStateOfPlayMiscAddKey extends StatefulWidget {
-  NewStateOfPlayMiscAddKey({ Key key, this.onSelect }) : super(key: key);
+class NewStateOfPlayDetailsRoomAddEquipment extends StatefulWidget {
+  NewStateOfPlayDetailsRoomAddEquipment({ Key key, this.onSelect }) : super(key: key);
 
   final SelectCallback onSelect;
 
   @override
-  _NewStateOfPlayMiscAddKeyState createState() => _NewStateOfPlayMiscAddKeyState();
+  _NewStateOfPlayDetailsRoomAddEquipmentState createState() => _NewStateOfPlayDetailsRoomAddEquipmentState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
+class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDetailsRoomAddEquipment> {
 
   TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newKeyController = TextEditingController(text: "");
+  TextEditingController _newEquipmentController = TextEditingController(text: "");
 
-  List<String> _selectedKeys = [];
+  List<String> _selectedEquipments = [];
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, key, RunMutation runDeleteMutation, Refetch refetch) async {
+  void _showDialogDelete(context, equipment, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            content: Text("Supprimer '" + key["type"] + "' ?"),
+            content: Text("Supprimer '" + equipment["type"] + "' ?"),
             actions: [
               FlatButton(
                 child: Text('ANNULER'),
@@ -48,7 +49,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
                   setState(() { _deleteLoading = true; });
                   MultiSourceResult mutationResult = runDeleteMutation({
                     "data": {
-                      "keyId": key["id"],
+                      "equipmentId": equipment["id"],
                     }
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
@@ -65,10 +66,10 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
                   else {
                     debugPrint('queryResult data: ' + networkResult.data.toString());
                     if (networkResult.data != null) {
-                      if (networkResult.data["deleteKey"] == null) {
+                      if (networkResult.data["deleteEquipment"] == null) {
                         // TODO: show error
                       }
-                      else if (networkResult.data["deleteKey"] != null) {
+                      else if (networkResult.data["deleteEquipment"] != null) {
                         Navigator.pop(context);
                         setState(() { });
                         // Navigator.popAndPushNamed(context, '/tenants');// To refresh
@@ -94,7 +95,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
   _onAdd(runMutation) async {
     MultiSourceResult result = runMutation({
       "data": {
-        "type": _newKeyController.text
+        "type": _newEquipmentController.text
       }
     });
 
@@ -103,17 +104,17 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
     setState(() { });
     Navigator.pop(context);
 
-    _newKeyController.text = "";
+    _newEquipmentController.text = "";
   }
 
-  void _showDialogNewKey (context) async {
+  void _showDialogNewEquipment (context) async {
     await showDialog(
       context: context,
       child: Mutation(
         options: MutationOptions(
           documentNode: gql('''
-            mutation createKey(\$data: CreateKeyInput!) {
-              createKey(data: \$data) {
+            mutation createEquipment(\$data: CreateEquipmentInput!) {
+              createEquipment(data: \$data) {
                 id
                 type
               }
@@ -132,10 +133,10 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
             
           return AlertDialog(
             content: TextField(
-              controller: _newKeyController,
+              controller: _newEquipmentController,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: "Entrez un nom de clé"
+                labelText: "Entrez un nom d'équipement"
               ),
               onSubmitted: (value) => _onAdd(runMutation),
             ),
@@ -143,7 +144,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               new FlatButton(
                 child: Text('ANNULER'),
                 onPressed: () {
-                  _newKeyController.text = "";
+                  _newEquipmentController.text = "";
                   Navigator.pop(context);
                 }
               ),
@@ -163,8 +164,8 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query keys(\$filter: KeysFilterInput!) {
-            keys (filter: \$filter) {
+          query equipments(\$filter: EquipmentsFilterInput!) {
+            equipments (filter: \$filter) {
               id
               type
             }
@@ -189,7 +190,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
         debugPrint('data: ' + result.data.toString());
         debugPrint('');
 
-        List<Map> keys;
+        List<Map> equipments;
 
         if (result.hasException) {
           body = Text(result.exception.toString());
@@ -199,13 +200,13 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
         }
         else {
 
-          keys = (result.data["keys"] as List).map((key) => {
-            "id": key["id"],
-            "type": key["type"],
+          equipments = (result.data["equipments"] as List).map((equipment) => {
+            "id": equipment["id"],
+            "type": equipment["type"],
           }).toList();
-          debugPrint('keys length: ' + keys.length.toString());
+          debugPrint('equipments length: ' + equipments.length.toString());
 
-          if (keys.length == 0) {
+          if (equipments.length == 0) {
             body = Container(
               alignment: Alignment.center,
               child: Text(
@@ -220,8 +221,8 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
             body = Mutation(
               options: MutationOptions(
                 documentNode: gql('''
-                  mutation deleteKey(\$data: DeleteKeyInput!) {
-                    deleteKey(data: \$data)
+                  mutation deleteEquipment(\$data: DeleteEquipmentInput!) {
+                    deleteEquipment(data: \$data)
                   }
                 '''), // this is the mutation string you just created
                 // you can update the cache based on results
@@ -238,35 +239,17 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  padding: EdgeInsets.only(top: 8),
-                  itemCount: keys.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      title: Text(keys[i]["type"]),
-                      selected: _selectedKeys.contains(keys[i]["id"]),
-                      onTap: () {
-                        setState(() {
-                          if (!_selectedKeys.contains(keys[i]["id"]))
-                            _selectedKeys.add(keys[i]["id"]);
-                          else
-                            _selectedKeys.remove(keys[i]["id"]);
-                        });
-                      },
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, keys[i], runDeleteMutation, refetch),
-                      )
-                    ]
-                  ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                return NewStateOfPlayDetailsRoomAddEquipmentContent(
+                  equipments: equipments,
+                  selectedEquipments: _selectedEquipments,
+                  onDelete: (equipment) => _showDialogDelete(context, equipment, runDeleteMutation, refetch),
+                  onSelect: (equipmentId) => {
+                    setState(() {
+                      if (!_selectedEquipments.contains(equipmentId))
+                        _selectedEquipments.add(equipmentId);
+                      else
+                        _selectedEquipments.remove(equipmentId);
+                    })
                   },
                 );
               }
@@ -285,8 +268,8 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newKeys) => ({
-                    "keys": newKeys["keys"]
+                  updateQuery: (existing, newEquipments) => ({
+                    "equipments": newEquipments["equipments"]
                   }),
                 ));
               }
@@ -298,13 +281,13 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewKey(context)
+                onPressed: () => _showDialogNewEquipment(context)
               ),
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],
