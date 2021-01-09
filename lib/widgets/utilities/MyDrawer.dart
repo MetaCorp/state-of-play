@@ -21,6 +21,12 @@ class MyDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(// TODO : change Account
             accountEmail: Text(user.email), //to keep since needed
             accountName: account != null ? Text(account["firstName"] + ' ' + account["lastName"]) : Text(user.firstName + ' ' + user.lastName),
+            otherAccountsPictures: [
+              account != null ? IconButton(
+                icon: Icon(Icons.supervised_user_circle),
+                onPressed: () => Navigator.popAndPushNamed(context, '/accounts'),
+              ) : Container()
+            ],
             currentAccountPicture: user != null ? CircleAvatar(
               radius: 30.0,
               backgroundImage: user.logo != null ? NetworkImage(user.logo) : null,
