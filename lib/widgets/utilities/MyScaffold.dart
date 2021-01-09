@@ -356,7 +356,7 @@ class _MyScaffoldState extends State<MyScaffold> {
         }
         
         // return
-        Scaffold(
+        return Scaffold(
           key: globalKey,
           appBar: widget.appBar,
           body: widget.body,
