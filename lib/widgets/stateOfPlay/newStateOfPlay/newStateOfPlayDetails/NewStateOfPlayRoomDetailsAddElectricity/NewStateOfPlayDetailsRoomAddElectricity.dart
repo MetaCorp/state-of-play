@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddDecoration/NewStateOfPlayDetailsAddDecorationContent.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayRoomDetailsAddElectricity/NewStateOfPlayDetailsRoomAddElectricityContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
-class NewStateOfPlayDetailsRoomAddDecoration extends StatefulWidget {
-  NewStateOfPlayDetailsRoomAddDecoration({ Key key, this.onSelect }) : super(key: key);
+class NewStateOfPlayDetailsRoomAddElectricity extends StatefulWidget {
+  NewStateOfPlayDetailsRoomAddElectricity({ Key key, this.onSelect }) : super(key: key);
 
   final SelectCallback onSelect;
 
   @override
-  _NewStateOfPlayDetailsRoomAddDecorationState createState() => _NewStateOfPlayDetailsRoomAddDecorationState();
+  _NewStateOfPlayDetailsRoomAddElectricityState createState() => _NewStateOfPlayDetailsRoomAddElectricityState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayDetailsRoomAddDecoration> {
+class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlayDetailsRoomAddElectricity> {
 
   TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newDecorationController = TextEditingController(text: "");
+  TextEditingController _newElectricityController = TextEditingController(text: "");
 
-  List<String> _selectedDecorations = []; 
+  List<String> _selectedElectricities = [];
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, decoration, RunMutation runDeleteMutation, Refetch refetch) async {
+  void _showDialogDelete(context, electricity, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            content: Text("Supprimer '" + decoration["type"] + "' ?"),
+            content: Text("Supprimer '" + electricity["type"] + "' ?"),
             actions: [
               FlatButton(
                 child: Text('ANNULER'),
@@ -49,7 +49,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                   setState(() { _deleteLoading = true; });
                   MultiSourceResult mutationResult = runDeleteMutation({
                     "data": {
-                      "decorationId": decoration["id"],
+                      "electricityId": electricity["id"],
                     }
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
@@ -66,10 +66,10 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                   else {
                     debugPrint('queryResult data: ' + networkResult.data.toString());
                     if (networkResult.data != null) {
-                      if (networkResult.data["deleteDecoration"] == null) {
+                      if (networkResult.data["deleteElectricity"] == null) {
                         // TODO: show error
                       }
-                      else if (networkResult.data["deleteDecoration"] != null) {
+                      else if (networkResult.data["deleteElectricity"] != null) {
                         Navigator.pop(context);
                         setState(() { });
                         // Navigator.popAndPushNamed(context, '/tenants');// To refresh
@@ -95,7 +95,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
   _onAdd(runMutation) async {
     MultiSourceResult result = runMutation({
       "data": {
-        "type": _newDecorationController.text
+        "type": _newElectricityController.text
       }
     });
 
@@ -104,17 +104,17 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
     setState(() { });
     Navigator.pop(context);
 
-    _newDecorationController.text = "";
+    _newElectricityController.text = "";
   }
 
-  void _showDialogNewDecoration (context) async {
+  void _showDialogNewElectricity (context) async {
     await showDialog(
       context: context,
       child: Mutation(
         options: MutationOptions(
           documentNode: gql('''
-            mutation createDecoration(\$data: CreateDecorationInput!) {
-              createDecoration(data: \$data) {
+            mutation createElectricity(\$data: CreateElectricityInput!) {
+              createElectricity(data: \$data) {
                 id
                 type
               }
@@ -133,10 +133,10 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
             
           return AlertDialog(
             content: TextField(
-              controller: _newDecorationController,
+              controller: _newElectricityController,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: "Entrez un nom de décoration"
+                labelText: "Entrez un nom d'électricité/chauffage"
               ),
               onSubmitted: (value) => _onAdd(runMutation),
             ),
@@ -144,7 +144,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               new FlatButton(
                 child: Text('ANNULER'),
                 onPressed: () {
-                  _newDecorationController.text = "";
+                  _newElectricityController.text = "";
                   Navigator.pop(context);
                 }
               ),
@@ -164,8 +164,8 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query decorations(\$filter: DecorationsFilterInput!) {
-            decorations (filter: \$filter) {
+          query electricities(\$filter: ElectricitiesFilterInput!) {
+            electricities (filter: \$filter) {
               id
               type
             }
@@ -190,7 +190,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
         debugPrint('data: ' + result.data.toString());
         debugPrint('');
 
-        List<Map> decorations;
+        List<Map> electricities;
 
         if (result.hasException) {
           body = Text(result.exception.toString());
@@ -199,13 +199,14 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
           body = Center(child: CircularProgressIndicator());
         }
         else {
-          decorations = (result.data["decorations"] as List).map((decoration) => {
-            "id": decoration["id"],
-            "type": decoration["type"],
-          }).toList();
-          debugPrint('decorations length: ' + decorations.length.toString());
 
-          if (decorations.length == 0) {
+          electricities = (result.data["electricities"] as List).map((electricity) => {
+            "id": electricity["id"],
+            "type": electricity["type"],
+          }).toList();
+          debugPrint('electricities length: ' + electricities.length.toString());
+
+          if (electricities.length == 0) {
             body = Container(
               alignment: Alignment.center,
               child: Text(
@@ -220,8 +221,8 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
             body = Mutation(
               options: MutationOptions(
                 documentNode: gql('''
-                  mutation deleteDecoration(\$data: DeleteDecorationInput!) {
-                    deleteDecoration(data: \$data)
+                  mutation deleteElectricity(\$data: DeleteElectricityInput!) {
+                    deleteElectricity(data: \$data)
                   }
                 '''), // this is the mutation string you just created
                 // you can update the cache based on results
@@ -238,22 +239,23 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                 QueryResult mutationResult,
               ) {
                 
-                return NewStateOfPlayDetailsRoomAddDecorationContent(
-                  decorations: decorations,
-                  selectedDecorations: _selectedDecorations,
-                  onDelete: (decoration) => _showDialogDelete(context, decoration, runDeleteMutation, refetch),
-                  onSelect: (decorationId) => {
+                return NewStateOfPlayDetailsRoomAddElectricityContent(
+                  electricities: electricities,
+                  selectedElectricities: _selectedElectricities,
+                  onDelete: (electricity) => _showDialogDelete(context, electricity, runDeleteMutation, refetch),
+                  onSelect: (electricityId) => {
                     setState(() {
-                      if (!_selectedDecorations.contains(decorationId))
-                        _selectedDecorations.add(decorationId);
+                      if (!_selectedElectricities.contains(electricityId))
+                        _selectedElectricities.add(electricityId);
                       else
-                        _selectedDecorations.remove(decorationId);
+                        _selectedElectricities.remove(electricityId);
                     })
                   },
                 );
               }
             );
           }
+
         }
 
         return Scaffold(
@@ -266,8 +268,8 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newDecorations) => ({
-                    "decorations": newDecorations["decorations"]
+                  updateQuery: (existing, newElectricitys) => ({
+                    "electricities": newElectricitys["electricities"]
                   }),
                 ));
               }
@@ -279,19 +281,19 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewDecoration(context)
+                onPressed: () => _showDialogNewElectricity(context)
               ),
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],
             backgroundColor: Colors.grey,
           ),
-          body: body,
+          body: body
         );
       }
     );

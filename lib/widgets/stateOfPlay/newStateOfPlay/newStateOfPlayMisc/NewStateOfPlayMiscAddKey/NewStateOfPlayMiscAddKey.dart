@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscAddKey/NewStateOfPlayMiscAddKeyContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 typedef SelectCallback = void Function(List<String>);
 
-class NewStateOfPlayDetailsRoomAddElectricity extends StatefulWidget {
-  NewStateOfPlayDetailsRoomAddElectricity({ Key key, this.onSelect }) : super(key: key);
+class NewStateOfPlayMiscAddKey extends StatefulWidget {
+  NewStateOfPlayMiscAddKey({ Key key, this.onSelect }) : super(key: key);
 
   final SelectCallback onSelect;
 
   @override
-  _NewStateOfPlayDetailsRoomAddElectricityState createState() => _NewStateOfPlayDetailsRoomAddElectricityState();
+  _NewStateOfPlayMiscAddKeyState createState() => _NewStateOfPlayMiscAddKeyState();
 }
 
 // adb reverse tcp:9002 tcp:9002
 
-class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlayDetailsRoomAddElectricity> {
+class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
 
   TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newElectricityController = TextEditingController(text: "");
+  TextEditingController _newKeyController = TextEditingController(text: "");
 
-  List<String> _selectedElectricities = [];
+  List<String> _selectedKeys = [];
 
   bool _deleteLoading = false;
 
-  void _showDialogDelete(context, electricity, RunMutation runDeleteMutation, Refetch refetch) async {
+  void _showDialogDelete(context, key, RunMutation runDeleteMutation, Refetch refetch) async {
     await showDialog(
       context: context,
       child: StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            content: Text("Supprimer '" + electricity["type"] + "' ?"),
+            content: Text("Supprimer '" + key["type"] + "' ?"),
             actions: [
               FlatButton(
                 child: Text('ANNULER'),
@@ -48,7 +49,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
                   setState(() { _deleteLoading = true; });
                   MultiSourceResult mutationResult = runDeleteMutation({
                     "data": {
-                      "electricityId": electricity["id"],
+                      "keyId": key["id"],
                     }
                   });
                   QueryResult networkResult = await mutationResult.networkResult;
@@ -65,10 +66,10 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
                   else {
                     debugPrint('queryResult data: ' + networkResult.data.toString());
                     if (networkResult.data != null) {
-                      if (networkResult.data["deleteElectricity"] == null) {
+                      if (networkResult.data["deleteKey"] == null) {
                         // TODO: show error
                       }
-                      else if (networkResult.data["deleteElectricity"] != null) {
+                      else if (networkResult.data["deleteKey"] != null) {
                         Navigator.pop(context);
                         setState(() { });
                         // Navigator.popAndPushNamed(context, '/tenants');// To refresh
@@ -94,7 +95,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
   _onAdd(runMutation) async {
     MultiSourceResult result = runMutation({
       "data": {
-        "type": _newElectricityController.text
+        "type": _newKeyController.text
       }
     });
 
@@ -103,17 +104,17 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
     setState(() { });
     Navigator.pop(context);
 
-    _newElectricityController.text = "";
+    _newKeyController.text = "";
   }
 
-  void _showDialogNewElectricity (context) async {
+  void _showDialogNewKey (context) async {
     await showDialog(
       context: context,
       child: Mutation(
         options: MutationOptions(
           documentNode: gql('''
-            mutation createElectricity(\$data: CreateElectricityInput!) {
-              createElectricity(data: \$data) {
+            mutation createKey(\$data: CreateKeyInput!) {
+              createKey(data: \$data) {
                 id
                 type
               }
@@ -132,10 +133,10 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
             
           return AlertDialog(
             content: TextField(
-              controller: _newElectricityController,
+              controller: _newKeyController,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: "Entrez un nom d'électricité/chauffage"
+                labelText: "Entrez un nom de clé"
               ),
               onSubmitted: (value) => _onAdd(runMutation),
             ),
@@ -143,7 +144,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               new FlatButton(
                 child: Text('ANNULER'),
                 onPressed: () {
-                  _newElectricityController.text = "";
+                  _newKeyController.text = "";
                   Navigator.pop(context);
                 }
               ),
@@ -163,8 +164,8 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
     return Query(
       options: QueryOptions(
         documentNode: gql('''
-          query electricities(\$filter: ElectricitiesFilterInput!) {
-            electricities (filter: \$filter) {
+          query keys(\$filter: KeysFilterInput!) {
+            keys (filter: \$filter) {
               id
               type
             }
@@ -189,7 +190,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
         debugPrint('data: ' + result.data.toString());
         debugPrint('');
 
-        List<Map> electricities;
+        List<Map> keys;
 
         if (result.hasException) {
           body = Text(result.exception.toString());
@@ -199,13 +200,13 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
         }
         else {
 
-          electricities = (result.data["electricities"] as List).map((electricity) => {
-            "id": electricity["id"],
-            "type": electricity["type"],
+          keys = (result.data["keys"] as List).map((key) => {
+            "id": key["id"],
+            "type": key["type"],
           }).toList();
-          debugPrint('electricities length: ' + electricities.length.toString());
+          debugPrint('keys length: ' + keys.length.toString());
 
-          if (electricities.length == 0) {
+          if (keys.length == 0) {
             body = Container(
               alignment: Alignment.center,
               child: Text(
@@ -220,8 +221,8 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
             body = Mutation(
               options: MutationOptions(
                 documentNode: gql('''
-                  mutation deleteElectricity(\$data: DeleteElectricityInput!) {
-                    deleteElectricity(data: \$data)
+                  mutation deleteKey(\$data: DeleteKeyInput!) {
+                    deleteKey(data: \$data)
                   }
                 '''), // this is the mutation string you just created
                 // you can update the cache based on results
@@ -238,35 +239,17 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  padding: EdgeInsets.only(top: 8),
-                  itemCount: electricities.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      title: Text(electricities[i]["type"]),
-                      selected: _selectedElectricities.contains(electricities[i]["id"]),
-                      onTap: () {
-                        setState(() {
-                          if (!_selectedElectricities.contains(electricities[i]["id"]))
-                            _selectedElectricities.add(electricities[i]["id"]);
-                          else
-                            _selectedElectricities.remove(electricities[i]["id"]);
-                        });
-                      },
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, electricities[i], runDeleteMutation, refetch),
-                      )
-                    ]
-                  ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                return NewStateOfPlayMiscAddKeyContent(
+                  keys: keys,
+                  selectedKeys: _selectedKeys,
+                  onDelete: (key) => _showDialogDelete(context, key, runDeleteMutation, refetch),
+                  onSelect: (keyId) => {
+                    setState(() {
+                      if (!_selectedKeys.contains(keyId))
+                        _selectedKeys.add(keyId);
+                      else
+                        _selectedKeys.remove(keyId);
+                    })
                   },
                 );
               }
@@ -285,8 +268,8 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               onChanged: (value) {
                 fetchMore(FetchMoreOptions(
                   variables: { "filter": { "search": value } },
-                  updateQuery: (existing, newElectricitys) => ({
-                    "electricities": newElectricitys["electricities"]
+                  updateQuery: (existing, newKeys) => ({
+                    "keys": newKeys["keys"]
                   }),
                 ));
               }
@@ -298,13 +281,13 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => _showDialogNewElectricity(context)
+                onPressed: () => _showDialogNewKey(context)
               ),
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
                 }
               ),
             ],

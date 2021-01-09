@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscAddMeter/NewStateOfPlayMiscAddMeterContent.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -238,35 +239,17 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  padding: EdgeInsets.only(top: 8),
-                  itemCount: meters.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      title: Text(meters[i]["type"]),
-                      selected: _selectedMeters.contains(meters[i]["id"]),
-                      onTap: () {
-                        setState(() {
-                          if (!_selectedMeters.contains(meters[i]["id"]))
-                            _selectedMeters.add(meters[i]["id"]);
-                          else
-                            _selectedMeters.remove(meters[i]["id"]);
-                        });
-                      },
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, meters[i], runDeleteMutation, refetch),
-                      )
-                    ]
-                  ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                return NewStateOfPlayMiscAddMeterContent(
+                  meters: meters,
+                  selectedMeters: _selectedMeters,
+                  onDelete: (meter) => _showDialogDelete(context, meter, runDeleteMutation, refetch),
+                  onSelect: (meterId) => {
+                    setState(() {
+                      if (!_selectedMeters.contains(meterId))
+                        _selectedMeters.add(meterId);
+                      else
+                        _selectedMeters.remove(meterId);
+                    })
                   },
                 );
               }
