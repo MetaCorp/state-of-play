@@ -415,10 +415,11 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         debugPrint('generatedPdf: ' + widget.stateOfPlay.newPdf.toString());
 
         
-        bool retConfirmPay = await _showDialogConfirmPay(context);
-        if (retConfirmPay == null || !retConfirmPay) {
-          setState(() { _isPdfLoading = false; });
-          return;}
+        // bool retConfirmPay = await _showDialogConfirmPay(context);
+        // if (retConfirmPay == null || !retConfirmPay) {
+        //   setState(() { _isPdfLoading = false; });
+        //   return;
+        // }
 
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
