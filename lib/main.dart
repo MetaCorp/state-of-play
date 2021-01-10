@@ -90,6 +90,14 @@ class _MyAppState extends State<MyApp> {
       // uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
       uri: 'http://$host:4000/graphql',
     );
+    
+    final WebSocketLink websocketLink = WebSocketLink(
+      url: 'ws://localhost:4000/graphql',
+      config: SocketClientConfig(
+        autoReconnect: true,
+        inactivityTimeout: Duration(days: 1)// TODO: shorter ?
+      ),
+    );
   
     final AuthLink authLink = AuthLink(
       getToken: () async {
@@ -98,7 +106,7 @@ class _MyAppState extends State<MyApp> {
       },
     );
 
-    final Link link = authLink.concat(httpLink);
+    final Link link = authLink.concat(httpLink).concat(websocketLink);
 
     client = ValueNotifier(
       GraphQLClient(

@@ -52,97 +52,125 @@ class _AccountsState extends State<Accounts> {
 
   @override
   Widget build(BuildContext context) {
-    return Query(
-      options: QueryOptions(
+    return Mutation(
+      options: MutationOptions(
         documentNode: gql('''
-          query user {
-            user {
-              accounts
-            }
+          mutation(\$data: LoginAccountInput!) {
+            loginAccount(data: \$data)
           }
-        ''')
+        '''), // this is the mutation string you just created
+        // you can update the cache based on results
+        update: (Cache cache, QueryResult result) {
+          return cache;
+        },
+        // or do something with the result.data on completion
+        onCompleted: (dynamic resultData) {
+          // debugPrint('onCompleted: ' + resultData.hasException);
+        },
       ),
       builder: (
-        QueryResult result, {
-        Refetch refetch,
-        FetchMore fetchMore,
-      }) {
-
-        debugPrint('userResult: ' + result.loading.toString());
-        debugPrint('userResult hasException: ' + result.hasException.toString());
-        debugPrint('userResult data: ' + result.data.toString());
-        if (result.hasException) {
-          if (result.exception.graphqlErrors.length > 0) { 
-            debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
-            debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
-          }
-          else
-            debugPrint("userResult clientException: " + result.exception.clientException.message);
-        }
-        debugPrint('');
-
-        if (result.data != null && result.data["user"] != null && !result.loading) {
-          _user = sop.User.fromJSON(result.data["user"]);
-          debugPrint('user: ' + _user.firstName.toString());
-        }
-
-        if (_user == null) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Profils')
-            ),
-            body: Center(child: CircularProgressIndicator())
-          );
-        }
+        RunMutation runMutation,
+        QueryResult mutationResult,
+      ) {
         
-        // return
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Profils'),
-            actions: [
-              _user != null ? IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () async {
-                  if (_user.accounts.length < 5) {
-                    await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewAccount(accounts: _user.accounts)));
-                    setState(() { });
-                  }
-                  else
-                    _showDialogLimitAccount(context);
-                },
-              ) : Container()
-            ],
+        return  Query(
+          options: QueryOptions(
+            documentNode: gql('''
+              query user {
+                user {
+                  accounts
+                }
+              }
+            ''')
           ),
-          body: Container(
-            margin: EdgeInsets.only(top: 8),
-            child: Column(
-              children: [
-                Flexible(
-                  child: ListView.separated(
-                    itemCount: _user.accounts.length,
-                    itemBuilder: (_, i) => ListTile(
-                      title: Row(
-                        children: [
-                          Text(_user.accounts[i]["firstName"] + ' ' + _user.accounts[i]["lastName"]),
-                          Spacer(),
-                          IconButton(
-                            icon: Icon(Icons.chevron_right),
-                          )
-                        ]
-                      ),
-                      onTap: () {
-                        _prefs.setString("account", jsonEncode(_user.accounts[i]));
-                        Navigator.popAndPushNamed(context, '/state-of-plays');
-                      }
-                    ),
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
+          builder: (
+            QueryResult result, {
+            Refetch refetch,
+            FetchMore fetchMore,
+          }) {
+
+            debugPrint('userResult: ' + result.loading.toString());
+            debugPrint('userResult hasException: ' + result.hasException.toString());
+            debugPrint('userResult data: ' + result.data.toString());
+            if (result.hasException) {
+              if (result.exception.graphqlErrors.length > 0) { 
+                debugPrint("userResult exception: " + result.exception.graphqlErrors[0].toString());
+                debugPrint("userResult exception: " + result.exception.graphqlErrors[0].extensions.toString());
+              }
+              else
+                debugPrint("userResult clientException: " + result.exception.clientException.message);
+            }
+            debugPrint('');
+
+            if (result.data != null && result.data["user"] != null && !result.loading) {
+              _user = sop.User.fromJSON(result.data["user"]);
+              debugPrint('user: ' + _user.firstName.toString());
+            }
+
+            if (_user == null) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text('Profils')
                 ),
-              ],
-            )
-          )
+                body: Center(child: CircularProgressIndicator())
+              );
+            }
+            
+            // return
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Profils'),
+                actions: [
+                  _user != null ? IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () async {
+                      if (_user.accounts.length < 5) {
+                        await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewAccount(accounts: _user.accounts)));
+                        setState(() { });
+                      }
+                      else
+                        _showDialogLimitAccount(context);
+                    },
+                  ) : Container()
+                ],
+              ),
+              body: Container(
+                margin: EdgeInsets.only(top: 8),
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: ListView.separated(
+                        itemCount: _user.accounts.length,
+                        itemBuilder: (_, i) => ListTile(
+                          title: Row(
+                            children: [
+                              Text(_user.accounts[i]["firstName"] + ' ' + _user.accounts[i]["lastName"]),
+                              Spacer(),
+                              IconButton(
+                                icon: Icon(Icons.chevron_right),
+                              )
+                            ]
+                          ),
+                          onTap: () {
+                            _prefs.setString("account", jsonEncode(_user.accounts[i]));
+                            runMutation({
+                              "data": {
+                                "accountId": _user.accounts[i]["id"]
+                              }
+                            });
+                            Navigator.popAndPushNamed(context, '/state-of-plays');
+                          }
+                        ),
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              )
+            );
+          }
         );
       }
     );

@@ -32,7 +32,8 @@ class _MyScaffoldState extends State<MyScaffold> {
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   TextStyle _smallTextStyle = new TextStyle( fontSize: 7 );
   TextStyle _titleTextStyle = new TextStyle( fontSize: 18,fontWeight: FontWeight.bold, color: Colors.grey[700]);
-        
+  
+  SharedPreferences _prefs;
   sop.User _user;
   dynamic _account;
 
@@ -42,6 +43,7 @@ class _MyScaffoldState extends State<MyScaffold> {
     dynamic account = prefs.getString("account") != null ? jsonDecode(prefs.getString("account")) : null;
     debugPrint('user.stateOfPlays.length: ' + user.stateOfPlays.length.toString());
     setState(() {
+      _prefs = prefs;
       _user = user;
       _account = account;
     });
@@ -316,7 +318,7 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
 
-    return Query(
+    final Widget scaffold = Query(
       options: QueryOptions(
         documentNode: gql('''
           query user {
@@ -390,5 +392,44 @@ class _MyScaffoldState extends State<MyScaffold> {
         );
       }
     );
+
+    // debugPrint('_user: ' + _user.id);
+    // debugPrint('_account: ' + _account["id"].toString());
+
+    return _user != null && _account != null ? Subscription(
+      "accountConnected",
+      '''
+        subscription accountConnected(\$userId: Int!, \$accountId: Int!) {
+          accountConnected(userId: \$userId, accountId: \$accountId) {
+            userId
+            accountId
+          }
+        }
+      ''',
+      variables: {
+        "userId": int.parse(_user.id),
+        "accountId": _account["id"]
+      },
+      builder: ({
+        bool loading,
+        dynamic payload,
+        dynamic error,
+      }) {
+
+        debugPrint('Subscription: loading: ' + loading.toString());
+        debugPrint('Subscription: payload: ' + payload.toString());
+        debugPrint('Subscription: error: ' + error.toString());
+        debugPrint('');
+
+        if (payload != null && _prefs != null) {
+          _prefs.setString("token", null);
+          _prefs.setString("user", null);
+          _prefs.setString("account", null);
+          Navigator.pushNamed(context, "/login");
+        }
+
+        return scaffold;
+      }
+    ) : scaffold;
   }
 }

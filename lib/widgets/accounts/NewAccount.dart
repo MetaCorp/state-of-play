@@ -29,6 +29,7 @@ class _NewAccountState extends State<NewAccount> {
       _formKey.currentState.save();
 
       widget.accounts.add(Map<String, dynamic>.from({
+        "id": widget.accounts.length + 1,
         "firstName": _firstName,
         "lastName": _lastName
       }));

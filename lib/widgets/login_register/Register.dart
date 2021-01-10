@@ -55,6 +55,7 @@ class _RegisterState extends State<Register> {
               token
               admin
               user {
+                id
                 firstName
                 lastName
                 email

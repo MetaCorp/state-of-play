@@ -62,6 +62,7 @@ class _LoginState extends State<Login> {
               token
               admin
               user {
+                id
                 firstName
                 lastName
                 email

@@ -637,6 +637,7 @@ class Insurance {
 
 class User {
   User({
+    this.id,
     this.firstName,
     this.lastName,
     this.documentHeader,
@@ -655,6 +656,7 @@ class User {
     this.accounts
   });
 
+  String id;
   String firstName;
   String lastName;
   String documentHeader;
@@ -676,6 +678,7 @@ class User {
   factory User.fromJSON(Map<String, dynamic> json) {
 
     return User(
+      id: json["id"],
       firstName: json["firstName"],
       lastName: json["lastName"],
       documentHeader: json["documentHeader"],

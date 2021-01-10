@@ -416,7 +416,8 @@ class _NewStateOfPlayContentState extends State<NewStateOfPlayContent> {
         bool retConfirmPay = await _showDialogConfirmPay(context);
         if (retConfirmPay == null || !retConfirmPay) {
           setState(() { _isPdfLoading = false; });
-          return;}
+          return;
+        }
 
         widget.onSave();
         OpenFile.open(widget.stateOfPlay.newPdf.path);
