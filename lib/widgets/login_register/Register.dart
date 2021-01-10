@@ -90,6 +90,7 @@ class _RegisterState extends State<Register> {
           if (result.exception.graphqlErrors[0].extensions != null &&
               result.exception.graphqlErrors[0].extensions["exception"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"]["IsEmailAlreadyExistConstraint"] != null)
             _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Email déjà utilisé.")));
