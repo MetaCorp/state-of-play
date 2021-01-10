@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/HeaderDiscoveryRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/Header.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddDecoration/NewStateOfPlayDetailsAddDecoration.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddElectricity.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomAddEquipment.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewSTateOfPlayRoomDetailsAddEquipement/NewStateOfPlayDetailsRoomAddEquipment.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomDecoration.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomElectricity.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoomEquipment.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayRoomDetailsAddDecoration/NewStateOfPlayRoomDetailsAddDecoration.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayRoomDetailsAddElectricity/NewStateOfPlayDetailsRoomAddElectricity.dart';
 
 class NewStateOfPlayDetailsRoom extends StatefulWidget {
   NewStateOfPlayDetailsRoom({ Key key, this.room }) : super(key: key);

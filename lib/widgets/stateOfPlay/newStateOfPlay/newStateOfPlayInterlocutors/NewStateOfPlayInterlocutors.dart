@@ -9,7 +9,7 @@ import 'package:flutter_tests/widgets/tenant/SearchTenants.dart';
 import 'package:flutter_tests/widgets/property/SearchProperties.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutor.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayInterlocutors/ListTileInterlocutorDiscovery.dart';
-import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutor/NewInterlocutor.dart';
 
 
 class NewStateOfPlayInterlocutors extends StatefulWidget {
@@ -60,7 +60,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             labelText: "Sélectionner un propriétaire",
             onPress: () {
               if (widget.stateOfPlay.owner.lastName != null)
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                   title: 'Éditer un propriétaire',
                   interlocutor: widget.stateOfPlay.owner,
                   onSave : (owner) {
@@ -79,7 +79,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                 )));
             },
             onPressAdd: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                 title: 'Nouveau propriétaire',
                 interlocutor: sop.Owner(),
                 onSave : (owner) {
@@ -104,7 +104,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
             labelText: "Sélectionner un mandataire",
             onPress: () {
               if (widget.stateOfPlay.representative != null && widget.stateOfPlay.representative.lastName != null)
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                   title: 'Éditer un mandataire',
                   interlocutor: widget.stateOfPlay.representative,
                   onSave : (representative) {
@@ -123,7 +123,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
                 )));
             },
             onPressAdd: () {
-              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+              Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                 title: 'Nouveau mandataire',
                 interlocutor: sop.Representative(),
                 onSave : (representative) {
@@ -161,7 +161,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
               if (widget.stateOfPlay.tenants.length >= 3)
                 _showDialogLimitTenants(context);
               else
-                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                   title: 'Nouveau locataire',
                   interlocutor: sop.Tenant(),
                   onSave : (tenant) {
@@ -178,7 +178,7 @@ class _NewStateOfPlayInterlocutorsState extends State<NewStateOfPlayInterlocutor
               ListTileInterlocutor(
                 text: tenant.firstName + ' ' + tenant.lastName,
                 onPress: () {
-                  Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutorContent(
+                  Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewInterlocutor(
                     title: 'Éditer un locataire',
                     interlocutor: tenant,
                     onSave : (tenant) {
