@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom/NewStateOfPlayDetailsAddRoomContent.dart';
+
 
 import 'package:feature_discovery/feature_discovery.dart';
 
@@ -248,34 +250,17 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                 QueryResult mutationResult,
               ) {
                 
-                return ListView.separated(
-                  itemCount: rooms.length,
-                  itemBuilder: (_, i) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      title: Text(rooms[i]["name"]),
-                      selected: _selectedRooms.contains(rooms[i]["id"]),
-                      onTap: () {
-                        setState(() {
-                          if (!_selectedRooms.contains(rooms[i]["id"]))
-                            _selectedRooms.add(rooms[i]["id"]);
-                          else
-                            _selectedRooms.remove(rooms[i]["id"]);
-                        });
-                      },
-                    ),
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Supprimer',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () => _showDialogDelete(context, rooms[i], runDeleteMutation, refetch),
-                      )
-                    ]
-                  ),
-                  separatorBuilder: (context, index) {
-                    return Divider();
+                return NewStateOfPlayDetailsAddRoomContent(
+                  rooms: rooms,
+                  selectedRooms: _selectedRooms,
+                  onDelete: (room) => _showDialogDelete(context, room, runDeleteMutation, refetch),
+                  onSelect: (roomId) => {
+                    setState(() {
+                      if (!_selectedRooms.contains(roomId))
+                        _selectedRooms.add(roomId);
+                      else
+                        _selectedRooms.remove(roomId);
+                    })
                   },
                 );
               }

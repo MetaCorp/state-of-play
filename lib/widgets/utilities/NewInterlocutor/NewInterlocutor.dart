@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
-import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/NewInterlocutor/NewInterlocutorContent.dart';
-import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 typedef SaveCallback = Function(dynamic);
 typedef DeleteCallback = Function();
@@ -91,7 +89,7 @@ class _NewInterlocutorState extends State<NewInterlocutor> {
         key: _formKey,
         title: widget.title,
         interlocutor: widget.interlocutor,
-        onDelete: widget.onDelete(),
+        //TODO delete??
         onSave: (interlocuteur) => widget.onSave(interlocuteur), 
       ),
     );
