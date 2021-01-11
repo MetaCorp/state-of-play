@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_tests/widgets/accounts/NewAccount.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-typedef SelectCallback = Function(dynamic);
+import 'package:flutter_tests/providers/MainProvider.dart';
+
+// typedef SelectCallback = Function(dynamic);
 
 class Accounts extends StatefulWidget {
-  Accounts({ Key key, this.onSelect }) : super(key: key);
+  Accounts({ Key key }) : super(key: key);
 
-  final SelectCallback onSelect;
+  // final SelectCallback onSelect;
 
   @override
   _AccountsState createState() => _AccountsState();
@@ -155,14 +158,16 @@ class _AccountsState extends State<Accounts> {
                               )
                             ]
                           ),
-                          onTap: () {
+                          onTap: () async {
                             _prefs.setString("account", jsonEncode(_user.accounts[i]));
-                            runMutation({
+                            MultiSourceResult result = runMutation({
                               "data": {
                                 "accountId": _user.accounts[i]["id"]
                               }
                             });
-                            widget.onSelect(_user.accounts[i]);
+                            await result.networkResult;
+                            
+                            Provider.of<MainProvider>(context, listen: false).updateAccount(_user.accounts[i]);
                             debugPrint('push SOP');
                             Navigator.popAndPushNamed(context, '/state-of-plays');
                           }

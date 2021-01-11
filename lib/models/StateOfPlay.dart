@@ -653,7 +653,8 @@ class User {
     this.newLogo,
     this.email,
     this.credits,
-    this.accounts
+    this.accounts,
+    this.isPro
   });
 
   String id;
@@ -675,6 +676,8 @@ class User {
 
   File newLogo;
 
+  bool isPro;
+
   factory User.fromJSON(Map<String, dynamic> json) {
 
     return User(
@@ -694,7 +697,8 @@ class User {
       newLogo: null,
       email: json["email"],
       credits: json["credits"],
-      accounts: json["accounts"] == null || json["accounts"] == "[]" ? [] : jsonDecode(json["accounts"])
+      accounts: json["accounts"] == null || json["accounts"] == "[]" ? [] : jsonDecode(json["accounts"]),
+      isPro: json["isPro"]
     );
   }
 }

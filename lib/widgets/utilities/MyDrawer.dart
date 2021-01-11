@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_tests/providers/MainProvider.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({ Key key, this.user, this.account }) : super(key: key);
@@ -24,7 +27,10 @@ class MyDrawer extends StatelessWidget {
             otherAccountsPictures: [
               account != null ? IconButton(
                 icon: Icon(Icons.supervised_user_circle),
-                onPressed: () => Navigator.popAndPushNamed(context, '/accounts'),
+                onPressed: () {
+                  Provider.of<MainProvider>(context, listen: false).updateAccount(null);
+                  Navigator.popAndPushNamed(context, '/accounts');
+                }
               ) : Container()
             ],
             currentAccountPicture: user != null ? CircleAvatar(
