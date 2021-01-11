@@ -56,7 +56,7 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.people_alt),
             onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
           ),
-          Divider(thickness: .8, indent: 18, endIndent: 18),
+          Divider(thickness: 2.0),
           ListTile(
             title: Text('Nous contacter'),
             leading: Icon(Icons.account_circle),
