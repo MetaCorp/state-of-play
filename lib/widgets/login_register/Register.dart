@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -6,8 +7,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+typedef RegisterCallback = Function(sop.User);
+
 class Register extends StatefulWidget {
-  Register({Key key}) : super(key: key);
+  Register({ Key key, this.onRegister }) : super(key: key);
+
+  final RegisterCallback onRegister;
 
   @override
   _RegisterState createState() => new _RegisterState();
@@ -204,6 +209,7 @@ class _RegisterState extends State<Register> {
                           else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
                             await _prefs.setString("token", networkResult.data["register"]["token"]);
                             await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
+                            widget.onRegister(sop.User.fromJSON(networkResult.data["register"]["user"]));
                             if (networkResult.data["register"]["user"]["isPro"])
                               Navigator.popAndPushNamed(context, '/accounts');
                             else

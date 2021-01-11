@@ -6,8 +6,12 @@ import 'package:flutter_tests/widgets/accounts/NewAccount.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+typedef SelectCallback = Function(dynamic);
+
 class Accounts extends StatefulWidget {
-  Accounts({Key key}) : super(key: key);
+  Accounts({ Key key, this.onSelect }) : super(key: key);
+
+  final SelectCallback onSelect;
 
   @override
   _AccountsState createState() => _AccountsState();
@@ -158,6 +162,8 @@ class _AccountsState extends State<Accounts> {
                                 "accountId": _user.accounts[i]["id"]
                               }
                             });
+                            widget.onSelect(_user.accounts[i]);
+                            debugPrint('push SOP');
                             Navigator.popAndPushNamed(context, '/state-of-plays');
                           }
                         ),

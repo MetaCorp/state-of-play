@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flip_panel/flip_panel.dart';
-import 'dart:math';
+// import 'package:flip_panel/flip_panel.dart';
+// import 'dart:math';
 
 import 'dart:convert';
 
+typedef LoginCallback = Function(sop.User);
+
 class Login extends StatefulWidget {
-  Login({Key key}) : super(key: key);
+  Login({ Key key, this.onLogin }) : super(key: key);
+
+  final LoginCallback onLogin;
 
   @override
   _LoginState createState() => new _LoginState();
@@ -238,6 +243,7 @@ class _LoginState extends State<Login> {
                           else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
                             await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
                             await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
+                            widget.onLogin(sop.User.fromJSON(networkResult.data["login"]["user"]));
                             if (networkResult.data["login"]["user"]["isPro"])
                               Navigator.popAndPushNamed(context, '/accounts');
                             else

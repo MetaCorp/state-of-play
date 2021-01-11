@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -74,16 +75,29 @@ ValueNotifier<GraphQLClient> client;
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  SharedPreferences _prefs;
+  dynamic _account;
+  sop.User _user;
+
+  bool _isInitialRouteSOP = false;
 
   deleteToken() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("token", null);
   }
 
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _prefs = prefs;
+    });
+  }
+
   @override
   void initState() {
     
     deleteToken();
+    getSharedPrefs();
     
     final HttpLink httpLink = HttpLink(
       // uri: 'https://housely-server.ew.r.appspot.com/graphql'
@@ -142,123 +156,165 @@ class _MyAppState extends State<MyApp> {
     //   DeviceOrientation.landscapeRight,
     // ]);
 
-    MaterialColor colorCustom = MaterialColor(0xFF4AAAD3, color); 
+    MaterialColor colorCustom = MaterialColor(0xFF4AAAD3, color);
+
+    final Widget materialApp = MaterialApp(
+      title: 'États des lieux',
+      theme: ThemeData(
+        primarySwatch: colorCustom, 
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        buttonColor: Colors.grey, 
+      ),
+      initialRoute: !_isInitialRouteSOP ? '/login' : '/state-of-plays',
+      onGenerateRoute: (settings) {
+        
+        if (settings.name == "/login") 
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Login(onLogin: (user) => setState(() { _user = user; })));
+        else if (settings.name == "/register") 
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Register(onRegister: (user) => setState(() { _user = user; })));
+
+
+        else if (settings.name == "/state-of-plays") 
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlays());
+        else if (settings.name == '/state-of-play') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
+        }
+        else if (settings.name == '/new-state-of-play') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: args != null ? args["stateOfPlayId"] : null));
+        }
+        else if (settings.name == '/edit-state-of-play') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => EditStateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
+        }
+        else if (settings.name == '/search-state-of-plays') {
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays());
+        }
+
+
+        else if (settings.name == '/properties')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Properties());
+        else if (settings.name == '/property') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Property(propertyId: args["propertyId"]));
+        }
+        else if (settings.name == '/new-property')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => NewProperty());
+        else if (settings.name == '/edit-property') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => EditProperty(propertyId: args["propertyId"]));
+        }
+        else if (settings.name == '/search-properties')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
+          
+
+        else if (settings.name == '/owners')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Owners());
+        else if (settings.name == '/owner') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Owner(ownerId: args["ownerId"],));
+        }
+        else if (settings.name == '/new-owner')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwner());
+        else if (settings.name == '/edit-owner') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => EditOwner(ownerId: args["ownerId"]));
+        }
+        else if (settings.name == '/search-owners')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchOwners());
+          
+
+        else if (settings.name == '/representatives')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Representatives());
+        else if (settings.name == '/representative') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Representative(representativeId: args["representativeId"]));
+        }
+        else if (settings.name == '/new-representative')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentative());
+        else if (settings.name == '/edit-representative') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => EditRepresentative(representativeId: args["representativeId"]));
+        }
+        else if (settings.name == '/search-representatives')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchRepresentatives());
+          
+
+        else if (settings.name == '/tenants')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenants());
+        else if (settings.name == '/tenant') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenant(tenantId: args["tenantId"]));
+        }
+        else if (settings.name == '/new-tenant')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenant());
+        else if (settings.name == '/edit-tenant') {
+          final Map args = settings.arguments;
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => EditTenant(tenantId: args["tenantId"]));
+        }
+        else if (settings.name == '/search-tenants')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants());
+
+
+        else if (settings.name == '/settings')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());
+
+        else if (settings.name == '/shop')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Shop());
+
+        else if (settings.name == '/accounts')
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => Accounts(onSelect: (account) => setState(() { _account = account; _isInitialRouteSOP = true; })));
+
+        return null;
+      }
+    );
 
     return GraphQLProvider(
       client: client,
       child: FeatureDiscovery(
         recordStepsInSharedPreferences: true,
-        child: MaterialApp(
-          title: 'États des lieux',
-          theme: ThemeData(
-            primarySwatch: colorCustom, 
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            buttonColor: Colors.grey, 
-          ),
-          initialRoute: '/login',
-          onGenerateRoute: (settings) {
-            
-            if (settings.name == "/login") 
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Login());
-            else if (settings.name == "/register") 
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Register());
-
-
-            else if (settings.name == "/state-of-plays") 
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlays());
-            else if (settings.name == '/state-of-play') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => StateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
+        child: _user != null && _account != null ? Subscription(
+          "accountConnected",
+          '''
+            subscription accountConnected(\$userId: Int!, \$accountId: Int!) {
+              accountConnected(userId: \$userId, accountId: \$accountId) {
+                userId
+                accountId
+              }
             }
-            else if (settings.name == '/new-state-of-play') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlay(stateOfPlayId: args != null ? args["stateOfPlayId"] : null));
-            }
-            else if (settings.name == '/edit-state-of-play') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => EditStateOfPlay(stateOfPlayId: args["stateOfPlayId"]));
-            }
-            else if (settings.name == '/search-state-of-plays') {
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchStateOfPlays());
+          ''',
+          variables: {
+            "userId": int.parse(_user.id),
+            "accountId": _account["id"]
+          },
+          builder: ({
+            bool loading,
+            dynamic payload,
+            dynamic error,
+          }) {
+
+            debugPrint('Subscription: loading: ' + loading.toString());
+            debugPrint('Subscription: payload: ' + payload.toString());
+            debugPrint('Subscription: error: ' + error.toString());
+            debugPrint('');
+
+            if (payload != null && _prefs != null) {
+              debugPrint('DISCONNECTED FROM ANOTHER ACCOUNT: ' + payload.toString());
+              _prefs.setString("token", null);
+              _prefs.setString("user", null);
+              _prefs.setString("account", null);
+              setState(() {
+                _user = null;
+                _account = null;
+              });
+              // Navigator.pushNamed(context, "/login");
             }
 
-
-            else if (settings.name == '/properties')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Properties());
-            else if (settings.name == '/property') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Property(propertyId: args["propertyId"]));
-            }
-            else if (settings.name == '/new-property')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => NewProperty());
-            else if (settings.name == '/edit-property') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => EditProperty(propertyId: args["propertyId"]));
-            }
-            else if (settings.name == '/search-properties')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchProperties());
-              
-
-            else if (settings.name == '/owners')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Owners());
-            else if (settings.name == '/owner') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Owner(ownerId: args["ownerId"],));
-            }
-            else if (settings.name == '/new-owner')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => NewOwner());
-            else if (settings.name == '/edit-owner') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => EditOwner(ownerId: args["ownerId"]));
-            }
-            else if (settings.name == '/search-owners')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchOwners());
-              
-
-            else if (settings.name == '/representatives')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Representatives());
-            else if (settings.name == '/representative') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Representative(representativeId: args["representativeId"]));
-            }
-            else if (settings.name == '/new-representative')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => NewRepresentative());
-            else if (settings.name == '/edit-representative') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => EditRepresentative(representativeId: args["representativeId"]));
-            }
-            else if (settings.name == '/search-representatives')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchRepresentatives());
-              
-
-            else if (settings.name == '/tenants')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenants());
-            else if (settings.name == '/tenant') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Tenant(tenantId: args["tenantId"]));
-            }
-            else if (settings.name == '/new-tenant')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => NewTenant());
-            else if (settings.name == '/edit-tenant') {
-              final Map args = settings.arguments;
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => EditTenant(tenantId: args["tenantId"]));
-            }
-            else if (settings.name == '/search-tenants')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => SearchTenants());
-
-
-            else if (settings.name == '/settings')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Settings());
-
-            else if (settings.name == '/shop')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Shop());
-
-            else if (settings.name == '/accounts')
-              return PageRouteBuilder(pageBuilder: (_, __, ___) => Accounts());
-
-            return null;
+            return materialApp;
           }
-        ),
+        )
+        : materialApp
       )
     );
   }
