@@ -49,6 +49,8 @@ class _NewStateOfPlayMiscInsuranceState extends State<NewStateOfPlayMiscInsuranc
                   onSaved: (value) => widget.insurance.company = value,
                   textCapitalization: TextCapitalization.sentences,
                   maxLength: 24,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(
                   height: 8,

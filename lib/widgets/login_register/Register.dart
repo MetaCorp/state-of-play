@@ -44,6 +44,39 @@ class _RegisterState extends State<Register> {
     super.initState();
   }
 
+  _register(RunMutation runMutation) async {
+                      
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("token", null);
+
+    MultiSourceResult result = runMutation({
+      "data": {
+        "email": _emailController.text,
+        "firstName": _firstNameController.text,
+        "lastName": _lastNameController.text,
+        "password": _passwordController.text
+      }
+    });
+
+    QueryResult networkResult =  await result.networkResult;
+
+    if (networkResult.hasException) {
+      // TODO display snackbar (email already in use)
+    } else {
+      debugPrint('queryResult data: ' + networkResult.data.toString());
+      if (networkResult.data != null) {
+        if (networkResult.data["register"] == null) {
+          // TODO: show error
+        }
+        else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
+          await _prefs.setString("token", networkResult.data["register"]["token"]);
+          await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
+          Navigator.popAndPushNamed(context, '/state-of-plays');
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Mutation(
@@ -123,6 +156,8 @@ class _RegisterState extends State<Register> {
                     decoration: InputDecoration(
                       labelText: 'Email'
                     ),
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(
                     height: 28,
@@ -133,6 +168,8 @@ class _RegisterState extends State<Register> {
                       labelText: 'Prénom'
                     ),
                     textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(
                     height: 28,
@@ -143,6 +180,8 @@ class _RegisterState extends State<Register> {
                       labelText: 'Nom'
                     ),
                     textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(
                     height: 28,
@@ -153,6 +192,7 @@ class _RegisterState extends State<Register> {
                       labelText: 'Password'
                     ),
                     obscureText: true,
+                    onEditingComplete: () => _register(runMutation),
                   ),
                   SizedBox(
                     height: 40,
@@ -161,38 +201,7 @@ class _RegisterState extends State<Register> {
                     child: Text('S\'inscrire'),
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
-                    onPressed: () async {
-                      
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setString("token", null);
-
-                      MultiSourceResult result = runMutation({
-                        "data": {
-                          "email": _emailController.text,
-                          "firstName": _firstNameController.text,
-                          "lastName": _lastNameController.text,
-                          "password": _passwordController.text
-                        }
-                      });
-
-                      QueryResult networkResult =  await result.networkResult;
-
-                      if (networkResult.hasException) {
-                        // TODO display snackbar (email already in use)
-                      } else {
-                        debugPrint('queryResult data: ' + networkResult.data.toString());
-                        if (networkResult.data != null) {
-                          if (networkResult.data["register"] == null) {
-                            // TODO: show error
-                          }
-                          else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
-                            await _prefs.setString("token", networkResult.data["register"]["token"]);
-                            await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
-                            Navigator.popAndPushNamed(context, '/state-of-plays');
-                          }
-                        }
-                      }
-                    }
+                    onPressed: _register(runMutation)
                   ),
                   SizedBox( height: 18,),
                   FlatButton(

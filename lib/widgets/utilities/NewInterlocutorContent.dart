@@ -54,6 +54,13 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
     );
   }
 
+  _save() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      widget.onSave(widget.interlocutor);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -75,6 +82,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 24,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -90,6 +99,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 24,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               !(widget.interlocutor is sop.Tenant) ? SizedBox(
                 height: 8,
@@ -105,6 +116,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 24,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ) : Container(),
               SizedBox(
                 height: 8,
@@ -119,6 +132,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 48,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -134,6 +149,8 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 12,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -149,6 +166,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                   return null;
                 },
                 maxLength: 24,
+                onEditingComplete: () => _save(),
               ),
               SizedBox(
                 height: 16,
@@ -157,12 +175,7 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
                 color: Colors.grey[100],
                 loading: widget.saveLoading,
                 child: Text('Sauvegarder'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    widget.onSave(widget.interlocutor);
-                  }
-                }
+                onPressed: () => _save()
               )
             ],
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 typedef SavedCallback = Function(String);
-
 typedef ValidatorCallback = String Function(String);
+typedef EditingCompleteCallback = Function();
 
 class MyTextFormField extends StatelessWidget {
 
@@ -16,7 +16,9 @@ class MyTextFormField extends StatelessWidget {
     this.keyboardType,
     this.maxLines,
     this.minLines,
-    this.textCapitalization = TextCapitalization.none
+    this.textCapitalization = TextCapitalization.none,
+    this.textInputAction = TextInputAction.done,
+    this.onEditingComplete
   }) : super(key: key);
 
   final String initialValue;
@@ -28,6 +30,8 @@ class MyTextFormField extends StatelessWidget {
   final int maxLines;
   final int minLines;
   final TextCapitalization textCapitalization;
+  final TextInputAction textInputAction;
+  final EditingCompleteCallback onEditingComplete;
 
 
   @override
@@ -42,6 +46,8 @@ class MyTextFormField extends StatelessWidget {
       keyboardType: keyboardType,
       maxLines: maxLines,
       minLines: minLines,
+      textInputAction: textInputAction,
+      onEditingComplete: onEditingComplete,
     );
   }
 }

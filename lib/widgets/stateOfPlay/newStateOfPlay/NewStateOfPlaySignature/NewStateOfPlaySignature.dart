@@ -72,6 +72,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 maxLength: 256,
                 minLines: 1,
                 maxLines: 2,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(height: sizedBoxHeight),
               MyTextFormField(
@@ -86,6 +88,8 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
                 },
                 maxLength: 1024,
                 maxLines: 4,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               // SizedBox(height: 24),             
               // Text("Nouvelle adresse des locataires"),

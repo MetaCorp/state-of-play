@@ -112,6 +112,8 @@ class _NewStateOfPlayDetailsRoomEquipmentState extends State<NewStateOfPlayDetai
                   textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.equipment.brandOrObject = value,
                   maxLength: 24,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(
                   height: 16,

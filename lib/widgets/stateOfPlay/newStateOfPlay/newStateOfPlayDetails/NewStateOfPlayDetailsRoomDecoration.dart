@@ -144,6 +144,8 @@ class _NewStateOfPlayDetailsRoomDecorationState extends State<NewStateOfPlayDeta
                   textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.decoration.nature = value,
                   maxLength: 24,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(
                   height: 8,

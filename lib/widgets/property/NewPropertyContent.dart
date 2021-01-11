@@ -50,6 +50,13 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
     );
   }
 
+  _save() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      widget.onSave(widget.property);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -72,6 +79,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 24,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -86,6 +95,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 48,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -101,6 +112,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 12,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -116,6 +129,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 24,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -145,6 +160,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 decoration: InputDecoration(labelText: 'Numéro de lot'),
                 onSaved: (value) => widget.property.lot = value,
                 maxLength: 12,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -155,6 +172,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 decoration: InputDecoration(labelText: 'Étage'),
                 onSaved: (value) => widget.property.floor = int.parse(value),
                 maxLength: 2,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -170,6 +189,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 2,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -185,6 +206,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 12,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -199,6 +222,8 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 48,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(
                 height: 8,
@@ -213,6 +238,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                   return null;
                 },
                 maxLength: 48,
+                onEditingComplete: () => _save(),
               ),
               SizedBox(
                 height: 16,
@@ -221,12 +247,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
                 color: Colors.grey[100],
                 loading: widget.saveLoading,
                 child: Text('Sauvegarder'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    widget.onSave(widget.property);
-                  }
-                }
+                onPressed: () => _save()
               )
             ],
           ),

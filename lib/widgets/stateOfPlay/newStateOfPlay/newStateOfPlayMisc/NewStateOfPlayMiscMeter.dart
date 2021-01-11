@@ -90,6 +90,8 @@ class _NewStateOfPlayMiscMeterState extends State<NewStateOfPlayMiscMeter> {
                   textCapitalization: TextCapitalization.sentences,
                   onSaved: (value) => widget.meter.location = value,
                   maxLength: 24,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(
                   height: 8,

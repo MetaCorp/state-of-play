@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flip_panel/flip_panel.dart';
-import 'dart:math';
+// import 'package:flip_panel/flip_panel.dart';
+// import 'dart:math';
 
 import 'dart:convert';
 
+typedef LoginCallback = Function(sop.User);
+
 class Login extends StatefulWidget {
-  Login({Key key}) : super(key: key);
+  Login({ Key key, this.onLogin }) : super(key: key);
+
+  final LoginCallback onLogin;
 
   @override
   _LoginState createState() => new _LoginState();
@@ -42,6 +47,37 @@ class _LoginState extends State<Login> {
     
     super.initState();
   }
+
+  _login(RunMutation runMutation) async {
+                      
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("token", null);
+    
+    MultiSourceResult result = runMutation({
+      "email": _emailController.text,
+      "password": _passwordController.text
+    });
+
+    QueryResult networkResult = await result.networkResult;
+
+    if (networkResult.hasException) {
+    
+    }
+    else {
+      debugPrint('queryResult data: ' + networkResult.data.toString());
+      if (networkResult.data != null) {
+        if (networkResult.data["login"] == null) {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
+        }
+        else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
+          await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
+          await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
+          widget.onLogin(sop.User.fromJSON(networkResult.data["login"]["user"]));
+          Navigator.popAndPushNamed(context, '/state-of-plays');
+        }
+      }
+    }
+  }
     
   @override
   Widget build(BuildContext context) {
@@ -62,6 +98,7 @@ class _LoginState extends State<Login> {
               token
               admin
               user {
+                id
                 firstName
                 lastName
                 email
@@ -196,6 +233,8 @@ class _LoginState extends State<Login> {
                     decoration: InputDecoration(
                       labelText: 'Email'
                     ),
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox( height: 28,),
                   TextField(
@@ -204,6 +243,7 @@ class _LoginState extends State<Login> {
                       labelText: 'Password'
                     ),
                     obscureText: true,
+                    onEditingComplete: () => _login(runMutation),
                   ),
                   SizedBox(
                     height: 60,
@@ -212,38 +252,7 @@ class _LoginState extends State<Login> {
                     child: Text('Se connecter'),
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
-                    onPressed: () async {
-                      
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setString("token", null);
-                      
-                      MultiSourceResult result = runMutation({
-                        "email": _emailController.text,
-                        "password": _passwordController.text
-                      });
-
-                      QueryResult networkResult = await result.networkResult;
-
-                      if (networkResult.hasException) {
-                      
-                      }
-                      else {
-                        debugPrint('queryResult data: ' + networkResult.data.toString());
-                        if (networkResult.data != null) {
-                          if (networkResult.data["login"] == null) {
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
-                          }
-                          else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
-                            await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
-                            await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
-                            // if (networkResult.data["login"]["isPro"])
-                            //   Navigator.popAndPushNamed(context, '/accounts');
-                            // else
-                            Navigator.popAndPushNamed(context, '/state-of-plays');
-                          }
-                        }
-                      }
-                    }
+                    onPressed: () => _login(runMutation),
                   ),
                   SizedBox( height: 18,),
                   FlatButton(

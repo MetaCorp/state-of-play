@@ -48,6 +48,8 @@ class _NewStateOfPlayMiscCommentsState extends State<NewStateOfPlayMiscComments>
                   onSaved: (value) => widget.stateOfPlay.comments = value,
                   maxLength: 256,
                   maxLines: 2,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(
                   height: 8,
