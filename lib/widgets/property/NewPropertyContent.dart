@@ -69,7 +69,7 @@ class _NewPropertyContentState extends State<NewPropertyContent> {
           key: _formKey,
           child: Column(
             children: [
-              MyTextFormField(
+              MyTextFormField(// TODO : for real keyboard (desktop version) https://stackoverflow.com/questions/58263620/how-to-use-key-press-event-on-textfromfield-in-flutter
                 initialValue: widget.property.reference,
                 decoration: InputDecoration(labelText: 'Référence interne'),
                 onSaved: (value) => widget.property.reference = value,

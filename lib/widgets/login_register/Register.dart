@@ -201,7 +201,7 @@ class _RegisterState extends State<Register> {
                     child: Text('S\'inscrire'),
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
-                    onPressed: _register(runMutation)
+                    onPressed: () => _register(runMutation)
                   ),
                   SizedBox( height: 18,),
                   FlatButton(

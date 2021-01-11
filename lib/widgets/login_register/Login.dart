@@ -72,7 +72,6 @@ class _LoginState extends State<Login> {
         else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
           await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
           await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
-          widget.onLogin(sop.User.fromJSON(networkResult.data["login"]["user"]));
           Navigator.popAndPushNamed(context, '/state-of-plays');
         }
       }
