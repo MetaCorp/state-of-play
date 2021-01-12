@@ -194,6 +194,7 @@ class _SearchOwnersState extends State<SearchOwners> {
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: 'Entrez votre recherche'

@@ -248,6 +248,7 @@ class _NewPropertyAddTypeState extends State<NewPropertyAddType> {
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Entrez votre recherche'

@@ -261,6 +261,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Entrez votre recherche'

@@ -192,6 +192,7 @@ class _SearchTenantsState extends State<SearchTenants> {
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Entrez votre recherche'

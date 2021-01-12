@@ -19,8 +19,9 @@ class NewStateOfPlayDetailsRoomAddDecoration extends StatefulWidget {
 
 class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayDetailsRoomAddDecoration> {
 
-  TextEditingController _searchController = TextEditingController(text: "");
-  TextEditingController _newDecorationController = TextEditingController(text: "");
+  TextEditingController _searchController; 
+  TextEditingController _newDecorationController; 
+  FocusNode myFocusNode;
 
   List<String> _selectedDecorations = []; 
 
@@ -85,10 +86,21 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
     );
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _searchController = TextEditingController(text: "");
+    _newDecorationController = TextEditingController(text: "");
+     myFocusNode = FocusNode();
+
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
-
+    myFocusNode.dispose();
     super.dispose();
   }
 
@@ -258,6 +270,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Entrez votre recherche'

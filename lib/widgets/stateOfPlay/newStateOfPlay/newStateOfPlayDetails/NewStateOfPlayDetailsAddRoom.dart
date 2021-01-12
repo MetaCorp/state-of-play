@@ -292,6 +292,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               title: Text('Rechercher une pièce'),
               description: Text("Pour rechercher une pièce, cliquez sur le champ texte en haut de l'app."),
               child: TextField(
+                autofocus: true,
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Entrez votre recherche'

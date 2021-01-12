@@ -193,6 +193,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Entrez votre recherche'

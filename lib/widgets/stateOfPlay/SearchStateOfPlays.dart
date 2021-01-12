@@ -299,6 +299,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
         return Scaffold(
           appBar: AppBar(
             title: TextField(
+              autofocus: true,
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Recherchez parmi les propriétaires, locataires et adresses...'
