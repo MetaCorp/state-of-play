@@ -138,6 +138,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
               decoration: InputDecoration(
                 labelText: "Entrez un nom d'électricité/chauffage"
               ),
+              textCapitalization: TextCapitalization.sentences,
               onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [

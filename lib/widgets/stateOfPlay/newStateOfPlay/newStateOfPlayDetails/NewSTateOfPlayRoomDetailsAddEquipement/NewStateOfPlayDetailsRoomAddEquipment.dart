@@ -138,6 +138,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
               decoration: InputDecoration(
                 labelText: "Entrez un nom d'équipement"
               ),
+              textCapitalization: TextCapitalization.sentences,
               onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [

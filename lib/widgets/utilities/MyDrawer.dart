@@ -30,31 +30,46 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: Text('États des lieux'),
             leading: Icon(Icons.text_snippet),
-            onTap: () => Navigator.popAndPushNamed(context, '/state-of-plays'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/state-of-plays');
+            }
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Propriétés'),
             leading: Icon(Icons.home),
-            onTap: () => Navigator.popAndPushNamed(context, '/properties'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/properties');
+            }
           ),
           Divider(thickness: 2.0),
           ListTile(
             title: Text('Propriétaires'),
             leading: Icon(Icons.people_alt),
-            onTap: () => Navigator.popAndPushNamed(context, '/owners'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/owners');
+            }
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Mandataires'),
             leading: Icon(Icons.people_alt),
-            onTap: () => Navigator.popAndPushNamed(context, '/representatives'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/representatives');
+            }
           ),
           Divider(thickness: .8, indent: 18, endIndent: 18),
           ListTile(
             title: Text('Locataires'),
             leading: Icon(Icons.people_alt),
-            onTap: () => Navigator.popAndPushNamed(context, '/tenants'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/tenants');
+            }
           ),
           Divider(thickness: 2.0),
           ListTile(
@@ -71,7 +86,7 @@ class MyDrawer extends StatelessWidget {
                 isHTML: false,
               );
 
-              await FlutterEmailSender.send(email);
+              FlutterEmailSender.send(email);
               Navigator.pop(context);
             },
           ),
@@ -79,14 +94,20 @@ class MyDrawer extends StatelessWidget {
           // ListTile(
           //   title: Text('Boutique'),
           //   leading: Icon(Icons.shop),
-          //   onTap: () => Navigator.popAndPushNamed(context, '/shop'),
+          //   onTap: () {
+          //   Navigator.pop(context);
+          //   Navigator.popAndPushNamed(context, '/shop'),
+          // }
           // ),
           Divider(thickness: 2.0),
           // TODO align not working
           ListTile(
             title: Text('Paramêtres'),
             leading: Icon(Icons.settings),
-            onTap: () => Navigator.popAndPushNamed(context, '/settings'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/settings');
+            }
           ),  
         ],
       ),

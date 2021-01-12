@@ -210,6 +210,7 @@ class _StateOfPlaysState extends State<StateOfPlays> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": "",

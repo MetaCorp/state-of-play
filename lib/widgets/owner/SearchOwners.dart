@@ -117,6 +117,7 @@ class _SearchOwnersState extends State<SearchOwners> {
             }
           }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": _searchController.text

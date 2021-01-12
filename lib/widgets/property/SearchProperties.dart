@@ -122,6 +122,7 @@ class _SearchPropertiesState extends State<SearchProperties> {
             }
           }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": _searchController.text

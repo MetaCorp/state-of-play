@@ -138,6 +138,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
               decoration: InputDecoration(
                 labelText: "Entrez un nom de clé"
               ),
+              textCapitalization: TextCapitalization.sentences,
               onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [

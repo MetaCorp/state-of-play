@@ -32,6 +32,7 @@ class _EditTenantState extends State<EditTenant> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "data": {
             "tenantId": widget.tenantId

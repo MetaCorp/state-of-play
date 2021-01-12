@@ -38,6 +38,7 @@ class _EditPropertyState extends State<EditProperty> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "data": {
             "propertyId": widget.propertyId

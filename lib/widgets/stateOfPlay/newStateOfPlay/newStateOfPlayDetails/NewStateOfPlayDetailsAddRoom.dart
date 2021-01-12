@@ -104,6 +104,21 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
     super.dispose();
   }
 
+  _onAdd(runMutation) async {
+    MultiSourceResult result = runMutation({
+      "data": {
+        "name": _newRoomController.text
+      }
+    });
+
+    await result.networkResult;
+
+    setState(() { });
+    Navigator.pop(context);
+
+    _newRoomController.text = "";
+  }
+
   void _showDialogNewRoom (context) async {
     await showDialog(
       context: context,
@@ -135,6 +150,8 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               decoration: InputDecoration(
                 labelText: "Entrez un nom de pièce"
               ),
+              textCapitalization: TextCapitalization.sentences,
+              onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [
               new FlatButton(
@@ -146,20 +163,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
               ),
               new FlatButton(
                 child: Text('AJOUTER'),
-                onPressed: () async {
-                  MultiSourceResult result = runMutation({
-                    "data": {
-                      "name": _newRoomController.text
-                    }
-                  });
-
-                  await result.networkResult;
-
-                  setState(() { });
-                  Navigator.pop(context);
-
-                  _newRoomController.text = "";
-                }
+                onPressed: () => _onAdd(runMutation)
               )
             ],
           );

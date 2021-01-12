@@ -367,11 +367,15 @@ class _NewStateOfPlayState extends State<NewStateOfPlay> {
 
             // debugPrint('new stateOfPlay user logo: ' + user.logo.toString());
             if (_stateOfPlay == null) {
-              // debugPrint('new stateOfPlay2 user logo: ' + user.logo.toString());
+              debugPrint('new stateOfPlay2 out: ' + _stateOfPlay2.out.toString());
+              debugPrint('new stateOfPlay out: ' + widget.out.toString());
               _stateOfPlay = _stateOfPlay2;
-              _stateOfPlay.out = widget.out;
               _stateOfPlay.documentHeader = user.documentHeader != null ? user.documentHeader : _stateOfPlay.documentHeader;
               _stateOfPlay.documentEnd = user.documentEnd != null ? user.documentEnd : _stateOfPlay.documentEnd;
+            }
+            
+            if (_stateOfPlay != null && _stateOfPlay.out != widget.out) {
+              _stateOfPlay.out = widget.out;
             }
 
             if (_stateOfPlay != null && _stateOfPlay.logo == null) {

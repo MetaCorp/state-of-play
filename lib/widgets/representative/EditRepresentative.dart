@@ -33,6 +33,7 @@ class _EditRepresentativeState extends State<EditRepresentative> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "data": {
             "representativeId": widget.representativeId

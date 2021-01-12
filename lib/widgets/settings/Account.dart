@@ -91,7 +91,8 @@ class _AccountState extends State<Account> {
               logo
             }
           }
-        ''')
+        '''),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
       builder: (
         QueryResult result, {

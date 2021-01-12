@@ -150,6 +150,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
               decoration: InputDecoration(
                 labelText: "Entrez un nom de décoration"
               ),
+              textCapitalization: TextCapitalization.sentences,
               onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [

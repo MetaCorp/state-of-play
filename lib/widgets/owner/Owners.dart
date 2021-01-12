@@ -117,7 +117,8 @@ class _OwnersState extends State<Owners> {
                 }
               }
             }
-            ''')
+            '''),
+            fetchPolicy: FetchPolicy.networkOnly,
           ),
           builder: (
             QueryResult result, {

@@ -212,6 +212,7 @@ class _SearchStateOfPlaysState extends State<SearchStateOfPlays> {
             }
           }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": _searchController.text,

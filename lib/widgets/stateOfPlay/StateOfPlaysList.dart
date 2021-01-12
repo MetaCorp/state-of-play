@@ -56,7 +56,12 @@ class _StateOfPlaysListState extends State<StateOfPlaysList> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Propriétaire: " + widget.stateOfPlays[i].owner.firstName + " " + widget.stateOfPlays[i].owner.lastName),
+                  Flexible(
+                    child: Text(
+                      "Propriétaire: " + widget.stateOfPlays[i].owner.firstName + " " + widget.stateOfPlays[i].owner.lastName,
+                      overflow: TextOverflow.clip,
+                    ),
+                  ),
                   IconButtonLoading(
                     loading: _pdfLoadings[i],
                     icon: Icon(Icons.text_snippet),

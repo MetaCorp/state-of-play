@@ -116,6 +116,7 @@ class _SearchRepresentativesState extends State<SearchRepresentatives> {
             }
           }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": _searchController.text

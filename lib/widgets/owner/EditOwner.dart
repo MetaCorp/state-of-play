@@ -33,6 +33,7 @@ class _EditOwnerState extends State<EditOwner> {
           }
         }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "data": {
             "ownerId": widget.ownerId

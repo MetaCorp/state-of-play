@@ -115,6 +115,7 @@ class _SearchTenantsState extends State<SearchTenants> {
             }
           }
         '''),
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           "filter": {
             "search": _searchController.text

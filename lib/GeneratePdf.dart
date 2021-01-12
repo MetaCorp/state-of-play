@@ -787,15 +787,15 @@ Future<File> generatePdf(sop.StateOfPlay stateOfPlay) async {
                         pw.Text(
                           stateOfPlay.property.reference + '           '
                         ),
-                        pw.Text(
+                        stateOfPlay.property.lot != null ? pw.Text(
                           stateOfPlayTexts.lot + ':   ',
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                           )
-                        ),
-                        pw.Text(
+                        ) : pw.Container(),
+                        stateOfPlay.property.lot != null ? pw.Text(
                           stateOfPlay.property.lot
-                        )
+                        ) : pw.Container()
                     ])
                   ],
                   

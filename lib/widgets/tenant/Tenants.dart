@@ -117,7 +117,8 @@ class _TenantsState extends State<Tenants> {
                 }
               }
             }
-            ''')
+            '''),
+            fetchPolicy: FetchPolicy.networkOnly,
           ),
           builder: (
             QueryResult result, {

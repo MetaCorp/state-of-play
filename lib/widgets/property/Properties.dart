@@ -119,7 +119,8 @@ class _PropertiesState extends State<Properties> {
                 }
               }
             }
-            ''')
+            '''),
+            fetchPolicy: FetchPolicy.networkOnly,
           ),
           builder: (
             QueryResult result, {

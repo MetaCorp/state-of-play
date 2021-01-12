@@ -138,6 +138,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
               decoration: InputDecoration(
                 labelText: "Entrez un nom de compteur"
               ),
+              textCapitalization: TextCapitalization.sentences,
               onSubmitted: (value) => _onAdd(runMutation),
             ),
             actions: [

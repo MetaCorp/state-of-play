@@ -61,12 +61,12 @@ class _LoginState extends State<Login> {
     QueryResult networkResult = await result.networkResult;
 
     if (networkResult.hasException) {
-    
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Impossible de se connecter.')));
     }
     else {
       debugPrint('queryResult data: ' + networkResult.data.toString());
       if (networkResult.data != null) {
-        if (networkResult.data["login"] == null) {
+        if (networkResult.data["login"] == null || networkResult.data["login"]["token"] == null) {
           _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Mauvaise combinaison email/password.')));
         }
         else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
