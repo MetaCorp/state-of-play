@@ -5,6 +5,7 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 class MainProvider with ChangeNotifier {
   sop.User user;
   dynamic account;
+  bool redirect = false;
 
   void updateUser(sop.User newUser) {
     user = newUser;
@@ -13,6 +14,11 @@ class MainProvider with ChangeNotifier {
 
   void updateAccount(dynamic newAccount) {
     account = newAccount;
+    notifyListeners();
+  }
+
+  void updateRedirect(bool newRedirect) {
+    redirect = newRedirect;
     notifyListeners();
   }
 }

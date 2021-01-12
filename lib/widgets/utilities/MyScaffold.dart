@@ -12,9 +12,13 @@ import 'package:flutter_tests/Icons/e_d_l_icons_icons.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
+import 'package:flutter_tests/providers/MainProvider.dart';
+
 
 class MyScaffold extends StatefulWidget {
   MyScaffold({ Key key, this.body, this.appBar }) : super(key: key);
@@ -396,6 +400,18 @@ class _MyScaffoldState extends State<MyScaffold> {
     // debugPrint('_user: ' + _user.id);
     // debugPrint('_account: ' + _account["id"].toString());
 
-    return scaffold;
+    return Consumer<MainProvider>(
+      builder: (context, main, child) {
+
+        if (main.redirect) {
+          Provider.of<MainProvider>(context, listen: false).updateUser(null);
+          Provider.of<MainProvider>(context, listen: false).updateAccount(null);
+          Provider.of<MainProvider>(context, listen: false).updateRedirect(false);
+          Future.microtask(() => Navigator.popAndPushNamed(context, '/login'));
+        }
+
+        return scaffold;
+      }
+    );
   }
 }
