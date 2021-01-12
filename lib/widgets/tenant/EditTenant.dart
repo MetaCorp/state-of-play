@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/utilities/NewInterlocutorContent.dart';
+import 'package:flutter_tests/widgets/utilities/NewInterlocutor/NewInterlocutor.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -102,7 +102,7 @@ class _EditTenantState extends State<EditTenant> {
                 QueryResult mutationResult,
               ) {
                 
-                return NewInterlocutorContent(
+                return NewInterlocutor(
                   title: 'Éditer un propriétaire',
                   saveLoading: mutationUpdateResult.loading,
                   interlocutor: tenant,

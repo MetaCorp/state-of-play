@@ -3,6 +3,8 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/Header.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscAddKey/NewStateOfPlayMiscAddKey.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscKey.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscKey.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayMisc/NewStateOfPlayMiscKey.dart';
 
 class NewStateOfPlayMiscKeys extends StatefulWidget {
   NewStateOfPlayMiscKeys({ Key key, this.keys }) : super(key: key);

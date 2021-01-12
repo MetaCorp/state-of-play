@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
-import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
@@ -23,37 +22,7 @@ class NewInterlocutorContent extends StatefulWidget {
 class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
 
   final _formKey = GlobalKey<FormState>();
-
   
-  void _showDialogDelete(context) async {
-    await showDialog(
-      context: context,
-      child: AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Supprimer '" + widget.interlocutor.firstName + ' ' + widget.interlocutor.lastName + "' ?"),
-            widget.interlocutor.stateOfPlays.length > 0 ? Text("Ceci entrainera la suppression de '" + widget.interlocutor.stateOfPlays.length.toString() + "' état" + (widget.interlocutor.stateOfPlays.length > 1 ? "s" : "") + " des lieux.") : Container(),
-          ]
-        ),
-        actions: [
-          new FlatButton(
-            child: Text('ANNULER'),
-            onPressed: () {
-              Navigator.pop(context);
-            }
-          ),
-          new FlatButton(
-            child: Text('SUPPRIMER'),
-            onPressed: () {
-              widget.onDelete();
-            }
-          )
-        ],
-      )
-    );
-  }
-
   _save() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -61,10 +30,10 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
 
-    Widget body = SingleChildScrollView( 
+    return SingleChildScrollView( 
       child: Container(
         margin: EdgeInsets.all(16),
         child: Form(
@@ -183,37 +152,6 @@ class _NewInterlocutorContentState extends State<NewInterlocutorContent> {
       )
     );
 
-    return widget.title != null ? Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButtonLoading(
-            loading: widget.saveLoading,
-            icon: Icon(Icons.check),
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                widget.onSave(widget.interlocutor);
-              }
-            }
-          ),
-          widget.onDelete != null ? PopupMenuButton(
-            icon: Icon(Icons.more_vert),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text("Supprimer"),
-                value: "delete",
-              )
-            ],
-            onSelected: (result) {
-              debugPrint("onSelected: " + result);
-              if (result == "delete")
-                _showDialogDelete(context);
-            }
-          ) : Container(),
-        ],
-      ),
-      body: body
-    ) : body;
+   
   }
 }

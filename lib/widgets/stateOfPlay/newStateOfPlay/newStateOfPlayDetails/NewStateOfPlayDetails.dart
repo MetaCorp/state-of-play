@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/stateOfPlay/HeaderDiscovery.dart';
-import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom.dart';
+import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsAddRoom/NewStateOfPlayDetailsAddRoom.dart';
 import 'package:flutter_tests/widgets/stateOfPlay/newStateOfPlay/newStateOfPlayDetails/NewStateOfPlayDetailsRoom.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
