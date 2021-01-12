@@ -17,6 +17,7 @@ class DateButton extends StatefulWidget {
 class _DateButtonState extends State<DateButton> {
 
   Future<void> _selectDate(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: widget.value != null ? widget.value : DateTime.now(),
