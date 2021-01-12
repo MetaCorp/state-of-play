@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/services.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -127,10 +128,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Force Device Orientation 
     //https://stackoverflow.com/questions/49418332/flutter-how-to-prevent-device-orientation-changes-and-force-portrait
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeRight,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      // DeviceOrientation.landscapeLeft,
+      // DeviceOrientation.landscapeRight,
+        DeviceOrientation.portraitUp,
+    ]);
 
     MaterialColor colorCustom = MaterialColor(0xFF4AAAD3, color); 
 
