@@ -5,7 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 class NewStateOfPlayDetailsAddRoomContent extends StatefulWidget {
@@ -14,7 +14,7 @@ class NewStateOfPlayDetailsAddRoomContent extends StatefulWidget {
   final SelectCallback onSelect;
   final DeleteCallback onDelete;
   
-  List<String> selectedRooms = [];
+  List<Map> selectedRooms = [];
   List<Map> rooms;
 
   @override
@@ -35,15 +35,9 @@ class _NewStateOfPlayDetailsAddRoomContentState extends State<NewStateOfPlayDeta
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.rooms[i]["name"]),
-          selected: widget.selectedRooms.contains(widget.rooms[i]["id"]),
+          selected: widget.selectedRooms.any((deco) => deco["id"] == widget.rooms[i]["id"]),
           onTap: () {
-            widget.onSelect(widget.rooms[i]["id"]);
-            // setState(() {
-            //   if (!selectedRooms.contains(rooms[i]["id"]))
-            //     _selectedRooms.add(rooms[i]["id"]);
-            //   else
-            //     _selectedRooms.remove(rooms[i]["id"]);
-            // });
+            widget.onSelect(widget.rooms[i]);
           },
         ),
         secondaryActions: [

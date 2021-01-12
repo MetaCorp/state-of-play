@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 class NewStateOfPlayDetailsRoomAddDecorationContent extends StatefulWidget {
@@ -11,7 +11,7 @@ class NewStateOfPlayDetailsRoomAddDecorationContent extends StatefulWidget {
   final DeleteCallback onDelete;
 
   List<Map> decorations;
-  List<String> selectedDecorations;
+  List<Map> selectedDecorations;
 
   @override
   _NewStateOfPlayDetailsRoomAddDecorationContentState createState() => _NewStateOfPlayDetailsRoomAddDecorationContentState();
@@ -31,9 +31,9 @@ class _NewStateOfPlayDetailsRoomAddDecorationContentState extends State<NewState
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.decorations[i]["type"]),
-          selected: widget.selectedDecorations.contains(widget.decorations[i]["id"]),
+          selected: widget.selectedDecorations.any((deco) => deco["id"] == widget.decorations[i]["id"]),
           onTap: () {
-            widget.onSelect(widget.decorations[i]["id"]);
+            widget.onSelect(widget.decorations[i]);
           },
         ),
         secondaryActions: [

@@ -25,7 +25,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newRoomController = TextEditingController(text: "");
 
-  List<String> _selectedRooms = [];
+  List<Map> _selectedRooms = [];
 
   bool _deleteLoading = false;
 
@@ -258,12 +258,12 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                   rooms: rooms,
                   selectedRooms: _selectedRooms,
                   onDelete: (room) => _showDialogDelete(context, room, runDeleteMutation, refetch),
-                  onSelect: (roomId) => {
+                  onSelect: (room) => {
                     setState(() {
-                      if (!_selectedRooms.contains(roomId))
-                        _selectedRooms.add(roomId);
+                       if (!_selectedRooms.any((room2) => room2["id"] == room["id"]))
+                        _selectedRooms.add(room);
                       else
-                        _selectedRooms.remove(roomId);
+                        _selectedRooms.remove(room);
                     })
                   },
                 );
@@ -320,7 +320,7 @@ class _NewStateOfPlayDetailsAddRoomState extends State<NewStateOfPlayDetailsAddR
                   icon: Icon(Icons.check),
                   onPressed: () {
                     Navigator.pop(context);
-                    widget.onSelect(_selectedRooms.map((id) => rooms.firstWhere((room) => room["id"] == id)["name"].toString()).toList());
+                    widget.onSelect(_selectedRooms.map((room) => room["name"].toString()).toList());
                   }
                 ),
               ),

@@ -22,7 +22,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newEquipmentController = TextEditingController(text: "");
 
-  List<String> _selectedEquipments = [];
+  List<Map> _selectedEquipments = [];
 
   bool _deleteLoading = false;
 
@@ -244,12 +244,12 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                   equipments: equipments,
                   selectedEquipments: _selectedEquipments,
                   onDelete: (equipment) => _showDialogDelete(context, equipment, runDeleteMutation, refetch),
-                  onSelect: (equipmentId) => {
+                  onSelect: (equipment) => {
                     setState(() {
-                      if (!_selectedEquipments.contains(equipmentId))
-                        _selectedEquipments.add(equipmentId);
+                        if (!_selectedEquipments.any((equip) => equipment["id"] == equip["id"]))
+                        _selectedEquipments.add(equipment);
                       else
-                        _selectedEquipments.remove(equipmentId);
+                        _selectedEquipments.remove(equipment);
                     })
                   },
                 );
@@ -289,7 +289,7 @@ class _NewStateOfPlayDetailsRoomAddEquipmentState extends State<NewStateOfPlayDe
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedEquipments.map((id) => equipments.firstWhere((equipment) => equipment["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedEquipments.map((equip) => equip["type"].toString()).toList());
                 }
               ),
             ],

@@ -3,7 +3,7 @@ import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 class NewStateOfPlayMiscAddKeyContent extends StatefulWidget {
@@ -13,7 +13,7 @@ class NewStateOfPlayMiscAddKeyContent extends StatefulWidget {
   final DeleteCallback onDelete;
   
   List<Map> keys;
-  List<String> selectedKeys = [];
+  List<Map> selectedKeys = [];
 
   @override
   _NewStateOfPlayMiscAddKeyContentState createState() => _NewStateOfPlayMiscAddKeyContentState();
@@ -33,15 +33,9 @@ class _NewStateOfPlayMiscAddKeyContentState extends State<NewStateOfPlayMiscAddK
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.keys[i]["type"]),
-          selected: widget.selectedKeys.contains(widget.keys[i]["id"]),
+          selected: widget.selectedKeys.any((key) => key["id"] == widget.keys[i]["id"]),
           onTap: () {
-            widget.onSelect(widget.keys[i]["id"]);
-            // setState(() {
-            //   if (!widget._selectedKeys.contains(keys[i]["id"]))
-            //     widget._selectedKeys.add(keys[i]["id"]);
-            //   else
-            //     widget._selectedKeys.remove(keys[i]["id"]);
-            // });
+            widget.onSelect(widget.keys[i]);
           },
         ),
         secondaryActions: [
