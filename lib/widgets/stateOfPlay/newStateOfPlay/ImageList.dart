@@ -135,6 +135,7 @@ class _ImageListState extends State<ImageList> {
                   ),
                 ),
                 onTap: () async {
+                  FocusScope.of(context).unfocus();
                   Uint8List editedImage = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => EditImage(
                     image: imageType.image,
                     type: imageType.type,

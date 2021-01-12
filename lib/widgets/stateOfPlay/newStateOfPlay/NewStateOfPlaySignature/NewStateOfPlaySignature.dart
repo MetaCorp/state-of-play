@@ -340,7 +340,7 @@ class _NewStateOfPlaySignatureState extends State<NewStateOfPlaySignature> {
   }
 
   goToSignatureSignature(person, {int index}) async {
-   
+    FocusScope.of(context).unfocus();
     Uint8List data = await Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => NewStateOfPlaySignatureSignature(
       interlocutor: person,
     )));
