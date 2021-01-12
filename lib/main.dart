@@ -294,53 +294,50 @@ class _MyAppState extends State<MyApp> {
         debugPrint('CONSUMER account: ' + main.account.toString());
         debugPrint('');
 
-        return Builder(
-          builder: (context) => GraphQLProvider(
-            client: client,
-            child: FeatureDiscovery(
-              recordStepsInSharedPreferences: true,
-              child: main.user != null && main.account != null ? Subscription(
-                "accountConnected",
-                '''
-                  subscription accountConnected(\$userId: Int!, \$accountId: Int!) {
-                    accountConnected(userId: \$userId, accountId: \$accountId) {
-                      userId
-                      accountId
-                    }
+        return GraphQLProvider(
+          client: client,
+          child: FeatureDiscovery(
+            recordStepsInSharedPreferences: true,
+            child: main.user != null && main.account != null ? Subscription(
+              "accountConnected",
+              '''
+                subscription accountConnected(\$userId: Int!, \$accountId: Int!) {
+                  accountConnected(userId: \$userId, accountId: \$accountId) {
+                    userId
+                    accountId
                   }
-                ''',
-                variables: {
-                  "userId": int.parse(main.user.id),
-                  "accountId": main.account["id"]
-                },
-                builder: ({
-                  bool loading,
-                  dynamic payload,
-                  dynamic error,
-                }) {
-
-                  debugPrint('Subscription: loading: ' + loading.toString());
-                  debugPrint('Subscription: payload: ' + payload.toString());
-                  debugPrint('Subscription: error: ' + error.toString());
-                  debugPrint('');
-
-                  if (payload != null && _prefs != null) {
-                    debugPrint('DISCONNECTED FROM ANOTHER ACCOUNT: ' + payload.toString());
-                    _prefs.setString("token", null);
-                    _prefs.setString("user", null);
-                    _prefs.setString("account", null);
-                    // main.user = null;
-                    // main.account = null;
-                    Provider.of<MainProvider>(context, listen: false).updateRedirect(true);
-                    // setState(() { });
-                    // Navigator.pushNamed(context, "/login");
-                  }
-
-                  return getMaterialApp(main);
                 }
-              )
-              : getMaterialApp(main)
+              ''',
+              variables: {
+                "userId": int.parse(main.user.id),
+                "accountId": main.account["id"]
+              },
+              builder: ({
+                bool loading,
+                dynamic payload,
+                dynamic error,
+              }) {
+
+                debugPrint('Subscription: loading: ' + loading.toString());
+                debugPrint('Subscription: payload: ' + payload.toString());
+                debugPrint('Subscription: error: ' + error.toString());
+                debugPrint('');
+
+                if (payload != null && _prefs != null) {
+                  debugPrint('DISCONNECTED FROM ANOTHER ACCOUNT: ' + payload.toString());
+                  _prefs.setString("token", null);
+                  _prefs.setString("user", null);
+                  _prefs.setString("account", null);
+                  // main.user = null;
+                  // main.account = null;
+                  Provider.of<MainProvider>(context, listen: false).updateRedirect(true);
+                  // Navigator.pushNamed(context, "/login");
+                }
+
+                return getMaterialApp(main);
+              }
             )
+            : getMaterialApp(main)
           )
         );
       }
