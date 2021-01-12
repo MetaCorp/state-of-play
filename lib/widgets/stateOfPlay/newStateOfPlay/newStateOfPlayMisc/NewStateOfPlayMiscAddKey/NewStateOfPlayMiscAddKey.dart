@@ -22,7 +22,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newKeyController = TextEditingController(text: "");
 
-  List<String> _selectedKeys = [];
+  List<Map> _selectedKeys = [];
 
   bool _deleteLoading = false;
 
@@ -244,13 +244,13 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
                   keys: keys,
                   selectedKeys: _selectedKeys,
                   onDelete: (key) => _showDialogDelete(context, key, runDeleteMutation, refetch),
-                  onSelect: (keyId) => {
+                  onSelect: (key) => {
                     setState(() {
-                      if (!_selectedKeys.contains(keyId))
-                        _selectedKeys.add(keyId);
+                       if (!_selectedKeys.any((key2) => key["id"] == key2["id"]))
+                        _selectedKeys.add(key);
                       else
-                        _selectedKeys.remove(keyId);
-                    })
+                        _selectedKeys.remove(key);
+                    })                   
                   },
                 );
               }
@@ -289,7 +289,7 @@ class _NewStateOfPlayMiscAddKeyState extends State<NewStateOfPlayMiscAddKey> {
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedKeys.map((id) => keys.firstWhere((key) => key["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedKeys.map((key) => key["type"].toString()).toList());
                 }
               ),
             ],

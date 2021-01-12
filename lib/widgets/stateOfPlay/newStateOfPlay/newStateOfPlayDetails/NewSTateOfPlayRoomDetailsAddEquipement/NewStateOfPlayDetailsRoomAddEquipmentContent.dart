@@ -3,7 +3,7 @@ import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 class NewStateOfPlayDetailsRoomAddEquipmentContent extends StatefulWidget {
@@ -13,7 +13,7 @@ class NewStateOfPlayDetailsRoomAddEquipmentContent extends StatefulWidget {
   final DeleteCallback onDelete;
 
   List<Map> equipments;
-  List<String> selectedEquipments;
+  List<Map> selectedEquipments;
 
   @override
   _NewStateOfPlayDetailsRoomAddEquipmentContentState createState() => _NewStateOfPlayDetailsRoomAddEquipmentContentState();
@@ -34,15 +34,9 @@ class _NewStateOfPlayDetailsRoomAddEquipmentContentState extends State<NewStateO
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.equipments[i]["type"]),
-          selected: widget.selectedEquipments.contains(widget.equipments[i]["id"]),
+          selected: widget.selectedEquipments.any( (equip)=> widget.equipments[i]["id"] == equip["id"]),
           onTap: () {
-            widget.onSelect(widget.equipments[i]["id"]);
-            // setState(() {
-            //   if (!widget.selectedEquipments.contains(widget.equipments[i]["id"]))
-            //     widget.selectedEquipments.add(widget.equipments[i]["id"]);
-            //   else
-            //     widget.selectedEquipments.remove(widget.equipments[i]["id"]);
-            // });
+            widget.onSelect(widget.equipments[i]);
           },
         ),
         secondaryActions: [

@@ -22,7 +22,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newMeterController = TextEditingController(text: "");
 
-  List<String> _selectedMeters = [];
+  List<Map> _selectedMeters = [];
 
   bool _deleteLoading = false;
 
@@ -244,12 +244,12 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
                   meters: meters,
                   selectedMeters: _selectedMeters,
                   onDelete: (meter) => _showDialogDelete(context, meter, runDeleteMutation, refetch),
-                  onSelect: (meterId) => {
+                  onSelect: (meter) => {
                     setState(() {
-                      if (!_selectedMeters.contains(meterId))
-                        _selectedMeters.add(meterId);
+                        if (!_selectedMeters.any((met) => meter["id"] == met["id"]))
+                        _selectedMeters.add(meter);
                       else
-                        _selectedMeters.remove(meterId);
+                        _selectedMeters.remove(meter);
                     })
                   },
                 );
@@ -289,7 +289,7 @@ class _NewStateOfPlayMiscAddMeterState extends State<NewStateOfPlayMiscAddMeter>
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedMeters.map((id) => meters.firstWhere((meter) => meter["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedMeters.map((meter) => meter["type"].toString()).toList());
                 }
               ),
             ],

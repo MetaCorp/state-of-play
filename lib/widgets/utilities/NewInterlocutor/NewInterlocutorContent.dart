@@ -3,7 +3,7 @@ import 'package:flutter_tests/models/StateOfPlay.dart' as sop;
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
-typedef SaveCallback = Function(dynamic);
+typedef SaveCallback = Function(Map);
 typedef DeleteCallback = Function();
 
 class NewInterlocutorContent extends StatefulWidget {

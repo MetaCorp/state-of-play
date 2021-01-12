@@ -22,7 +22,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
   TextEditingController _searchController = TextEditingController(text: "");
   TextEditingController _newElectricityController = TextEditingController(text: "");
 
-  List<String> _selectedElectricities = [];
+  List<Map> _selectedElectricities = [];
 
   bool _deleteLoading = false;
 
@@ -244,12 +244,12 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
                   electricities: electricities,
                   selectedElectricities: _selectedElectricities,
                   onDelete: (electricity) => _showDialogDelete(context, electricity, runDeleteMutation, refetch),
-                  onSelect: (electricityId) => {
+                  onSelect: (electricity) => {
                     setState(() {
-                      if (!_selectedElectricities.contains(electricityId))
-                        _selectedElectricities.add(electricityId);
+                       if (!_selectedElectricities.any((elec) => electricity["id"] == elec["id"]))
+                        _selectedElectricities.add(electricity);
                       else
-                        _selectedElectricities.remove(electricityId);
+                        _selectedElectricities.remove(electricity);
                     })
                   },
                 );
@@ -289,7 +289,7 @@ class _NewStateOfPlayDetailsRoomAddElectricityState extends State<NewStateOfPlay
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedElectricities.map((id) => electricities.firstWhere((electrity) => electrity["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedElectricities.map((elec) => elec["type"].toString()).toList());
                 }
               ),
             ],

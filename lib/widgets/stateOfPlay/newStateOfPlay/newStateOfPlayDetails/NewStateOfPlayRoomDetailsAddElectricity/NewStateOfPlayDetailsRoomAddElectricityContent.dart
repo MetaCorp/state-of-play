@@ -3,7 +3,7 @@ import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 
@@ -14,7 +14,7 @@ class NewStateOfPlayDetailsRoomAddElectricityContent extends StatefulWidget {
   final DeleteCallback onDelete;
 
   List<Map> electricities;
-  List<String> selectedElectricities;
+  List<Map> selectedElectricities;
 
 
   @override
@@ -35,15 +35,9 @@ class _NewStateOfPlayDetailsRoomAddElectricityContentState extends State<NewStat
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.electricities[i]["type"]),
-          selected: widget.selectedElectricities.contains(widget.electricities[i]["id"]),
+          selected: widget.selectedElectricities.any((deco) => deco["id"] == widget.electricities[i]["id"]),
           onTap: () {
-             widget.onSelect(widget.electricities[i]["id"]);
-            // setState(() {
-            //   if (!_selectedElectricities.contains(widget.electricities[i]["id"]))
-            //     _selectedElectricities.add(widget.electricities[i]["id"]);
-            //   else
-            //     _selectedElectricities.remove(widget.electricities[i]["id"]);
-            // });
+             widget.onSelect(widget.electricities[i]);
           },
         ),
         secondaryActions: [

@@ -23,7 +23,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
   TextEditingController _newDecorationController; 
   FocusNode myFocusNode;
 
-  List<String> _selectedDecorations = []; 
+  List<Map> _selectedDecorations = []; 
 
   bool _deleteLoading = false;
 
@@ -254,12 +254,12 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                   decorations: decorations,
                   selectedDecorations: _selectedDecorations,
                   onDelete: (decoration) => _showDialogDelete(context, decoration, runDeleteMutation, refetch),
-                  onSelect: (decorationId) => {
+                  onSelect: (decoration) => {
                     setState(() {
-                      if (!_selectedDecorations.contains(decorationId))
-                        _selectedDecorations.add(decorationId);
+                      if (!_selectedDecorations.any((deco) => decoration["id"] == deco["id"]))
+                        _selectedDecorations.add(decoration);
                       else
-                        _selectedDecorations.remove(decorationId);
+                        _selectedDecorations.remove(decoration);
                     })
                   },
                 );
@@ -298,7 +298,7 @@ class _NewStateOfPlayDetailsRoomAddDecorationState extends State<NewStateOfPlayD
                 icon: Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onSelect(_selectedDecorations.map((id) => decorations.firstWhere((decoration) => decoration["id"] == id)["type"].toString()).toList());
+                  widget.onSelect(_selectedDecorations.map((deco) => deco["type"].toString()).toList());
                 }
               ),
             ],

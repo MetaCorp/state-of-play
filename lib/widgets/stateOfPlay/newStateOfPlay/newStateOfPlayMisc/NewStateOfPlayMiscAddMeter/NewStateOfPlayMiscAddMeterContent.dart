@@ -3,7 +3,7 @@ import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-typedef SelectCallback = void Function(String);
+typedef SelectCallback = void Function(Map);
 typedef DeleteCallback = void Function(Map);
 
 
@@ -14,7 +14,7 @@ class NewStateOfPlayMiscAddMeterContent extends StatefulWidget {
   final DeleteCallback onDelete;
 
   List<Map> meters;
-  List<String> selectedMeters = [];
+  List<Map> selectedMeters = [];
 
   @override
   _NewStateOfPlayMiscAddMeterContentState createState() => _NewStateOfPlayMiscAddMeterContentState();
@@ -34,15 +34,9 @@ class _NewStateOfPlayMiscAddMeterContentState extends State<NewStateOfPlayMiscAd
         actionExtentRatio: 0.25,
         child: ListTile(
           title: Text(widget.meters[i]["type"]),
-          selected: widget.selectedMeters.contains(widget.meters[i]["id"]),
+          selected: widget.selectedMeters.any((meter) => meter["id"] == widget.meters[i]["id"]),
           onTap: () {
-            widget.onSelect(widget.meters[i]["id"]);
-            // setState(() {
-            //   if (!_selectedMeters.contains(meters[i]["id"]))
-            //     _selectedMeters.add(meters[i]["id"]);
-            //   else
-            //     _selectedMeters.remove(meters[i]["id"]);
-            // });
+            widget.onSelect(widget.meters[i]);
           },
         ),
         secondaryActions: [
