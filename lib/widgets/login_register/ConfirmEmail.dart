@@ -160,6 +160,7 @@ class ConfirmEmailState extends State<ConfirmEmail> {
                         color: Theme.of(context).primaryColor,
                         onPressed: _codeController.text.length == 6 ? () => _confirmEmail(runMutation) : null,
                       ),
+                      SizedBox( height: 18,),
                       FlatButtonLoading(
                         loading: resultSendVerificationEmail.loading,
                         child: Text('Envoyer le code de confirmation'),

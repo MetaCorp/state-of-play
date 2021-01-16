@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/utilities/FlatButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/RaisedButtonLoading.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -112,10 +113,10 @@ class _RegisterState extends State<Register> {
         QueryResult result,
       ) {
 
-        debugPrint('queryResult hasException: ' + result.hasException.toString());
-        debugPrint('queryResult loading: ' + result.loading.toString());
-        if(result.hasException && result.exception.graphqlErrors.length > 0) debugPrint('queryResult graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
-        else if(result.hasException) debugPrint('queryResult clientException: ' + result.exception.clientException.message);
+        debugPrint('register hasException: ' + result.hasException.toString());
+        debugPrint('register loading: ' + result.loading.toString());
+        if(result.hasException && result.exception.graphqlErrors.length > 0) debugPrint('register graphqlErrors: ' + result.exception.graphqlErrors[0].toString());
+        else if(result.hasException) debugPrint('register clientException: ' + result.exception.clientException.message);
 
         if (result.hasException) {
           debugPrint('hasException: ' + result.exception.toString());
@@ -213,7 +214,7 @@ class _RegisterState extends State<Register> {
                     onPressed: () {
                       Navigator.popAndPushNamed(context, '/login');
                     },
-                  )
+                  ),
                 ],
               ),
             ),
