@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tests/widgets/login_register/ConfirmEmail.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -85,9 +86,9 @@ class _MyAppState extends State<MyApp> {
     deleteToken();
     
     final HttpLink httpLink = HttpLink(
-      uri: 'https://housely-server.ew.r.appspot.com/graphql'
+      // uri: 'https://housely-server.ew.r.appspot.com/graphql'
       // uri: 'https://dry-fjord-30387.herokuapp.com/graphql'
-      // uri: 'http://$host:4000/graphql',
+      uri: 'http://$host:4000/graphql',
     );
   
     final AuthLink authLink = AuthLink(
@@ -244,6 +245,11 @@ class _MyAppState extends State<MyApp> {
 
             else if (settings.name == '/shop')
               return PageRouteBuilder(pageBuilder: (_, __, ___) => Shop());
+            
+            else if (settings.name == '/verify')
+              return PageRouteBuilder(pageBuilder: (_, __, ___) => ConfirmEmail());
+
+            
 
             return null;
           }

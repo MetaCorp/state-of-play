@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
         else if (networkResult.data["register"] != null && networkResult.data["register"]["token"] != null) {
           await _prefs.setString("token", networkResult.data["register"]["token"]);
           await _prefs.setString("user", jsonEncode(networkResult.data["register"]["user"]));
-          Navigator.popAndPushNamed(context, '/state-of-plays');
+          Navigator.pushNamed(context, '/verify');
         }
       }
     }
@@ -120,9 +120,13 @@ class _RegisterState extends State<Register> {
         if (result.hasException) {
           debugPrint('hasException: ' + result.exception.toString());
 
-          if (result.exception.graphqlErrors[0].extensions != null &&
+          if (result.exception.graphqlErrors != null &&
+              result.exception.graphqlErrors.length > 0 &&
+              result.exception.graphqlErrors[0] != null &&
+              result.exception.graphqlErrors[0].extensions != null &&
               result.exception.graphqlErrors[0].extensions["exception"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"] != null &&
+              result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"].length > 0 &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"] != null &&
               result.exception.graphqlErrors[0].extensions["exception"]["validationErrors"][0]["constraints"]["IsEmailAlreadyExistConstraint"] != null)

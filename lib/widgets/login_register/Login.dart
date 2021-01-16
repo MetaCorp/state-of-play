@@ -72,7 +72,10 @@ class _LoginState extends State<Login> {
         else if (networkResult.data["login"] != null && networkResult.data["login"]["token"] != null) {
           await _prefs.setString("token", networkResult.data["login"]["token"]);// TODO: admin
           await _prefs.setString("user", jsonEncode(networkResult.data["login"]["user"]));
-          Navigator.popAndPushNamed(context, '/state-of-plays');
+          if (networkResult.data["login"]["user"]["isVerified"])
+            Navigator.popAndPushNamed(context, '/state-of-plays');
+          else
+            Navigator.pushNamed(context, '/verify');
         }
       }
     }
@@ -102,6 +105,7 @@ class _LoginState extends State<Login> {
                 lastName
                 email
                 credits
+                isVerified
                 stateOfPlays {
                   id
                 }
