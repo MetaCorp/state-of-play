@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tests/widgets/settings/ChangePassword.dart';
 import 'package:flutter_tests/widgets/settings/LogoPicker.dart';
 import 'package:flutter_tests/widgets/utilities/IconButtonLoading.dart';
 import 'package:flutter_tests/widgets/utilities/MyTextFormField.dart';
@@ -264,6 +265,13 @@ class _AccountState extends State<Account> {
                               color: Colors.grey[100],
                               child: Text('Sauvegarder'),
                               onPressed: () => _save(runMutation)
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            FlatButton(
+                              child: Text('Changer de mot de pase'),
+                              onPressed: () => Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => ChangePassword()))
                             )
                           ],
                         ),

@@ -15,12 +15,13 @@ class MyTextFormField extends StatelessWidget {
     this.maxLength,
     this.validator,
     this.keyboardType,
-    this.maxLines,
+    this.maxLines = 1,
     this.minLines,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction = TextInputAction.done,
     this.onEditingComplete,
     this.onFieldSubmitted,
+    this.obscureText = false,
   }) : super(key: key);
 
   final String initialValue;
@@ -35,6 +36,7 @@ class MyTextFormField extends StatelessWidget {
   final TextInputAction textInputAction;
   final EditingCompleteCallback onEditingComplete;
   final FieldSubmittedCallback onFieldSubmitted;
+  final bool obscureText;
 
 
   @override
@@ -52,6 +54,7 @@ class MyTextFormField extends StatelessWidget {
       textInputAction: textInputAction,
       onEditingComplete: onEditingComplete,
       onFieldSubmitted: onFieldSubmitted,
+      obscureText: obscureText,
     );
   }
 }

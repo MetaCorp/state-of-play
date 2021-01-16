@@ -190,7 +190,15 @@ class _NewPropertyAddTypeState extends State<NewPropertyAddType> {
           debugPrint('propertyTypes length: ' + propertyTypes.length.toString());
 
           if (propertyTypes.length == 0) {
-            body = Text("no propertyType");
+            body = Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Aucun résultat.",
+                style: TextStyle(
+                  color: Colors.grey[600]
+                )
+              )
+            );
           }
           else {
             body = Mutation(
