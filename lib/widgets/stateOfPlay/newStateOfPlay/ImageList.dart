@@ -38,7 +38,7 @@ class _ImageListState extends State<ImageList> {
                 imageType.image,
                 width: 150,
                 height: 150,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover
                 // frameBuilder: (BuildContext context, Widget child, int frame,
                 //   bool wasSynchronouslyLoaded) {
                 //   if (wasSynchronouslyLoaded) {

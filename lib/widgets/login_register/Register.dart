@@ -45,10 +45,19 @@ class _RegisterState extends State<Register> {
     super.initState();
   }
 
+   _trimText(){
+    _emailController.text = _emailController.text.trim();
+    //_passwordController.text = _passwordController.text.trim();
+    _firstNameController.text = _firstNameController.text.trim();
+    _lastNameController.text = _lastNameController.text.trim();
+  }
+
   _register(RunMutation runMutation) async {
                       
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("token", null);
+
+    _trimText();
 
     MultiSourceResult result = runMutation({
       "data": {
