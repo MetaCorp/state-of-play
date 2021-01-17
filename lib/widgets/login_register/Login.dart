@@ -49,11 +49,18 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
+  _trimText(){
+    _emailController.text = _emailController.text.trim();
+    //_passwordController.text = _passwordController.text.trim();
+  }
+
   _login(RunMutation runMutation) async {
                       
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("token", null);
     
+    _trimText();
+
     MultiSourceResult result = runMutation({
       "email": _emailController.text,
       "password": _passwordController.text
@@ -63,6 +70,7 @@ class _LoginState extends State<Login> {
 
     if (networkResult.hasException) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Impossible de se connecter.')));
+      debugPrint('Exception: ' + networkResult.exception.toString());
     }
     else {
       debugPrint('queryResult data: ' + networkResult.data.toString());
@@ -141,6 +149,7 @@ class _LoginState extends State<Login> {
       ) {
 
         debugPrint('sendEmailNewPassword hasException: ' + sendEmailNewPasswordResult.hasException.toString());
+        debugPrint('hasException: ' + sendEmailNewPasswordResult.exception.toString());
         debugPrint('sendEmailNewPassword loading: ' + sendEmailNewPasswordResult.loading.toString());
         if(sendEmailNewPasswordResult.hasException && sendEmailNewPasswordResult.exception.graphqlErrors.length > 0) debugPrint('sendEmailNewPassword graphqlErrors: ' + sendEmailNewPasswordResult.exception.graphqlErrors[0].toString());
         else if(sendEmailNewPasswordResult.hasException) debugPrint('sendEmailNewPassword clientException: ' + sendEmailNewPasswordResult.exception.clientException.message);
