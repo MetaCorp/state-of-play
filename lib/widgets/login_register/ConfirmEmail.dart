@@ -163,8 +163,18 @@ class ConfirmEmailState extends State<ConfirmEmail> {
                       SizedBox( height: 18,),
                       FlatButtonLoading(
                         loading: resultSendVerificationEmail.loading,
-                        child: Text('Envoyer le code de confirmation'),
-                        onPressed: () => runSendVerificationEmailMutation({}),
+                        child: Text(
+                          'Réenvoyer le code de confirmation',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12
+                          ),
+                        ),
+                        onPressed: () async {
+                          MultiSourceResult result = runSendVerificationEmailMutation({});
+                          await result.networkResult;
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Code envoyé par email.")));
+                        },
                       )
                     ],
                   ),

@@ -95,13 +95,16 @@ class _LoginState extends State<Login> {
       }
     });
 
-    QueryResult networkResult =  await result.networkResult;
+    QueryResult queryResult =  await result.networkResult;
 
-    if (networkResult.hasException) {
+    if (queryResult.hasException) {
       // TODO display snackbar (email already in use)
     } else {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Un nouveau mot de passe vous a été envoyé par email.")));
-      debugPrint('sendEmailNewPassword data: ' + networkResult.data.toString());
+      if (queryResult.data["sendEmailNewPassword"] == 0)
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Cet email n'est pas enregistré.")));
+      else
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Un nouveau mot de passe vous a été envoyé par email.")));
+      debugPrint('sendEmailNewPassword data: ' + queryResult.data.toString());
     }
   }
     
@@ -296,7 +299,10 @@ class _LoginState extends State<Login> {
                           labelText: 'Password'
                         ),
                         obscureText: true,
-                        onEditingComplete: () => _login(runMutation),
+                        onEditingComplete: () {
+                          FocusScope.of(context).unfocus();
+                          _login(runMutation);
+                        },
                       ),
                       SizedBox(
                         height: 60,

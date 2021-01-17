@@ -109,6 +109,7 @@ class _NewPropertyAddTypeState extends State<NewPropertyAddType> {
               decoration: InputDecoration(
                 labelText: "Entrez un type de bien"
               ),
+              textCapitalization: TextCapitalization.sentences,
             ),
             actions: [
               new FlatButton(

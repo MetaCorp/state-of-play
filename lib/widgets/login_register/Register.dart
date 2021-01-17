@@ -197,13 +197,16 @@ class _RegisterState extends State<Register> {
                       labelText: 'Password'
                     ),
                     obscureText: true,
-                    onEditingComplete: () => _register(runMutation),
+                    onEditingComplete: () {
+                      FocusScope.of(context).unfocus();
+                      _register(runMutation);
+                    },
                   ),
                   SizedBox(
                     height: 40,
                   ),
                   RaisedButtonLoading(
-                    child: Text('S\'inscrire'),
+                    child: Text("S'inscrire"),
                     color: Theme.of(context).primaryColor,
                     loading: result.loading,
                     onPressed: () => _register(runMutation)
